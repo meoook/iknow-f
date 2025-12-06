@@ -1,4 +1,4 @@
-export interface Notification {
+export interface INotification {
   id: string
   message: string
   type: 'info' | 'success' | 'warning' | 'error'
@@ -6,7 +6,7 @@ export interface Notification {
   read: boolean
 }
 
-export interface NotificationState {
-  notifications: Notification[]
+export interface INotificationState {
+  notifications: INotification[]
   unreadCount: number
 }

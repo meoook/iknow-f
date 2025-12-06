@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../hooks/useRedux'
-import { markAsRead, markAllAsRead } from '../store/notificationSlice'
+import { markAsRead, markAllAsRead } from '../store/notification.slice'
 import './NotificationBell.scss'
 
 export const NotificationBell = () => {
   const dispatch = useAppDispatch()
-  const { notifications, unreadCount } = useAppSelector(
-    (state) => state.notifications
-  )
+  const { notifications, unreadCount } = useAppSelector((state) => state.notifications)
   const [isOpen, setIsOpen] = useState(false)
 
   const handleToggle = () => {
@@ -47,22 +45,11 @@ export const NotificationBell = () => {
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`notification-item ${
-                    notification.read ? 'read' : 'unread'
-                  }`}
-                  onClick={() =>
-                    !notification.read && handleMarkAsRead(notification.id)
-                  }
-                >
-                  <div className={`notification-type ${notification.type}`}>
-                    {notification.type}
-                  </div>
-                  <div className='notification-message'>
-                    {notification.message}
-                  </div>
-                  <div className='notification-time'>
-                    {new Date(notification.timestamp).toLocaleString()}
-                  </div>
+                  className={`notification-item ${notification.read ? 'read' : 'unread'}`}
+                  onClick={() => !notification.read && handleMarkAsRead(notification.id)}>
+                  <div className={`notification-type ${notification.type}`}>{notification.type}</div>
+                  <div className='notification-message'>{notification.message}</div>
+                  <div className='notification-time'>{new Date(notification.timestamp).toLocaleString()}</div>
                 </div>
               ))
             )}

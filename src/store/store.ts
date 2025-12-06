@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { api } from '../services/api'
-import authReducer from './authSlice'
-import notificationReducer from './notificationSlice'
+import authReducer from './auth.slice'
+import notificationReducer from './notification.slice'
 import { websocketMiddleware } from './websocketMiddleware'
 
 export const store = configureStore({

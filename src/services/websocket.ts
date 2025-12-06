@@ -1,7 +1,7 @@
 import { config } from '../config/config'
 import { store } from '../store/store'
-import { addNotification } from '../store/notificationSlice'
-import type { Notification } from '../types/notification.types'
+import { addNotification } from '../store/notification.slice'
+import type { INotification } from '../types/notification.types'
 
 class WebSocketService {
   private ws: WebSocket | null = null
@@ -13,12 +13,10 @@ class WebSocketService {
 
   connect() {
     const token = localStorage.getItem('auth_token')
-
     if (!token) {
       console.warn('No auth token found, skipping WebSocket connection')
       return
     }
-
     this.intentionalDisconnect = false
 
     try {
@@ -30,7 +28,6 @@ class WebSocketService {
         this.reconnectAttempts = 0
         this.clearReconnectTimer()
       }
-
       this.ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data)
@@ -39,30 +36,24 @@ class WebSocketService {
           console.error('Failed to parse WebSocket message:', error)
         }
       }
-
       this.ws.onerror = (error) => {
         console.error('WebSocket error:', error)
       }
-
       this.ws.onclose = () => {
         console.log('WebSocket disconnected')
         // Only attempt reconnect if it wasn't intentional
-        if (!this.intentionalDisconnect) {
-          this.attemptReconnect()
-        }
+        if (!this.intentionalDisconnect) this.attemptReconnect()
       }
     } catch (error) {
       console.error('Failed to create WebSocket connection:', error)
-      if (!this.intentionalDisconnect) {
-        this.attemptReconnect()
-      }
+      if (!this.intentionalDisconnect) this.attemptReconnect()
     }
   }
 
   private handleMessage(data: any) {
     // Handle different message types
     if (data.type === 'notification') {
-      const notification: Notification = {
+      const notification: INotification = {
         id: data.id || Date.now().toString(),
         message: data.message,
         type: data.notificationType || 'info',
@@ -98,23 +89,17 @@ class WebSocketService {
   disconnect() {
     // Mark as intentional disconnect to prevent auto-reconnect
     this.intentionalDisconnect = true
-
     this.clearReconnectTimer()
-
     if (this.ws) {
       this.ws.close()
       this.ws = null
     }
-
     this.reconnectAttempts = 0
   }
 
   send(data: any) {
-    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify(data))
-    } else {
-      console.warn('WebSocket is not connected')
-    }
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) this.ws.send(JSON.stringify(data))
+    else console.warn('WebSocket is not connected')
   }
 
   // Notification commands

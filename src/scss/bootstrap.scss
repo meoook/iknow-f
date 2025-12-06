@@ -1,0 +1,108 @@
+.btn {
+  // min-width: 120px;
+  height: 36px;
+  padding-left: 16px;
+  padding-right: 16px;
+  // padding: 8px 10px;
+  gap: 4px;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  &-close {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0.4rem;
+    font-size: 1.5rem;
+    padding: 0.1rem;
+    color: inherit;
+  }
+  &-small {
+    min-width: unset;
+    padding: 0 4px;
+    font-weight: 200;
+  }
+  &-icon {
+    min-width: 24px;
+    margin-right: 4px;
+    font-weight: 200;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  &.green {
+    background-color: var(--color-green); // #4a8b3e;
+    // background-image: linear-gradient(to top, rgba($green, 0.25) 100%, rgba($green, 0.65));
+    &:hover {
+      background-color: var(--color-green-light); // #4a8b3e;
+      // background-image: linear-gradient(to top, rgba($green, 0.4) 100%, rgba($green, 0.65));
+    }
+  }
+  &.red {
+    background-color: var(--color-red);
+    // background-image: linear-gradient(to top, rgba($red, 0.25) 100%, rgba($red, 0.65));
+    &:hover {
+      background-color: var(--color-red-light);
+      // background-image: linear-gradient(to top, rgba($red, 0.4) 100%, rgba($red, 0.65));
+    }
+  }
+  &.orange {
+    background-color: var(--color-warning);
+    &:hover {
+      background-color: var(--color-warning-light);
+    }
+  }
+  &.blue {
+    background-color: var(--color-blue);
+    &:hover {
+      background-color: var(--color-blue-light);
+    }
+  }
+  &.gray:hover {
+    background: rgba(var(--color-shadow), 0.6);
+  }
+  &:active {
+    transform: translate(1px, 2px);
+  }
+  @media screen and (max-width: 768px) {
+    & {
+      min-width: 105px;
+      padding: 4px 10px;
+    }
+  }
+}
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+}
+.row,
+.column {
+  &.center {
+    align-items: center;
+  }
+  // &.stretch {
+  //   align-items: stretch;
+  // }
+  &.justify {
+    justify-content: space-between;
+  }
+  &.bottom {
+    align-items: flex-end;
+  }
+  &.middle {
+    justify-content: center;
+  }
+  &.max-h {
+    min-height: 90vh;
+  }
+}

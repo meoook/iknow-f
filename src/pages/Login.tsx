@@ -1,9 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  useLoginWithPasswordMutation,
-  useLoginWithWeb3Mutation,
-} from '../services/api'
+import { useLoginWithPasswordMutation, useLoginWithWeb3Mutation } from '../services/api'
 import { web3AuthService } from '../services/web3Auth'
 import './Login.scss'
 
@@ -13,10 +10,8 @@ export const Login = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const [loginWithPassword, { isLoading: isPasswordLoading }] =
-    useLoginWithPasswordMutation()
-  const [loginWithWeb3, { isLoading: isWeb3Loading }] =
-    useLoginWithWeb3Mutation()
+  const [loginWithPassword, { isLoading: isPasswordLoading }] = useLoginWithPasswordMutation()
+  const [loginWithWeb3, { isLoading: isWeb3Loading }] = useLoginWithWeb3Mutation()
 
   const handlePasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,8 +29,7 @@ export const Login = () => {
     setError('')
 
     try {
-      const { walletAddress, signature, message } =
-        await web3AuthService.authenticateWithWeb3()
+      const { walletAddress, signature, message } = await web3AuthService.authenticateWithWeb3()
       await loginWithWeb3({ walletAddress, signature, message }).unwrap()
       navigate('/')
     } catch (err: any) {
@@ -51,11 +45,7 @@ export const Login = () => {
         {error && <div className='login-error'>{error}</div>}
 
         <div className='login-web3'>
-          <button
-            onClick={handleWeb3Login}
-            disabled={isWeb3Loading}
-            className='web3-button'
-          >
+          <button onClick={handleWeb3Login} disabled={isWeb3Loading} className='web3-button'>
             {isWeb3Loading ? 'Connecting...' : '🦊 Connect Wallet'}
           </button>
         </div>
@@ -89,11 +79,7 @@ export const Login = () => {
             />
           </div>
 
-          <button
-            type='submit'
-            disabled={isPasswordLoading}
-            className='login-button'
-          >
+          <button type='submit' disabled={isPasswordLoading} className='login-button'>
             {isPasswordLoading ? 'Logging in...' : 'Login'}
           </button>
         </form>

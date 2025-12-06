@@ -1,6 +1,6 @@
 import type { Middleware } from '@reduxjs/toolkit'
 import { wsService } from '../services/websocket'
-import { markAsRead, markAllAsRead, removeNotification, clearAllNotifications } from './notificationSlice'
+import { markAsRead, markAllAsRead, removeNotification, clearAllNotifications } from './notification.slice'
 
 export const websocketMiddleware: Middleware = () => (next) => (action) => {
   // First, pass the action to the next middleware/reducer

@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
   id: string
   email?: string
   walletAddress?: string
@@ -6,31 +6,31 @@ export interface User {
   authMethod: 'web3' | 'email' | 'telegram'
 }
 
-export interface AuthState {
-  user: User | null
+export interface IAuthState {
+  user: IUser | null
   token: string | null
   loading: boolean
   error: string | null
   isAuthenticated: boolean
 }
 
-export interface LoginCredentials {
+export interface ILoginCredentials {
   email: string
   password: string
 }
 
-export interface Web3AuthPayload {
+export interface IWeb3AuthPayload {
   walletAddress: string
   signature: string
   message: string
 }
 
-export interface AuthResponse {
+export interface IAuthResponse {
   token: string
-  user: User
+  user: IUser
 }
 
-export interface ApiError {
+export interface IApiError {
   message: string
   code?: string
 }

@@ -10,8 +10,9 @@ import { MyBets } from './pages/MyBets'
 import { wsService } from './services/websocket'
 import { useAppSelector } from './hooks/useRedux'
 import './App.css'
+import Header from './components/header'
 
-function App() {
+export default function NavRouter() {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
 
   useEffect(() => {
@@ -28,32 +29,31 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className='app'>
-        <Navbar />
-        <main className='main-content'>
-          <ScrollToTop />
-          <Routes>
-            {/* Protected routes */}
-            <Route element={<LayoutProtected />}>
-              <Route path='/my-requests' element={<MyRequests />} />
-              <Route path='/my-predictions' element={<MyPredictions />} />
-              <Route path='/my-bets' element={<MyBets />} />
-            </Route>
+      <Header />
+      {/* <Navbar /> */}
+      <main className='main-content'>
+        <ScrollToTop />
+        <Routes>
+          {/* Protected routes */}
+          <Route element={<LayoutProtected />}>
+            <Route path='/my-requests' element={<MyRequests />} />
+            <Route path='/my-predictions' element={<MyPredictions />} />
+            <Route path='/my-bets' element={<MyBets />} />
+          </Route>
 
-            {/* Auth-only routes (redirect if already authenticated) */}
-            <Route element={<LayoutNotAuthed />}>
-              <Route path='/login' element={<Login />} />
-            </Route>
+          {/* Auth-only routes (redirect if already authenticated) */}
+          <Route element={<LayoutNotAuthed />}>
+            <Route path='/login' element={<Login />} />
+          </Route>
 
-            {/* Public routes */}
-            <Route path='/' element={<Home />} />
-            <Route path='/group' element={<Group />} />
+          {/* Public routes */}
+          <Route path='/' element={<Home />} />
+          <Route path='/group' element={<Group />} />
 
-            {/* 404 fallback */}
-            <Route path='*' element={<Navigate to='/' replace />} />
-          </Routes>
-        </main>
-      </div>
+          {/* 404 fallback */}
+          <Route path='*' element={<Navigate to='/' replace />} />
+        </Routes>
+      </main>
     </BrowserRouter>
   )
 }
@@ -80,5 +80,3 @@ function ScrollToTop() {
   }, [pathname])
   return null
 }
-
-export default App

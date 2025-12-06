@@ -5,15 +5,13 @@ export const Home = () => {
 
   return (
     <div className='page-container'>
-      <h1>Welcome to iKnow</h1>
-
       <section className='groups-section'>
         <h2>Groups</h2>
 
         {isLoading && <div>Loading groups...</div>}
         {error && <div className='error'>Failed to load groups</div>}
 
-        {groups && (
+        {groups && groups.length > 0 && (
           <div className='groups-grid'>
             {groups.map((group: any) => (
               <div key={group.id} className='group-card'>

@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { NotificationState, Notification } from '../types/notification.types'
+import type { INotificationState, INotification } from '../types/notification.types'
 
-const initialState: NotificationState = {
+const initialState: INotificationState = {
   notifications: [],
   unreadCount: 0,
 }
@@ -10,7 +10,7 @@ const notificationSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    addNotification: (state, action: PayloadAction<Notification>) => {
+    addNotification: (state, action: PayloadAction<INotification>) => {
       state.notifications.unshift(action.payload)
       if (!action.payload.read) state.unreadCount += 1
     },

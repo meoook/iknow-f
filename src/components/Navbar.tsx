@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../hooks/useRedux'
-import { logout } from '../store/authSlice'
+import { logout } from '../store/auth.slice'
 import './Navbar.scss'
 import { NotificationBell } from './NotificationBell'
 
@@ -47,10 +47,7 @@ export const Navbar = () => {
             <>
               <NotificationBell />
               <div className='navbar-user'>
-                {user?.email ||
-                  user?.walletAddress?.slice(0, 6) +
-                    '...' +
-                    user?.walletAddress?.slice(-4)}
+                {user?.email || user?.walletAddress?.slice(0, 6) + '...' + user?.walletAddress?.slice(-4)}
               </div>
               <button onClick={handleLogout} className='navbar-button'>
                 Logout

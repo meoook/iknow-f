@@ -39,9 +39,7 @@ export const Group = () => {
         </div>
       )}
 
-      {groups && groups.length === 0 && searchQuery && (
-        <div>No groups found</div>
-      )}
+      {groups && groups.length === 0 && searchQuery && <div>No groups found</div>}
     </div>
   )
 }
