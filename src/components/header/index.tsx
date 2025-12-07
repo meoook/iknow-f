@@ -33,10 +33,10 @@ export default function Header() {
               <input name='search' placeholder='Поиск' />
               <IconSprite name='search' />
             </form>
-            <div className='row center gap8'>
-              <IconSprite name='tultip' size={16} />
+            <button className={style.tultip}>
+              <IconSprite name='tultip' size={14} />
               <span>Как это работает?</span>
-            </div>
+            </button>
           </div>
           <div className='row center gap8'>
             {/* <button className={style.theme} onClick={toggleTheme}>
@@ -57,29 +57,29 @@ export default function Header() {
         </div>
         <nav>
           <div className='row center gap12'>
-            <button className={`row center gap2 ${style.active}`}>
+            <button className={`row start gap2 ${style.active}`}>
               <IconSprite name='trend' size={16} />
               <span>Топ</span>
             </button>
-            <button className='row center gap2'>
+            <button className='row start gap2'>
               <IconSprite name='volume' size={16} />
               <span>Объем</span>
             </button>
-            <button className='row center gap2'>
+            <button className='row start gap2'>
               <IconSprite name='diff' size={16} />
               <span>Разница</span>
             </button>
-            <button className='row center gap2'>
+            <button className='row start gap2'>
               <IconSprite name='star' size={16} />
               <span>Новые</span>
             </button>
-            <button className='row center gap2'>
+            <button className='row start gap2'>
               <IconSprite name='finish' size={16} />
               <span>Финиш</span>
             </button>
           </div>
           <div className='hr' />
-          <div className='row center gap8 w100'>
+          <div className='row center gap12 w100'>
             <button>Политика</button>
             <button>Спорт</button>
             <button>Финансы</button>

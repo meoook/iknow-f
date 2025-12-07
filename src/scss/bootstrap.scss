@@ -86,6 +86,9 @@
   &.center {
     align-items: center;
   }
+  &.start {
+    align-items: start;
+  }
   // &.stretch {
   //   align-items: stretch;
   // }
@@ -127,6 +130,6 @@
   box-sizing: border-box;
   height: 20px;
   width: 1px;
-  margin: 0 var(--size-8);
+  margin: 0 var(--size-12);
   background-color: var(--color-secondary);
 }

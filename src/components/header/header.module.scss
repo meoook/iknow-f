@@ -65,6 +65,17 @@ nav {
     transform: translateY(-50%);
   }
 }
+.tultip {
+  display: flex;
+  align-items: center;
+  gap: var(--size-8);
+  color: var(--color-brand-dark);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  &:hover {
+    color: var(--color-brand);
+  }
+}
 
 .menu {
   display: flex;
