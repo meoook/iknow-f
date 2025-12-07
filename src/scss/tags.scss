@@ -31,7 +31,8 @@ body {
   font-weight: 400;
   color: var(--color-primary);
   overflow-y: scroll;
-  background: linear-gradient(to right, #131619, #040506);
+  // background: linear-gradient(to right, #131619, #040506);
+  background: var(--color-body);
   margin: 0;
   line-height: inherit;
 }
@@ -47,6 +48,14 @@ select {
 button,
 input {
   overflow: visible;
+}
+input,
+select {
+  height: 40px;
+  border-radius: var(--radius);
+  &:hover {
+    background-color: var(--color-active);
+  }
 }
 button,
 input,

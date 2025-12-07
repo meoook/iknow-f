@@ -38,8 +38,8 @@ export default function Header() {
                 <span>Как это работает?</span>
               </div>
               {/* <button className={style.btn} disabled>
-              {iconArray.search}
-            </button> */}
+                {iconArray.search}
+              </button> */}
             </div>
           </div>
           <div className={style.menu}>
