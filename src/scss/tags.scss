@@ -21,7 +21,6 @@ html {
   -webkit-text-size-adjust: 100%;
   -moz-tab-size: 4;
   tab-size: 4;
-  font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -39,6 +38,7 @@ body {
 a,
 a:visited {
   text-decoration: none;
+  color: inherit;
 }
 button,
 select {
@@ -49,25 +49,30 @@ button,
 input {
   overflow: visible;
 }
-input,
-select {
-  height: 40px;
-  border-radius: var(--radius);
-  &:hover {
-    background-color: var(--color-active);
-  }
-}
 button,
 input,
 optgroup,
 select,
 textarea {
+  background-color: transparent;
   font-family: inherit;
   font-size: 100%;
   line-height: 1.15;
   margin: 0;
-  background-color: var(--color-input);
   color: inherit;
+}
+input,
+select {
+  height: 40px;
+  border-radius: var(--radius);
+  background-color: var(--color-input);
+  &:hover {
+    background-color: var(--color-hover);
+  }
+  &:focus-within {
+    background-color: var(--color-hover);
+    box-shadow: var(--color-shadow);
+  }
 }
 hr {
   padding-top: 1px;

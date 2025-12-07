@@ -1,15 +1,6 @@
 // import React from 'react'
 
-type IconName =
-  | 'add_o'
-  | 'arrow_back'
-  | 'arrow_down'
-  | 'arrow_up'
-  | 'arrow_right'
-  | 'home'
-  | 'search'
-  | 'user'
-  | 'settings'
+type IconName = 'diff' | 'finish' | 'menu' | 'search' | 'star' | 'trend' | 'tultip' | 'volume'
 
 interface IconProps {
   name: IconName

@@ -4,7 +4,6 @@
   padding-left: 16px;
   padding-right: 16px;
   // padding: 8px 10px;
-  gap: 4px;
   font-weight: 500;
   color: var(--color-primary);
   text-align: center;
@@ -30,11 +29,14 @@
   }
   &-icon {
     min-width: 24px;
-    margin-right: 4px;
-    font-weight: 200;
-    &:last-child {
-      margin-right: 0;
+    // margin-right: 4px;
+    border-radius: var(--radius);
+    &:hover {
+      background-color: var(--color-hover);
     }
+    // &:last-child {
+    //   margin-right: 0;
+    // }
   }
   &.green {
     background-color: var(--color-green); // #4a8b3e;
@@ -70,12 +72,6 @@
   &:active {
     transform: translate(1px, 2px);
   }
-  @media screen and (max-width: 768px) {
-    & {
-      min-width: 105px;
-      padding: 4px 10px;
-    }
-  }
 }
 .row {
   display: flex;
@@ -102,7 +98,35 @@
   &.middle {
     justify-content: center;
   }
-  &.max-h {
-    min-height: 90vh;
+  &.gap {
+    gap: var(--size-20);
+    &2 {
+      gap: var(--size-2);
+    }
+    &4 {
+      gap: var(--size-4);
+    }
+    &8 {
+      gap: var(--size-8);
+    }
+    &12 {
+      gap: var(--size-12);
+    }
+    &16 {
+      gap: var(--size-16);
+    }
+    &20 {
+      gap: var(--size-20);
+    }
   }
+}
+.w100 {
+  width: 100%;
+}
+.hr {
+  box-sizing: border-box;
+  height: 20px;
+  width: 1px;
+  margin: 0 var(--size-8);
+  background-color: var(--color-secondary);
 }

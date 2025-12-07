@@ -57,12 +57,13 @@
 
   --color-input: #2d2d3a; // #282831
   --color-active: #2c2c35;
+  --color-hover: #2f2f3f;
 
   --color-shadow: #2222;
   --color-border: #434a56; // #464e5a
   --color-disabled: #505059;
 
-  --color-brand: #7545d2;
+  --color-brand: #ffc400; // #7545d2
   // COLORS
   --color-green: #4a8b3e;
   --color-green-light: #4a8b3e;
@@ -93,9 +94,12 @@
   --radius: 8px;
   --font-size-h1: 24px;
   --font-size-h2: 20px;
-  --base-size-4: 4px;
-  --base-size-8: 8px;
-  --base-size-16: 16px;
+  --size-2: 2px;
+  --size-4: 4px;
+  --size-8: 8px;
+  --size-12: 12px;
+  --size-16: 16px;
+  --size-20: 20px;
   --size-checkbox: 24px;
   // Other
   --text-weight: 600;

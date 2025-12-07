@@ -5,7 +5,7 @@ import { useGetUserQuery, useSingOutMutation } from '../../services/api'
 import { useNavigate } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
 import IconSprite from '../../elements/icon/Icon'
-
+import Logo from './logo'
 export default function Header() {
   const navigate = useNavigate()
   // const { isAuthenticated, user } = useAppSelector((state) => state.auth)
@@ -22,27 +22,23 @@ export default function Header() {
   return (
     <>
       {loading && <LoaderCar />}
-      <header className={style.header}>
-        <nav>
-          <div className={style.logo}>
-            <Link className={style.link} to='/'>
-              <IconSprite name='arrow_down' />
-              <h2>iKnow</h2>
-            </Link>
-          </div>
-          <div className={style.search}>
-            <div className={style.input}>
-              <input name='search' placeholder='Search' />
-              <div className='row'>
-                <IconSprite name='arrow_down' />
-                <span>Как это работает?</span>
-              </div>
-              {/* <button className={style.btn} disabled>
-                {iconArray.search}
-              </button> */}
+      <header>
+        <div className={style.head}>
+          <Link className={style.logo} to='/'>
+            <Logo />
+            <h2>iKnow</h2>
+          </Link>
+          <div className='row center gap w100'>
+            <form className={style.input}>
+              <input name='search' placeholder='Поиск' />
+              <IconSprite name='search' />
+            </form>
+            <div className='row center gap8'>
+              <IconSprite name='tultip' size={16} />
+              <span>Как это работает?</span>
             </div>
           </div>
-          <div className={style.menu}>
+          <div className='row center gap8'>
             {/* <button className={style.theme} onClick={toggleTheme}>
             {dark ? iconArray.sun : iconArray.moon}
           </button> */}
@@ -51,9 +47,51 @@ export default function Header() {
               <></>
             ) : (
               <Link className='btn blue' to='/login'>
-                Sign Up
+                Войти
               </Link>
             )}
+            <button className='btn btn-icon'>
+              <IconSprite name='menu' />
+            </button>
+          </div>
+        </div>
+        <nav>
+          <div className='row center gap12'>
+            <button className={`row center gap2 ${style.active}`}>
+              <IconSprite name='trend' size={16} />
+              <span>Топ</span>
+            </button>
+            <button className='row center gap2'>
+              <IconSprite name='volume' size={16} />
+              <span>Объем</span>
+            </button>
+            <button className='row center gap2'>
+              <IconSprite name='diff' size={16} />
+              <span>Разница</span>
+            </button>
+            <button className='row center gap2'>
+              <IconSprite name='star' size={16} />
+              <span>Новые</span>
+            </button>
+            <button className='row center gap2'>
+              <IconSprite name='finish' size={16} />
+              <span>Финиш</span>
+            </button>
+          </div>
+          <div className='hr' />
+          <div className='row center gap8 w100'>
+            <button>Политика</button>
+            <button>Спорт</button>
+            <button>Финансы</button>
+            <button>Крипта</button>
+            <button className={style.active}>Геополитика</button>
+            <button>Технологии</button>
+            <button>Культура</button>
+            <button>Мир</button>
+            <button>Экономика</button>
+            <button>Выборы</button>
+            <button>Упоминания</button>
+            <button>Другие</button>
           </div>
         </nav>
       </header>
