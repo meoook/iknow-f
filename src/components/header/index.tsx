@@ -1,5 +1,6 @@
 import style from './header.module.scss'
 import { Link } from 'react-router-dom'
+import { useState, useRef } from 'react'
 import LoaderCar from '../../elements/loader-car'
 import { useGetUserQuery, useSingOutMutation } from '../../services/api'
 import { useNavigate } from 'react-router-dom'
@@ -14,9 +15,31 @@ export default function Header() {
   const [signOut, { isLoading }] = useSingOutMutation()
   const { data: user } = useGetUserQuery(undefined, { skip: !Boolean(token) || isLoading })
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isDarkTheme, setIsDarkTheme] = useState(true)
+  const closeTimeoutRef = useRef<number | null>(null)
+
   const logOut = () => {
     navigate('/', { replace: true })
     signOut()
+  }
+
+  const toggleTheme = () => {
+    setIsDarkTheme(!isDarkTheme)
+  }
+
+  const handleMouseEnter = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+      closeTimeoutRef.current = null
+    }
+    setIsMenuOpen(true)
+  }
+
+  const handleMouseLeave = () => {
+    closeTimeoutRef.current = setTimeout(() => {
+      setIsMenuOpen(false)
+    }, 300)
   }
 
   return (
@@ -50,9 +73,22 @@ export default function Header() {
                 Войти
               </Link>
             )}
-            <button className='btn btn-icon'>
-              <IconSprite name='menu' />
-            </button>
+            <div className={style.menuContainer} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+              <button className='btn btn-icon'>
+                <IconSprite name='menu' />
+              </button>
+              {isMenuOpen && (
+                <div className={style.dropdown}>
+                  <button className={style.dropdownItem}>Профиль</button>
+                  <button className={style.dropdownItem}>Настройки</button>
+                  <button className={style.dropdownItem}>О приложении</button>
+                  <div className={style.divider} />
+                  <button className={style.themeToggle} onClick={toggleTheme}>
+                    <span>{isDarkTheme ? 'Светлая тема' : 'Темная тема'}</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <nav>
