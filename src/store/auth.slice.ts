@@ -56,7 +56,7 @@ const authSlice = createSlice({
         state.user = null
         localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
       })
-      .addMatcher(api.endpoints.loginWithPassword.matchFulfilled, (state, action) => {
+      .addMatcher(api.endpoints.changePassword.matchFulfilled, (state, action) => {
         state.user = action.payload.user
         state.token = action.payload.token
         state.isAuthenticated = true

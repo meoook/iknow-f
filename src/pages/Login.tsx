@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useLoginWithPasswordMutation, useLoginWithWeb3Mutation } from '../services/api'
+import { useSignInMutation, useW3authMutation } from '../services/api'
 import { web3AuthService } from '../services/web3Auth'
 import './Login.scss'
 
@@ -10,15 +10,15 @@ export const Login = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const [loginWithPassword, { isLoading: isPasswordLoading }] = useLoginWithPasswordMutation()
-  const [loginWithWeb3, { isLoading: isWeb3Loading }] = useLoginWithWeb3Mutation()
+  const [signIn, { isLoading: isPasswordLoading }] = useSignInMutation()
+  const [w3auth, { isLoading: isWeb3Loading }] = useW3authMutation()
 
   const handlePasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
     try {
-      await loginWithPassword({ email, password }).unwrap()
+      await signIn({ email, password }).unwrap()
       navigate('/')
     } catch (err: any) {
       setError(err.data?.message || 'Login failed')
@@ -29,8 +29,8 @@ export const Login = () => {
     setError('')
 
     try {
-      const { walletAddress, signature, message } = await web3AuthService.authenticateWithWeb3()
-      await loginWithWeb3({ walletAddress, signature, message }).unwrap()
+      const { signature, message } = await web3AuthService.authenticateWithWeb3()
+      await w3auth({ message, signature }).unwrap()
       navigate('/')
     } catch (err: any) {
       setError(err.message || 'Web3 login failed')

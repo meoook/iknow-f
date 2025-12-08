@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
-import { Navbar } from './components/Navbar'
 import { Home } from './pages/Home'
 import { Group } from './pages/Group'
 import { Login } from './pages/Login'
@@ -9,18 +8,14 @@ import { MyPredictions } from './pages/MyPredictions'
 import { MyBets } from './pages/MyBets'
 import { wsService } from './services/websocket'
 import { useAppSelector } from './hooks/useRedux'
-import './App.css'
 import Header from './components/header'
 
 export default function NavRouter() {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
 
   useEffect(() => {
-    if (isAuthenticated) {
-      wsService.connect()
-    } else {
-      wsService.disconnect()
-    }
+    if (isAuthenticated) wsService.connect()
+    else wsService.disconnect()
 
     return () => {
       wsService.disconnect()
@@ -30,8 +25,7 @@ export default function NavRouter() {
   return (
     <BrowserRouter>
       <Header />
-      {/* <Navbar /> */}
-      <main className='main-content'>
+      <main>
         <ScrollToTop />
         <Routes>
           {/* Protected routes */}
@@ -47,6 +41,18 @@ export default function NavRouter() {
           </Route>
 
           {/* Public routes */}
+          <Route path='/politics' element={<Home />} />
+          <Route path='/sport' element={<Home />} />
+          <Route path='/finance' element={<Home />} />
+          <Route path='/crypto' element={<Home />} />
+          <Route path='/geopolitics' element={<Home />} />
+          <Route path='/technology' element={<Home />} />
+          <Route path='/culture' element={<Home />} />
+          <Route path='/world' element={<Home />} />
+          <Route path='/economy' element={<Home />} />
+          <Route path='/elections' element={<Home />} />
+          <Route path='/mentions' element={<Home />} />
+          <Route path='/other' element={<Home />} />
           <Route path='/' element={<Home />} />
           <Route path='/group' element={<Group />} />
 

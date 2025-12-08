@@ -31,14 +31,14 @@ export class Web3AuthService {
     }
   }
 
-  async authenticateWithWeb3(): Promise<{ walletAddress: string; signature: string; message: string }> {
+  async authenticateWithWeb3(): Promise<{ signature: string; message: string }> {
     // Connect wallet
     const walletAddress = await this.connectWallet()
     // Create message to sign
     const message = `Sign this message to authenticate with iKnow.\n\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`
     // Sign message
     const signature = await this.signMessage(walletAddress, message)
-    return { walletAddress, signature, message }
+    return { signature, message }
   }
 
   disconnect() {

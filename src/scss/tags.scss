@@ -17,7 +17,7 @@
 // }
 
 html {
-  line-height: 1.5;
+  line-height: 1;
   -webkit-text-size-adjust: 100%;
   -moz-tab-size: 4;
   tab-size: 4;
@@ -35,10 +35,20 @@ body {
   margin: 0;
   line-height: inherit;
 }
+main {
+  max-width: var(--size-surface);
+  width: 100%;
+  margin-inline: auto;
+  min-height: 50vh;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 a,
 a:visited {
   text-decoration: none;
   color: inherit;
+  transition: all 0.3s;
 }
 button,
 select {
@@ -57,9 +67,10 @@ textarea {
   background-color: transparent;
   font-family: inherit;
   font-size: 100%;
-  line-height: 1.15;
+  // line-height: inherit;
   margin: 0;
   color: inherit;
+  transition: all 0.3s;
 }
 input,
 select {
@@ -75,7 +86,7 @@ select {
   }
 }
 hr {
-  padding-top: 1px;
+  height: 1px;
   margin: var(--base-size-8, 8px) 0;
   background-color: var(--color-border);
   border: none;
@@ -107,7 +118,6 @@ legend {
   flex-shrink: 0;
 }
 svg {
-  fill: currentColor;
   transition: fill 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
   user-select: none;
 }
@@ -118,11 +128,6 @@ img {
   object-fit: cover;
   transition: all 0.3s;
   background-color: rgba(var(--color-primary), 0.8);
-}
-hr {
-  height: 2px;
-  margin: 5px 0;
-  box-shadow: 0 0 2px var(--color-border);
 }
 small {
   &.green {

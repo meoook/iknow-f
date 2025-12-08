@@ -16,7 +16,7 @@ export const api = createApi({
   }),
   tagTypes: ['User', 'Requests', 'Predictions', 'Bets', 'Groups'],
   endpoints: (builder) => ({
-    // Web3 endpoints
+    // Auth endpoints
     w3nonce: builder.mutation<Web3Message, { chain: number; address: string }>({
       query: ({ chain, address }) => ({
         url: 'auth/web3',
@@ -46,7 +46,7 @@ export const api = createApi({
         // }
       },
     }),
-    signIn: builder.mutation<string, { email: string; password: string }>({
+    signIn: builder.mutation<string, ILoginCredentials>({
       // invalidatesTags: ['User'],
       query: ({ email, password }) => ({
         url: 'auth/user',
@@ -76,12 +76,16 @@ export const api = createApi({
         method: 'DELETE',
       }),
     }),
-    // Auth endpoints
-    loginWithPassword: builder.mutation<IAuthResponse, ILoginCredentials>({
-      query: (credentials) => ({
+    getUser: builder.query<IUser, void>({
+      query: () => 'auth/user',
+      providesTags: ['User'],
+    }),
+    // User endpoints
+    changePassword: builder.mutation<IAuthResponse, { password: string }>({
+      query: (payload) => ({
         url: 'auth/user/password',
         method: 'POST',
-        body: credentials,
+        body: payload,
       }),
     }),
     loginWithWeb3: builder.mutation<IAuthResponse, { walletAddress: string; signature: string; message: string }>({
@@ -91,23 +95,19 @@ export const api = createApi({
         body: payload,
       }),
     }),
-    loginWithEmail: builder.mutation<IAuthResponse, { email: string }>({
+    setEmail: builder.mutation<IAuthResponse, { email: string }>({
       query: (payload) => ({
         url: 'auth/user/email',
         method: 'POST',
         body: payload,
       }),
     }),
-    loginWithTelegram: builder.mutation<IAuthResponse, any>({
+    setTelegram: builder.mutation<IAuthResponse, { nonce: string }>({
       query: (payload) => ({
         url: 'auth/user/telegram',
         method: 'POST',
         body: payload,
       }),
-    }),
-    getUser: builder.query<IUser, void>({
-      query: () => 'auth/user',
-      providesTags: ['User'],
     }),
 
     // Protected endpoints
@@ -142,10 +142,10 @@ export const {
   useSignInMutation,
   useSingOutMutation,
   // ------
-  useLoginWithPasswordMutation,
+  useChangePasswordMutation,
   useLoginWithWeb3Mutation,
-  useLoginWithEmailMutation,
-  useLoginWithTelegramMutation,
+  useSetEmailMutation,
+  useSetTelegramMutation,
   useGetUserQuery,
   useGetMyRequestsQuery,
   useGetMyPredictionsQuery,

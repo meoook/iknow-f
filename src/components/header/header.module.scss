@@ -1,4 +1,6 @@
 header {
+  position: sticky;
+  top: 0;
   box-sizing: border-box;
   background: var(--color-head);
   color: var(--color-primary);
@@ -9,10 +11,11 @@ header {
   & .logo {
     display: inline-flex;
     align-items: center;
-    gap: var(--size-8);
+    gap: 8px;
     color: var(--color-brand);
   }
 }
+
 .head,
 nav {
   display: flex;
@@ -22,16 +25,26 @@ nav {
   margin-inline: auto;
 }
 .head {
-  height: 64px;
-  gap: var(--size-20);
+  height: 60px;
+  gap: 20px;
 }
 nav {
-  height: 48px;
+  height: 44px;
   justify-content: space-between;
-  gap: var(--gap);
   color: var(--color-secondary);
-  .active {
-    color: var(--color-primary);
+
+  .item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    &:hover {
+      color: var(--color-primary);
+    }
+
+    &:global(.active) {
+      color: var(--color-primary);
+    }
   }
 }
 
@@ -68,7 +81,7 @@ nav {
 .tultip {
   display: flex;
   align-items: center;
-  gap: var(--size-8);
+  gap: 8px;
   color: var(--color-brand-dark);
   font-size: var(--font-size-sm);
   cursor: pointer;
@@ -86,14 +99,36 @@ nav {
   position: absolute;
   top: calc(100% + 4px);
   right: 0;
-  min-width: 200px;
+  min-width: 220px;
   background: var(--color-head);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   box-shadow: 0 4px 12px var(--color-shadow);
-  padding: var(--size-8) 0;
+  padding: 8px 0;
   z-index: 100;
   animation: fadeIn 0.2s ease-in-out;
+
+  .item,
+  .link {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px;
+    cursor: pointer;
+    gap: 8px;
+
+    &:hover {
+      background-color: var(--color-hover);
+    }
+  }
+
+  .item {
+    color: var(--color-primary);
+  }
+  .link {
+    color: var(--color-secondary);
+  }
 }
 
 @keyframes fadeIn {
@@ -105,45 +140,4 @@ nav {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.dropdownItem,
-.themeToggle {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: var(--size-12) var(--size-16);
-  text-align: left;
-  color: var(--color-primary);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  font-size: var(--font-size);
-
-  &:hover {
-    background-color: var(--color-hover);
-  }
-}
-
-.themeToggle {
-  color: var(--color-brand);
-  font-weight: 500;
-
-  &:hover {
-    color: var(--color-brand-dark);
-  }
-}
-
-.divider {
-  height: 1px;
-  background-color: var(--color-border);
-  margin: var(--size-8) 0;
-}
-
-.menu {
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  gap: var(--gap);
 }
