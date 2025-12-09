@@ -22,10 +22,6 @@ export const api = createApi({
         url: 'auth/web3',
         params: { chain, address },
       }),
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        dispatch(setLoading(true))
-        await queryFulfilled
-      },
     }),
     w3auth: builder.mutation<string, { message: string; signature: string }>({
       // invalidatesTags: ['User'],
@@ -39,10 +35,10 @@ export const api = createApi({
         if (response.status === 'FETCH_ERROR') return 'server unreacheble'
         return 'invalid signature'
       },
-      // async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-      //   dispatch(setLoading(true))
-      //   await queryFulfilled
-      // },
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        dispatch(setLoading(true))
+        await queryFulfilled
+      },
     }),
     signIn: builder.mutation<string, ILoginCredentials>({
       // invalidatesTags: ['User'],
@@ -62,7 +58,7 @@ export const api = createApi({
       },
     }),
     singOut: builder.mutation<void, void>({
-      invalidatesTags: ['User'],
+      // invalidatesTags: ['User'],
       query: () => ({
         url: 'auth/user',
         method: 'DELETE',

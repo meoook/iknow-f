@@ -133,3 +133,18 @@
   margin: 0 var(--size-12);
   background-color: var(--color-secondary);
 }
+
+.color {
+  &-green {
+    color: var(--color-green);
+  }
+  &-red {
+    color: var(--color-red);
+  }
+  &-blue {
+    color: var(--color-blue);
+  }
+  &-brand {
+    color: var(--color-brand);
+  }
+}

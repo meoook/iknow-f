@@ -4,6 +4,7 @@ type IconName =
   | 'activity'
   | 'crown'
   | 'diff'
+  | 'exit'
   | 'finish'
   | 'menu'
   | 'moon'

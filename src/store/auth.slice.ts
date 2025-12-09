@@ -45,7 +45,7 @@ const authSlice = createSlice({
     builder
       .addMatcher(api.endpoints.w3auth.matchFulfilled, (state, action) => {
         state.token = action.payload
-        // state.loading = false
+        state.loading = false
         state.isAuthenticated = true
         localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload)
       })
@@ -58,9 +58,15 @@ const authSlice = createSlice({
       })
       .addMatcher(api.endpoints.signIn.matchFulfilled, (state, action) => {
         state.token = action.payload
-        // state.loading = false
+        state.loading = false
         state.isAuthenticated = true
         localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload)
+      })
+      .addMatcher(api.endpoints.singOut.matchFulfilled, (state) => {
+        state.token = null
+        state.isAuthenticated = false
+        state.user = null
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
       })
       .addMatcher(api.endpoints.getUser.matchFulfilled, (state, action) => {
         state.loading = false

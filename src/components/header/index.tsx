@@ -12,9 +12,9 @@ export default function Header() {
   const navigate = useNavigate()
   // const { isAuthenticated, user } = useAppSelector((state) => state.auth)
 
-  const { token, loading } = useAppSelector((state) => state.auth)
+  const { token, loading, user } = useAppSelector((state) => state.auth)
   const [signOut, { isLoading }] = useSingOutMutation()
-  const { data: user } = useGetUserQuery(undefined, { skip: !Boolean(token) || isLoading })
+  // const { data: user } = useGetUserQuery(undefined, { skip: !Boolean(token) || isLoading })
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isDarkTheme, setIsDarkTheme] = useState(true)
@@ -22,7 +22,8 @@ export default function Header() {
   const closeTimeoutRef = useRef<number | null>(null)
 
   const logOut = () => {
-    navigate('/', { replace: true })
+    setIsMenuOpen(false) // Закрываем меню при выходе
+    // navigate('/', { replace: true })
     signOut()
   }
 
@@ -104,6 +105,12 @@ export default function Header() {
                   <a className={style.link} href='/docs'>
                     Документация
                   </a>
+                  {user && (
+                    <button className={style.item} onClick={logOut}>
+                      <IconSprite name='exit' size={20} color='var(--color-red)' />
+                      <span className='color-red'>Выйти</span>
+                    </button>
+                  )}
                 </div>
               )}
             </div>
