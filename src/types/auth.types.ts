@@ -1,9 +1,11 @@
 export interface IUser {
-  id: string
+  address: string
+  balance: string
+  username?: string
   email?: string
-  walletAddress?: string
-  telegram?: string
-  authMethod: 'web3' | 'email' | 'telegram'
+  email_validated: boolean
+  telegram_id: string
+  avatar?: string
 }
 
 export interface IAuthState {

@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { IAuthState, IAuthResponse } from '../types/auth.types'
 import { api } from '../services/api'
 
-const LOCAL_STORAGE_TOKEN_KEY: string = 'token'
+export const LOCAL_STORAGE_TOKEN_KEY: string = 'token'
 
 const initialState: IAuthState = {
   token: localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY),
@@ -45,7 +45,7 @@ const authSlice = createSlice({
     builder
       .addMatcher(api.endpoints.w3auth.matchFulfilled, (state, action) => {
         state.token = action.payload
-        state.loading = false
+        // state.loading = false
         state.isAuthenticated = true
         localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload)
       })
@@ -56,25 +56,21 @@ const authSlice = createSlice({
         state.user = null
         localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
       })
-      .addMatcher(api.endpoints.changePassword.matchFulfilled, (state, action) => {
-        state.user = action.payload.user
-        state.token = action.payload.token
+      .addMatcher(api.endpoints.signIn.matchFulfilled, (state, action) => {
+        state.token = action.payload
+        // state.loading = false
         state.isAuthenticated = true
-        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload.token)
-      })
-      .addMatcher(api.endpoints.loginWithWeb3.matchFulfilled, (state, action) => {
-        state.user = action.payload.user
-        state.token = action.payload.token
-        state.isAuthenticated = true
-        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload.token)
+        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload)
       })
       .addMatcher(api.endpoints.getUser.matchFulfilled, (state, action) => {
+        state.loading = false
+        state.isAuthenticated = true
         state.user = action.payload
       })
       .addMatcher(api.endpoints.getUser.matchRejected, (state) => {
-        // If fetching user fails, clear auth
-        state.isAuthenticated = false
         state.token = null
+        state.loading = false
+        state.isAuthenticated = false
         state.user = null
         localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
       })

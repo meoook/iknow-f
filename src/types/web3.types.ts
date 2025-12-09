@@ -1,9 +1,4 @@
-export interface Web3Message {
-  address: string
+export interface Web3MessageNonce {
   nonce: string
-  domain: string
-  statement: string
-  uri: string
-  chainId: number
-  timeout: number
+  expire: number
 }

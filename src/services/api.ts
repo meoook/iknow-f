@@ -1,15 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { config } from '../config/config'
 import type { IUser, ILoginCredentials, IAuthResponse } from '../types/auth.types'
-import type { Web3Message } from '../types/web3.types'
-import { setLoading } from '../store/auth.slice'
+import type { Web3MessageNonce } from '../types/web3.types'
+import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl: config.apiBaseUrl,
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem('auth_token')
+      const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
       if (token) headers.set('Authorization', `Bearer ${token}`)
       return headers
     },
@@ -17,11 +17,15 @@ export const api = createApi({
   tagTypes: ['User', 'Requests', 'Predictions', 'Bets', 'Groups'],
   endpoints: (builder) => ({
     // Auth endpoints
-    w3nonce: builder.mutation<Web3Message, { chain: number; address: string }>({
+    w3nonce: builder.mutation<Web3MessageNonce, { chain: number; address: string }>({
       query: ({ chain, address }) => ({
         url: 'auth/web3',
         params: { chain, address },
       }),
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        dispatch(setLoading(true))
+        await queryFulfilled
+      },
     }),
     w3auth: builder.mutation<string, { message: string; signature: string }>({
       // invalidatesTags: ['User'],
@@ -35,16 +39,10 @@ export const api = createApi({
         if (response.status === 'FETCH_ERROR') return 'server unreacheble'
         return 'invalid signature'
       },
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        dispatch(setLoading(true))
-        await queryFulfilled
-        // try {
-        //   const { data: token } = await queryFulfilled
-        //   dispatch(setToken(token))
-        // } catch (error) {
-        //   dispatch(setLoading(false))
-        // }
-      },
+      // async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+      //   dispatch(setLoading(true))
+      //   await queryFulfilled
+      // },
     }),
     signIn: builder.mutation<string, ILoginCredentials>({
       // invalidatesTags: ['User'],
@@ -61,12 +59,6 @@ export const api = createApi({
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         dispatch(setLoading(true))
         await queryFulfilled
-        // try {
-        //   const { data: token } = await queryFulfilled
-        //   dispatch(setToken(token))
-        // } catch (error) {
-        //   dispatch(setLoading(false))
-        // }
       },
     }),
     singOut: builder.mutation<void, void>({

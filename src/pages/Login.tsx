@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSignInMutation, useW3authMutation } from '../services/api'
+import { useSignInMutation, useW3authMutation, useW3nonceMutation } from '../services/api'
 import { web3AuthService } from '../services/web3Auth'
 import './Login.scss'
 
@@ -12,6 +12,7 @@ export const Login = () => {
 
   const [signIn, { isLoading: isPasswordLoading }] = useSignInMutation()
   const [w3auth, { isLoading: isWeb3Loading }] = useW3authMutation()
+  const [w3nonce] = useW3nonceMutation()
 
   const handlePasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,7 +30,7 @@ export const Login = () => {
     setError('')
 
     try {
-      const { signature, message } = await web3AuthService.authenticateWithWeb3()
+      const { signature, message } = await web3AuthService.authenticateWithWeb3(w3nonce)
       await w3auth({ message, signature }).unwrap()
       navigate('/')
     } catch (err: any) {

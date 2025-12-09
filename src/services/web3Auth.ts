@@ -1,5 +1,17 @@
 import { createWalletClient, custom, type WalletClient } from 'viem'
 import { mainnet } from 'viem/chains'
+import type { Web3MessageNonce } from '../types/web3.types'
+
+// Helper function to format date to local YYYY-MM-DD hh:mm:ss
+function formatLocalDateTime(date: Date): string {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  const seconds = String(date.getSeconds()).padStart(2, '0')
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
 
 export class Web3AuthService {
   private walletClient: WalletClient | null = null
@@ -31,11 +43,24 @@ export class Web3AuthService {
     }
   }
 
-  async authenticateWithWeb3(): Promise<{ signature: string; message: string }> {
+  async authenticateWithWeb3(
+    w3nonce: (params: { chain: number; address: string }) => Promise<{ data?: Web3MessageNonce }>
+  ): Promise<{ signature: string; message: string }> {
     // Connect wallet
     const walletAddress = await this.connectWallet()
-    // Create message to sign
-    const message = `Sign this message to authenticate with iKnow.\n\nWallet: ${walletAddress}\nTimestamp: ${Date.now()}`
+
+    // Get nonce from server
+    const nonceResponse = await w3nonce({ chain: 1, address: walletAddress })
+    if (!nonceResponse.data) throw new Error('Failed to get nonce from server')
+
+    const { nonce, expire } = nonceResponse.data
+
+    // Create message to sign with nonce
+    let message = `iKnow wants you to sign in with your account:\n${walletAddress}`
+    message += `\n\nNonce: ${nonce}`
+    message += `\nIssued At: ${formatLocalDateTime(new Date())}`
+    message += `\nExpire At: ${formatLocalDateTime(new Date(expire * 1000))}`
+
     // Sign message
     const signature = await this.signMessage(walletAddress, message)
     return { signature, message }

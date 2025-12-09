@@ -168,6 +168,7 @@ export default function Header() {
               Выборы
             </NavLink>
             <NavLink to='/mentions' className={style.item}>
+              {/* Высказывания */}
               Упоминания
             </NavLink>
             {/* <NavLink to='/other' className={style.item}>
