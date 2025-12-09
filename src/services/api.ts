@@ -24,7 +24,6 @@ export const api = createApi({
       }),
     }),
     w3auth: builder.mutation<string, { message: string; signature: string }>({
-      // invalidatesTags: ['User'],
       query: ({ message, signature }) => ({
         url: 'auth/web3',
         method: 'POST',
@@ -41,7 +40,6 @@ export const api = createApi({
       },
     }),
     signIn: builder.mutation<string, ILoginCredentials>({
-      // invalidatesTags: ['User'],
       query: ({ email, password }) => ({
         url: 'auth/user',
         method: 'POST',
@@ -58,7 +56,6 @@ export const api = createApi({
       },
     }),
     singOut: builder.mutation<void, void>({
-      // invalidatesTags: ['User'],
       query: () => ({
         url: 'auth/user',
         method: 'DELETE',
@@ -76,19 +73,13 @@ export const api = createApi({
         body: payload,
       }),
     }),
-    loginWithWeb3: builder.mutation<IAuthResponse, { walletAddress: string; signature: string; message: string }>({
-      query: (payload) => ({
-        url: 'auth/web3',
-        method: 'POST',
-        body: payload,
-      }),
-    }),
     setEmail: builder.mutation<IAuthResponse, { email: string }>({
       query: (payload) => ({
         url: 'auth/user/email',
         method: 'POST',
         body: payload,
       }),
+      invalidatesTags: ['User'],
     }),
     setTelegram: builder.mutation<IAuthResponse, { nonce: string }>({
       query: (payload) => ({
@@ -96,6 +87,7 @@ export const api = createApi({
         method: 'POST',
         body: payload,
       }),
+      invalidatesTags: ['User'],
     }),
 
     // Protected endpoints
@@ -131,7 +123,6 @@ export const {
   useSingOutMutation,
   // ------
   useChangePasswordMutation,
-  useLoginWithWeb3Mutation,
   useSetEmailMutation,
   useSetTelegramMutation,
   useGetUserQuery,

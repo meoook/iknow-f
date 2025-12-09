@@ -129,17 +129,3 @@ img {
   transition: all 0.3s;
   background-color: rgba(var(--color-primary), 0.8);
 }
-small {
-  &.green {
-    color: var(--color-msg-success);
-  }
-  &.red {
-    color: var(--color-msg-error);
-  }
-  &.blue {
-    color: var(--color-msg-info);
-  }
-  &.gray {
-    color: var(--color-secondary);
-  }
-}
