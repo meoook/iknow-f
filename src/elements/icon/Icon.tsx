@@ -2,6 +2,10 @@
 
 type IconName =
   | 'activity'
+  | 'arrow_down'
+  | 'bell'
+  | 'bell-z'
+  | 'close'
   | 'crown'
   | 'diff'
   | 'exit'

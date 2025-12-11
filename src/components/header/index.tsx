@@ -1,123 +1,50 @@
 import style from './header.module.scss'
+import { useState } from 'react'
+import { useAppSelector } from '../../hooks/useRedux'
 import { Link, NavLink } from 'react-router-dom'
-import { useState, useRef } from 'react'
-import { useGetUserQuery, useSingOutMutation } from '../../services/api'
-import { useNavigate } from 'react-router-dom'
-import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
+import { useModal } from '../../hooks/hooks'
+import Modal from '../../elements/modal'
+import ModalLogin from '../../modals/login'
 import IconSprite from '../../elements/icon/Icon'
-import LoaderCar from '../../elements/loader-car'
 import Logo from './logo'
+import UserMenu from '../userMenu'
 
 export default function Header() {
-  const navigate = useNavigate()
-  // const { isAuthenticated, user } = useAppSelector((state) => state.auth)
-
-  const { token, loading, user } = useAppSelector((state) => state.auth)
-  const [signOut, { isLoading }] = useSingOutMutation()
-  // const { data: user } = useGetUserQuery(undefined, { skip: !Boolean(token) || isLoading })
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isDarkTheme, setIsDarkTheme] = useState(true)
+  const { user, loading } = useAppSelector((state) => state.auth)
   const [filter, setFilter] = useState('top')
-  const closeTimeoutRef = useRef<number | null>(null)
-
-  const logOut = () => {
-    setIsMenuOpen(false) // Закрываем меню при выходе
-    // navigate('/', { replace: true })
-    signOut()
-  }
+  const [modal, open, close] = useModal()
 
   const handleF = (e: React.MouseEvent<HTMLButtonElement>) => {
     setFilter(e.currentTarget.name)
   }
 
-  const toggleTheme = () => {
-    setIsDarkTheme(!isDarkTheme)
-  }
-
-  const handleMouseEnter = () => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current)
-      closeTimeoutRef.current = null
-    }
-    setIsMenuOpen(true)
-  }
-
-  const handleMouseLeave = () => {
-    closeTimeoutRef.current = setTimeout(() => {
-      setIsMenuOpen(false)
-    }, 300)
-  }
-
   return (
     <>
-      {loading && <LoaderCar />}
+      <Modal close={close} modal={modal}>
+        <ModalLogin />
+      </Modal>
       <header>
         <div className={style.head}>
           <Link className={style.logo} to='/'>
             <Logo />
-            <h2>iKnow</h2>
+            <h2>Vanga</h2>
           </Link>
-          <div className='row center gap w100'>
+          <div className='row center gap20 w100'>
             <form className={style.input}>
               <input name='search' placeholder='Поиск' />
               <IconSprite name='search' />
             </form>
-            <button className={style.tultip}>
-              <IconSprite name='tultip' size={14} />
-              <span>Как это работает?</span>
-            </button>
-          </div>
-          <div className='row center gap8'>
-            {user ? (
-              // <UserMenu user={user} />
-              <></>
-            ) : (
-              <Link className='btn blue' to='/login'>
-                Войти
-              </Link>
-            )}
-            <div className={style.menuContainer} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-              <button className='btn btn-icon'>
-                <IconSprite name='menu' />
+            {!user && !loading && (
+              <button className={style.tultip} onClick={open}>
+                <IconSprite name='tultip' size={14} />
+                <span>Как это работает?</span>
               </button>
-              {isMenuOpen && (
-                <div className={style.dropdown}>
-                  <button className={style.item}>
-                    <IconSprite name='crown' size={20} color='var(--color-brand)' />
-                    <span>Таблица лидеров</span>
-                  </button>
-                  <button className={style.item}>
-                    <IconSprite name='activity' size={20} color='var(--color-red)' />
-                    <span>Активность</span>
-                  </button>
-                  <button className={style.item} onClick={toggleTheme}>
-                    <IconSprite name='moon' size={20} color='var(--color-blue)' />
-                    {isDarkTheme ? 'Светлая тема' : 'Темная тема'}
-                  </button>
-                  <hr />
-                  <a className={style.link} href='/terms'>
-                    Условия использования
-                  </a>
-                  <a className={style.link} href='/about'>
-                    О приложении
-                  </a>
-                  <a className={style.link} href='/docs'>
-                    Документация
-                  </a>
-                  {user && (
-                    <button className={style.item} onClick={logOut}>
-                      <IconSprite name='exit' size={20} color='var(--color-red)' />
-                      <span className='color-red'>Выйти</span>
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
+            )}
           </div>
+          <UserMenu />
         </div>
         <nav>
-          <div className='row center gap12'>
+          <div className='row center gap8'>
             <button className={`${style.item} ${filter === 'top' ? 'active' : ''}`} name='top' onClick={handleF}>
               <IconSprite name='trend' size={16} />
               <span>Топ</span>
@@ -140,7 +67,7 @@ export default function Header() {
             </button>
           </div>
           <div className='hr' />
-          <div className='row center gap12 w100'>
+          <div className='row center gap8 w100'>
             <NavLink to='/' className={style.item}>
               Все
             </NavLink>

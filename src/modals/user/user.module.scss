@@ -1,0 +1,97 @@
+.wrapper {
+  box-sizing: border-box;
+  width: 260px;
+  padding: 20px 20px;
+  overflow: hidden;
+}
+.layout {
+  display: flex;
+  margin-top: 10px;
+}
+.avatar {
+  margin-right: 10px;
+  & img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.name,
+.username {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.name {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.username {
+  display: block;
+  color: var(--color-subtitle);
+  font-size: var(--font-size-m);
+}
+
+.tags {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  & > button {
+    margin-top: 10px;
+  }
+}
+
+.timeline {
+  margin: 12px auto 0;
+  max-width: 472px;
+  height: 90px;
+}
+
+.masker {
+  background: var(--color-dialog);
+  position: absolute;
+  &.line0 {
+    height: 10px;
+    left: 50px;
+    top: 0;
+    right: 0;
+  }
+  &.box1 {
+    height: 15px;
+    left: 50px;
+    top: 10px;
+    width: 20px;
+  }
+  &.line1 {
+    height: 10px;
+    left: 50px;
+    top: 25px;
+    right: 0;
+  }
+  &.box2 {
+    height: 15px;
+    left: 50px;
+    top: 35px;
+    width: 20px;
+  }
+  &.box3 {
+    height: 15px;
+    right: 0;
+    top: 35px;
+    width: 50px;
+  }
+  &.line2 {
+    height: 15px;
+    left: 0px;
+    top: 50px;
+    right: 0;
+  }
+}

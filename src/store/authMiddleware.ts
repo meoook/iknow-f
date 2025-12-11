@@ -2,18 +2,32 @@ import type { Middleware } from '@reduxjs/toolkit'
 import { api } from '../services/api'
 
 /**
- * Middleware для автоматического вызова getUser после успешной аутентификации
+ * Middleware для автоматической загрузки данных пользователя:
+ * 1. При инициализации приложения (если токен есть в localStorage)
+ * 2. После успешной аутентификации (w3auth или signIn)
  */
-export const authMiddleware: Middleware = (store) => (next) => (action) => {
-  const result = next(action)
+export const authMiddleware: Middleware = (store) => {
+  // Инициализация: проверяем наличие токена при старте приложения
+  setTimeout(() => {
+    const state = store.getState() as any
 
-  // Проверяем, что это успешная аутентификация через w3auth или signIn
-  if (api.endpoints.w3auth.matchFulfilled(action) || api.endpoints.signIn.matchFulfilled(action)) {
-    // Автоматически запускаем запрос getUser с форсированием обновления
-    // forceRefetch: true игнорирует кэш и всегда делает новый запрос
-    // @ts-ignore - RTK Query dispatch type mismatch
-    store.dispatch(api.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
+    if (state.auth.token && !state.auth.user) {
+      // Токен есть (из localStorage), но пользователя нет - загружаем
+      // @ts-ignore - RTK Query dispatch type mismatch
+      store.dispatch(api.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
+    }
+  }, 0)
+
+  // Основная функция middleware - реагирует на actions
+  return (next) => (action) => {
+    const result = next(action)
+
+    // После успешной аутентификации автоматически загружаем пользователя
+    if (api.endpoints.w3auth.matchFulfilled(action) || api.endpoints.signIn.matchFulfilled(action)) {
+      // @ts-ignore - RTK Query dispatch type mismatch
+      store.dispatch(api.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
+    }
+
+    return result
   }
-
-  return result
 }

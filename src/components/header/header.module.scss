@@ -38,6 +38,7 @@ nav {
     align-items: center;
     gap: 2px;
     cursor: pointer;
+    font-weight: 500;
     &:hover {
       color: var(--color-primary);
     }
@@ -87,58 +88,5 @@ nav {
   cursor: pointer;
   &:hover {
     color: var(--color-brand);
-  }
-}
-
-.menuContainer {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  right: 0;
-  min-width: 220px;
-  background: var(--color-head);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  box-shadow: 0 4px 12px var(--color-shadow);
-  padding: 8px 0;
-  z-index: 100;
-  animation: fadeIn 0.2s ease-in-out;
-
-  .item,
-  .link {
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 12px;
-    cursor: pointer;
-    gap: 8px;
-
-    &:hover {
-      background-color: var(--color-hover);
-    }
-  }
-
-  .item {
-    color: var(--color-primary);
-  }
-  .link {
-    color: var(--color-secondary);
-    line-height: 20px;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

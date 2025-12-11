@@ -1,0 +1,18 @@
+.wrapper {
+  box-sizing: border-box;
+  width: 300px;
+  padding: 20px 24px 15px;
+}
+.title {
+  text-align: center;
+}
+.section {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0 5px;
+}
+.label {
+  min-width: 80px;
+  text-align: right;
+  padding-right: 15px;
+}

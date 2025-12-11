@@ -4,7 +4,6 @@ import authReducer from './auth.slice'
 import notificationReducer from './notification.slice'
 import { websocketMiddleware } from './websocketMiddleware'
 import { authMiddleware } from './authMiddleware'
-import { initAuthMiddleware } from './initAuthMiddleware'
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +12,7 @@ export const store = configureStore({
     notifications: notificationReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware, websocketMiddleware, authMiddleware, initAuthMiddleware),
+    getDefaultMiddleware().concat(api.middleware, websocketMiddleware, authMiddleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

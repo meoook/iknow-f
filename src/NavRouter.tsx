@@ -11,16 +11,16 @@ import { useAppSelector } from './hooks/useRedux'
 import Header from './components/header'
 
 export default function NavRouter() {
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
+  const user = useAppSelector((state) => state.auth.user)
 
   useEffect(() => {
-    if (isAuthenticated) wsService.connect()
+    if (user) wsService.connect()
     else wsService.disconnect()
 
     return () => {
       wsService.disconnect()
     }
-  }, [isAuthenticated])
+  }, [user])
 
   return (
     <BrowserRouter>
@@ -66,15 +66,15 @@ export default function NavRouter() {
 
 // Layout for protected routes
 function LayoutProtected() {
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
-  if (!isAuthenticated) return <Navigate to='/login' replace />
+  const user = useAppSelector((state) => state.auth.user)
+  if (!user) return <Navigate to='/login' replace />
   return <Outlet />
 }
 
 // Layout for auth-only routes (login page)
 function LayoutNotAuthed() {
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
-  if (isAuthenticated) return <Navigate to='/' replace />
+  const user = useAppSelector((state) => state.auth.user)
+  if (user) return <Navigate to='/' replace />
   return <Outlet />
 }
 
