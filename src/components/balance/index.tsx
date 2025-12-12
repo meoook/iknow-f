@@ -12,27 +12,22 @@ export default function Balance({ name, balance, currency }: BalanceProps) {
 
   useEffect(() => {
     const targetValue = typeof balance === 'string' ? Number(balance) : balance
-    const duration = 700 // Длительность анимации в миллисекундах
-    const startTime = Date.now()
-    const startValue = 0
+    const duration = 1200
+    const steps = 60
+    const increment = targetValue / steps
+    let current = 0
 
-    const animate = () => {
-      const currentTime = Date.now()
-      const elapsed = currentTime - startTime
-      const progress = Math.min(elapsed / duration, 1)
-
-      // Easing function для плавности (ease-out)
-      const easeOutQuart = 1 - Math.pow(1 - progress, 4)
-      const currentValue = startValue + (targetValue - startValue) * easeOutQuart
-
-      setDisplayValue(currentValue)
-
-      if (progress < 1) {
-        requestAnimationFrame(animate)
+    const timer = setInterval(() => {
+      current += increment
+      if (current >= targetValue) {
+        setDisplayValue(targetValue)
+        clearInterval(timer)
+      } else {
+        setDisplayValue(current)
       }
-    }
+    }, duration / steps)
 
-    requestAnimationFrame(animate)
+    return () => clearInterval(timer)
   }, [balance])
 
   const getCurrencySymbol = (curr?: string): string => {
@@ -49,16 +44,12 @@ export default function Balance({ name, balance, currency }: BalanceProps) {
     return symbols[curr] || curr
   }
 
-  const formatBalance = (value: number): string => {
-    return value.toFixed(2)
-  }
-
   return (
     <div className={style.balance}>
       <div className={style.name}>{name}</div>
       <div className={style.amount}>
         {getCurrencySymbol(currency)}
-        {formatBalance(displayValue)}
+        {displayValue.toFixed(2)}
       </div>
     </div>
   )
