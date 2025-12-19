@@ -1,11 +1,12 @@
 import style from './user.module.scss'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useState, useRef } from 'react'
 import { useSingOutMutation } from '../../services/api'
 import { useAppSelector } from '../../hooks/useRedux'
 import IconSprite from '../../elements/icon/Icon'
 import { NotificationBell } from '../notification'
 import Balance from '../balance'
+import Avatar from '../avatar'
 
 export default function UserMenu() {
   const { loading, user } = useAppSelector((state) => state.auth)
@@ -69,7 +70,7 @@ export default function UserMenu() {
       <div className={style.container} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         {user ? (
           <div className={style.btn}>
-            <img className='avatar' src={user?.avatar || 'http://localhost/static/avatar/no_person.jpg'} alt='' />
+            <Avatar src={user.avatar} />
             <div className={`arrow${isMenuOpen ? ' active' : ''}`}>
               <IconSprite name='arrow_down' />
             </div>
@@ -84,7 +85,7 @@ export default function UserMenu() {
             {user && (
               <>
                 <Link className={style.user} to='/profile'>
-                  <img className='avatar' src={user?.avatar || 'http://localhost/static/avatar/no_person.jpg'} alt='' />
+                  <Avatar src={user.avatar} />
                   <span>{user.address.slice(0, 6) + '...' + user.address.slice(-4)}</span>
                 </Link>
                 <hr />

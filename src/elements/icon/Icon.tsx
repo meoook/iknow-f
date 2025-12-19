@@ -16,6 +16,7 @@ type IconName =
   | 'star'
   | 'trend'
   | 'tultip'
+  | 'upload'
   | 'volume'
 
 interface IconProps {

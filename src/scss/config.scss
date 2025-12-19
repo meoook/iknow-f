@@ -55,7 +55,7 @@
   --color-head: #202029;
   --color-dialog: #23232b;
 
-  --color-input: #2d2d3a; // #282831
+  --color-input: #2a2a3a; // #282831
   --color-active: #2c2c35;
   --color-hover: #2f2f3f;
 
@@ -65,7 +65,6 @@
   --color-disabled: #505059;
 
   --color-brand: #ffc400; // #7545d2
-  --color-brand-dark: #dda400;
   // COLORS
   --color-green: #4a8b3e;
   --color-green-light: #6ebe5c;
@@ -73,15 +72,19 @@
   --color-red: #dc3545;
   --color-red-light: #ed4b9e;
   --color-red-dark: #ed4b9e;
-  --color-warning: #ffb237;
-  --color-warning-light: #ffb237;
-  --color-warning-dark: #ffb237;
-  --color-yellow: #d67e0a;
-  --color-yellow-light: #d67e0a;
-  --color-yellow-dark: #d67e0a;
+  --color-orange: #e67e0a;
+  --color-orange-light: #ffb237;
+  --color-orange-dark: #d66b0a;
+  --color-yellow: #c2d60a;
+  --color-yellow-light: #ebe710;
+  --color-yellow-dark: #ebd409;
   --color-blue: #2c9cdb;
   --color-blue-light: #2ea9db;
   --color-blue-dark: #1fc7d4;
+
+  --color-gray: #2c2c35;
+  --color-gray-light: #3b3b47;
+  --color-gray-dark: #2c2c35;
 
   // MSG COLORS
   --color-msg-default: #007bff;

@@ -1,15 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchGroupsQuery } from '../services/api'
+import { useParams } from 'react-router-dom'
 
 export const Group = () => {
+  const { id } = useParams()
   const [searchQuery, setSearchQuery] = useState('')
-  const {
-    data: groups,
-    isLoading,
-    error,
-  } = useSearchGroupsQuery(searchQuery, {
-    skip: !searchQuery,
-  })
+  const { data: groups, isLoading, error } = useSearchGroupsQuery(searchQuery, { skip: !searchQuery })
+
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     const lookup = bots?.find((b) => b.id === Number(id))
+  //     if (!lookup) navigate('/bots', { replace: true })
+  //     else {
+  //       setBot(lookup)
+  //     }
+  //   }
+  // }, [bots, id, isLoading, navigate])
 
   return (
     <div className='page-container'>

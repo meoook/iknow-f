@@ -6,6 +6,7 @@ import { Login } from './pages/Login'
 import { MyRequests } from './pages/MyRequests'
 import { MyPredictions } from './pages/MyPredictions'
 import { MyBets } from './pages/MyBets'
+import { Profile } from './pages/Profile'
 import { wsService } from './services/websocket'
 import { useAppSelector } from './hooks/useRedux'
 import Header from './components/header'
@@ -33,6 +34,7 @@ export default function NavRouter() {
             <Route path='/my-requests' element={<MyRequests />} />
             <Route path='/my-predictions' element={<MyPredictions />} />
             <Route path='/my-bets' element={<MyBets />} />
+            <Route path='/profile' element={<Profile />} />
           </Route>
 
           {/* Auth-only routes (redirect if already authenticated) */}
@@ -53,8 +55,8 @@ export default function NavRouter() {
           <Route path='/elections' element={<Home />} />
           <Route path='/mentions' element={<Home />} />
           <Route path='/other' element={<Home />} />
+          <Route path='/group/:id' element={<Group />} />
           <Route path='/' element={<Home />} />
-          <Route path='/group' element={<Group />} />
 
           {/* 404 fallback */}
           <Route path='*' element={<Navigate to='/' replace />} />
@@ -66,15 +68,15 @@ export default function NavRouter() {
 
 // Layout for protected routes
 function LayoutProtected() {
-  const user = useAppSelector((state) => state.auth.user)
-  if (!user) return <Navigate to='/login' replace />
+  const token = useAppSelector((state) => state.auth.token)
+  if (!token) return <Navigate to='/login' replace />
   return <Outlet />
 }
 
 // Layout for auth-only routes (login page)
 function LayoutNotAuthed() {
-  const user = useAppSelector((state) => state.auth.user)
-  if (user) return <Navigate to='/' replace />
+  const token = useAppSelector((state) => state.auth.token)
+  if (token) return <Navigate to='/' replace />
   return <Outlet />
 }
 
