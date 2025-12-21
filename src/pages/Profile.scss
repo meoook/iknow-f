@@ -1,10 +1,5 @@
 .profile-page {
   display: flex;
-  width: 1000px;
-  margin-inline: auto;
-  padding-top: 20px;
-  background: var(--color-body);
-  gap: 0;
 }
 
 .profile-sidebar {
@@ -74,7 +69,7 @@
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 .error-message {

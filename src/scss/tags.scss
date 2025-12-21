@@ -30,6 +30,7 @@ body {
   font-weight: 400;
   color: var(--color-primary);
   overflow-y: scroll;
+  overflow-x: hidden;
   // background: linear-gradient(to right, #131619, #040506);
   background: var(--color-body);
   margin: 0;

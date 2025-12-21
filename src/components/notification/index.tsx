@@ -1,12 +1,12 @@
 import style from './notify.module.scss'
 import { useClickOutside } from '../../hooks/hooks'
 import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
-import { markAllAsRead, markAsRead } from '../../store/notification.slice'
+import { markAllAsRead, markAsRead } from '../../store/app.slice'
 import IconSprite from '../../elements/icon/Icon'
 
 export const NotificationBell = () => {
   const dispatch = useAppDispatch()
-  const { notifications, unreadCount } = useAppSelector((state) => state.notifications)
+  const { notifications, unreadCount } = useAppSelector((state) => state.app)
   const [menuRef, isMenuOpen, menuToogle] = useClickOutside()
 
   const handleMarkAsRead = (id: string) => {

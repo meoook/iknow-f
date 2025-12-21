@@ -1,7 +1,7 @@
 import { config } from '../config/config'
 import { store } from '../store/store'
-import { addNotification } from '../store/notification.slice'
-import type { INotification } from '../types/notification.types'
+import { addNotification } from '../store/app.slice'
+import type { INotification } from '../types/app.types'
 
 class WebSocketService {
   private ws: WebSocket | null = null

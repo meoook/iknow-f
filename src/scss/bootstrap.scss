@@ -37,6 +37,7 @@
     }
   }
   &.green {
+    color: #fff;
     background-color: var(--color-green); // #4a8b3e;
     // background-image: linear-gradient(to top, rgba($green, 0.25) 100%, rgba($green, 0.65));
     &:hover {
@@ -45,6 +46,7 @@
     }
   }
   &.red {
+    color: #fff;
     background-color: var(--color-red);
     // background-image: linear-gradient(to top, rgba($red, 0.25) 100%, rgba($red, 0.65));
     &:hover {
@@ -53,21 +55,23 @@
     }
   }
   &.orange {
+    color: #fff;
     background-color: var(--color-orange);
     &:hover {
       background-color: var(--color-orange-light);
     }
   }
   &.blue {
+    color: #fff;
     background-color: var(--color-blue);
     &:hover {
       background-color: var(--color-blue-light);
     }
   }
   &.gray {
-    background-color: var(--color-gray);
+    background-color: var(--color-active);
     &:hover {
-      background-color: var(--color-gray-light);
+      background-color: var(--color-hover);
     }
   }
   &:active {
@@ -123,6 +127,9 @@
     }
   }
 }
+.col {
+  width: 100%;
+}
 .w100 {
   width: 100%;
 }
@@ -148,6 +155,13 @@
     color: var(--color-brand);
   }
 }
+
+.container {
+  width: var(--size-container);
+  margin-inline: auto;
+  padding-top: 20px;
+}
+
 .shimmer {
   animation: shimmer 1.5s infinite;
   background: linear-gradient(90deg, transparent 5%, var(--color-border) 50%, transparent 95%);

@@ -2,18 +2,21 @@ import style from './user.module.scss'
 import { Link } from 'react-router-dom'
 import { useState, useRef } from 'react'
 import { useSingOutMutation } from '../../services/api'
-import { useAppSelector } from '../../hooks/useRedux'
+import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
+import { toggleTheme } from '../../store/app.slice'
 import IconSprite from '../../elements/icon/Icon'
 import { NotificationBell } from '../notification'
 import Balance from '../balance'
 import Avatar from '../avatar'
+import Toggle from '../toggle'
 
 export default function UserMenu() {
   const { loading, user } = useAppSelector((state) => state.auth)
+  const { theme } = useAppSelector((state) => state.app)
+  const dispatch = useAppDispatch()
   const [signOut] = useSingOutMutation()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isDarkTheme, setIsDarkTheme] = useState(true)
   const closeTimeoutRef = useRef<number | null>(null)
 
   const logOut = () => {
@@ -21,8 +24,8 @@ export default function UserMenu() {
     signOut()
   }
 
-  const toggleTheme = () => {
-    setIsDarkTheme(!isDarkTheme)
+  const handleToggleTheme = () => {
+    dispatch(toggleTheme())
   }
 
   const handleMouseEnter = () => {
@@ -99,17 +102,19 @@ export default function UserMenu() {
               <IconSprite name='activity' size={20} color='var(--color-red)' />
               <span>Активность</span>
             </button>
-            <button className={style.item} onClick={toggleTheme}>
+            <button className={style.item} onClick={handleToggleTheme}>
               <IconSprite name='moon' size={20} color='var(--color-blue)' />
-              {isDarkTheme ? 'Светлая тема' : 'Темная тема'}
+              <span>Темная тема</span>
+              <div className='w100'></div>
+              <Toggle checked={theme === 'dark'} />
             </button>
             {user && (
               <>
                 <Link to='/my-requests' className={style.item}>
                   My Requests
                 </Link>
-                <Link to='/my-predictions' className={style.item}>
-                  My Predictions
+                <Link to='/predictions' className={style.item}>
+                  Мое участие
                 </Link>
                 <Link to='/my-bets' className={style.item}>
                   My Bets

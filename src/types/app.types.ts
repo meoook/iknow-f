@@ -6,7 +6,8 @@ export interface INotification {
   read: boolean
 }
 
-export interface INotificationState {
+export interface IAppState {
+  theme: 'light' | 'dark'
   notifications: INotification[]
   unreadCount: number
 }

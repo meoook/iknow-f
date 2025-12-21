@@ -55,11 +55,6 @@ export function Profile() {
     console.log('Upload avatar')
   }
 
-  const handleConnectX = () => {
-    // TODO: Реализовать подключение к X (Twitter)
-    console.log('Connect to X')
-  }
-
   const renderTabContent = () => {
     switch (activeTab) {
       case 'profile':
@@ -164,41 +159,43 @@ export function Profile() {
   if (!token) return <Navigate to='/login' />
 
   return (
-    <div className='profile-page'>
-      <div className='profile-sidebar'>
-        <button
-          className={`sidebar-item ${activeTab === 'profile' ? 'active' : ''}`}
-          onClick={() => setActiveTab('profile')}>
-          Профиль
-        </button>
-        <button
-          className={`sidebar-item ${activeTab === 'account' ? 'active' : ''}`}
-          onClick={() => setActiveTab('account')}>
-          Счет
-        </button>
-        <button
-          className={`sidebar-item ${activeTab === 'trading' ? 'active' : ''}`}
-          onClick={() => setActiveTab('trading')}>
-          Торговля
-        </button>
-        <button
-          className={`sidebar-item ${activeTab === 'notifications' ? 'active' : ''}`}
-          onClick={() => setActiveTab('notifications')}>
-          Уведомления
-        </button>
-        <button
-          className={`sidebar-item ${activeTab === 'builder' ? 'active' : ''}`}
-          onClick={() => setActiveTab('builder')}>
-          Коды
-        </button>
-        <button
-          className={`sidebar-item ${activeTab === 'export' ? 'active' : ''}`}
-          onClick={() => setActiveTab('export')}>
-          Экспорт ключа
-        </button>
-      </div>
+    <div className='container'>
+      <div className='profile-page'>
+        <div className='profile-sidebar'>
+          <button
+            className={`sidebar-item ${activeTab === 'profile' ? 'active' : ''}`}
+            onClick={() => setActiveTab('profile')}>
+            Профиль
+          </button>
+          <button
+            className={`sidebar-item ${activeTab === 'account' ? 'active' : ''}`}
+            onClick={() => setActiveTab('account')}>
+            Счет
+          </button>
+          <button
+            className={`sidebar-item ${activeTab === 'trading' ? 'active' : ''}`}
+            onClick={() => setActiveTab('trading')}>
+            Торговля
+          </button>
+          <button
+            className={`sidebar-item ${activeTab === 'notifications' ? 'active' : ''}`}
+            onClick={() => setActiveTab('notifications')}>
+            Уведомления
+          </button>
+          <button
+            className={`sidebar-item ${activeTab === 'builder' ? 'active' : ''}`}
+            onClick={() => setActiveTab('builder')}>
+            Коды
+          </button>
+          <button
+            className={`sidebar-item ${activeTab === 'export' ? 'active' : ''}`}
+            onClick={() => setActiveTab('export')}>
+            Экспорт ключа
+          </button>
+        </div>
 
-      <div className='profile-main'>{renderTabContent()}</div>
+        <div className='profile-main'>{renderTabContent()}</div>
+      </div>
     </div>
   )
 }

@@ -32,7 +32,7 @@ export default function NavRouter() {
           {/* Protected routes */}
           <Route element={<LayoutProtected />}>
             <Route path='/my-requests' element={<MyRequests />} />
-            <Route path='/my-predictions' element={<MyPredictions />} />
+            <Route path='/predictions' element={<MyPredictions />} />
             <Route path='/my-bets' element={<MyBets />} />
             <Route path='/profile' element={<Profile />} />
           </Route>
