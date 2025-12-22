@@ -1,6 +1,6 @@
 import { createWalletClient, custom, type WalletClient } from 'viem'
 import { mainnet } from 'viem/chains'
-import type { Web3MessageNonce } from '../types/web3.types'
+import type { IWeb3NonceResponse } from '../types/web3.types'
 
 // Helper function to format date to local YYYY-MM-DD hh:mm:ss
 function formatLocalDateTime(date: Date): string {
@@ -44,7 +44,7 @@ export class Web3AuthService {
   }
 
   async authenticateWithWeb3(
-    w3nonce: (params: { chain: number; address: string }) => Promise<{ data?: Web3MessageNonce }>
+    w3nonce: (params: { chain: number; address: string }) => Promise<{ data?: IWeb3NonceResponse }>
   ): Promise<{ signature: string; message: string }> {
     // Connect wallet
     const walletAddress = await this.connectWallet()

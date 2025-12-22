@@ -22,9 +22,9 @@ const authSlice = createSlice({
     // Handle login mutations from RTK Query
     builder
       .addMatcher(api.endpoints.w3auth.matchFulfilled, (state, action) => {
-        state.token = action.payload
+        state.token = action.payload.token
         // state.loading = false
-        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload)
+        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload.token)
       })
       .addMatcher(api.endpoints.w3auth.matchRejected, (state) => {
         state.token = null
@@ -33,9 +33,9 @@ const authSlice = createSlice({
         localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
       })
       .addMatcher(api.endpoints.signIn.matchFulfilled, (state, action) => {
-        state.token = action.payload
+        state.token = action.payload.token
         // state.loading = false
-        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload)
+        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload.token)
       })
       .addMatcher(api.endpoints.singOut.matchFulfilled, (state) => {
         state.token = null

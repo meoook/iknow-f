@@ -1,59 +1,54 @@
 import style from './prediction.module.scss'
 import { useState } from 'react'
 import DateSelect from '../../components/dateselect'
-// import { AppContext } from '../../context/application/appContext'
+import type { IPredictionRequest, TVote } from '../../types/app.types'
+import { useCreatePredictionMutation } from '../../services/api'
 
 export default function ModalPrediction() {
-  const [disabled, setDisabled] = useState(false)
-  const [formData, setFormData] = useState({
+  const [createPrediction, { isLoading }] = useCreatePredictionMutation()
+  const [formData, setFormData] = useState<IPredictionRequest>({
     title: '',
     description: '',
     vote: 'yes',
-    end_date: '',
     amount: '',
     currency: '',
+    end_date: '',
   })
 
-  const [errors, setErrors] = useState({ title: '', description: '', amount: '', currency: '', end_date: '' })
+  const [errors, setErrors] = useState({ title: '', description: '', currency: '', amount: '', end_date: '' })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
-    // Очистка ошибки при изменении поля
     if (errors[name as keyof typeof errors]) setErrors((prev) => ({ ...prev, [name]: '' }))
   }
 
   const handleVoteChange = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { value } = e.currentTarget
-    setFormData((prev) => ({ ...prev, vote: value }))
+    const vote = e.currentTarget.value as TVote
+    setFormData((prev) => ({ ...prev, vote }))
   }
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
     setFormData((prev) => ({ ...prev, amount: value }))
-    // Очистка ошибки при изменении поля
     if (errors.amount) setErrors((prev) => ({ ...prev, amount: '' }))
   }
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target
     setFormData((prev) => ({ ...prev, currency: value }))
-    // Очистка ошибки при изменении поля
     if (errors.currency) setErrors((prev) => ({ ...prev, currency: '' }))
   }
 
-  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setDisabled(true)
-    console.log(e.currentTarget.name)
-
-    // authNetwork(e.currentTarget.name)
+  const handleCreate = () => {
+    createPrediction(formData)
   }
 
   return (
     <div className={style.wrapper}>
       <h1 className={style.title}>Создание прогноза</h1>
       <hr />
-      <div className='form-group'>
+      <div className='form-row'>
         <label htmlFor='title'>Название</label>
         <input
           type='text'
@@ -64,9 +59,9 @@ export default function ModalPrediction() {
           className={errors.title ? 'outline error' : 'outline'}
           placeholder='Название'
         />
-        {errors.title && <span className='error-message'>{errors.title}</span>}
+        {errors.title && <span className='error-msg'>{errors.title}</span>}
       </div>
-      <div className='form-group'>
+      <div className='form-row'>
         <label htmlFor='description'>Описание</label>
         <textarea
           id='description'
@@ -76,9 +71,9 @@ export default function ModalPrediction() {
           className={errors.description ? 'outline error' : 'outline'}
           placeholder='Детали прогноза. Общедоступные источники для проверки.'
         />
-        {errors.description && <span className='error-message'>{errors.description}</span>}
+        {errors.description && <span className='error-msg'>{errors.description}</span>}
       </div>
-      <div className='form-group row center gap20'>
+      <div className='form-row row center gap12'>
         <button
           className={`btn col ${formData.vote === 'yes' ? 'green' : 'gray'}`}
           value='yes'
@@ -89,19 +84,23 @@ export default function ModalPrediction() {
           Не сбудется
         </button>
       </div>
-      <div className='form-group'>
-        <div className='row center gap20'>
+      <div className='form-row'>
+        <div className='row center gap16'>
           <div className='col'>
             <label htmlFor='currency'>Валюта</label>
-            <select id='currency' name='currency' className='outline' defaultValue='' onChange={handleCurrencyChange}>
+            <select
+              id='currency'
+              name='currency'
+              className={errors.currency ? 'outline error' : 'outline'}
+              defaultValue=''
+              onChange={handleCurrencyChange}>
               <option value='' disabled>
                 Выберите валюту
               </option>
-              <option value='RUB'>Рубли</option>
-              <option value='USD'>Доллары</option>
-              <option value='EUR'>Евро</option>
+              <option value='STR'>Баллы</option>
+              <option value='USD'>Крипта</option>
+              <option value='RUB'>Кэш</option>
             </select>
-            {errors.currency && <span className='error-message'>{errors.currency}</span>}
           </div>
           <div className='col'>
             <label htmlFor='amount'>Количество</label>
@@ -109,25 +108,24 @@ export default function ModalPrediction() {
               id='amount'
               name='amount'
               value={formData.amount}
-              onChange={handleInputChange}
+              onChange={handleAmountChange}
               className={errors.amount ? 'outline error' : 'outline'}
               placeholder='Количество'
+              inputMode='numeric'
             />
-            {errors.description && <span className='error-message'>{errors.description}</span>}
           </div>
         </div>
+        {(errors.currency || errors.amount) && <div className='error-msg'>{errors.currency || errors.amount}</div>}
       </div>
-      <div className='form-group'>
-        <label htmlFor='end_date'>Дата события / Дата окончания прогноза</label>
-        <DateSelect
-          value={formData.end_date}
-          onChange={(date) => setFormData((prev) => ({ ...prev, end_date: date }))}
-          minDate={new Date().toISOString().split('T')[0]}
-          error={!!errors.end_date}
-        />
-        {errors.end_date && <span className='error-message'>{errors.end_date}</span>}
-      </div>
-      <button className='btn blue' onClick={handleLogin} disabled={disabled}>
+      <label>Дата события / Дата окончания прогноза</label>
+      <DateSelect
+        value={formData.end_date}
+        onChange={(date) => setFormData((prev) => ({ ...prev, end_date: date }))}
+        minDate={new Date().toISOString().split('T')[0]}
+        error={!!errors.end_date}
+      />
+      {errors.end_date && <span className='error-message'>{errors.end_date}</span>}
+      <button className='btn blue' onClick={handleCreate} disabled={isLoading}>
         Создать
       </button>
     </div>

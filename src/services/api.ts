@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { config } from '../config/config'
 import type { IUser, ILoginCredentials, IAuthResponse } from '../types/auth.types'
-import type { Web3MessageNonce } from '../types/web3.types'
+import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
+import type { IPredictionRequest } from '../types/app.types'
 
 export const api = createApi({
   reducerPath: 'api',
@@ -17,19 +18,18 @@ export const api = createApi({
   tagTypes: ['User', 'Requests', 'Predictions', 'Bets', 'Groups'],
   endpoints: (builder) => ({
     // Auth endpoints
-    w3nonce: builder.mutation<Web3MessageNonce, { chain: number; address: string }>({
+    w3nonce: builder.mutation<IWeb3NonceResponse, IWeb3NonceRequest>({
       query: ({ chain, address }) => ({
         url: 'auth/web3',
         params: { chain, address },
       }),
     }),
-    w3auth: builder.mutation<string, { message: string; signature: string }>({
+    w3auth: builder.mutation<IAuthResponse, IWeb3AuthRequest>({
       query: ({ message, signature }) => ({
         url: 'auth/web3',
         method: 'POST',
         body: { message, signature },
       }),
-      transformResponse: (response: any) => response.token,
       transformErrorResponse: (response: any) => {
         if (response.status === 'FETCH_ERROR') return 'server unreacheble'
         return 'invalid signature'
@@ -39,13 +39,12 @@ export const api = createApi({
         await queryFulfilled
       },
     }),
-    signIn: builder.mutation<string, ILoginCredentials>({
+    signIn: builder.mutation<IAuthResponse, ILoginCredentials>({
       query: ({ email, password }) => ({
         url: 'auth/user',
         method: 'POST',
         body: { username: email, password },
       }),
-      transformResponse: (response: any) => response.token,
       transformErrorResponse: (response: any) => {
         if (response.status === 'FETCH_ERROR') return 'server unreacheble'
         return 'invalid credentials'
@@ -66,7 +65,7 @@ export const api = createApi({
       providesTags: ['User'],
     }),
     // User endpoints
-    changePassword: builder.mutation<IAuthResponse, { password: string }>({
+    changePassword: builder.mutation<void, { password: string }>({
       query: (payload) => ({
         url: 'auth/user/password',
         method: 'POST',
@@ -99,6 +98,14 @@ export const api = createApi({
       query: () => 'my/prediction',
       providesTags: ['Predictions'],
     }),
+    createPrediction: builder.mutation<any, IPredictionRequest>({
+      query: (payload) => ({
+        url: 'my/prediction',
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['Predictions'],
+    }),
     getMyBets: builder.query<any[], void>({
       query: () => 'my/bet',
       providesTags: ['Bets'],
@@ -121,11 +128,13 @@ export const {
   useW3authMutation,
   useSignInMutation,
   useSingOutMutation,
+  useGetUserQuery,
+  // ------
+  useCreatePredictionMutation,
   // ------
   useChangePasswordMutation,
   useSetEmailMutation,
   useSetTelegramMutation,
-  useGetUserQuery,
   useGetMyRequestsQuery,
   useGetMyPredictionsQuery,
   useGetMyBetsQuery,

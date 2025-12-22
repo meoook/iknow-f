@@ -2,7 +2,7 @@
   box-sizing: border-box;
   width: var(--size-modal);
   padding: 20px 20px;
-  // overflow: hidden;
+  overflow: hidden;
   text-wrap: nowrap;
   :global(.col.btn) {
     height: 50px;

@@ -11,3 +11,14 @@ export interface IAppState {
   notifications: INotification[]
   unreadCount: number
 }
+
+export type TVote = 'yes' | 'no'
+
+export interface IPredictionRequest {
+  title: string
+  description: string
+  vote: TVote
+  end_date: string
+  currency: string
+  amount: string
+}

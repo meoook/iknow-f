@@ -19,18 +19,6 @@ export interface ILoginCredentials {
   password: string
 }
 
-export interface IWeb3AuthPayload {
-  walletAddress: string
-  signature: string
-  message: string
-}
-
 export interface IAuthResponse {
   token: string
-  user: IUser
-}
-
-export interface IApiError {
-  message: string
-  code?: string
 }
