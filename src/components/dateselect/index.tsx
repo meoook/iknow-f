@@ -54,6 +54,7 @@ export default function DateSelect({ value, onChange, minDate, error }: DateSele
 
       if (!isValidDate) {
         setValidationError('Не верный формат даты')
+        onChange('')
         return
       }
 
@@ -66,6 +67,7 @@ export default function DateSelect({ value, onChange, minDate, error }: DateSele
           year: 'numeric',
         })
         setValidationError(`Дата не может быть раньше ${minDateFormatted}`)
+        onChange('')
         return
       }
 
@@ -73,8 +75,9 @@ export default function DateSelect({ value, onChange, minDate, error }: DateSele
       onChange(formattedDate)
     } else {
       setValidationError('')
+      onChange('')
     }
-  }, [month, day, year, onChange, minDate])
+  }, [month, day, year, minDate])
 
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setMonth(e.target.value)

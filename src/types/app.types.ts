@@ -12,13 +12,61 @@ export interface IAppState {
   unreadCount: number
 }
 
+export interface PaginatedResponse<T> {
+  total: number
+  data: T[]
+}
+
 export type TVote = 'yes' | 'no'
 
-export interface IPredictionRequest {
+export interface IRequestCreate {
   title: string
   description: string
   vote: TVote
   end_date: string
   currency: string
   amount: string
+}
+
+export interface IRequest {
+  id: number
+  state: string
+  reject_reason: string
+  tag: string
+  title: string
+  description: string
+  vote: boolean
+  amount: string
+  end_date: string
+}
+
+export interface IGroup {
+  id: number
+  title: string
+  description: string
+  tag: string
+  icon: string
+}
+
+export interface IPrediction {
+  id: number
+  state: string
+  volume_y: number
+  volume_n: number
+  bet_diff: number
+  result: string
+  title: string
+  description: string
+  end_date: string
+  group_title: string
+  group_tag: string
+  group_icon: string
+}
+
+export interface IBet {
+  id: number
+  state: string
+  vote: TVote
+  amount: string
+  created: string
 }

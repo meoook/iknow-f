@@ -3,7 +3,7 @@ import { config } from '../config/config'
 import type { IUser, ILoginCredentials, IAuthResponse } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
-import type { IPredictionRequest } from '../types/app.types'
+import type { IRequest, IRequestCreate, PaginatedResponse } from '../types/app.types'
 
 export const api = createApi({
   reducerPath: 'api',
@@ -90,21 +90,21 @@ export const api = createApi({
     }),
 
     // Protected endpoints
-    getMyRequests: builder.query<any[], void>({
+    getMyRequests: builder.query<PaginatedResponse<IRequest>, void>({
       query: () => 'my/request',
       providesTags: ['Requests'],
+    }),
+    createRequest: builder.mutation<any, IRequestCreate>({
+      query: (payload) => ({
+        url: 'my/request',
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['Requests'],
     }),
     getMyPredictions: builder.query<any[], void>({
       query: () => 'my/prediction',
       providesTags: ['Predictions'],
-    }),
-    createPrediction: builder.mutation<any, IPredictionRequest>({
-      query: (payload) => ({
-        url: 'my/prediction',
-        method: 'POST',
-        body: payload,
-      }),
-      invalidatesTags: ['Predictions'],
     }),
     getMyBets: builder.query<any[], void>({
       query: () => 'my/bet',
@@ -130,7 +130,7 @@ export const {
   useSingOutMutation,
   useGetUserQuery,
   // ------
-  useCreatePredictionMutation,
+  useCreateRequestMutation,
   // ------
   useChangePasswordMutation,
   useSetEmailMutation,

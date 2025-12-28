@@ -34,23 +34,43 @@
 
 .login-web3 {
   margin-bottom: 1.5rem;
+  display: flex;
+  gap: 1rem;
 }
 
 .web3-button {
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  flex: 1;
+  padding: 0.75rem;
   color: white;
   border: none;
   border-radius: 10px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  &.metamask {
+    background: #f6851b;
+    &:hover:not(:disabled) {
+      background: darken(#f6851b, 5%);
+      box-shadow: 0 4px 15px rgba(246, 133, 27, 0.4);
+    }
+  }
+
+  &.phantom {
+    background: #512da8;
+    &:hover:not(:disabled) {
+      background: darken(#512da8, 5%);
+      box-shadow: 0 4px 15px rgba(81, 45, 168, 0.4);
+    }
+  }
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
   }
 
   &:disabled {

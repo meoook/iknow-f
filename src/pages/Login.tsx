@@ -26,11 +26,11 @@ export const Login = () => {
     }
   }
 
-  const handleWeb3Login = async () => {
+  const handleWeb3Login = async (type: 'metamask' | 'phantom') => {
     setError('')
 
     try {
-      const { signature, message } = await web3AuthService.authenticateWithWeb3(w3nonce)
+      const { signature, message } = await web3AuthService.authenticateWithWeb3(w3nonce, type)
       await w3auth({ message, signature }).unwrap()
       navigate('/')
     } catch (err: any) {
@@ -46,8 +46,11 @@ export const Login = () => {
         {error && <div className='login-error'>{error}</div>}
 
         <div className='login-web3'>
-          <button onClick={handleWeb3Login} disabled={isWeb3Loading} className='web3-button'>
-            {isWeb3Loading ? 'Connecting...' : '🦊 Connect Wallet'}
+          <button onClick={() => handleWeb3Login('metamask')} disabled={isWeb3Loading} className='web3-button metamask'>
+            {isWeb3Loading ? 'Connecting...' : '🦊 MetaMask'}
+          </button>
+          <button onClick={() => handleWeb3Login('phantom')} disabled={isWeb3Loading} className='web3-button phantom'>
+            {isWeb3Loading ? 'Connecting...' : '👻 Phantom'}
           </button>
         </div>
 

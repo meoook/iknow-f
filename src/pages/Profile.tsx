@@ -70,7 +70,7 @@ export function Profile() {
               </button>
             </div>
 
-            <div className='form-group'>
+            <div className='form-row'>
               <label htmlFor='email'>Почта</label>
               <input
                 type='email'
@@ -81,10 +81,10 @@ export function Profile() {
                 className={errors.email ? 'outline error' : 'outline'}
                 placeholder='your@email.com'
               />
-              {errors.email && <span className='error-message'>{errors.email}</span>}
+              {errors.email && <span className='error-msg'>{errors.email}</span>}
             </div>
 
-            <div className='form-group'>
+            <div className='form-row'>
               <label htmlFor='username'>Никнейм</label>
               <input
                 type='text'
@@ -95,10 +95,10 @@ export function Profile() {
                 className={errors.username ? 'outline error' : 'outline'}
                 placeholder='Никнейм'
               />
-              {errors.username && <span className='error-message'>{errors.username}</span>}
+              {errors.username && <span className='error-msg'>{errors.username}</span>}
             </div>
 
-            <div className='form-group'>
+            <div className='form-row'>
               <label htmlFor='bio'>О себе</label>
               <textarea
                 id='bio'

@@ -110,14 +110,8 @@ export default function UserMenu() {
             </button>
             {user && (
               <>
-                <Link to='/my-requests' className={style.item}>
-                  My Requests
-                </Link>
                 <Link to='/predictions' className={style.item}>
                   Мое участие
-                </Link>
-                <Link to='/my-bets' className={style.item}>
-                  My Bets
                 </Link>
               </>
             )}

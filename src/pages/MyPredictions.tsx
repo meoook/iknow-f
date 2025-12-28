@@ -1,35 +1,95 @@
-import { useGetMyPredictionsQuery } from '../services/api'
+import Modal from '../elements/modal'
+import type { IRequest } from '../types/app.types'
+import { useGetMyRequestsQuery } from '../services/api'
+import { useModal } from '../hooks/hooks'
+import ModalPrediction from '../modals/prediction'
+import Loader from '../elements/loader'
+import IconSprite from '../elements/icon/Icon'
 
 export const MyPredictions = () => {
-  const { data: predictions, isLoading, error } = useGetMyPredictionsQuery()
+  const { data, isLoading, error } = useGetMyRequestsQuery()
+  const [modal, open, close] = useModal()
 
   return (
-    <div className='page-container'>
-      <h1>My Predictions</h1>
-
-      {isLoading && <div>Loading predictions...</div>}
-      {error && <div className='error'>Failed to load predictions</div>}
-
-      {predictions && predictions.length > 0 && (
-        <div className='items-list'>
-          {predictions.map((prediction: any) => (
-            <div key={prediction.id} className='item-card'>
-              <h3>{prediction.title}</h3>
-              <p>{prediction.description}</p>
-              <div className='item-meta'>
-                <span>Confidence: {prediction.confidence}%</span>
-                <span>
-                  Created: {new Date(prediction.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-          ))}
+    <>
+      <Modal close={close} modal={modal}>
+        <ModalPrediction close={close} />
+      </Modal>
+      <div className='container'>
+        <div className='row center justify'>
+          <h1>Мои прогнозы</h1>
+          <button className='btn blue' onClick={open}>
+            Создать
+          </button>
         </div>
-      )}
+        <hr />
+        {data?.data.length !== 0 && (
+          <>
+            <section>
+              {isLoading && <div>Загрузка прогнозов...</div>}
+              {error && <div className='error'>Ошибка загрузки прогнозов</div>}
+              {data?.data.map((request: IRequest) => (
+                <MyRequestItem key={request.id} request={request} />
+              ))}
+            </section>
+            <h3>Мое участие</h3>
+            <hr />
+          </>
+        )}
+        <section>
+          <div className='empty'>
+            <IconSprite name='draft' size={24} />
+            <span>У вас нет активных прогнозов</span>
+          </div>
+        </section>
+      </div>
+    </>
+  )
+}
 
-      {predictions && predictions.length === 0 && (
-        <div>No predictions found</div>
-      )}
+const MyRequestItem = ({ request }: { request: IRequest }) => {
+  return (
+    <div key={request.id} className='card'>
+      <div className={request.vote ? 'picture green' : 'picture red'}>
+        <div className='row justify'>
+          <span>{request.vote ? 'Сбудется' : 'Не сбудется'}</span>
+          <span>{new Date(request.end_date).toLocaleDateString()}</span>
+        </div>
+        <div className='row justify'>
+          <span>Баллы</span>
+          <span>{Number(request.amount).toFixed(2)}</span>
+        </div>
+        {request.state == 'REJECTED' && (
+          <div className='popup reject'>
+            <div className='row center gap4'>
+              <IconSprite name='warning' size={20} />
+              <span>Отклонено</span>
+            </div>
+            {request.reject_reason && (
+              <small className='line-clamp-3' title={request.reject_reason}>
+                {request.reject_reason}
+              </small>
+            )}
+          </div>
+        )}
+        {request.state == 'VALIDATE' && (
+          <div className='popup'>
+            <div className='row center gap4'>
+              <Loader />
+              <span>Ожидает подтверждения...</span>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className='title'>
+        <h3 className='line-clamp-2' title={request.title}>
+          {request.title}
+        </h3>
+      </div>
+      <div className='dsc'>{request.description}</div>
+      {/* <div>Таг: {request.tag}</div> */}
+      {/* <div>Статус: {request.state}</div> */}
+      {/* {request.reject_reason && <div>Отклонено: {request.reject_reason}</div>} */}
     </div>
   )
 }

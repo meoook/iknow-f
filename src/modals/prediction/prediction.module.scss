@@ -8,6 +8,15 @@
     height: 50px;
   }
 }
-.title {
-  margin-top: 10px;
+.error,
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.error {
+  color: var(--color-orange);
+}
+.loader {
+  color: var(--color-green);
 }

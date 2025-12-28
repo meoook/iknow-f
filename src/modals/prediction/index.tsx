@@ -1,12 +1,14 @@
 import style from './prediction.module.scss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DateSelect from '../../components/dateselect'
-import type { IPredictionRequest, TVote } from '../../types/app.types'
-import { useCreatePredictionMutation } from '../../services/api'
+import type { IRequestCreate, TVote } from '../../types/app.types'
+import { useCreateRequestMutation } from '../../services/api'
+import IconSprite from '../../elements/icon/Icon'
+import Loader from '../../elements/loader'
 
-export default function ModalPrediction() {
-  const [createPrediction, { isLoading }] = useCreatePredictionMutation()
-  const [formData, setFormData] = useState<IPredictionRequest>({
+export default function ModalPrediction({ close }: { close: () => void }) {
+  const [createRequest, { isLoading, isError }] = useCreateRequestMutation()
+  const [formData, setFormData] = useState<IRequestCreate>({
     title: '',
     description: '',
     vote: 'yes',
@@ -14,13 +16,21 @@ export default function ModalPrediction() {
     currency: '',
     end_date: '',
   })
-
   const [errors, setErrors] = useState({ title: '', description: '', currency: '', amount: '', end_date: '' })
+  const [error, setError] = useState<string>('')
+
+  useEffect(() => {
+    if (isError) setError('Ошибка при создании прогноза')
+  }, [isError])
+
+  const validForm = (): boolean => Object.values(formData).every((value) => value.trim())
+  const haveErrors = (): boolean => Object.values(errors).some((value) => value)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
     if (errors[name as keyof typeof errors]) setErrors((prev) => ({ ...prev, [name]: '' }))
+    setError('')
   }
 
   const handleVoteChange = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -31,22 +41,38 @@ export default function ModalPrediction() {
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
     setFormData((prev) => ({ ...prev, amount: value }))
-    if (errors.amount) setErrors((prev) => ({ ...prev, amount: '' }))
+    const amount = Number(value)
+    if (isNaN(amount)) setErrors((prev) => ({ ...prev, amount: 'Неверный формат' }))
+    else if (amount < 0) setErrors((prev) => ({ ...prev, amount: 'Количество не может быть отрицательным' }))
+    else if (errors.amount) setErrors((prev) => ({ ...prev, amount: '' }))
+    setError('')
   }
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target
     setFormData((prev) => ({ ...prev, currency: value }))
     if (errors.currency) setErrors((prev) => ({ ...prev, currency: '' }))
+    setError('')
   }
 
   const handleCreate = () => {
-    createPrediction(formData)
+    if (haveErrors()) {
+      setError('Есть ошибки')
+      return
+    }
+    if (!validForm()) {
+      setError('Заполните все поля')
+      return
+    }
+    setError('')
+    createRequest(formData)
+      .unwrap()
+      .then(() => close())
   }
 
   return (
     <div className={style.wrapper}>
-      <h1 className={style.title}>Создание прогноза</h1>
+      <h1>Создание прогноза</h1>
       <hr />
       <div className='form-row'>
         <label htmlFor='title'>Название</label>
@@ -121,13 +147,30 @@ export default function ModalPrediction() {
       <DateSelect
         value={formData.end_date}
         onChange={(date) => setFormData((prev) => ({ ...prev, end_date: date }))}
-        minDate={new Date().toISOString().split('T')[0]}
+        minDate={(() => {
+          const tomorrow = new Date()
+          tomorrow.setDate(tomorrow.getDate() + 1)
+          return tomorrow.toISOString().split('T')[0]
+        })()}
         error={!!errors.end_date}
       />
-      {errors.end_date && <span className='error-message'>{errors.end_date}</span>}
-      <button className='btn blue' onClick={handleCreate} disabled={isLoading}>
-        Создать
-      </button>
+      <div className='row center gap16'>
+        <button className='btn blue' onClick={handleCreate} disabled={isLoading}>
+          Создать
+        </button>
+        {error && (
+          <div className={style.error}>
+            <IconSprite name='warning' />
+            {error}
+          </div>
+        )}
+        {isLoading && (
+          <div className={style.loader}>
+            <Loader />
+            Создание прогноза...
+          </div>
+        )}
+      </div>
     </div>
   )
 }

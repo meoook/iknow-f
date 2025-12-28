@@ -40,7 +40,7 @@ export const useScreenSize = () => {
   return size
 }
 
-export const useComponentSize = <T extends HTMLElement>(componentRef: React.RefObject<T>) => {
+export const useComponentSize = <T extends HTMLElement>(componentRef: React.RefObject<T | null>) => {
   const [width, setWidth] = useState(0)
   useEffect(() => {
     const element = componentRef.current

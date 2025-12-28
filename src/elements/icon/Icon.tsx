@@ -8,6 +8,7 @@ type IconName =
   | 'close'
   | 'crown'
   | 'diff'
+  | 'draft'
   | 'exit'
   | 'finish'
   | 'menu'
@@ -18,6 +19,7 @@ type IconName =
   | 'tultip'
   | 'upload'
   | 'volume'
+  | 'warning'
 
 interface IconProps {
   name: IconName
