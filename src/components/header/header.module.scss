@@ -39,6 +39,7 @@ nav {
     gap: 2px;
     cursor: pointer;
     font-weight: 500;
+    color: inherit;
     &:hover {
       color: var(--color-primary);
     }

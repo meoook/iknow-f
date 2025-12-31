@@ -21,7 +21,7 @@ export default function Header() {
   return (
     <>
       <Modal close={close} modal={modal}>
-        <ModalLogin />
+        <ModalLogin closeModal={close} />
       </Modal>
       <header>
         <div className={style.head}>

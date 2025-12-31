@@ -1,11 +1,17 @@
+interface IBalances {
+  POINT: number
+  CASH: number
+}
+
 export interface IUser {
   address: string
-  balance: string
-  username?: string
+  username: string
   email?: string
-  email_validated: boolean
+  email_notify: boolean
   telegram_id: string
+  telegram_notify: boolean
   avatar?: string
+  balances: IBalances
 }
 
 export interface IAuthState {

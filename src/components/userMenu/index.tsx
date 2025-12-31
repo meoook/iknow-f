@@ -63,16 +63,15 @@ export default function UserMenu() {
     <div className='row center gap8'>
       {user ? (
         <>
-          <Balance name='Баллы' balance={10720.21} />
-          <Balance name='Крипто' balance={user.balance} currency='USD' />
-          <Balance name='Кэш' balance={user.balance} currency='RUB' />
+          <Balance name='Баллы' balance={user.balances.POINT} />
+          <Balance name='Кэш' balance={user.balances.CASH} currency='USD' />
           <button className='btn blue'>Депозит</button>
           <NotificationBell />
         </>
       ) : (
         <>
           <Modal close={close} modal={modal}>
-            <ModalLogin />
+            <ModalLogin closeModal={close} />
           </Modal>
           <button className='btn blue' onClick={open}>
             Войти
@@ -98,7 +97,10 @@ export default function UserMenu() {
               <>
                 <Link className={style.user} to='/profile'>
                   <Avatar src={user.avatar} />
-                  <span>{user.address.slice(0, 6) + '...' + user.address.slice(-4)}</span>
+                  <div>
+                    <span>{user.address.slice(0, 6) + '...' + user.address.slice(-6)}</span>
+                    {user.username !== user.address && <span className={style.username}>{user.username}</span>}
+                  </div>
                 </Link>
                 <hr />
               </>
