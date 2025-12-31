@@ -56,7 +56,7 @@
   &.metamask {
     background: #f6851b;
     &:hover:not(:disabled) {
-      background: darken(#f6851b, 5%);
+      background: #cf7016;
       box-shadow: 0 4px 15px rgba(246, 133, 27, 0.4);
     }
   }
@@ -64,7 +64,7 @@
   &.phantom {
     background: #512da8;
     &:hover:not(:disabled) {
-      background: darken(#512da8, 5%);
+      background: #7655c2;
       box-shadow: 0 4px 15px rgba(81, 45, 168, 0.4);
     }
   }
@@ -144,7 +144,6 @@
   color: white;
   border: none;
   border-radius: 10px;
-  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s, transform 0.2s;

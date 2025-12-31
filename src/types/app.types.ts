@@ -21,11 +21,13 @@ export type TVote = 'yes' | 'no'
 
 export interface IRequestCreate {
   title: string
-  description: string
+  rules: string
+  choices: string[]
+  vote_choice: string
   vote: TVote
-  end_date: string
   currency: string
   amount: string
+  end_date: string
 }
 
 export interface IRequest {
@@ -34,7 +36,9 @@ export interface IRequest {
   reject_reason: string
   tag: string
   title: string
-  description: string
+  rules: string
+  choices: string[]
+  vote_choice: string
   vote: boolean
   amount: string
   end_date: string

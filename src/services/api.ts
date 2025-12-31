@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { config } from '../config/config'
 import type { IUser, ILoginCredentials, IAuthResponse } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
-import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 import type { IRequest, IRequestCreate, PaginatedResponse } from '../types/app.types'
+import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
 export const api = createApi({
   reducerPath: 'api',
@@ -90,35 +90,31 @@ export const api = createApi({
     }),
 
     // Protected endpoints
-    getMyRequests: builder.query<PaginatedResponse<IRequest>, void>({
-      query: () => 'my/request',
+    getRequests: builder.query<PaginatedResponse<IRequest>, void>({
+      query: () => 'request',
       providesTags: ['Requests'],
     }),
     createRequest: builder.mutation<any, IRequestCreate>({
       query: (payload) => ({
-        url: 'my/request',
+        url: 'request',
         method: 'POST',
         body: payload,
       }),
       invalidatesTags: ['Requests'],
     }),
-    getMyPredictions: builder.query<any[], void>({
-      query: () => 'my/prediction',
-      providesTags: ['Predictions'],
-    }),
-    getMyBets: builder.query<any[], void>({
-      query: () => 'my/bet',
+    getBets: builder.query<any[], void>({
+      query: () => 'bet',
       providesTags: ['Bets'],
     }),
 
     // Public endpoints
-    getGroups: builder.query<any[], void>({
-      query: () => 'group',
-      providesTags: ['Groups'],
+    getPredictions: builder.query<any[], void>({
+      query: () => 'prediction',
+      providesTags: ['Predictions'],
     }),
-    searchGroups: builder.query<any[], string>({
-      query: (searchQuery) => `group/search?q=${encodeURIComponent(searchQuery)}`,
-      providesTags: ['Groups'],
+    searchPredictions: builder.query<any[], string>({
+      query: (searchQuery) => `prediction/search?q=${encodeURIComponent(searchQuery)}`,
+      providesTags: ['Predictions'],
     }),
   }),
 })
@@ -135,9 +131,8 @@ export const {
   useChangePasswordMutation,
   useSetEmailMutation,
   useSetTelegramMutation,
-  useGetMyRequestsQuery,
-  useGetMyPredictionsQuery,
-  useGetMyBetsQuery,
-  useGetGroupsQuery,
-  useSearchGroupsQuery,
+  useGetRequestsQuery,
+  useGetBetsQuery,
+  useGetPredictionsQuery,
+  useSearchPredictionsQuery,
 } = api

@@ -1,15 +1,21 @@
 .wrapper {
   box-sizing: border-box;
-  width: 240px;
-  padding: 20px 20px;
+  width: var(--size-modal);
   overflow: hidden;
   text-wrap: nowrap;
   display: flex;
   flex-direction: column;
-  & > button {
-    margin-top: 15px;
-  }
+  gap: 20px;
 }
-.title {
-  margin-top: 10px;
+.email {
+  position: relative;
+  & input {
+    height: 54px;
+  }
+  & button {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+  }
 }

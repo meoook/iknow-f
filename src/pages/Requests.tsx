@@ -1,13 +1,13 @@
 import Modal from '../elements/modal'
 import type { IRequest } from '../types/app.types'
-import { useGetMyRequestsQuery } from '../services/api'
+import { useGetRequestsQuery } from '../services/api'
 import { useModal } from '../hooks/hooks'
 import ModalPrediction from '../modals/prediction'
 import Loader from '../elements/loader'
 import IconSprite from '../elements/icon/Icon'
 
-export const MyPredictions = () => {
-  const { data, isLoading, error } = useGetMyRequestsQuery()
+export const Requests = () => {
+  const { data, isLoading, error } = useGetRequestsQuery()
   const [modal, open, close] = useModal()
 
   return (
@@ -29,7 +29,7 @@ export const MyPredictions = () => {
               {isLoading && <div>Загрузка прогнозов...</div>}
               {error && <div className='error'>Ошибка загрузки прогнозов</div>}
               {data?.data.map((request: IRequest) => (
-                <MyRequestItem key={request.id} request={request} />
+                <RequestItem key={request.id} request={request} />
               ))}
             </section>
             <h3>Мое участие</h3>
@@ -47,7 +47,7 @@ export const MyPredictions = () => {
   )
 }
 
-const MyRequestItem = ({ request }: { request: IRequest }) => {
+const RequestItem = ({ request }: { request: IRequest }) => {
   return (
     <div key={request.id} className='card'>
       <div className={request.vote ? 'picture green' : 'picture red'}>
@@ -86,7 +86,7 @@ const MyRequestItem = ({ request }: { request: IRequest }) => {
           {request.title}
         </h3>
       </div>
-      <div className='dsc'>{request.description}</div>
+      <div className='rules'>{request.rules}</div>
       {/* <div>Таг: {request.tag}</div> */}
       {/* <div>Статус: {request.state}</div> */}
       {/* {request.reject_reason && <div>Отклонено: {request.reject_reason}</div>} */}

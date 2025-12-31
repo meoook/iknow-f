@@ -1,11 +1,9 @@
 .btn {
-  // min-width: 120px;
   height: 36px;
   padding-left: 16px;
   padding-right: 16px;
   font-weight: 500;
   color: var(--color-primary);
-  text-align: center;
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s, color 0.3s;
@@ -22,10 +20,9 @@
     padding: 0.1rem;
     color: inherit;
   }
-  &-small {
+  &.big {
     min-width: unset;
-    padding: 0 4px;
-    font-weight: 200;
+    height: 54px;
   }
   &-icon {
     width: 44px;
@@ -143,7 +140,7 @@
   height: 20px;
   width: 1px;
   margin: 0 12px;
-  background-color: var(--color-secondary);
+  background-color: var(--color-border);
 }
 
 .color {
@@ -201,9 +198,6 @@
     left: 0;
     font-size: var(--font-size-sm);
     color: var(--color-red);
-    .form-row {
-      border-color: var(--color-red);
-    }
   }
 }
 
@@ -300,6 +294,6 @@
     -webkit-box-orient: vertical;
   }
 }
-// .grow {
-//   flex-grow: 1;
-// }
+.grow {
+  flex-grow: 1;
+}

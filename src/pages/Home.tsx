@@ -1,22 +1,22 @@
-import { useGetGroupsQuery } from '../services/api'
+import { useGetPredictionsQuery } from '../services/api'
 
 export const Home = () => {
-  const { data: groups, isLoading, error } = useGetGroupsQuery()
+  const { data: predictions, isLoading, error } = useGetPredictionsQuery()
 
   return (
     <div className='page-container'>
-      <section className='groups-section'>
-        <h2>Groups</h2>
+      <section className='predictions-section'>
+        <h2>Predictions</h2>
 
-        {isLoading && <div>Loading groups...</div>}
-        {error && <div className='error'>Failed to load groups</div>}
+        {isLoading && <div>Loading predictions...</div>}
+        {error && <div className='error'>Failed to load predictions</div>}
 
-        {groups && groups.length > 0 && (
+        {predictions && predictions.length > 0 && (
           <div className='groups-grid'>
-            {groups.map((group: any) => (
-              <div key={group.id} className='group-card'>
-                <h3>{group.name}</h3>
-                <p>{group.description}</p>
+            {predictions.map((prediction: any) => (
+              <div key={prediction.id} className='group-card'>
+                <h3>{prediction.name}</h3>
+                <p>{prediction.description}</p>
               </div>
             ))}
           </div>

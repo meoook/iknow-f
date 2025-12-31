@@ -1,6 +1,6 @@
 .wrapper {
   box-sizing: border-box;
-  width: var(--size-modal);
+  min-width: var(--size-modal);
   padding: 20px 20px;
   overflow: hidden;
   text-wrap: nowrap;

@@ -10,7 +10,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
   const [createRequest, { isLoading, isError }] = useCreateRequestMutation()
   const [formData, setFormData] = useState<IRequestCreate>({
     title: '',
-    description: '',
+    rules: '',
     vote: 'yes',
     amount: '',
     currency: '',
@@ -92,7 +92,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
         <textarea
           id='description'
           name='description'
-          value={formData.description}
+          value={formData.rules}
           onChange={handleInputChange}
           className={errors.description ? 'outline error' : 'outline'}
           placeholder='Детали прогноза. Общедоступные источники для проверки.'

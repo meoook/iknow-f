@@ -9,6 +9,9 @@ import { NotificationBell } from '../notification'
 import Balance from '../balance'
 import Avatar from '../avatar'
 import Toggle from '../toggle'
+import ModalLogin from '../../modals/login'
+import Modal from '../../elements/modal'
+import { useModal } from '../../hooks/hooks'
 
 export default function UserMenu() {
   const { loading, user } = useAppSelector((state) => state.auth)
@@ -18,6 +21,7 @@ export default function UserMenu() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const closeTimeoutRef = useRef<number | null>(null)
+  const [modal, open, close] = useModal()
 
   const logOut = () => {
     setIsMenuOpen(false)
@@ -66,9 +70,14 @@ export default function UserMenu() {
           <NotificationBell />
         </>
       ) : (
-        <Link className='btn blue' to='/login'>
-          Войти
-        </Link>
+        <>
+          <Modal close={close} modal={modal}>
+            <ModalLogin />
+          </Modal>
+          <button className='btn blue' onClick={open}>
+            Войти
+          </button>
+        </>
       )}
       <div className={style.container} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         {user ? (

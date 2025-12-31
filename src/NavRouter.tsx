@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'rea
 import { Home } from './pages/Home'
 import { Group } from './pages/Group'
 import { Login } from './pages/Login'
-import { MyPredictions } from './pages/MyPredictions'
+import { Requests } from './pages/Requests'
 import { Profile } from './pages/Profile'
 import { wsService } from './services/websocket'
 import { useAppSelector } from './hooks/useRedux'
@@ -29,7 +29,7 @@ export default function NavRouter() {
         <Routes>
           {/* Protected routes */}
           <Route element={<LayoutProtected />}>
-            <Route path='/predictions' element={<MyPredictions />} />
+            <Route path='/predictions' element={<Requests />} />
             <Route path='/profile' element={<Profile />} />
           </Route>
 

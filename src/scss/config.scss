@@ -47,6 +47,7 @@
   // --shadows-inset: inset 0px 2px 2px -1px rgba(74, 74, 104, 0.1);
   // --shadows-tooltip: 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px -8px rgba(14, 14, 44, 0.1);
 
+  --colors-white: #fff;
   --color-primary: #fff;
   // --color-fg-default: #fff;
   --color-secondary: #99a;
@@ -61,7 +62,7 @@
 
   --color-shadow: #2222;
   --color-shimmer: #4442;
-  --color-border: #434a56aa; // #464e5a
+  --color-border: #434a56; // #464e5a
   --color-disabled: #505059;
 
   --color-brand: #ffc400; // #7545d2
@@ -94,7 +95,7 @@
   --color-msg-error: #dc3545;
   // Sizes
   --size-surface: 1360px;
-  --size-modal: 500px;
+  --size-modal: 440px;
   --size-container: 1000px;
   --font-size: 16px;
   --font-size-sm: 14px;
@@ -112,6 +113,9 @@
   // Other
   --text-weight: 600;
   --timer: 0.9s;
+
+  // Shadows
+  --shadow: 0px 0px 0px 4px var(--color-shadow);
 }
 
 *,
