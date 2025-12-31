@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { Home } from './pages/Home'
 import { Group } from './pages/Group'
-import { Login } from './pages/Login'
 import { Requests } from './pages/Requests'
 import { Profile } from './pages/Profile'
 import { wsService } from './services/websocket'
@@ -34,9 +33,9 @@ export default function NavRouter() {
           </Route>
 
           {/* Auth-only routes (redirect if already authenticated) */}
-          <Route element={<LayoutNotAuthed />}>
+          {/* <Route element={<LayoutNotAuthed />}>
             <Route path='/login' element={<Login />} />
-          </Route>
+          </Route> */}
 
           {/* Public routes */}
           <Route path='/politics' element={<Home />} />

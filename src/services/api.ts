@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { config } from '../config/config'
-import type { IUser, ILoginCredentials, IAuthResponse } from '../types/auth.types'
+import type { IUser, IAuthResponse } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
 import type { IRequest, IRequestCreate, PaginatedResponse } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
@@ -39,15 +39,21 @@ export const api = createApi({
         await queryFulfilled
       },
     }),
-    signIn: builder.mutation<IAuthResponse, ILoginCredentials>({
-      query: ({ email, password }) => ({
-        url: 'auth/user',
+    emailNonce: builder.mutation<{ expire: number }, { email: string }>({
+      query: (payload) => ({
+        url: 'auth/user/email',
+        params: payload,
+      }),
+    }),
+    emailAuth: builder.mutation<IAuthResponse, { email: string; nonce: string }>({
+      query: (payload) => ({
+        url: 'auth/user/email',
         method: 'POST',
-        body: { username: email, password },
+        body: payload,
       }),
       transformErrorResponse: (response: any) => {
         if (response.status === 'FETCH_ERROR') return 'server unreacheble'
-        return 'invalid credentials'
+        return 'invalid nonce'
       },
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         dispatch(setLoading(true))
@@ -65,21 +71,6 @@ export const api = createApi({
       providesTags: ['User'],
     }),
     // User endpoints
-    changePassword: builder.mutation<void, { password: string }>({
-      query: (payload) => ({
-        url: 'auth/user/password',
-        method: 'POST',
-        body: payload,
-      }),
-    }),
-    setEmail: builder.mutation<IAuthResponse, { email: string }>({
-      query: (payload) => ({
-        url: 'auth/user/email',
-        method: 'POST',
-        body: payload,
-      }),
-      invalidatesTags: ['User'],
-    }),
     setTelegram: builder.mutation<IAuthResponse, { nonce: string }>({
       query: (payload) => ({
         url: 'auth/user/telegram',
@@ -122,14 +113,13 @@ export const api = createApi({
 export const {
   useW3nonceMutation,
   useW3authMutation,
-  useSignInMutation,
   useSingOutMutation,
   useGetUserQuery,
   // ------
   useCreateRequestMutation,
   // ------
-  useChangePasswordMutation,
-  useSetEmailMutation,
+  useEmailNonceMutation,
+  useEmailAuthMutation,
   useSetTelegramMutation,
   useGetRequestsQuery,
   useGetBetsQuery,

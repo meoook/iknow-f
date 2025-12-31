@@ -1,6 +1,6 @@
 import style from './login.module.scss'
 import { useState } from 'react'
-import { useSignInMutation, useW3authMutation, useW3nonceMutation } from '../../services/api'
+import { useEmailNonceMutation, useEmailAuthMutation, useW3authMutation, useW3nonceMutation } from '../../services/api'
 import { web3AuthService } from '../../services/web3Auth'
 import IconSprite from '../../elements/icon/Icon'
 
@@ -9,7 +9,8 @@ export default function ModalLogin(closeModal: () => void) {
   const [emailValid, setEmailValid] = useState(false)
   const [error, setError] = useState('')
 
-  const [signIn, { isLoading: isOauthLoading }] = useSignInMutation()
+  const [emailNonce, { isLoading: isOauthLoading }] = useEmailNonceMutation()
+  const [emailAuth, { isLoading: isEmailLoading }] = useEmailAuthMutation()
   const [w3auth, { isLoading: isWeb3Loading }] = useW3authMutation()
   const [w3nonce] = useW3nonceMutation()
 
@@ -23,7 +24,7 @@ export default function ModalLogin(closeModal: () => void) {
     setError('')
 
     try {
-      await signIn({ email, password: '' }).unwrap()
+      await emailNonce({ email }).unwrap()
       localStorage.setItem('email', email)
       closeModal()
     } catch (err: any) {

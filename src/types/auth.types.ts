@@ -14,11 +14,6 @@ export interface IAuthState {
   loading: boolean
 }
 
-export interface ILoginCredentials {
-  email: string
-  password: string
-}
-
 export interface IAuthResponse {
   token: string
 }

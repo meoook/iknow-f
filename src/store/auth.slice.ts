@@ -23,7 +23,7 @@ const authSlice = createSlice({
     builder
       .addMatcher(api.endpoints.w3auth.matchFulfilled, (state, action) => {
         state.token = action.payload.token
-        // state.loading = false
+        state.loading = false
         localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload.token)
       })
       .addMatcher(api.endpoints.w3auth.matchRejected, (state) => {
@@ -32,10 +32,16 @@ const authSlice = createSlice({
         state.user = null
         localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
       })
-      .addMatcher(api.endpoints.signIn.matchFulfilled, (state, action) => {
+      .addMatcher(api.endpoints.emailAuth.matchFulfilled, (state, action) => {
         state.token = action.payload.token
-        // state.loading = false
+        state.loading = false
         localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload.token)
+      })
+      .addMatcher(api.endpoints.emailAuth.matchRejected, (state) => {
+        state.token = null
+        state.loading = false
+        state.user = null
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
       })
       .addMatcher(api.endpoints.singOut.matchFulfilled, (state) => {
         state.token = null

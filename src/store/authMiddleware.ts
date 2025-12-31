@@ -23,7 +23,7 @@ export const authMiddleware: Middleware = (store) => {
     const result = next(action)
 
     // После успешной аутентификации автоматически загружаем пользователя
-    if (api.endpoints.w3auth.matchFulfilled(action) || api.endpoints.signIn.matchFulfilled(action)) {
+    if (api.endpoints.w3auth.matchFulfilled(action) || api.endpoints.emailAuth.matchFulfilled(action)) {
       // @ts-ignore - RTK Query dispatch type mismatch
       store.dispatch(api.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
     }

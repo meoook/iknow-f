@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAppSelector } from '../hooks/useRedux'
-import { useSetEmailMutation } from '../services/api'
+// import { useSetEmailMutation } from '../services/api'
 import './Profile.scss'
 import IconSprite from '../elements/icon/Icon'
 import Avatar from '../components/avatar'
@@ -12,7 +12,7 @@ export function Profile() {
   const user = useAppSelector((state) => state.auth.user)
   const token = useAppSelector((state) => state.auth.token)
   const [activeTab, setActiveTab] = useState<TabType>('profile')
-  const [setEmail, { isLoading: isEmailLoading }] = useSetEmailMutation()
+  // const [setEmail, { isLoading: isEmailLoading }] = useSetEmailMutation()
 
   const [formData, setFormData] = useState({ email: user?.email || '', username: user?.username || '', bio: '' })
 
@@ -41,7 +41,7 @@ export function Profile() {
 
     if (!newErrors.email && !newErrors.username) {
       try {
-        if (formData.email !== user?.email) await setEmail({ email: formData.email }).unwrap()
+        // if (formData.email !== user?.email) await setEmail({ email: formData.email }).unwrap()
         // TODO: Добавить сохранение username и bio когда API будет готово
         console.log('Saving changes:', formData)
       } catch (error) {
@@ -111,9 +111,9 @@ export function Profile() {
               />
             </div>
 
-            <button className='btn blue' onClick={handleSaveChanges} disabled={isEmailLoading}>
+            {/* <button className='btn blue' onClick={handleSaveChanges} disabled={isEmailLoading}>
               {isEmailLoading ? 'Сохраняю...' : 'Сохранить'}
-            </button>
+            </button> */}
           </div>
         )
       case 'account':
