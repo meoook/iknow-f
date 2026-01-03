@@ -3,17 +3,31 @@ import { store } from '../store/store'
 import { addNotification } from '../store/app.slice'
 import type { INotification } from '../types/app.types'
 
+const WsOutEvent = {
+  auth: 'auth',
+  notification_read: 'notification_read',
+  notification_all_read: 'notification_all_read',
+  notification_remove: 'notification_remove',
+  notification_clear: 'notification_clear',
+} as const
+
+type WsOutEvent = (typeof WsOutEvent)[keyof typeof WsOutEvent]
+
 class WebSocketService {
   private ws: WebSocket | null = null
   private reconnectAttempts = 0
-  private maxReconnectAttempts = 5
+  private maxReconnectAttempts = 3
   private reconnectDelay = 3000
   private reconnectTimer: number | null = null
   private intentionalDisconnect = false
+  private token: string = ''
+  private isConnected = false
 
-  connect() {
-    const token = localStorage.getItem('auth_token')
-    if (!token) {
+  connect(token?: string | null) {
+    // const token = localStorage.getItem('auth_token')
+    if (this.isConnected) return
+    if (token) this.token = token
+    if (!this.token) {
       console.warn('No auth token found, skipping WebSocket connection')
       return
     }
@@ -21,12 +35,13 @@ class WebSocketService {
 
     try {
       // Send token as query parameter
-      this.ws = new WebSocket(`${config.wsUrl}?token=${token}`)
+      this.ws = new WebSocket(`${config.wsUrl}?token=${this.token}`)
 
       this.ws.onopen = () => {
         console.log('WebSocket connected')
         this.reconnectAttempts = 0
         this.clearReconnectTimer()
+        this.isConnected = true
       }
       this.ws.onmessage = (event) => {
         try {
@@ -43,6 +58,7 @@ class WebSocketService {
         console.log('WebSocket disconnected')
         // Only attempt reconnect if it wasn't intentional
         if (!this.intentionalDisconnect) this.attemptReconnect()
+        this.isConnected = false
       }
     } catch (error) {
       console.error('Failed to create WebSocket connection:', error)
@@ -55,10 +71,11 @@ class WebSocketService {
     if (data.type === 'notification') {
       const notification: INotification = {
         id: data.id || Date.now().toString(),
-        message: data.message,
-        type: data.notificationType || 'info',
-        timestamp: data.timestamp || Date.now(),
-        read: false,
+        text: data.message,
+        alert_type: data.notificationType || 'ℹ️',
+        title: data.title || 'Notification',
+        read: data.read || false,
+        created: data.created || new Date().toISOString(),
       }
 
       store.dispatch(addNotification(notification))
@@ -95,28 +112,30 @@ class WebSocketService {
       this.ws = null
     }
     this.reconnectAttempts = 0
+    this.isConnected = false
   }
 
-  send(data: any) {
+  private send(type: WsOutEvent, value: any) {
+    const data = { type, value }
     if (this.ws && this.ws.readyState === WebSocket.OPEN) this.ws.send(JSON.stringify(data))
     else console.warn('WebSocket is not connected')
   }
 
   // Notification commands
   sendMarkAsRead(notificationId: string) {
-    this.send({ type: 'notification_mark_read', notificationId })
+    this.send(WsOutEvent.notification_read, notificationId)
   }
 
   sendMarkAllAsRead() {
-    this.send({ type: 'notification_mark_all_read' })
+    this.send(WsOutEvent.notification_all_read, null)
   }
 
   sendRemoveNotification(notificationId: string) {
-    this.send({ type: 'notification_remove', notificationId })
+    this.send(WsOutEvent.notification_remove, notificationId)
   }
 
   sendClearAllNotifications() {
-    this.send({ type: 'notification_clear_all' })
+    this.send(WsOutEvent.notification_clear, null)
   }
 }
 

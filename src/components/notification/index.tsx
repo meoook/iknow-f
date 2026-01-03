@@ -47,9 +47,9 @@ export const NotificationBell = () => {
                   key={notification.id}
                   className={`${style.item} ${notification.read ? 'read' : 'unread'}`}
                   onClick={() => !notification.read && handleMarkAsRead(notification.id)}>
-                  <div className={`${style.type} ${notification.type}`}>{notification.type}</div>
-                  <div className={style.message}>{notification.message}</div>
-                  <div className={style.time}>{new Date(notification.timestamp).toLocaleString()}</div>
+                  <div className={`${style.type} ${notification.alert_type}`}>{notification.alert_type}</div>
+                  <div className={style.message}>{notification.text}</div>
+                  <div className={style.time}>{new Date(notification.created).toLocaleString()}</div>
                 </div>
               ))
             )}

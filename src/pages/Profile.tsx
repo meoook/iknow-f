@@ -1,22 +1,31 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAppSelector } from '../hooks/useRedux'
 // import { useSetEmailMutation } from '../services/api'
 import './Profile.scss'
 import IconSprite from '../elements/icon/Icon'
 import Avatar from '../components/avatar'
-import { Navigate } from 'react-router-dom'
+import { EMAIL_REGEX } from '../config/config'
 
 type TabType = 'profile' | 'account' | 'trading' | 'notifications' | 'builder' | 'export'
 
 export function Profile() {
   const user = useAppSelector((state) => state.auth.user)
-  const token = useAppSelector((state) => state.auth.token)
+  const loading = useAppSelector((state) => state.auth.loading)
   const [activeTab, setActiveTab] = useState<TabType>('profile')
   // const [setEmail, { isLoading: isEmailLoading }] = useSetEmailMutation()
 
   const [formData, setFormData] = useState({ email: user?.email || '', username: user?.username || '', bio: '' })
-
   const [errors, setErrors] = useState({ email: '', username: '' })
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        email: user.email || '',
+        username: user.username || '',
+        bio: '', // Assuming bio might be added later to IUser
+      })
+    }
+  }, [user])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -25,15 +34,10 @@ export function Profile() {
     if (errors[name as keyof typeof errors]) setErrors((prev) => ({ ...prev, [name]: '' }))
   }
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
-  }
-
   const handleSaveChanges = async () => {
     const newErrors = { email: '', username: '' }
 
-    if (formData.email && !validateEmail(formData.email)) newErrors.email = 'Invalid email format'
+    if (formData.email && !EMAIL_REGEX.test(formData.email)) newErrors.email = 'Invalid email format'
 
     if (formData.username && formData.username.length < 3) newErrors.username = 'Username must be at least 3 characters'
 
@@ -58,6 +62,27 @@ export function Profile() {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'profile':
+        if (loading) {
+          return (
+            <div className='profile-content'>
+              <h1 className='profile-title'>Настройки профиля</h1>
+              <div className='profile-avatar-section'>
+                <div className='skeleton-avatar' />
+                <div className='skeleton-btn' />
+              </div>
+              {['Почта', 'Никнейм'].map((i) => (
+                <div className='form-row' key={i}>
+                  <label>{i}</label>
+                  <div className='skeleton-input' />
+                </div>
+              ))}
+              <div className='form-row'>
+                <label>О себе</label>
+                <div className='skeleton-textarea' />
+              </div>
+            </div>
+          )
+        }
         return (
           <div className='profile-content'>
             <h1 className='profile-title'>Настройки профиля</h1>
@@ -111,9 +136,9 @@ export function Profile() {
               />
             </div>
 
-            {/* <button className='btn blue' onClick={handleSaveChanges} disabled={isEmailLoading}>
-              {isEmailLoading ? 'Сохраняю...' : 'Сохранить'}
-            </button> */}
+            <button className='btn blue' onClick={handleSaveChanges}>
+              Сохранить
+            </button>
           </div>
         )
       case 'account':
@@ -155,8 +180,6 @@ export function Profile() {
         return null
     }
   }
-
-  if (!token) return <Navigate to='/login' />
 
   return (
     <div className='container'>

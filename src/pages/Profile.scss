@@ -1,3 +1,51 @@
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+%shim {
+  animation: shimmer 2s infinite;
+  display: block;
+  background: var(--color-input);
+  background-image: linear-gradient(to right, transparent 0%, var(--color-border) 50%, transparent 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 100px;
+  position: relative;
+}
+
+.skeleton {
+  &-avatar {
+    @extend %shim;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+  &-btn {
+    @extend %shim;
+    width: 120px;
+    height: 36px;
+    border-radius: var(--radius);
+  }
+
+  &-input {
+    @extend %shim;
+    width: 100%;
+    height: 40px;
+    border-radius: var(--radius);
+  }
+
+  &-textarea {
+    @extend %shim;
+    width: 100%;
+    height: 106px;
+    border-radius: var(--radius);
+  }
+}
+
 .profile-page {
   display: flex;
 }

@@ -1,5 +1,5 @@
 .btn {
-  height: 36px;
+  height: 38px;
   padding-left: 16px;
   padding-right: 16px;
   font-weight: 500;
@@ -21,7 +21,6 @@
     color: inherit;
   }
   &.big {
-    min-width: unset;
     height: 54px;
   }
   &-icon {
@@ -129,9 +128,6 @@
     }
   }
 }
-.col {
-  width: 100%;
-}
 .w100 {
   width: 100%;
 }
@@ -201,91 +197,13 @@
   }
 }
 
-.card {
-  box-sizing: border-box;
-  display: inline-flex;
-  flex-direction: column;
-  // gap: 12px;
-  width: 320px;
-  height: 280px;
-  align-items: start;
-  background-color: var(--color-dialog);
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  & .picture {
-    position: relative;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%;
-    height: 88px;
-    padding: 8px 14px;
-    overflow: hidden;
-    color: #fff;
-    &.red {
-      background-color: var(--color-red);
-    }
-    &.green {
-      background-color: var(--color-green-dark);
-    }
-    & .popup {
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      // gap: 6px;
-      background-color: var(--color-orange-dark);
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      padding: 6px 14px;
-      max-height: 100%;
-      font-weight: 600;
-      transition: transform 0.3s ease-out;
-      transform: translateY(100%);
-      // pointer-events: none;
-      &.reject {
-        background-color: var(--color-red-dark);
-        height: 100%;
-      }
-    }
-  }
-  & .title {
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 54px;
-    padding: 0 14px;
-    overflow: hidden;
-    // text-wrap: balance;
-    // border-bottom: 1px solid var(--color-border);
-  }
-  &:hover {
-    & .popup {
-      transform: translateY(0);
-    }
-  }
-  & .dsc {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-line-clamp: 7;
-    -webkit-box-orient: vertical;
-    padding: 0 14px;
-    font-size: var(--font-size-sm);
-    color: var(--color-secondary);
-  }
-}
-
 .line-clamp {
   &-1 {
     display: -webkit-box;
     overflow: hidden;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
   }
   &-2 {
     display: -webkit-box;
@@ -302,4 +220,16 @@
 }
 .grow {
   flex-grow: 1;
+}
+.noscroll {
+  overflow-y: auto;
+  // Скрываем скроллбар для Webkit браузеров (Chrome, Safari, Edge)
+  &::-webkit-scrollbar {
+    width: 0;
+    display: none;
+  }
+  // Скрываем скроллбар для Firefox
+  scrollbar-width: none;
+  // Скрываем скроллбар для IE/Edge (старые версии)
+  -ms-overflow-style: none;
 }

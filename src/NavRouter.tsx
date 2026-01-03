@@ -9,16 +9,16 @@ import { useAppSelector } from './hooks/useRedux'
 import Header from './components/header'
 
 export default function NavRouter() {
-  const user = useAppSelector((state) => state.auth.user)
+  const { user, token } = useAppSelector((state) => state.auth)
 
   useEffect(() => {
-    if (user) wsService.connect()
+    if (user) wsService.connect(token)
     else wsService.disconnect()
 
     return () => {
       wsService.disconnect()
     }
-  }, [user])
+  }, [user, token])
 
   return (
     <BrowserRouter>

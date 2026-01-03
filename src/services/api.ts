@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { config } from '../config/config'
 import type { IUser, IAuthResponse } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
-import type { IRequest, IRequestCreate, PaginatedResponse } from '../types/app.types'
+import type { INotification, IRequest, IRequestCreate, PaginatedResponse } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
 export const api = createApi({
@@ -69,6 +69,9 @@ export const api = createApi({
     getUser: builder.query<IUser, void>({
       query: () => 'auth/user',
       providesTags: ['User'],
+    }),
+    getNotifications: builder.query<INotification[], void>({
+      query: () => 'auth/user/notification',
     }),
     // User endpoints
     setTelegram: builder.mutation<IAuthResponse, { nonce: string }>({

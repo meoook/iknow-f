@@ -49,18 +49,7 @@
   padding: 8px 0;
   z-index: 100;
   animation: fadeIn 0.2s ease-in-out;
-  overflow-y: auto;
   max-height: calc(100vh - 100px);
-
-  // Скрываем скроллбар для Webkit браузеров (Chrome, Safari, Edge)
-  &::-webkit-scrollbar {
-    width: 0;
-    display: none;
-  }
-  // Скрываем скроллбар для Firefox
-  scrollbar-width: none;
-  // Скрываем скроллбар для IE/Edge (старые версии)
-  -ms-overflow-style: none;
 
   .item,
   .link {

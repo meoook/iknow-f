@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { IAppState, INotification } from '../types/app.types'
+import { api } from '../services/api'
 
 // Функция для определения начальной темы
 const getInitialTheme = (): 'light' | 'dark' => {
@@ -19,10 +20,10 @@ const applyTheme = (theme: 'light' | 'dark') => {
   const root = document.documentElement
   if (theme === 'light') {
     root.style.setProperty('--color-primary', '#222')
-    root.style.setProperty('--color-secondary', '#555')
+    root.style.setProperty('--color-secondary', '#444')
     root.style.setProperty('--color-body', '#fff')
     root.style.setProperty('--color-head', '#fff')
-    root.style.setProperty('--color-dialog', '#fff')
+    root.style.setProperty('--color-dialog', '#eee')
     root.style.setProperty('--color-input', '#fff')
     root.style.setProperty('--color-active', '#ddd')
     root.style.setProperty('--color-hover', '#eee')
@@ -79,6 +80,11 @@ const appSlice = createSlice({
       state.notifications = []
       state.unreadCount = 0
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(api.endpoints.getNotifications.matchFulfilled, (state, action) => {
+      state.notifications = action.payload
+    })
   },
 })
 

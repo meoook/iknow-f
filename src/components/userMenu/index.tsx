@@ -92,7 +92,7 @@ export default function UserMenu() {
           </button>
         )}
         {isMenuOpen && (
-          <div className={style.dropdown}>
+          <div className={`${style.dropdown} noscroll`}>
             {user && (
               <>
                 <Link className={style.user} to='/profile'>

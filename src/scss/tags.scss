@@ -4,10 +4,11 @@
 ::-webkit-scrollbar-thumb {
   background-color: #41464f;
   border-radius: 8px;
+  height: 56px;
 }
 ::-webkit-scrollbar-track {
   background-color: #1d2033;
-  box-shadow: inset 0 0 4px #372f47;
+  box-shadow: inset 0 0 4px #444;
 }
 
 // @media screen and (min-width: 576px) {
@@ -17,7 +18,7 @@
 // }
 
 html {
-  line-height: 1.2rem;
+  line-height: 1.2;
   -webkit-text-size-adjust: 100%;
   -moz-tab-size: 4;
   tab-size: 4;
@@ -34,7 +35,7 @@ body {
   // background: linear-gradient(to right, #131619, #040506);
   background: var(--color-body);
   margin: 0;
-  line-height: inherit;
+  // line-height: inherit;
 }
 main {
   max-width: var(--size-surface);
@@ -76,7 +77,7 @@ textarea {
 }
 input,
 select {
-  height: 40px;
+  height: 38px;
 }
 input,
 select,
@@ -128,6 +129,10 @@ hr {
   margin: var(--base-size-8, 8px) 0;
   background-color: var(--color-border);
   border: none;
+  &.hide {
+    height: 20px;
+    background-color: transparent;
+  }
 }
 h1,
 h2,

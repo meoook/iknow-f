@@ -1,9 +1,10 @@
 export interface INotification {
   id: string
-  message: string
-  type: 'info' | 'success' | 'warning' | 'error'
-  timestamp: number
   read: boolean
+  alert_type: 'ℹ️' | '⚠️' | '✅' | '❌'
+  title: string
+  text: string
+  created: string
 }
 
 export interface IAppState {
@@ -40,6 +41,7 @@ export interface IRequest {
   choices: string[]
   vote_choice: string
   vote: boolean
+  currency: 'POINT' | 'CASH'
   amount: string
   end_date: string
 }

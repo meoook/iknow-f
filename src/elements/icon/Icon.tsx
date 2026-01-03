@@ -5,6 +5,7 @@ type IconName =
   | 'arrow_down'
   | 'bell'
   | 'bell-z'
+  | 'check'
   | 'close'
   | 'crown'
   | 'diff'

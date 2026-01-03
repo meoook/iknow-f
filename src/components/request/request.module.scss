@@ -1,0 +1,135 @@
+.item {
+  display: flex;
+  // border-bottom: 1px dashed var(--color-border);
+  overflow: hidden;
+  gap: 16px;
+  padding: 4px 0;
+}
+
+.indicator {
+  min-width: 4px;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+
+  &.blue {
+    background: var(--color-blue-dark);
+  }
+
+  &.green {
+    background: var(--color-green);
+  }
+
+  &.red {
+    background: var(--color-red);
+  }
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  gap: 24px;
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-sm);
+  // color: var(--color-secondary);
+  color: var(--color-brand);
+}
+
+.rules {
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary);
+  line-height: 1.5;
+}
+
+.chips {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: 8px;
+}
+
+.chip {
+  font-size: var(--font-size-sm);
+  padding: 4px 8px;
+  background: var(--color-dialog);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-secondary);
+}
+
+.prediction {
+  box-sizing: border-box;
+  width: 240px;
+  flex-shrink: 0;
+  padding: 12px;
+  background: var(--color-dialog);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: var(--font-size-sm);
+}
+
+.vote {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  & .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+    letter-spacing: 0.5px;
+  }
+
+  & .yes,
+  & .no {
+    font-weight: 500;
+    border-radius: 4px;
+    padding: 4px 8px;
+  }
+
+  & .yes {
+    color: var(--color-green);
+    background: rgba(74, 139, 62, 0.15);
+  }
+  & .no {
+    color: var(--color-orange);
+    background: rgba(238, 153, 0, 0.15);
+  }
+}
+
+.state {
+  // margin-top: 8px;
+  padding: 8px 12px;
+  font-size: var(--font-size-sm);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  line-height: 1;
+  min-height: 34px;
+
+  &.error {
+    background: rgba(238, 153, 0, 0.1);
+    color: var(--color-orange);
+  }
+  &.pending {
+    background: rgba(44, 116, 194, 0.1);
+    color: var(--color-blue);
+  }
+  &.ok {
+    background: rgba(74, 139, 62, 0.15);
+    color: var(--color-green);
+  }
+  & .reason {
+    color: var(--color-secondary);
+    font-style: italic;
+  }
+}
