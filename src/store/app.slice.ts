@@ -23,10 +23,10 @@ const applyTheme = (theme: 'light' | 'dark') => {
     root.style.setProperty('--color-secondary', '#444')
     root.style.setProperty('--color-body', '#fff')
     root.style.setProperty('--color-head', '#fff')
-    root.style.setProperty('--color-dialog', '#eee')
+    root.style.setProperty('--color-dialog', '#e9e9e9')
     root.style.setProperty('--color-input', '#fff')
     root.style.setProperty('--color-active', '#ddd')
-    root.style.setProperty('--color-hover', '#eee')
+    root.style.setProperty('--color-hover', '#e0e0e0')
   } else {
     root.style.removeProperty('--color-primary')
     root.style.removeProperty('--color-secondary')
@@ -55,40 +55,40 @@ const appSlice = createSlice({
       state.notifications.unshift(action.payload)
       if (!action.payload.read) state.unreadCount += 1
     },
-    markAsRead: (state, action: PayloadAction<string>) => {
-      const notification = state.notifications.find((n) => n.id === action.payload)
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(api.endpoints.getNotifications.matchFulfilled, (state, action) => {
+      state.notifications = action.payload
+      state.unreadCount = action.payload.filter((n) => !n.read).length
+    })
+    builder.addMatcher(api.endpoints.readNotification.matchFulfilled, (state, action) => {
+      const notification = state.notifications.find((n) => n.id === action.meta.arg.originalArgs)
       if (notification && !notification.read) {
         notification.read = true
         state.unreadCount = Math.max(0, state.unreadCount - 1)
       }
-    },
-    markAllAsRead: (state) => {
+    })
+    builder.addMatcher(api.endpoints.readAllNotifications.matchFulfilled, (state) => {
       state.notifications.forEach((n) => {
         n.read = true
       })
       state.unreadCount = 0
-    },
-    removeNotification: (state, action: PayloadAction<string>) => {
-      const index = state.notifications.findIndex((n) => n.id === action.payload)
+    })
+    builder.addMatcher(api.endpoints.deleteNotification.matchFulfilled, (state, action) => {
+      const index = state.notifications.findIndex((n) => n.id === action.meta.arg.originalArgs)
       if (index !== -1) {
         const notification = state.notifications[index]
         if (!notification.read) state.unreadCount = Math.max(0, state.unreadCount - 1)
         state.notifications.splice(index, 1)
       }
-    },
-    clearAllNotifications: (state) => {
+    })
+    builder.addMatcher(api.endpoints.deleteAllNotifications.matchFulfilled, (state) => {
       state.notifications = []
       state.unreadCount = 0
-    },
-  },
-  extraReducers: (builder) => {
-    builder.addMatcher(api.endpoints.getNotifications.matchFulfilled, (state, action) => {
-      state.notifications = action.payload
     })
   },
 })
 
-export const { toggleTheme, addNotification, markAsRead, markAllAsRead, removeNotification, clearAllNotifications } =
-  appSlice.actions
+export const { toggleTheme, addNotification } = appSlice.actions
 
 export default appSlice.reducer

@@ -41,13 +41,13 @@ export const api = createApi({
     }),
     emailNonce: builder.mutation<{ expire: number }, { email: string }>({
       query: (payload) => ({
-        url: 'auth/user/email',
+        url: 'auth/email',
         params: payload,
       }),
     }),
     emailAuth: builder.mutation<IAuthResponse, { email: string; nonce: string }>({
       query: (payload) => ({
-        url: 'auth/user/email',
+        url: 'auth/email',
         method: 'POST',
         body: payload,
       }),
@@ -72,6 +72,30 @@ export const api = createApi({
     }),
     getNotifications: builder.query<INotification[], void>({
       query: () => 'auth/user/notification',
+    }),
+    readNotification: builder.mutation<void, number>({
+      query: (payload) => ({
+        url: `auth/user/notification/${payload}`,
+        method: 'PUT',
+      }),
+    }),
+    readAllNotifications: builder.mutation<void, void>({
+      query: () => ({
+        url: 'auth/user/notification/all/read',
+        method: 'PUT',
+      }),
+    }),
+    deleteNotification: builder.mutation<void, number>({
+      query: (payload) => ({
+        url: `auth/user/notification/${payload}`,
+        method: 'DELETE',
+      }),
+    }),
+    deleteAllNotifications: builder.mutation<void, void>({
+      query: () => ({
+        url: 'auth/user/notification/all/delete',
+        method: 'DELETE',
+      }),
     }),
     // User endpoints
     setTelegram: builder.mutation<IAuthResponse, { nonce: string }>({
@@ -116,13 +140,18 @@ export const api = createApi({
 export const {
   useW3nonceMutation,
   useW3authMutation,
-  useSingOutMutation,
+  useEmailNonceMutation,
+  useEmailAuthMutation,
   useGetUserQuery,
+  useSingOutMutation,
+  // Notifications
+  useReadNotificationMutation,
+  useReadAllNotificationsMutation,
+  useDeleteNotificationMutation,
+  useDeleteAllNotificationsMutation,
   // ------
   useCreateRequestMutation,
   // ------
-  useEmailNonceMutation,
-  useEmailAuthMutation,
   useSetTelegramMutation,
   useGetRequestsQuery,
   useGetBetsQuery,

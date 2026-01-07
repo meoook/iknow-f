@@ -1,4 +1,4 @@
-@keyframes shimmer {
+@keyframes shim {
   0% {
     background-position: -1000px 0;
   }
@@ -8,7 +8,7 @@
 }
 
 %shim {
-  animation: shimmer 2s infinite;
+  animation: shim 2s infinite;
   display: block;
   background: var(--color-input);
   background-image: linear-gradient(to right, transparent 0%, var(--color-border) 50%, transparent 100%);

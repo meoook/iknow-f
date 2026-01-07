@@ -1,7 +1,7 @@
 export interface INotification {
-  id: string
+  id: number
   read: boolean
-  alert_type: 'ℹ️' | '⚠️' | '✅' | '❌'
+  alert_type: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR'
   title: string
   text: string
   created: string

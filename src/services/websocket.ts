@@ -13,6 +13,16 @@ const WsOutEvent = {
 
 type WsOutEvent = (typeof WsOutEvent)[keyof typeof WsOutEvent]
 
+// const WsInEvent = {
+//   auth: 'auth',
+//   notification_read: 'notification_read',
+//   notification_all_read: 'notification_all_read',
+//   notification_remove: 'notification_remove',
+//   notification_clear: 'notification_clear',
+// } as const
+
+// type WsInEvent = (typeof WsInEvent)[keyof typeof WsInEvent]
+
 class WebSocketService {
   private ws: WebSocket | null = null
   private reconnectAttempts = 0
@@ -81,6 +91,17 @@ class WebSocketService {
       store.dispatch(addNotification(notification))
     }
   }
+
+  //   web_socket.onmessage = (ev: MessageEvent) => {
+  //   const msg: { type: CActionType | WebRTCActionType; value?: any } = JSON.parse(ev.data)
+  //   console.log('Received', msg.type, msg.value)
+  //   if (msg.type === WebRTCActionType.RTC_ANSWER) handleAnswer(msg.value)
+  //   else if (msg.type === WebRTCActionType.RTC_OFFER) createAnswer(msg.value)
+  //   else if (msg.type === WebRTCActionType.OPPONENT_FOUND) setFound(msg.value)
+  //   else if (msg.type === WebRTCActionType.RTC_CANDIDATE) addCandidate(msg.value)
+  //   else if (msg.type === WebRTCActionType.RTC_DISCONNECT) dropUser()
+  //   else dispatch({ type: msg.type as CActionType, payload: msg.value })
+  // }
 
   private attemptReconnect() {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
