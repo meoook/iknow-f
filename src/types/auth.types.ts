@@ -1,6 +1,18 @@
+const ICurrency = {
+  POINT: 'POINT',
+  CASH: 'CASH',
+} as const
+
+type ICurrency = (typeof ICurrency)[keyof typeof ICurrency]
+
 interface IBalances {
-  POINT: number
-  CASH: number
+  [ICurrency.POINT]: number
+  [ICurrency.CASH]: number
+}
+
+export interface IBalanceUpdate {
+  currency: ICurrency
+  amount: number
 }
 
 export interface IUser {

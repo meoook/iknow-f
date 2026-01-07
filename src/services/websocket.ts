@@ -1,7 +1,7 @@
 import { config } from '../config/config'
 import { store } from '../store/store'
 import { addNotification } from '../store/app.slice'
-import type { INotification } from '../types/app.types'
+import { setBalance } from '../store/auth.slice'
 
 const WsOutEvent = {
   auth: 'auth',
@@ -13,15 +13,18 @@ const WsOutEvent = {
 
 type WsOutEvent = (typeof WsOutEvent)[keyof typeof WsOutEvent]
 
-// const WsInEvent = {
-//   auth: 'auth',
-//   notification_read: 'notification_read',
-//   notification_all_read: 'notification_all_read',
-//   notification_remove: 'notification_remove',
-//   notification_clear: 'notification_clear',
-// } as const
+const WsInEvent = {
+  auth: 'auth',
+  notify: 'notify',
+  balance: 'balance',
+} as const
 
-// type WsInEvent = (typeof WsInEvent)[keyof typeof WsInEvent]
+type WsInEvent = (typeof WsInEvent)[keyof typeof WsInEvent]
+
+interface WsInMessage {
+  type: WsInEvent
+  value?: any
+}
 
 class WebSocketService {
   private ws: WebSocket | null = null
@@ -45,7 +48,7 @@ class WebSocketService {
 
     try {
       // Send token as query parameter
-      this.ws = new WebSocket(`${config.wsUrl}?token=${this.token}`)
+      this.ws = new WebSocket(`${config.wsUrl}/${this.token}`)
 
       this.ws.onopen = () => {
         console.log('WebSocket connected')
@@ -55,8 +58,8 @@ class WebSocketService {
       }
       this.ws.onmessage = (event) => {
         try {
-          const data = JSON.parse(event.data)
-          this.handleMessage(data)
+          const msg: WsInMessage = JSON.parse(event.data)
+          this.handleMessage(msg)
         } catch (error) {
           console.error('Failed to parse WebSocket message:', error)
         }
@@ -66,9 +69,9 @@ class WebSocketService {
       }
       this.ws.onclose = () => {
         console.log('WebSocket disconnected')
+        this.isConnected = false
         // Only attempt reconnect if it wasn't intentional
         if (!this.intentionalDisconnect) this.attemptReconnect()
-        this.isConnected = false
       }
     } catch (error) {
       console.error('Failed to create WebSocket connection:', error)
@@ -76,32 +79,11 @@ class WebSocketService {
     }
   }
 
-  private handleMessage(data: any) {
-    // Handle different message types
-    if (data.type === 'notification') {
-      const notification: INotification = {
-        id: data.id || Date.now().toString(),
-        text: data.message,
-        alert_type: data.notificationType || 'ℹ️',
-        title: data.title || 'Notification',
-        read: data.read || false,
-        created: data.created || new Date().toISOString(),
-      }
-
-      store.dispatch(addNotification(notification))
-    }
+  private handleMessage(msg: WsInMessage) {
+    if (msg.type === WsInEvent.notify) store.dispatch(addNotification(msg.value))
+    else if (msg.type === WsInEvent.balance) store.dispatch(setBalance(msg.value))
+    else console.log(`Unknown message type: ${msg.type} with value: ${msg.value}`)
   }
-
-  //   web_socket.onmessage = (ev: MessageEvent) => {
-  //   const msg: { type: CActionType | WebRTCActionType; value?: any } = JSON.parse(ev.data)
-  //   console.log('Received', msg.type, msg.value)
-  //   if (msg.type === WebRTCActionType.RTC_ANSWER) handleAnswer(msg.value)
-  //   else if (msg.type === WebRTCActionType.RTC_OFFER) createAnswer(msg.value)
-  //   else if (msg.type === WebRTCActionType.OPPONENT_FOUND) setFound(msg.value)
-  //   else if (msg.type === WebRTCActionType.RTC_CANDIDATE) addCandidate(msg.value)
-  //   else if (msg.type === WebRTCActionType.RTC_DISCONNECT) dropUser()
-  //   else dispatch({ type: msg.type as CActionType, payload: msg.value })
-  // }
 
   private attemptReconnect() {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
