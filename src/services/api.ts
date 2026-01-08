@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { config } from '../config/config'
 import type { IUser, IAuthResponse } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
-import type { INotification, IRequest, IRequestCreate, PaginatedResponse } from '../types/app.types'
+import type { IBet, INotification, IPrediction, IRequest, IRequestCreate, PaginatedResponse } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
 export const api = createApi({
@@ -120,13 +120,13 @@ export const api = createApi({
       }),
       invalidatesTags: ['Requests'],
     }),
-    getBets: builder.query<any[], void>({
+    getBets: builder.query<IBet[], void>({
       query: () => 'bet',
       providesTags: ['Bets'],
     }),
 
     // Public endpoints
-    getPredictions: builder.query<any[], void>({
+    getPredictions: builder.query<PaginatedResponse<IPrediction>, void>({
       query: () => 'prediction',
       providesTags: ['Predictions'],
     }),

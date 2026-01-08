@@ -95,6 +95,9 @@
   &.start {
     align-items: start;
   }
+  &.wrap {
+    flex-wrap: wrap;
+  }
   // &.stretch {
   //   align-items: stretch;
   // }

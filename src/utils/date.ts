@@ -15,5 +15,5 @@ export const formatRelativeTime = (date: string | number | Date): string => {
   if (diffInMinutes >= 1) return `${diffInMinutes} мин назад`
   if (diffInSeconds >= 20) return `${diffInSeconds} сек назад`
 
-  return 'тилько что'
+  return 'только что'
 }

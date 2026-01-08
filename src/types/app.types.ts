@@ -46,7 +46,18 @@ export interface IRequest {
   end_date: string
 }
 
-export interface IGroup {
+export interface IPrediction {
+  id: number
+  title: string
+  group: string
+  icon: string
+  volume: string
+  bet_diff: string
+  end_date: string
+}
+
+export interface IPredictionDetail {
+  // 'id', 'title', 'group', 'icon', 'volume', 'bet_diff', 'end_date'
   id: number
   title: string
   description: string
@@ -54,7 +65,7 @@ export interface IGroup {
   icon: string
 }
 
-export interface IPrediction {
+export interface IChoice {
   id: number
   state: string
   volume_y: number

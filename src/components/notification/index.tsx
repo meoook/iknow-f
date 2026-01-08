@@ -64,6 +64,11 @@ function NotificationItem({ notification }: { notification: INotification }) {
   const [readOne] = useReadNotificationMutation()
   const [deleteOne] = useDeleteNotificationMutation()
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    deleteOne(notification.id)
+  }
+
   const alertType = notification.alert_type.toLowerCase() as any
   let itemClass = style.item
   if (!notification.read) itemClass += ` ${style.unread}`
@@ -77,7 +82,7 @@ function NotificationItem({ notification }: { notification: INotification }) {
         <div className={style.message}>{notification.text}</div>
         <div className={style.time}>{formatRelativeTime(notification.created)}</div>
       </div>
-      <div className={style.close} onClick={() => deleteOne(notification.id)}>
+      <div className={style.close} onClick={handleDelete}>
         <IconSprite name='close' size={16} />
       </div>
     </div>

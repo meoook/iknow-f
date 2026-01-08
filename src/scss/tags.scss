@@ -175,7 +175,7 @@ img {
 section {
   // display: flex;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: center;
   width: 100%;
   gap: 20px;
@@ -190,7 +190,7 @@ section {
     align-items: center;
     justify-content: center;
     gap: 20px;
-    grid-column: span 3;
+    grid-column: span 4;
   }
 }
 

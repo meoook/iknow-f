@@ -1,27 +1,39 @@
+import PredictionCard from '../components/card'
+import IconSprite from '../elements/icon/Icon'
+import Loader from '../elements/loader'
 import { useGetPredictionsQuery } from '../services/api'
+import type { IPrediction } from '../types/app.types'
 
 export const Home = () => {
-  const { data: predictions, isLoading, error } = useGetPredictionsQuery()
+  const { data, isLoading, error } = useGetPredictionsQuery()
 
   return (
-    <div className='page-container'>
-      <section className='predictions-section'>
-        <h2>Predictions</h2>
-
-        {isLoading && <div>Loading predictions...</div>}
-        {error && <div className='error'>Failed to load predictions</div>}
-
-        {predictions && predictions.length > 0 && (
-          <div className='groups-grid'>
-            {predictions.map((prediction: any) => (
-              <div key={prediction.id} className='group-card'>
-                <h3>{prediction.name}</h3>
-                <p>{prediction.description}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-    </div>
+    <section>
+      {isLoading && (
+        <div className='empty'>
+          <Loader />
+          <span>Загрузка...</span>
+        </div>
+      )}
+      {error && (
+        <div className='empty error'>
+          <IconSprite name='error' />
+          <span>Ошибка загрузки</span>
+        </div>
+      )}
+      {data && data.data.length === 0 && (
+        <div className='empty'>
+          <IconSprite name='draft' />
+          <span>Предсказания отсутствуют</span>
+        </div>
+      )}
+      {data && data.data.length > 0 && (
+        <>
+          {data.data.map((prediction: IPrediction) => (
+            <PredictionCard prediction={prediction} />
+          ))}
+        </>
+      )}
+    </section>
   )
 }
