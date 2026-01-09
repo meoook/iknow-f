@@ -1,4 +1,5 @@
 export const config = {
+  imgBaseUrl: 'http://localhost/static',
   apiBaseUrl: 'http://localhost/api',
   wsUrl: 'ws://localhost/ws',
   // WalletConnect Project ID - get from https://cloud.walletconnect.com/

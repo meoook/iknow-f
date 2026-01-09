@@ -40,7 +40,7 @@ interface IconProps {
 export default function IconSprite({ name, size = 24, color = 'currentColor' }: IconProps) {
   return (
     // <svg width={size} height={size} fill={color} className={className} {...svgProps}>
-    <svg width={size} height={size} fill={color} stroke={color}>
+    <svg width={size} height={size} fill={color}>
       <use href={`/sprite.svg#${name}`} />
     </svg>
   )

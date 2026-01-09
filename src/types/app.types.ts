@@ -51,8 +51,8 @@ export interface IPrediction {
   title: string
   group: string
   icon: string
-  volume: string
-  bet_diff: string
+  volume: number
+  bet_diff: number
   end_date: string
 }
 
