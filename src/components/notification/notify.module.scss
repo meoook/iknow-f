@@ -63,9 +63,14 @@
   transition: background 1000s;
   text-wrap: wrap;
 
+  &:last-child {
+    border-bottom: none;
+  }
+
   &.unread {
     cursor: pointer;
     background: #65656522;
+
     &:hover {
       background: var(--color-hover);
     }
@@ -74,6 +79,7 @@
 
 .icon {
   padding: 12px;
+
   &:global(.info) {
     color: var(--color-blue);
   }
@@ -90,6 +96,7 @@
     color: var(--color-red);
   }
 }
+
 .close {
   position: absolute;
   right: 0;
@@ -97,6 +104,7 @@
   padding: 4px;
   color: var(--color-secondary);
   cursor: pointer;
+
   &:hover {
     color: var(--color-primary);
   }

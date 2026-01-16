@@ -3,7 +3,7 @@ const ICurrency = {
   CASH: 'CASH',
 } as const
 
-type ICurrency = (typeof ICurrency)[keyof typeof ICurrency]
+export type ICurrency = (typeof ICurrency)[keyof typeof ICurrency]
 
 interface IBalances {
   [ICurrency.POINT]: number

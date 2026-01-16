@@ -1,3 +1,5 @@
+import type { ICurrency } from "./auth.types"
+
 export interface INotification {
   id: number
   read: boolean
@@ -27,7 +29,7 @@ export interface IRequestCreate {
   vote_choice: string
   vote: TVote
   currency: string
-  amount: string
+  amount: number
   end_date: string
 }
 
@@ -42,7 +44,7 @@ export interface IRequest {
   vote_choice: string
   vote: boolean
   currency: 'POINT' | 'CASH'
-  amount: string
+  amount: number
   end_date: string
 }
 
@@ -80,10 +82,25 @@ export interface IChoice {
   group_icon: string
 }
 
+interface IBetChoice {
+  id: number
+  volume_y: number
+  volume_n: number
+  bet_diff: number
+  title: string
+  result: boolean | null
+  prediction_end_date: string
+  prediction_title: string
+  prediction_group: string
+  prediction_icon: string
+}
+
 export interface IBet {
   id: number
-  state: string
+  state: 'ACTIVE' | 'WIN' | 'LOSE' | 'CANCEL'
   vote: TVote
-  amount: string
+  currency: ICurrency
+  amount: number
   created: string
+  choice: IBetChoice
 }

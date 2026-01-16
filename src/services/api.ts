@@ -120,7 +120,7 @@ export const api = createApi({
       }),
       invalidatesTags: ['Requests'],
     }),
-    getBets: builder.query<IBet[], void>({
+    getBets: builder.query<PaginatedResponse<IBet>, void>({
       query: () => 'bet',
       providesTags: ['Bets'],
     }),

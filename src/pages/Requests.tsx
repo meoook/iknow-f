@@ -1,13 +1,16 @@
 import Modal from '../elements/modal'
-import type { IRequest } from '../types/app.types'
-import { useGetRequestsQuery } from '../services/api'
+import type { IBet, IRequest } from '../types/app.types'
+import { useGetRequestsQuery, useGetBetsQuery } from '../services/api'
 import { useModal } from '../hooks/hooks'
 import ModalPrediction from '../modals/prediction'
 import IconSprite from '../elements/icon/Icon'
 import RequestItem from '../components/request'
+import BetItem from '../components/bet'
+import Loader from '../elements/loader'
 
 export const Requests = () => {
   const { data, isLoading, error } = useGetRequestsQuery()
+  const { data: bets, isLoading: betsLoading, error: betsError } = useGetBetsQuery()
   const [modal, open, close] = useModal()
 
   return (
@@ -37,12 +40,18 @@ export const Requests = () => {
             <hr />
           </>
         )}
-        <section>
-          <div className='empty'>
-            <IconSprite name='draft' size={24} />
-            <span>У вас нет активных прогнозов</span>
-          </div>
-        </section>
+        <div className='column gap12'>
+          {bets?.data.length === 0 && <div className='empty'><IconSprite name='draft' size={24} /><span>У вас нет активных прогнозов</span></div>}
+          {betsLoading && <div className='empty'><Loader /><span>Загрузка прогнозов...</span></div>}
+          {betsError && <div className='empty'><IconSprite name='error' size={24} /><span>Ошибка загрузки прогнозов</span></div>}
+          {bets?.data.length !== 0 && (
+            <>
+              {bets?.data.map((bet: IBet) => (
+                <BetItem key={bet.id} bet={bet} />
+              ))}
+            </>
+          )}
+        </div>
       </div>
     </>
   )
