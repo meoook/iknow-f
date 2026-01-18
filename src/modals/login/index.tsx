@@ -1,5 +1,5 @@
 import style from './login.module.scss'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useEmailNonceMutation, useEmailAuthMutation, useW3authMutation, useW3nonceMutation } from '../../services/api'
 import { web3AuthService } from '../../services/web3Auth'
 import IconSprite from '../../elements/icon/Icon'
@@ -7,6 +7,7 @@ import { EMAIL_REGEX } from '../../config/config'
 
 export default function ModalLogin({ closeModal }: { closeModal: () => void }) {
   const initialEmail = localStorage.getItem('email') || ''
+  const firstInput = useRef<HTMLInputElement>(null)
   const [email, setEmail] = useState(initialEmail)
   const [emailValid, setEmailValid] = useState(EMAIL_REGEX.test(initialEmail))
   const [error, setError] = useState('')
@@ -30,6 +31,7 @@ export default function ModalLogin({ closeModal }: { closeModal: () => void }) {
       await emailNonce({ email }).unwrap()
       localStorage.setItem('email', email)
       setStep('nonce')
+      firstInput.current?.focus()
     } catch (err: any) {
       setError(err.data?.message || 'Login failed')
     }
@@ -165,6 +167,7 @@ export default function ModalLogin({ closeModal }: { closeModal: () => void }) {
                   onPaste={handlePaste}
                   maxLength={1}
                   className={style.nonceCell}
+                  ref={i === 0 ? firstInput : undefined}
                 />
               ))}
             </div>

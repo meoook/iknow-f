@@ -1,0 +1,46 @@
+.bet {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-hover);
+    transform: translateY(-2px);
+  }
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: -30px;
+  padding: 2px 0;
+  min-width: 100px;
+  text-align: center;
+  background-color: var(--color-green);
+  color: #fff;
+  font-size: var(--font-size-xs);
+  line-height: 1;
+  transform: rotate(-45deg);
+  &.green {
+    background-color: var(--color-green);
+  }
+  &.red {
+    background-color: var(--color-red);
+  }
+  &.orange {
+    background-color: var(--color-orange);
+  }
+}
+
+.main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 20px;
+  gap: 8px;
+}

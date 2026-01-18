@@ -1,7 +1,7 @@
 import style from './prediction.module.scss'
 import { useEffect, useState } from 'react'
 import DateSelect from '../../components/dateselect'
-import type { IRequestCreate, TVote } from '../../types/app.types'
+import type { IRequestCreate } from '../../types/app.types'
 import { useCreateRequestMutation } from '../../services/api'
 import IconSprite from '../../elements/icon/Icon'
 import Loader from '../../elements/loader'
@@ -13,9 +13,9 @@ export default function ModalPrediction({ close }: { close: () => void }) {
     rules: '',
     choices: [],
     vote_choice: '',
-    vote: 'yes',
+    vote: true,
     currency: '',
-    amount: '',
+    amount: 0,
     end_date: '',
   })
   const [errors, setErrors] = useState({ title: '', rules: '', choices: '', vote_choice: '', amount: '', end_date: '' })
@@ -33,7 +33,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
       formData.choices.length > 0 &&
       formData.vote_choice !== '' &&
       formData.currency !== '' &&
-      formData.amount !== '' &&
+      formData.amount !== 0 &&
       formData.end_date !== ''
     )
   }
@@ -89,14 +89,14 @@ export default function ModalPrediction({ close }: { close: () => void }) {
   }
 
   const handleVoteChange = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const vote = e.currentTarget.value as TVote
+    const vote = e.currentTarget.value === 'yes'
     setFormData((prev) => ({ ...prev, vote }))
   }
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
-    setFormData((prev) => ({ ...prev, amount: value }))
     const amount = Number(value)
+    setFormData((prev) => ({ ...prev, amount }))
     if (isNaN(amount)) setErrors((prev) => ({ ...prev, amount: 'Неверный формат' }))
     else if (amount < 0) setErrors((prev) => ({ ...prev, amount: 'Количество не может быть отрицательным' }))
     else if (errors.amount) setErrors((prev) => ({ ...prev, amount: '' }))
@@ -191,16 +191,10 @@ export default function ModalPrediction({ close }: { close: () => void }) {
         {errors.rules && <span className='error-msg'>{errors.rules}</span>}
       </div>
       <div className='form-row row center gap12'>
-        <button
-          className={`btn w100 big ${formData.vote === 'yes' ? 'green' : 'gray'}`}
-          value='yes'
-          onClick={handleVoteChange}>
+        <button className={`btn w100 big ${formData.vote ? 'green' : 'gray'}`} value='yes' onClick={handleVoteChange}>
           Сбудется
         </button>
-        <button
-          className={`btn w100 big ${formData.vote === 'no' ? 'red' : 'gray'}`}
-          value='no'
-          onClick={handleVoteChange}>
+        <button className={`btn w100 big ${!formData.vote ? 'red' : 'gray'}`} value='no' onClick={handleVoteChange}>
           Не сбудется
         </button>
       </div>

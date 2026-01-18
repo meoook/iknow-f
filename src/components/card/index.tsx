@@ -14,14 +14,14 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
   return (
     <Link to={`/prediction/${prediction.id}`} className={style.card}>
       <div className='row center gap8'>
-        <img src={prediction.icon || `${config.imgBaseUrl}/icon/no_icon1.png`} alt={prediction.title} />
-        <h3 className='line-clamp-2' title={prediction.title}>
+        <img src={prediction.icon || `${config.imgBaseUrl}/icon/no_icon.png`} alt={prediction.title} />
+        <h3 className='clamp-2' title={prediction.title}>
           {prediction.title}
         </h3>
       </div>
       {/* <div className='grow'>{prediction.group}</div> */}
       <div className='column grow'>
-        <span className={style.subtitle}>Разница</span>
+        <span className='label'>Разница</span>
         <div className={style.progress}>
           <div className={`${style.bar} ${color}`} style={{ width: prediction.bet_diff + '%' }}>
             &nbsp;
@@ -31,11 +31,11 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
       </div>
       <div className='row center justify'>
         <div className='column'>
-          <span className={style.subtitle}>Объем</span>
+          <span className='label'>Объем</span>
           <span>${volume}</span>
         </div>
         <div className='column'>
-          <span className={style.subtitle}>Дата завершения</span>
+          <span className='label'>Дата завершения</span>
           <span className={style.right}>{new Date(prediction.end_date).toLocaleDateString()}</span>
         </div>
       </div>

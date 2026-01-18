@@ -23,7 +23,7 @@ export const NotificationBell = () => {
 
   const openMenu = () => {
     menuToogle(null as any)
-    setTimeout(() => readAll(), 0)
+    if (unreadCount > 0) setTimeout(() => readAll(), 0)
   }
 
   return (
@@ -37,9 +37,11 @@ export const NotificationBell = () => {
         <div className={style.dropdown}>
           <div className={style.header}>
             <h3>Уведомления</h3>
-            <button onClick={handleDeleteAll} className='btn btn-icon' title='Удалить все'>
-              <IconSprite name='delete' size={24} />
-            </button>
+            {notifications.length > 0 && (
+              <button onClick={handleDeleteAll} className='btn btn-icon' title='Удалить все'>
+                <IconSprite name='delete' size={24} />
+              </button>
+            )}
           </div>
 
           <div className={`${style.list} noscroll`}>

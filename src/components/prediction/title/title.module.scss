@@ -1,0 +1,12 @@
+.date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-sm);
+  color: var(--color-brand);
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+}

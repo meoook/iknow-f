@@ -2,7 +2,15 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { config } from '../config/config'
 import type { IUser, IAuthResponse } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
-import type { IBet, INotification, IPrediction, IRequest, IRequestCreate, PaginatedResponse } from '../types/app.types'
+import type {
+  IBet,
+  INotification,
+  IPrediction,
+  IPredictionDetail,
+  IRequest,
+  IRequestCreate,
+  PaginatedResponse,
+} from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
 export const api = createApi({
@@ -134,6 +142,10 @@ export const api = createApi({
       query: (searchQuery) => `prediction/search?q=${encodeURIComponent(searchQuery)}`,
       providesTags: ['Predictions'],
     }),
+    getPrediction: builder.query<IPredictionDetail, number>({
+      query: (id) => `prediction/${id}`,
+      // providesTags: ['Predictions'],
+    }),
   }),
 })
 
@@ -157,4 +169,5 @@ export const {
   useGetBetsQuery,
   useGetPredictionsQuery,
   useSearchPredictionsQuery,
+  useGetPredictionQuery,
 } = api

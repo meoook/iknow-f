@@ -1,7 +1,9 @@
 import style from './request.module.scss'
-import IconSprite from '../../elements/icon/Icon'
-import Loader from '../../elements/loader'
-import type { IRequest } from '../../types/app.types'
+import type { IRequest } from '../../../types/app.types'
+import IconSprite from '../../../elements/icon/Icon'
+import Loader from '../../../elements/loader'
+import VoteItem from '../vote'
+import BetTitle from '../title'
 
 export default function RequestItem({ request, isLast }: { request: IRequest; isLast?: boolean }) {
   const iClass = request.state === 'REJECTED' ? style.red : request.state === 'VALIDATE' ? style.blue : style.green
@@ -12,13 +14,7 @@ export default function RequestItem({ request, isLast }: { request: IRequest; is
 
         <div className={style.main}>
           <div className='column gap12 grow'>
-            <div className='column gap4'>
-              <h3>{request.title}</h3>
-              <div className={style.date}>
-                <IconSprite name='finish' size={16} />
-                <span>Завершение: {new Date(request.end_date).toLocaleDateString()}</span>
-              </div>
-            </div>
+            <BetTitle title={request.title} date={request.end_date} />
 
             <p className={style.rules}>{request.rules}</p>
 
@@ -59,24 +55,12 @@ export default function RequestItem({ request, isLast }: { request: IRequest; is
             )}
           </div>
 
-          <div className={style.prediction}>
-            <div className={style.vote}>
-              <span className={style.label}>Ваш выбор</span>
-              <span>{request.vote_choice || '—'}</span>
-            </div>
-
-            <div className={style.vote}>
-              <span className={style.label}>Ставка</span>
-              <span>
-                {Number(request.amount).toFixed(2)} {request.currency === 'POINT' ? 'Баллов' : 'Кэш'}
-              </span>
-            </div>
-
-            <div className={style.vote}>
-              <span className={style.label}>Прогноз</span>
-              <span className={request.vote ? style.yes : style.no}>{request.vote ? 'Сбудется' : 'Не сбудется'}</span>
-            </div>
-          </div>
+          <VoteItem
+            choice={request.vote_choice}
+            vote={request.vote}
+            currency={request.currency}
+            amount={request.amount}
+          />
         </div>
       </div>
       {!isLast && <hr />}

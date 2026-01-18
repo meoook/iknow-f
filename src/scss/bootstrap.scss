@@ -22,6 +22,8 @@
   }
   &.big {
     height: 54px;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
   }
   &-icon {
     width: 44px;
@@ -200,7 +202,7 @@
   }
 }
 
-.line-clamp {
+.clamp {
   &-1 {
     display: -webkit-box;
     overflow: hidden;
@@ -223,6 +225,10 @@
 }
 .grow {
   flex-grow: 1;
+}
+.label {
+  color: var(--color-secondary);
+  font-size: var(--font-size-xs);
 }
 .noscroll {
   overflow-y: auto;

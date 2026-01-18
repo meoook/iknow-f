@@ -70,7 +70,7 @@ export const useModal = (): [boolean, () => void, () => void] => {
 export const intlNumber = (lang: string, amount: number): string => {
   return Intl.NumberFormat(lang, {
     notation: 'compact',
-    compactDisplay: 'short',
+    // compactDisplay: 'long',
     // maximumSignificantDigits: 3,
     maximumFractionDigits: 1,
   }).format(amount)
