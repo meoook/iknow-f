@@ -87,6 +87,7 @@ export interface IPredictionDetail {
   end_date: string
   rules: string
   closed: string
+  created: string
   choices: IChoice[]
 }
 

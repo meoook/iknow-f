@@ -7,7 +7,7 @@ import { Profile } from './pages/Profile'
 import { wsService } from './services/websocket'
 import { useAppSelector } from './hooks/useRedux'
 import Header from './components/header'
-import { PredictionDetail } from './pages/PredictionDetail'
+import { PredictionDetail } from './pages/PredictionDetail/page'
 
 export default function NavRouter() {
   const { user, token } = useAppSelector((state) => state.auth)

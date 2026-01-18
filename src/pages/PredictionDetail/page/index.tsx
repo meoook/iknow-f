@@ -1,12 +1,13 @@
 import style from './prediction.module.scss'
-import { useParams } from 'react-router-dom'
-import IconSprite from '../../elements/icon/Icon'
-import Loader from '../../elements/loader'
-import { useGetPredictionQuery } from '../../services/api'
-import type { IChoice, IPrediction } from '../../types/app.types'
 import { useEffect, useState } from 'react'
-import { intlNumber } from '../../hooks/hooks'
-import { config } from '../../config/config'
+import { useParams } from 'react-router-dom'
+import { intlNumber } from '../../../hooks/hooks'
+import { config } from '../../../config/config'
+import type { IChoice } from '../../../types/app.types'
+import { useGetPredictionQuery } from '../../../services/api'
+import IconSprite from '../../../elements/icon/Icon'
+import Loader from '../../../elements/loader'
+import TradePanel from '../panel'
 
 export const PredictionDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -76,15 +77,20 @@ export const PredictionDetail = () => {
               <span className='label'>Статус</span>
               <span>{prediction.state}</span>
             </div>
+            <div className='row center gap4'>
+              <span className='label'>Создано</span>
+              <span>{new Date(prediction.created).toLocaleDateString()}</span>
+            </div>
           </div>
+          <h2>Правила</h2>
           <div>{prediction.rules}</div>
         </div>
 
         <div>
-          <div className={style.thead}>
+          {/* <div className={style.thead}>
             <div>Варианты</div>
             <div>Вероятность</div>
-          </div>
+          </div> */}
           {prediction.choices?.map((choice) => (
             <div
               key={choice.id}
@@ -104,60 +110,9 @@ export const PredictionDetail = () => {
             </div>
           ))}
         </div>
+        <div></div>
       </div>
       <TradePanel prediction={prediction} selectedChoice={selectedChoice} />
     </div>
-  )
-}
-
-function TradePanel({ prediction, selectedChoice }: { prediction: IPrediction; selectedChoice: IChoice | null }) {
-  const [currency, setCurrency] = useState<'cash' | 'point'>('cash')
-  const [amount, setAmount] = useState<string>('0')
-
-  return (
-    <aside className={style.panel}>
-      <div className='row center gap12'>
-        <img className={style.icon} src={prediction.icon || `${config.imgBaseUrl}/icon/no_icon.png`} alt='' />
-        <h3 className='clamp-2'>{selectedChoice?.title || 'Select an option'}</h3>
-      </div>
-
-      <div className={style.tabs}>
-        <button className={`${style.tab} ${currency === 'cash' ? 'active' : ''}`} onClick={() => setCurrency('cash')}>
-          Кэш
-        </button>
-        <button className={`${style.tab} ${currency === 'point' ? 'active' : ''}`} onClick={() => setCurrency('point')}>
-          Баллы
-        </button>
-      </div>
-
-      <div className='column gap12'>
-        <div className='row justify center'>
-          <label>Количество</label>
-          <div className={style.input}>
-            <span>{currency === 'point' ? '¢' : '$'}</span>
-            <input type='text' value={amount} onChange={(e) => setAmount(e.target.value)} />
-          </div>
-        </div>
-
-        <div className='quick-amounts row gap8'>
-          <button className='btn gray chip' onClick={() => setAmount((prev) => (Number(prev) + 1).toString())}>
-            {currency === 'point' ? '+¢1' : '+$1'}
-          </button>
-          <button className='btn gray chip' onClick={() => setAmount((prev) => (Number(prev) + 20).toString())}>
-            {currency === 'point' ? '+¢20' : '+$20'}
-          </button>
-          <button className='btn gray chip' onClick={() => setAmount((prev) => (Number(prev) + 100).toString())}>
-            {currency === 'point' ? '+¢100' : '+$100'}
-          </button>
-          <button className='btn gray chip'>Max</button>
-        </div>
-      </div>
-
-      <button className='btn blue w100 big'>Сделать ставку</button>
-
-      <div className={style.terms}>
-        Сделав ставку, вы соглашаетесь с <a href='#'>условиями</a>.
-      </div>
-    </aside>
   )
 }
