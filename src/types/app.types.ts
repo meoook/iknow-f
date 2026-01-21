@@ -1,4 +1,9 @@
-import type { ICurrency } from './auth.types'
+import type { TCurrency } from './auth.types'
+
+export interface IConfig {
+  diff: number
+  fee: number
+}
 
 export interface INotification {
   id: number
@@ -11,6 +16,7 @@ export interface INotification {
 
 export interface IAppState {
   theme: 'light' | 'dark'
+  config: IConfig
   notifications: INotification[]
   unreadCount: number
 }
@@ -21,12 +27,12 @@ export interface PaginatedResponse<T> {
 }
 
 export interface IRequestCreate {
+  icon?: File
   title: string
   rules: string
   choices: string[]
-  vote_choice: string
-  vote: boolean
-  currency: string
+  vote: string
+  currency: TCurrency
   amount: number
   end_date: string
 }
@@ -36,18 +42,18 @@ export interface IRequest {
   state: string
   reject_reason: string
   tag: string
+  icon?: string
   title: string
   rules: string
   choices: string[]
   vote_choice: string
   vote: boolean
-  currency: 'POINT' | 'CASH'
+  currency: TCurrency
   amount: number
   end_date: string
 }
 
 const TPredictionState = {
-  NEW: 'NEW',
   ACTIVE: 'ACTIVE',
   DISPUTE: 'DISPUTE',
   ENDED: 'ENDED',
@@ -63,17 +69,16 @@ export interface IPrediction {
   group: string
   icon: string
   volume: number
-  bet_diff: number
+  diff: number
   end_date: string
 }
 
 export interface IChoice {
   id: number
   title: string
-  volume_y: number
-  volume_n: number
-  bet_diff: number
-  result: boolean
+  volume: number
+  diff: number
+  win: boolean | null
 }
 
 export interface IPredictionDetail {
@@ -104,13 +109,43 @@ interface IBetChoice {
   prediction_end_date: string
 }
 
-export interface IBet {
+export interface IMyBet {
   id: number
   state: 'ACTIVE' | 'WIN' | 'LOSE' | 'CANCEL'
   vote: boolean
-  currency: ICurrency
+  currency: TCurrency
   amount: number
   win: number
   created: string
   choice: IBetChoice
+}
+
+export interface IBetCreate {
+  choice_id: number
+  currency: TCurrency
+  amount: number
+}
+
+export interface IBet {
+  id: number
+  username: string
+  avatar: string
+  currency: TCurrency
+  amount: number
+  title: string
+  created: string
+}
+
+export interface IComment {
+  id: number
+  text: string
+  username: string
+  avatar: string
+  likes: number
+  created: string
+}
+
+export interface ICommentCreate {
+  prediction: number
+  text: string
 }

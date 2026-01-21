@@ -13,6 +13,7 @@ type IconName =
   | 'draft'
   | 'error'
   | 'exit'
+  | 'favorite'
   | 'finish'
   | 'info'
   | 'menu'

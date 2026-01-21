@@ -1,10 +1,10 @@
 import style from './vote.module.scss'
-import type { ICurrency } from '../../../types/auth.types'
+import type { TCurrency } from '../../../types/auth.types'
 
 interface VoteItemProps {
   choice: string
   vote: boolean
-  currency: ICurrency
+  currency: TCurrency
   amount: number
 }
 

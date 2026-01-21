@@ -8,8 +8,10 @@ import { wsService } from './services/websocket'
 import { useAppSelector } from './hooks/useRedux'
 import Header from './components/header'
 import { PredictionDetail } from './pages/PredictionDetail/page'
+import { useGetConfigQuery } from './services/api'
 
 export default function NavRouter() {
+  useGetConfigQuery()
   const { user, token } = useAppSelector((state) => state.auth)
 
   useEffect(() => {

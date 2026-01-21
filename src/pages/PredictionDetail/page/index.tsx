@@ -8,6 +8,7 @@ import { useGetPredictionQuery } from '../../../services/api'
 import IconSprite from '../../../elements/icon/Icon'
 import Loader from '../../../elements/loader'
 import TradePanel from '../panel'
+import PredictionTabs from '../tabs'
 
 export const PredictionDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -87,10 +88,6 @@ export const PredictionDetail = () => {
         </div>
 
         <div>
-          {/* <div className={style.thead}>
-            <div>Варианты</div>
-            <div>Вероятность</div>
-          </div> */}
           {prediction.choices?.map((choice) => (
             <div
               key={choice.id}
@@ -110,7 +107,7 @@ export const PredictionDetail = () => {
             </div>
           ))}
         </div>
-        <div></div>
+        <PredictionTabs prediction={prediction} />
       </div>
       <TradePanel prediction={prediction} selectedChoice={selectedChoice} />
     </div>

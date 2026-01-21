@@ -1,12 +1,12 @@
 import style from './bet.module.scss'
-import type { IBet } from '../../../types/app.types'
+import type { IMyBet } from '../../../types/app.types'
 import VoteItem from '../vote'
 import BetTitle from '../title'
 import PredictionProgress from '../../progress'
 import { Link } from 'react-router-dom'
 
 interface ToggleProps {
-  bet: IBet
+  bet: IMyBet
 }
 
 export default function BetItem({ bet }: ToggleProps) {

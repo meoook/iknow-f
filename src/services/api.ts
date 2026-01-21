@@ -3,13 +3,18 @@ import { config } from '../config/config'
 import type { IUser, IAuthResponse } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
 import type {
-  IBet,
+  IMyBet,
+  IBetCreate,
   INotification,
   IPrediction,
   IPredictionDetail,
   IRequest,
   IRequestCreate,
   PaginatedResponse,
+  IBet,
+  IComment,
+  ICommentCreate,
+  IConfig,
 } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
@@ -23,8 +28,12 @@ export const api = createApi({
       return headers
     },
   }),
-  tagTypes: ['User', 'Requests', 'Predictions', 'Bets', 'Groups'],
+  tagTypes: ['User', 'Requests', 'Predictions', 'MyBets', 'Bets', 'Groups', 'Comments'],
   endpoints: (builder) => ({
+    // Client endpoints
+    getConfig: builder.query<IConfig, void>({
+      query: () => 'config',
+    }),
     // Auth endpoints
     w3nonce: builder.mutation<IWeb3NonceResponse, IWeb3NonceRequest>({
       query: ({ chain, address }) => ({
@@ -128,9 +137,39 @@ export const api = createApi({
       }),
       invalidatesTags: ['Requests'],
     }),
-    getBets: builder.query<PaginatedResponse<IBet>, void>({
-      query: () => 'bet',
+    getMyBets: builder.query<PaginatedResponse<IMyBet>, void>({
+      query: () => 'bet/my',
+      providesTags: ['MyBets'],
+    }),
+    createMyBet: builder.mutation<IMyBet, IBetCreate>({
+      query: (payload) => ({
+        url: 'bet/my',
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['MyBets'],
+    }),
+    getBets: builder.query<PaginatedResponse<IBet>, { id: number; limit?: number; offset?: number }>({
+      query: ({ id, limit = 10, offset = 0 }) => ({
+        url: 'bet',
+        params: { prediction: id, limit, offset },
+      }),
       providesTags: ['Bets'],
+    }),
+    getComments: builder.query<PaginatedResponse<IComment>, { id: number; limit?: number; offset?: number }>({
+      query: ({ id, limit = 10, offset = 0 }) => ({
+        url: 'comment',
+        params: { prediction: id, limit, offset },
+      }),
+      providesTags: ['Comments'],
+    }),
+    createComment: builder.mutation<IComment, ICommentCreate>({
+      query: (payload) => ({
+        url: 'comment',
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['Comments'],
     }),
 
     // Public endpoints
@@ -150,6 +189,7 @@ export const api = createApi({
 })
 
 export const {
+  useGetConfigQuery,
   useW3nonceMutation,
   useW3authMutation,
   useEmailNonceMutation,
@@ -163,10 +203,14 @@ export const {
   useDeleteAllNotificationsMutation,
   // ------
   useCreateRequestMutation,
+  useGetMyBetsQuery,
+  useCreateMyBetMutation,
+  useGetBetsQuery,
+  useGetCommentsQuery,
+  useCreateCommentMutation,
   // ------
   useSetTelegramMutation,
   useGetRequestsQuery,
-  useGetBetsQuery,
   useGetPredictionsQuery,
   useSearchPredictionsQuery,
   useGetPredictionQuery,

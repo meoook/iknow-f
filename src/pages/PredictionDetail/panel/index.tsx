@@ -3,6 +3,8 @@ import { useRef, useState } from 'react'
 import type { IChoice, IPredictionDetail } from '../../../types/app.types'
 import { config } from '../../../config/config'
 import { useAppSelector } from '../../../hooks/useRedux'
+import { useCreateMyBetMutation } from '../../../services/api'
+import type { TCurrency } from '../../../types/auth.types'
 
 export default function TradePanel({
   prediction,
@@ -13,13 +15,23 @@ export default function TradePanel({
 }) {
   const MAX_VALUE: number = 99999999
   const { user, loading } = useAppSelector((state) => state.auth)
+  const [createBet, { isLoading }] = useCreateMyBetMutation()
 
-  const [currency, setCurrency] = useState<'cash' | 'point'>('cash')
+  const [currency, setCurrency] = useState<TCurrency>('CASH')
   const [amount, setAmount] = useState<string>('0')
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const handleCreateBet = () => {
+    if (!selectedChoice) return
+    createBet({
+      choice_id: selectedChoice.id,
+      currency,
+      amount: Number(amount),
+    })
+  }
+
   const setMaxAmount = () => {
-    if (currency === 'cash') {
+    if (currency === 'CASH') {
       const value = user?.balances.CASH ? Math.floor(user.balances.CASH) : 0
       setAmount(`${Math.min(value, MAX_VALUE)}`)
     } else {
@@ -56,12 +68,12 @@ export default function TradePanel({
         </div>
 
         <div className={style.tabs}>
-          <button className={`${style.tab}${currency === 'cash' ? ' active' : ''}`} onClick={() => setCurrency('cash')}>
+          <button className={`${style.tab}${currency === 'CASH' ? ' active' : ''}`} onClick={() => setCurrency('CASH')}>
             Кэш
           </button>
           <button
-            className={`${style.tab}${currency === 'point' ? ' active' : ''}`}
-            onClick={() => setCurrency('point')}>
+            className={`${style.tab}${currency === 'POINT' ? ' active' : ''}`}
+            onClick={() => setCurrency('POINT')}>
             Баллы
           </button>
         </div>
@@ -71,7 +83,7 @@ export default function TradePanel({
             <div>Количество</div>
             <div className={style.inputWrapper} onClick={() => inputRef.current?.focus()}>
               <div className={style.inputContainer}>
-                <span>{currency === 'point' ? '¢' : '$'}</span>
+                <span>{currency === 'POINT' ? '¢' : '$'}</span>
                 <div className={style.inputContent}>
                   <input
                     ref={inputRef}
@@ -82,7 +94,7 @@ export default function TradePanel({
                     inputMode='decimal'
                     autoComplete='off'
                     autoFocus={true}
-                    placeholder={`${currency === 'point' ? '¢' : '$'}0`}
+                    placeholder={`${currency === 'POINT' ? '¢' : '$'}0`}
                   />
                   <span className={style.mirror}>{displayValue || '0'}</span>
                 </div>
@@ -95,17 +107,17 @@ export default function TradePanel({
               <button
                 className='btn gray chip'
                 onClick={() => setAmount((prev) => Math.min(Number(prev) + 1, MAX_VALUE).toString())}>
-                {currency === 'point' ? '+¢1' : '+$1'}
+                {currency === 'POINT' ? '+¢1' : '+$1'}
               </button>
               <button
                 className='btn gray chip'
                 onClick={() => setAmount((prev) => Math.min(Number(prev) + 20, MAX_VALUE).toString())}>
-                {currency === 'point' ? '+¢20' : '+$20'}
+                {currency === 'POINT' ? '+¢20' : '+$20'}
               </button>
               <button
                 className='btn gray chip'
                 onClick={() => setAmount((prev) => Math.min(Number(prev) + 100, MAX_VALUE).toString())}>
-                {currency === 'point' ? '+¢100' : '+$100'}
+                {currency === 'POINT' ? '+¢100' : '+$100'}
               </button>
               <button className='btn gray chip' onClick={setMaxAmount}>
                 Max
@@ -114,7 +126,7 @@ export default function TradePanel({
           </div>
         </div>
 
-        <button className='btn blue w100 big' disabled={loading}>
+        <button className='btn blue w100 big' disabled={loading || isLoading} onClick={handleCreateBet}>
           Сделать ставку
         </button>
       </div>

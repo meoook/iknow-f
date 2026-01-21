@@ -2,7 +2,7 @@ import style from './avatar.module.scss'
 import { config } from '../../config/config'
 interface AvatarProps {
   src?: string
-  size?: 'big' | 'small'
+  size?: 'big' | 'small' | 'medium'
 }
 
 export default function Avatar({ src, size }: AvatarProps) {

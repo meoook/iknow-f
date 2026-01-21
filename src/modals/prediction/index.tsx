@@ -5,6 +5,10 @@ import type { IRequestCreate } from '../../types/app.types'
 import { useCreateRequestMutation } from '../../services/api'
 import IconSprite from '../../elements/icon/Icon'
 import Loader from '../../elements/loader'
+import type { TCurrency } from '../../types/auth.types'
+
+const VOTE_YES_NAME = 'Да / Сбудется'
+const VOTE_NO_NAME = 'Нет / Не сбудется'
 
 export default function ModalPrediction({ close }: { close: () => void }) {
   const [createRequest, { isLoading, isError }] = useCreateRequestMutation()
@@ -12,9 +16,8 @@ export default function ModalPrediction({ close }: { close: () => void }) {
     title: '',
     rules: '',
     choices: [],
-    vote_choice: '',
-    vote: true,
-    currency: '',
+    vote: '',
+    currency: 'CASH',
     amount: 0,
     end_date: '',
   })
@@ -31,8 +34,8 @@ export default function ModalPrediction({ close }: { close: () => void }) {
       formData.title.trim() !== '' &&
       formData.rules.trim() !== '' &&
       formData.choices.length > 0 &&
-      formData.vote_choice !== '' &&
-      formData.currency !== '' &&
+      formData.vote !== '' &&
+      ['CASH', 'POINT'].includes(formData.currency) &&
       formData.amount !== 0 &&
       formData.end_date !== ''
     )
@@ -55,11 +58,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
       }
       setFormData((prev) => {
         const newChoices = [...prev.choices, newChoice]
-        return {
-          ...prev,
-          choices: newChoices,
-          vote_choice: prev.vote_choice || newChoice,
-        }
+        return { ...prev, choices: newChoices, vote: prev.vote || newChoice }
       })
       setChoiceInput('')
       setError('')
@@ -76,20 +75,18 @@ export default function ModalPrediction({ close }: { close: () => void }) {
   const handleRemoveChoice = (choiceToRemove: string) => {
     setFormData((prev) => {
       const newChoices = prev.choices.filter((c) => c !== choiceToRemove)
-      let newVoteChoice = prev.vote_choice
-      if (newVoteChoice === choiceToRemove) {
-        newVoteChoice = newChoices.length > 0 ? newChoices[0] : ''
-      }
-      return { ...prev, choices: newChoices, vote_choice: newVoteChoice }
+      let newVote = prev.vote
+      if (newVote === choiceToRemove) newVote = newChoices.length > 0 ? newChoices[0] : ''
+      return { ...prev, choices: newChoices, vote: newVote }
     })
   }
 
   const handleChoiceClick = (choice: string) => {
-    setFormData((prev) => ({ ...prev, vote_choice: choice }))
+    setFormData((prev) => ({ ...prev, vote: choice }))
   }
 
   const handleVoteChange = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const vote = e.currentTarget.value === 'yes'
+    const vote = e.currentTarget.value === 'yes' ? VOTE_YES_NAME : VOTE_NO_NAME
     setFormData((prev) => ({ ...prev, vote }))
   }
 
@@ -105,7 +102,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target
-    setFormData((prev) => ({ ...prev, currency: value }))
+    setFormData((prev) => ({ ...prev, currency: value as TCurrency }))
   }
 
   const handleCreate = () => {
@@ -161,7 +158,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
           {formData.choices.map((choice) => (
             <div
               key={choice}
-              className={`${style.chip} ${formData.vote_choice === choice ? style.active : ''}`}
+              className={`${style.chip} ${formData.vote === choice ? style.active : ''}`}
               onClick={() => handleChoiceClick(choice)}>
               <span className='line-clamp-1' title={choice}>
                 {choice}
@@ -179,7 +176,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
         </div>
       </div>
       <div className='form-row'>
-        <label htmlFor='rules'>Условия/Правила</label>
+        <label htmlFor='rules'>Условия / Правила</label>
         <textarea
           id='rules'
           name='rules'

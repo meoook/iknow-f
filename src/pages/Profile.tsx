@@ -3,7 +3,7 @@ import { useAppSelector } from '../hooks/useRedux'
 // import { useSetEmailMutation } from '../services/api'
 import './Profile.scss'
 import IconSprite from '../elements/icon/Icon'
-import Avatar from '../components/avatar'
+import Avatar from '../elements/avatar'
 import { EMAIL_REGEX } from '../config/config'
 
 type TabType = 'profile' | 'account' | 'trading' | 'notifications' | 'builder' | 'export'
