@@ -1,16 +1,18 @@
 import style from './prediction.module.scss'
 import { useEffect, useState } from 'react'
-import DateSelect from '../../components/dateselect'
-import type { IRequestCreate } from '../../types/app.types'
+import { useAppSelector } from '../../hooks/useRedux'
 import { useCreateRequestMutation } from '../../services/api'
+import type { IRequestCreate } from '../../types/app.types'
+import type { TCurrency } from '../../types/auth.types'
+import DateSelect from '../../components/dateselect'
 import IconSprite from '../../elements/icon/Icon'
 import Loader from '../../elements/loader'
-import type { TCurrency } from '../../types/auth.types'
 
 const VOTE_YES_NAME = 'Да / Сбудется'
 const VOTE_NO_NAME = 'Нет / Не сбудется'
 
 export default function ModalPrediction({ close }: { close: () => void }) {
+  const user = useAppSelector((state) => state.auth.user)
   const [createRequest, { isLoading, isError }] = useCreateRequestMutation()
   const [formData, setFormData] = useState<IRequestCreate>({
     title: '',
@@ -24,19 +26,23 @@ export default function ModalPrediction({ close }: { close: () => void }) {
   const [errors, setErrors] = useState({ title: '', rules: '', choices: '', vote_choice: '', amount: '', end_date: '' })
   const [error, setError] = useState<string>('')
   const [choiceInput, setChoiceInput] = useState('')
+  const [activeTab, setActiveTab] = useState<'yesno' | 'choices'>('yesno')
 
   useEffect(() => {
     if (isError) setError('Ошибка при создании прогноза')
   }, [isError])
 
   const validForm = (): boolean => {
+    const currentBalance = user?.balances[formData.currency] || 0
     return (
       formData.title.trim() !== '' &&
       formData.rules.trim() !== '' &&
-      formData.choices.length > 0 &&
-      formData.vote !== '' &&
+      formData.vote.trim() !== '' &&
+      formData.choices.length > 1 &&
+      formData.choices.includes(formData.vote) &&
       ['CASH', 'POINT'].includes(formData.currency) &&
-      formData.amount !== 0 &&
+      formData.amount > 0 &&
+      formData.amount <= currentBalance &&
       formData.end_date !== ''
     )
   }
@@ -50,19 +56,18 @@ export default function ModalPrediction({ close }: { close: () => void }) {
   }
 
   const handleAddChoice = () => {
-    if (choiceInput.trim()) {
-      const newChoice = choiceInput.trim()
-      if (formData.choices.includes(newChoice)) {
-        setError('Такой вариант уже есть')
-        return
-      }
-      setFormData((prev) => {
-        const newChoices = [...prev.choices, newChoice]
-        return { ...prev, choices: newChoices, vote: prev.vote || newChoice }
-      })
-      setChoiceInput('')
-      setError('')
+    const newChoice = choiceInput.trim()
+    if (!newChoice) return
+    if (formData.choices.includes(newChoice)) {
+      setError('Такой вариант уже есть')
+      return
     }
+    setFormData((prev) => {
+      const newChoices = [...prev.choices, newChoice]
+      return { ...prev, choices: newChoices, vote: prev.vote || newChoice }
+    })
+    setChoiceInput('')
+    setError('')
   }
 
   const handleChoiceKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -90,14 +95,24 @@ export default function ModalPrediction({ close }: { close: () => void }) {
     setFormData((prev) => ({ ...prev, vote }))
   }
 
+  const handleTabChange = (tab: 'choices' | 'yesno') => {
+    setActiveTab(tab)
+    setFormData((prev) => ({ ...prev, vote: '', choices: tab === 'yesno' ? [VOTE_YES_NAME, VOTE_NO_NAME] : [] }))
+    setError('')
+  }
+
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
     const amount = Number(value)
-    setFormData((prev) => ({ ...prev, amount }))
+    const currentBalance = user?.balances[formData.currency] || 0
+
+    if (!isNaN(amount)) setFormData((prev) => ({ ...prev, amount }))
+
     if (isNaN(amount)) setErrors((prev) => ({ ...prev, amount: 'Неверный формат' }))
     else if (amount < 0) setErrors((prev) => ({ ...prev, amount: 'Количество не может быть отрицательным' }))
+    else if (amount > currentBalance) setErrors((prev) => ({ ...prev, amount: 'Недостаточно средств' }))
     else if (errors.amount) setErrors((prev) => ({ ...prev, amount: '' }))
-    setError('')
+    if (error) setError('')
   }
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -115,6 +130,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
       return
     }
     setError('')
+
     createRequest(formData)
       .unwrap()
       .then(() => close())
@@ -138,43 +154,72 @@ export default function ModalPrediction({ close }: { close: () => void }) {
         {errors.title && <span className='error-msg'>{errors.title}</span>}
       </div>
 
-      <div className='form-row'>
-        <label htmlFor='choice-input'>Варианты</label>
-        <div className='row center gap8'>
-          <input
-            type='text'
-            id='choice-input'
-            value={choiceInput}
-            onChange={(e) => setChoiceInput(e.target.value)}
-            onKeyDown={handleChoiceKeyDown}
-            className='outline'
-            placeholder='Добавить вариант'
-          />
-          <button className='btn blue' onClick={handleAddChoice}>
-            Добавить
-          </button>
+      <div className={style.tabs}>
+        <div
+          className={`${style.tab} ${activeTab === 'yesno' ? style.active : ''}`}
+          onClick={() => handleTabChange('yesno')}>
+          Да / Нет
         </div>
-        <div className={style.chips}>
-          {formData.choices.map((choice) => (
-            <div
-              key={choice}
-              className={`${style.chip} ${formData.vote === choice ? style.active : ''}`}
-              onClick={() => handleChoiceClick(choice)}>
-              <span className='line-clamp-1' title={choice}>
-                {choice}
-              </span>
-              <button
-                className={style.remove}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleRemoveChoice(choice)
-                }}>
-                <IconSprite name='close' size={16} />
-              </button>
-            </div>
-          ))}
+        <div
+          className={`${style.tab} ${activeTab === 'choices' ? style.active : ''}`}
+          onClick={() => handleTabChange('choices')}>
+          Варианты
         </div>
       </div>
+
+      {activeTab === 'choices' ? (
+        <div className='form-row'>
+          <div className='row center gap8'>
+            <input
+              type='text'
+              id='choice-input'
+              value={choiceInput}
+              onChange={(e) => setChoiceInput(e.target.value)}
+              onKeyDown={handleChoiceKeyDown}
+              className='outline'
+              placeholder='Добавить вариант'
+            />
+            <button className='btn blue' onClick={handleAddChoice}>
+              Добавить
+            </button>
+          </div>
+          <div className={style.chips}>
+            {formData.choices.map((choice) => (
+              <div
+                key={choice}
+                className={`${style.chip} ${formData.vote === choice ? style.active : ''}`}
+                onClick={() => handleChoiceClick(choice)}>
+                <span className='clamp-1' title={choice}>
+                  {choice}
+                </span>
+                <button
+                  className={style.remove}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleRemoveChoice(choice)
+                  }}>
+                  <IconSprite name='close' size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className='form-row row center gap12'>
+          <button
+            className={`btn w100 big ${formData.vote === VOTE_YES_NAME ? 'green' : 'gray'}`}
+            value='yes'
+            onClick={handleVoteChange}>
+            Сбудется
+          </button>
+          <button
+            className={`btn w100 big ${formData.vote === VOTE_NO_NAME ? 'red' : 'gray'}`}
+            value='no'
+            onClick={handleVoteChange}>
+            Не сбудется
+          </button>
+        </div>
+      )}
       <div className='form-row'>
         <label htmlFor='rules'>Условия / Правила</label>
         <textarea
@@ -186,14 +231,6 @@ export default function ModalPrediction({ close }: { close: () => void }) {
           placeholder='Условия для соблюдения прогноза. Общедоступные источники для проверки.'
         />
         {errors.rules && <span className='error-msg'>{errors.rules}</span>}
-      </div>
-      <div className='form-row row center gap12'>
-        <button className={`btn w100 big ${formData.vote ? 'green' : 'gray'}`} value='yes' onClick={handleVoteChange}>
-          Сбудется
-        </button>
-        <button className={`btn w100 big ${!formData.vote ? 'red' : 'gray'}`} value='no' onClick={handleVoteChange}>
-          Не сбудется
-        </button>
       </div>
       <div className='form-row'>
         <div className='row center gap16'>
@@ -216,7 +253,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
               onChange={handleAmountChange}
               className={errors.amount ? 'outline error' : 'outline'}
               placeholder='Количество'
-              inputMode='numeric'
+              inputMode='decimal'
             />
           </div>
         </div>

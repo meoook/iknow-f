@@ -1,13 +1,13 @@
-const ICurrency = {
+const TCurrency = {
   POINT: 'POINT',
   CASH: 'CASH',
 } as const
 
-export type TCurrency = (typeof ICurrency)[keyof typeof ICurrency]
+export type TCurrency = (typeof TCurrency)[keyof typeof TCurrency]
 
 interface IBalances {
-  [ICurrency.POINT]: number
-  [ICurrency.CASH]: number
+  [TCurrency.POINT]: number
+  [TCurrency.CASH]: number
 }
 
 export interface IBalanceUpdate {

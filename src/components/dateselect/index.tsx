@@ -105,7 +105,7 @@ export default function DateSelect({ value, onChange, minDate, error }: DateSele
           maxLength={2}
           inputMode='numeric'
         />
-        <select className={`${style.month} outline`} value={month} onChange={handleMonthChange}>
+        <select className={`${style.month} outline`} name='month' value={month} onChange={handleMonthChange}>
           <option value=''>Месяц</option>
           {MONTHS.map((m) => (
             <option key={m.value} value={m.value}>

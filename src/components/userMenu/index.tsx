@@ -12,6 +12,8 @@ import Toggle from '../toggle'
 import ModalLogin from '../../modals/login'
 import Modal from '../../elements/modal'
 import { useModal } from '../../hooks/hooks'
+import type { IUser } from '../../types/auth.types'
+import ModalDeposit from '../../modals/deposit'
 
 export default function UserMenu() {
   const { loading, user } = useAppSelector((state) => state.auth)
@@ -21,7 +23,6 @@ export default function UserMenu() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const closeTimeoutRef = useRef<number | null>(null)
-  const [modal, open, close] = useModal()
 
   const logOut = () => {
     setIsMenuOpen(false)
@@ -61,23 +62,7 @@ export default function UserMenu() {
 
   return (
     <div className='row center gap8'>
-      {user ? (
-        <>
-          <Balance name='Баллы' balance={user.balances.POINT} />
-          <Balance name='Кэш' balance={user.balances.CASH} currency='USD' />
-          <button className='btn blue'>Депозит</button>
-          <NotificationBell />
-        </>
-      ) : (
-        <>
-          <Modal close={close} modal={modal}>
-            <ModalLogin closeModal={close} />
-          </Modal>
-          <button className='btn blue' onClick={open}>
-            Войти
-          </button>
-        </>
-      )}
+      {user ? <UserButtons user={user} /> : <NotAuthButtons />}
       <div className={style.container} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         {user ? (
           <div className={style.btn}>
@@ -146,5 +131,36 @@ export default function UserMenu() {
         )}
       </div>
     </div>
+  )
+}
+
+function UserButtons({ user }: { user: IUser }) {
+  const [modal, open, close] = useModal()
+  return (
+    <>
+      <Modal close={close} modal={modal}>
+        <ModalDeposit />
+      </Modal>
+      <Balance name='Баллы' balance={user.balances.POINT} />
+      <Balance name='Кэш' balance={user.balances.CASH} currency='USD' />
+      <button className='btn blue' onClick={open}>
+        Депозит
+      </button>
+      <NotificationBell />
+    </>
+  )
+}
+
+function NotAuthButtons() {
+  const [modal, open, close] = useModal()
+  return (
+    <>
+      <Modal close={close} modal={modal}>
+        <ModalLogin closeModal={close} />
+      </Modal>
+      <button className='btn blue' onClick={open}>
+        Войти
+      </button>
+    </>
   )
 }

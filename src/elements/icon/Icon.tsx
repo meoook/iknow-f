@@ -7,6 +7,7 @@ type IconName =
   | 'bell-z'
   | 'check'
   | 'close'
+  | 'copy'
   | 'crown'
   | 'delete'
   | 'diff'

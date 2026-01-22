@@ -34,6 +34,9 @@ export const api = createApi({
     getConfig: builder.query<IConfig, void>({
       query: () => 'config',
     }),
+    deposit: builder.mutation<void, void>({
+      query: () => 'deposit',
+    }),
     // Auth endpoints
     w3nonce: builder.mutation<IWeb3NonceResponse, IWeb3NonceRequest>({
       query: ({ chain, address }) => ({
@@ -190,6 +193,7 @@ export const api = createApi({
 
 export const {
   useGetConfigQuery,
+  useDepositMutation,
   useW3nonceMutation,
   useW3authMutation,
   useEmailNonceMutation,
