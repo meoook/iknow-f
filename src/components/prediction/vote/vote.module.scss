@@ -1,41 +1,17 @@
 .prediction {
   box-sizing: border-box;
-  width: 240px;
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
+  width: 240px;
   padding: 12px;
+  gap: 8px;
   background: var(--color-dialog);
   border-radius: var(--radius);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
   font-size: var(--font-size-sm);
-}
 
-.vote {
-  display: flex;
-  flex-direction: column;
-  // gap: 2px;
-
-  & .label {
-    font-size: var(--font-size-xs);
+  & h3 {
     text-transform: uppercase;
-    color: var(--color-secondary);
-    letter-spacing: 0.5px;
-  }
-
-  & .yes,
-  & .no {
-    font-weight: 500;
-    border-radius: 4px;
-    padding: 4px 8px;
-  }
-
-  & .yes {
-    color: var(--color-green);
-    background: rgba(74, 139, 62, 0.15);
-  }
-  & .no {
-    color: var(--color-orange);
-    background: rgba(238, 153, 0, 0.15);
+    line-height: 1.2;
   }
 }

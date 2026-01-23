@@ -11,7 +11,7 @@ const getInitialTheme = (): 'light' | 'dark' => {
 
 const initialState: IAppState = {
   theme: getInitialTheme(),
-  config: { diff: 0, fee: 0 },
+  config: { multiplier: 0, fee: 0 },
   notifications: [],
   unreadCount: 0,
 }

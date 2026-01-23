@@ -14,7 +14,7 @@ export const Home = () => {
   return (
     <section>
       {data.data.map((prediction: IPrediction) => (
-        <PredictionCard prediction={prediction} />
+        <PredictionCard key={prediction.id} prediction={prediction} />
       ))}
     </section>
   )

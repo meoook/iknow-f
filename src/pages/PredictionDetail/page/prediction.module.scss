@@ -4,31 +4,6 @@
   position: relative;
 }
 
-.header {
-  position: sticky;
-  top: 124px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background: var(--color-body);
-  z-index: 1;
-
-  & img {
-    width: 64px;
-    height: 64px;
-    // width: 48px;
-    // height: 48px;
-  }
-
-  & .date {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: var(--font-size-sm);
-    color: var(--color-brand);
-  }
-}
-
 // ITEM
 
 .item {

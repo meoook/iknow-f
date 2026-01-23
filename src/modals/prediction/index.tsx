@@ -17,7 +17,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
   const [formData, setFormData] = useState<IRequestCreate>({
     title: '',
     rules: '',
-    choices: [],
+    choices: [VOTE_YES_NAME, VOTE_NO_NAME],
     vote: '',
     currency: 'CASH',
     amount: 0,
@@ -26,6 +26,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
   const [errors, setErrors] = useState({ title: '', rules: '', choices: '', vote_choice: '', amount: '', end_date: '' })
   const [error, setError] = useState<string>('')
   const [choiceInput, setChoiceInput] = useState('')
+  const [amountInput, setAmountInput] = useState(formData.amount.toString())
   const [activeTab, setActiveTab] = useState<'yesno' | 'choices'>('yesno')
 
   useEffect(() => {
@@ -34,6 +35,16 @@ export default function ModalPrediction({ close }: { close: () => void }) {
 
   const validForm = (): boolean => {
     const currentBalance = user?.balances[formData.currency] || 0
+    if (formData.title.trim() === '') console.log('title')
+    if (formData.rules.trim() === '') console.log('rules')
+    if (formData.vote.trim() === '') console.log('vote')
+    if (formData.choices.length === 0) console.log('choices')
+    if (formData.choices.includes(formData.vote) === false) console.log('vote_choice')
+    if (!['CASH', 'POINT'].includes(formData.currency)) console.log('currency')
+    if (formData.amount <= 0) console.log('amount')
+    if (formData.amount > currentBalance) console.log('amount')
+    if (formData.end_date === '') console.log('end_date')
+
     return (
       formData.title.trim() !== '' &&
       formData.rules.trim() !== '' &&
@@ -67,7 +78,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
       return { ...prev, choices: newChoices, vote: prev.vote || newChoice }
     })
     setChoiceInput('')
-    setError('')
+    if (error) setError('')
   }
 
   const handleChoiceKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -98,26 +109,43 @@ export default function ModalPrediction({ close }: { close: () => void }) {
   const handleTabChange = (tab: 'choices' | 'yesno') => {
     setActiveTab(tab)
     setFormData((prev) => ({ ...prev, vote: '', choices: tab === 'yesno' ? [VOTE_YES_NAME, VOTE_NO_NAME] : [] }))
-    setError('')
+    if (error) setError('')
   }
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
+    setAmountInput(value)
+
     const amount = Number(value)
     const currentBalance = user?.balances[formData.currency] || 0
 
-    if (!isNaN(amount)) setFormData((prev) => ({ ...prev, amount }))
+    if (value === '') {
+      setFormData((prev) => ({ ...prev, amount: 0 }))
+      setErrors((prev) => ({ ...prev, amount: '' }))
+    } else if (isNaN(amount)) {
+      setFormData((prev) => ({ ...prev, amount: 0 }))
+      setErrors((prev) => ({ ...prev, amount: 'Неверный формат' }))
+    } else if (amount < 0) {
+      setFormData((prev) => ({ ...prev, amount }))
+      setErrors((prev) => ({ ...prev, amount: 'Количество не может быть отрицательным' }))
+    } else if (amount > currentBalance) {
+      setFormData((prev) => ({ ...prev, amount }))
+      setErrors((prev) => ({ ...prev, amount: 'Недостаточно средств' }))
+    } else {
+      setFormData((prev) => ({ ...prev, amount }))
+      setErrors((prev) => ({ ...prev, amount: '' }))
+    }
 
-    if (isNaN(amount)) setErrors((prev) => ({ ...prev, amount: 'Неверный формат' }))
-    else if (amount < 0) setErrors((prev) => ({ ...prev, amount: 'Количество не может быть отрицательным' }))
-    else if (amount > currentBalance) setErrors((prev) => ({ ...prev, amount: 'Недостаточно средств' }))
-    else if (errors.amount) setErrors((prev) => ({ ...prev, amount: '' }))
     if (error) setError('')
   }
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target
+    const currentBalance = user?.balances[value as TCurrency] || 0
     setFormData((prev) => ({ ...prev, currency: value as TCurrency }))
+    if (error) setError('')
+    if (formData.amount > currentBalance) setErrors((prev) => ({ ...prev, amount: 'Недостаточно средств' }))
+    else if (errors['amount']) setErrors((prev) => ({ ...prev, amount: '' }))
   }
 
   const handleCreate = () => {
@@ -129,7 +157,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
       setError('Заполните все поля')
       return
     }
-    setError('')
+    if (error) setError('')
 
     createRequest(formData)
       .unwrap()
@@ -249,7 +277,7 @@ export default function ModalPrediction({ close }: { close: () => void }) {
             <input
               id='amount'
               name='amount'
-              value={formData.amount}
+              value={amountInput}
               onChange={handleAmountChange}
               className={errors.amount ? 'outline error' : 'outline'}
               placeholder='Количество'

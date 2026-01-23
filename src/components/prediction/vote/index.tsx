@@ -1,32 +1,47 @@
 import style from './vote.module.scss'
 import type { TCurrency } from '../../../types/auth.types'
+import type { IMyBet } from '../../../types/app.types'
 
 interface VoteItemProps {
-  choice: string
-  vote: boolean
+  vote: string
   currency: TCurrency
   amount: number
+  bet?: IMyBet
 }
 
-export default function VoteItem({ choice, vote, currency, amount }: VoteItemProps) {
+export default function VoteItem({ vote, currency, amount, bet }: VoteItemProps) {
   return (
     <div className={style.prediction}>
-      <div className={style.vote}>
-        <span className={style.label}>Ваш выбор</span>
-        <span>{choice || '—'}</span>
+      <div>
+        <h3 className='label'>Ваш выбор</h3>
+        <div>{vote || '—'}</div>
       </div>
 
-      <div className={style.vote}>
-        <span className={style.label}>Ставка</span>
-        <span>
+      <div>
+        <h3 className='label'>Ставка</h3>
+        <div>
           {Number(amount).toFixed(2)} {currency === 'POINT' ? 'Баллов' : 'Кэш'}
-        </span>
+        </div>
       </div>
 
-      <div className={style.vote}>
-        <span className={style.label}>Прогноз</span>
-        <span className={vote ? style.yes : style.no}>{vote ? 'Сбудется' : 'Не сбудется'}</span>
-      </div>
+      {bet?.state === 'WIN' && (
+        <div>
+          <h3 className='label'>Выигрыш</h3>
+          <div>{bet.win.toFixed(2)}</div>
+        </div>
+      )}
+      {bet?.state === 'ACTIVE' && (
+        <div>
+          <h3 className='label'>Возможный выигрыш</h3>
+          <div>{(bet.amount * bet.choice.multiplier).toFixed(2)}</div>
+        </div>
+      )}
+      {bet?.state === 'CANCEL' && (
+        <div>
+          <h3 className='label'>Возврат</h3>
+          <div>{bet.amount.toFixed(2)}</div>
+        </div>
+      )}
     </div>
   )
 }

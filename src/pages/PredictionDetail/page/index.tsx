@@ -9,6 +9,7 @@ import IconSprite from '../../../elements/icon/Icon'
 import Loader from '../../../elements/loader'
 import TradePanel from '../panel'
 import PredictionTabs from '../tabs'
+import PredictionHead from '../../../components/head'
 
 export const PredictionDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -56,37 +57,20 @@ export const PredictionDetail = () => {
   return (
     <div className={style.main}>
       <div className='column gap20 grow'>
-        <div className={style.header}>
-          <div className='row center gap12'>
-            <img src={prediction.icon || `${config.imgBaseUrl}/icon/no_icon.png`} alt={prediction.title} />
-            <h1>{prediction.title}</h1>
-          </div>
-          <div className='row center gap12'>
-            <div className={style.date}>
-              <IconSprite name='finish' size={16} />
-              {prediction.closed ? (
-                <span>Завершено: {new Date(prediction.closed).toLocaleDateString()}</span>
-              ) : (
-                <span>Завершение: {new Date(prediction.end_date).toLocaleDateString()}</span>
-              )}
-            </div>
-            <div className='row center gap4'>
-              <span className='label'>Группа</span>
-              <span>{prediction.group}</span>
-            </div>
-            <div className='row center gap4'>
-              <span className='label'>Статус</span>
-              <span>{prediction.state}</span>
-            </div>
-            <div className='row center gap4'>
-              <span className='label'>Создано</span>
-              <span>{new Date(prediction.created).toLocaleDateString()}</span>
-            </div>
-          </div>
+        <PredictionHead
+          icon={prediction.icon}
+          title={prediction.title}
+          group={prediction.group}
+          state={prediction.state}
+          date={prediction.end_date}
+          closed={prediction.closed}
+          created={prediction.created}
+          big
+        />
+        <div>
           <h2>Правила</h2>
           <div>{prediction.rules}</div>
         </div>
-
         <div>
           {prediction.choices?.map((choice) => (
             <div
@@ -95,10 +79,10 @@ export const PredictionDetail = () => {
               onClick={() => setSelectedChoice(choice)}>
               <div className='grow column'>
                 <span className='clamp-1'>{choice.title}</span>
-                <span className='label'>Объем ${intlNumber('ru-RU', choice.volume_y + choice.volume_n)}</span>
+                <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
               </div>
               <div className='row center gap8'>
-                <span className={style.value}>{(choice.bet_diff || 0).toFixed(0)}%</span>
+                <span className={style.value}>{(choice.multiplier || 0).toFixed(0)}%</span>
                 <span className={style.change}>
                   <IconSprite name='arrow_down' />
                   <span>4%</span>

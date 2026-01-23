@@ -6,13 +6,12 @@ import { useAppSelector } from '../../../hooks/useRedux'
 import { useCreateMyBetMutation } from '../../../services/api'
 import type { TCurrency } from '../../../types/auth.types'
 
-export default function TradePanel({
-  prediction,
-  selectedChoice,
-}: {
+interface TradePanelProps {
   prediction: IPredictionDetail
   selectedChoice: IChoice | null
-}) {
+}
+
+export default function TradePanel({ prediction, selectedChoice }: TradePanelProps) {
   const MAX_VALUE: number = 99999999
   const { user, loading } = useAppSelector((state) => state.auth)
   const [createBet, { isLoading }] = useCreateMyBetMutation()
@@ -23,11 +22,7 @@ export default function TradePanel({
 
   const handleCreateBet = () => {
     if (!selectedChoice) return
-    createBet({
-      choice_id: selectedChoice.id,
-      currency,
-      amount: Number(amount),
-    })
+    createBet({ choice_id: selectedChoice.id, currency, amount: Number(amount) })
   }
 
   const setMaxAmount = () => {
@@ -123,6 +118,14 @@ export default function TradePanel({
                 Max
               </button>
             </div>
+          </div>
+        </div>
+
+        <div>
+          <div>Возможный выигрыш</div>
+          <div>
+            {currency === 'POINT' ? '¢' : '$'}
+            {formatWithCommas(amount)}
           </div>
         </div>
 

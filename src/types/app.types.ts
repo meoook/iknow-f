@@ -1,7 +1,7 @@
 import type { TCurrency } from './auth.types'
 
 export interface IConfig {
-  diff: number
+  multiplier: number
   fee: number
 }
 
@@ -41,13 +41,13 @@ export interface IRequest {
   id: number
   state: string
   reject_reason: string
+  group: string
   tag: string
   icon?: string
   title: string
   rules: string
   choices: string[]
-  vote_choice: string
-  vote: boolean
+  vote: string
   currency: TCurrency
   amount: number
   end_date: string
@@ -69,7 +69,7 @@ export interface IPrediction {
   group: string
   icon: string
   volume: number
-  diff: number
+  multiplier: number
   end_date: string
 }
 
@@ -77,7 +77,7 @@ export interface IChoice {
   id: number
   title: string
   volume: number
-  diff: number
+  multiplier: number
   win: boolean | null
 }
 
@@ -88,7 +88,7 @@ export interface IPredictionDetail {
   group: string
   icon: string
   volume: number
-  bet_diff: number
+  multiplier: number
   end_date: string
   rules: string
   closed: string
@@ -96,28 +96,31 @@ export interface IPredictionDetail {
   choices: IChoice[]
 }
 
-interface IBetChoice {
-  volume_y: number
-  volume_n: number
-  bet_diff: number
+interface IBetPrediction {
+  id: number
   title: string
-  result: boolean | null
-  prediction_id: number
-  prediction_title: string
-  prediction_group: string
-  prediction_icon: string
-  prediction_end_date: string
+  group: string
+  icon: string
+  volume: number
+  end_date: string
+}
+
+interface IBetChoice {
+  volume: number
+  multiplier: number
+  title: string
+  win: boolean | null
 }
 
 export interface IMyBet {
   id: number
   state: 'ACTIVE' | 'WIN' | 'LOSE' | 'CANCEL'
-  vote: boolean
   currency: TCurrency
   amount: number
   win: number
   created: string
   choice: IBetChoice
+  prediction: IBetPrediction
 }
 
 export interface IBetCreate {

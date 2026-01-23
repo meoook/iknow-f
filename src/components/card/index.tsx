@@ -10,7 +10,7 @@ interface PredictionCardProps {
 
 export default function PredictionCard({ prediction }: PredictionCardProps) {
   const volume = intlNumber('ru-RU', prediction.volume)
-  const color = prediction.bet_diff > 80 ? style.red : prediction.bet_diff > 50 ? style.orange : style.green
+  const color = prediction.multiplier > 80 ? style.red : prediction.multiplier > 50 ? style.orange : style.green
   return (
     <Link to={`/prediction/${prediction.id}`} className={style.card}>
       <div className='row center gap8'>
@@ -23,10 +23,10 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
       <div className='column grow'>
         <span className='label'>Разница</span>
         <div className={style.progress}>
-          <div className={`${style.bar} ${color}`} style={{ width: prediction.bet_diff + '%' }}>
+          <div className={`${style.bar} ${color}`} style={{ width: prediction.multiplier + '%' }}>
             &nbsp;
           </div>
-          <span>{prediction.bet_diff.toFixed(0) || 0}</span>
+          <span>{prediction.multiplier.toFixed(0) || 0}</span>
         </div>
       </div>
       <div className='row center justify'>
