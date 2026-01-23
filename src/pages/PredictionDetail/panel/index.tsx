@@ -1,10 +1,10 @@
 import style from './panel.module.scss'
 import { useRef, useState } from 'react'
-import type { IChoice, IPredictionDetail } from '../../../types/app.types'
-import { config } from '../../../config/config'
 import { useAppSelector } from '../../../hooks/useRedux'
 import { useCreateMyBetMutation } from '../../../services/api'
+import type { IChoice, IPredictionDetail } from '../../../types/app.types'
 import type { TCurrency } from '../../../types/auth.types'
+import { config } from '../../../config/config'
 
 interface TradePanelProps {
   prediction: IPredictionDetail
@@ -121,11 +121,18 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
           </div>
         </div>
 
-        <div>
-          <div>Возможный выигрыш</div>
-          <div>
-            {currency === 'POINT' ? '¢' : '$'}
-            {formatWithCommas(amount)}
+        <div
+          className={`${style.payoutWrapper}${Number(amount) > 0 && selectedChoice && selectedChoice.multiplier >= 1 ? ' show' : ''}`}>
+          <div className='row justify center'>
+            <div>Возможный выигрыш</div>
+            <div className={style.inputWrapper} onClick={() => inputRef.current?.focus()}>
+              <div className={`${style.inputContainer} green`}>
+                <span>{currency === 'POINT' ? '¢' : '$'}</span>
+                <div className={style.inputContent}>
+                  {formatWithCommas((Number(amount) * (selectedChoice?.multiplier || 1)).toFixed(0))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
