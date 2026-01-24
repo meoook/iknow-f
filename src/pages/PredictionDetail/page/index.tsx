@@ -2,7 +2,6 @@ import style from './prediction.module.scss'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { intlNumber } from '../../../hooks/hooks'
-import { config } from '../../../config/config'
 import type { IChoice } from '../../../types/app.types'
 import { useGetPredictionQuery } from '../../../services/api'
 import IconSprite from '../../../elements/icon/Icon'
@@ -82,7 +81,7 @@ export const PredictionDetail = () => {
                 <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
               </div>
               <div className='row center gap8'>
-                <span className={style.value}>{(choice.multiplier || 0).toFixed(0)}%</span>
+                <span className={style.value}>{((choice.volume / prediction.volume) * 100).toFixed(0)}%</span>
                 <span className={style.change}>
                   <IconSprite name='arrow_down' />
                   <span>4%</span>

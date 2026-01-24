@@ -144,7 +144,7 @@ export const api = createApi({
       query: () => 'bet/my',
       providesTags: ['MyBets'],
     }),
-    createMyBet: builder.mutation<IMyBet, IBetCreate>({
+    createMyBet: builder.mutation<void, IBetCreate>({
       query: (payload) => ({
         url: 'bet/my',
         method: 'POST',

@@ -5,6 +5,7 @@ import { useCreateMyBetMutation } from '../../../services/api'
 import type { IChoice, IPredictionDetail } from '../../../types/app.types'
 import type { TCurrency } from '../../../types/auth.types'
 import { config } from '../../../config/config'
+import IconSprite from '../../../elements/icon/Icon'
 
 interface TradePanelProps {
   prediction: IPredictionDetail
@@ -18,10 +19,17 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
 
   const [currency, setCurrency] = useState<TCurrency>('CASH')
   const [amount, setAmount] = useState<string>('0')
+  const [isTilt, setIsTilt] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const handleCreateBet = () => {
     if (!selectedChoice) return
+    const balance = currency === 'CASH' ? user?.balances.CASH : user?.balances.POINT
+    if (Number(amount) > (balance || 0)) {
+      setIsTilt(true)
+      setTimeout(() => setIsTilt(false), 1000)
+      return
+    }
     createBet({ choice_id: selectedChoice.id, currency, amount: Number(amount) })
   }
 
@@ -54,6 +62,8 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
 
   const displayValue = formatWithCommas(amount)
 
+  const displayPayout = Number(amount) > 0 && selectedChoice && selectedChoice.multiplier > 1
+
   return (
     <aside className={style.panel}>
       <div className={style.bet}>
@@ -76,12 +86,15 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
         <div className='column gap12'>
           <div className='row justify center'>
             <div>Количество</div>
-            <div className={style.inputWrapper} onClick={() => inputRef.current?.focus()}>
+            <div
+              className={`${style.inputWrapper}${isTilt ? ` ${style.tilt}` : ''}`}
+              onClick={() => inputRef.current?.focus()}>
               <div className={style.inputContainer}>
                 <span>{currency === 'POINT' ? '¢' : '$'}</span>
                 <div className={style.inputContent}>
                   <input
                     ref={inputRef}
+                    name='amount'
                     type='text'
                     value={displayValue}
                     onChange={handleInputChange}
@@ -119,17 +132,27 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
               </button>
             </div>
           </div>
-        </div>
 
-        <div
-          className={`${style.payoutWrapper}${Number(amount) > 0 && selectedChoice && selectedChoice.multiplier >= 1 ? ' show' : ''}`}>
-          <div className='row justify center'>
-            <div>Возможный выигрыш</div>
-            <div className={style.inputWrapper} onClick={() => inputRef.current?.focus()}>
-              <div className={`${style.inputContainer} green`}>
-                <span>{currency === 'POINT' ? '¢' : '$'}</span>
-                <div className={style.inputContent}>
-                  {formatWithCommas((Number(amount) * (selectedChoice?.multiplier || 1)).toFixed(0))}
+          <div className={`${style.payoutWrapper}${displayPayout ? ' show' : ''}${isTilt ? ` ${style.tilt}` : ''}`}>
+            <div className='row justify bottom'>
+              <div className='column'>
+                <div>Возможный</div>
+                <div className='row center gap4'>
+                  <span>выигрыш</span>
+                  <span className={style.info}>
+                    <IconSprite name='info' size={18} />
+                    <div className={style.tooltip}>
+                      Размер выигрыша формируется по итогам предсказания с учётом всех ставок
+                    </div>
+                  </span>
+                </div>
+              </div>
+              <div className={style.inputWrapper} onClick={() => inputRef.current?.focus()}>
+                <div className={`${style.inputContainer} green`}>
+                  <span>{currency === 'POINT' ? '¢' : '$'}</span>
+                  <div className={style.inputContent}>
+                    {formatWithCommas((Number(amount) * (selectedChoice?.multiplier || 1)).toFixed(0))}
+                  </div>
                 </div>
               </div>
             </div>

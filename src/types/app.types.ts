@@ -3,6 +3,10 @@ import type { TCurrency } from './auth.types'
 export interface IConfig {
   multiplier: number
   fee: number
+  min_cash: number
+  min_point: number
+  min_cash_create: number
+  min_point_create: number
 }
 
 export interface INotification {
