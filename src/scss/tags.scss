@@ -1,11 +1,13 @@
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-thumb {
   background-color: #41464f;
   border-radius: 8px;
   height: 56px;
 }
+
 ::-webkit-scrollbar-track {
   background-color: #1d2033;
   box-shadow: inset 0 0 4px #444;
@@ -25,6 +27,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 body {
   font-family: 'Inter var', sans-serif;
   font-size: var(--font-size);
@@ -32,18 +35,22 @@ body {
   color: var(--color-primary);
   overflow-y: scroll;
   overflow-x: hidden;
+  scrollbar-gutter: stable;
   // background: linear-gradient(to right, #131619, #040506);
   background: var(--color-body);
   margin: 0;
+
   // line-height: inherit;
   // color-scheme: light dark; !!!!
 }
+
 main {
   // position: relative;
   max-width: var(--size-surface);
   width: 100%;
   height: 100%;
   margin-inline: auto;
+  padding: 0 20px;
   // min-height: 50vh;
   // margin-top: 20px;
   // margin-bottom: 20px;
@@ -55,16 +62,19 @@ a:visited {
   color: inherit;
   transition: all 0.3s;
 }
+
 button,
 select {
   text-transform: none;
   white-space: nowrap;
   cursor: pointer;
 }
+
 button,
 input {
   overflow: visible;
 }
+
 button,
 input,
 optgroup,
@@ -78,10 +88,12 @@ textarea {
   color: inherit;
   transition: all 0.3s;
 }
+
 input,
 select {
   height: 38px;
 }
+
 input,
 select,
 textarea {
@@ -91,52 +103,63 @@ textarea {
   padding-right: 16px;
   border-radius: var(--radius);
   background-color: var(--color-input);
+
   &.outline {
     border: 1px solid var(--color-border);
+
     // box-shadow: 0 0 0 2px var(--color-border);
     &:focus {
       border: 1px solid var(--color-orange);
       // box-shadow: 0 0 0 2px var(--color-orange);
     }
+
     &.error {
       border: 1px solid var(--color-red);
       // box-shadow: 0 0 0 2px var(--color-red);
     }
   }
+
   &:hover {
     background-color: var(--color-hover);
   }
+
   &:focus-within {
     background-color: var(--color-hover);
     // box-shadow: var(--color-shadow);
   }
+
   &::placeholder {
     color: var(--color-secondary);
     opacity: 0.6;
   }
 }
+
 textarea {
   min-height: 100px;
   padding-top: 12px;
   padding-bottom: 12px;
   resize: none;
 }
+
 label {
   display: block;
   color: var(--color-primary);
   font-weight: 500;
   margin-bottom: 6px;
 }
+
 hr {
   height: 1px;
   margin: var(--base-size-8, 8px) 0;
   background-color: var(--color-border);
   border: none;
+
   &.hide {
     height: 20px;
     background-color: transparent;
   }
 }
+
 h1,
 h2,
 h3 {
@@ -144,12 +167,15 @@ h3 {
   font-weight: 600;
   line-height: 1.5rem;
 }
+
 h1 {
   font-size: var(--font-size-h1);
 }
+
 h2 {
   font-size: var(--font-size-h2);
 }
+
 h3 {
   // text-transform: uppercase;
   font-weight: 500;
@@ -162,10 +188,12 @@ legend {
   pointer-events: none;
   flex-shrink: 0;
 }
+
 svg {
   transition: fill 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
   user-select: none;
 }
+
 img {
   width: 100%;
   height: 100%;

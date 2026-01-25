@@ -8,7 +8,7 @@
 
 .sticky {
   position: sticky;
-  top: 104px;
+  top: calc(var(--size-head) + var(--size-nav));
   background-color: var(--color-body);
   z-index: 1;
   // padding-top: 4px;
@@ -53,6 +53,7 @@
     font-size: 24px;
     font-weight: 700;
   }
+
   .change {
     display: flex;
     align-items: center;

@@ -1,7 +1,8 @@
 .panel {
   box-sizing: border-box;
   position: sticky;
-  top: 128px;
+  top: calc(var(--size-head) + var(--size-nav) + 20px);
+  // top: 124px;
   height: fit-content;
   width: 360px;
   min-width: 360px;
@@ -47,6 +48,7 @@
 
     &:global(.active) {
       color: var(--color-primary);
+
       &::after {
         content: '';
         position: absolute;
@@ -61,19 +63,23 @@
 }
 
 @keyframes tilt {
+
   10%,
   90% {
     transform: translate3d(-1px, 0, 0);
   }
+
   20%,
   80% {
     transform: translate3d(2px, 0, 0);
   }
+
   30%,
   50%,
   70% {
     transform: translate3d(-4px, 0, 0);
   }
+
   40%,
   60% {
     transform: translate3d(4px, 0, 0);
@@ -136,7 +142,7 @@
   display: flex;
   justify-content: flex-end;
 
-  & > div {
+  &>div {
     width: fit-content;
   }
 }
@@ -146,6 +152,7 @@
   color: var(--color-secondary);
   text-align: center;
   margin-top: 12px;
+
   & a {
     text-decoration: underline;
   }

@@ -92,9 +92,11 @@
   --color-msg-warning: #ce9c09; //#eab000;
   --color-msg-error: #dc3545;
   // Sizes
-  --size-surface: 1360px;
-  --size-modal: 500px;
+  --size-surface: 1400px;
   --size-container: 1000px;
+  --size-modal: 500px;
+  --size-head: 60px;
+  --size-nav: 44px;
   --radius: 8px;
   --font-size-h1: 24px;
   --font-size-h2: 20px;
@@ -116,6 +118,7 @@
   margin: 0;
   padding: 0;
 }
+
 :focus,
 :active {
   outline: none;

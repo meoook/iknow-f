@@ -32,6 +32,7 @@ export const PredictionDetail = () => {
 
   useEffect(() => {
     const handleScroll = () => {
+      if (document.body.style.position === 'fixed') return
       const scrollY = window.scrollY
       const maxScroll = 100 // Дистанция, за которую произойдет полное изменение
       const progress = Math.min(scrollY / maxScroll, 1)
@@ -69,11 +70,11 @@ export const PredictionDetail = () => {
 
   return (
     <div className={style.main}>
-      <div className='column gap12 grow'>
+      <div className='column grow'>
         <div className={style.sticky}>
           <PredictionHead icon={prediction.icon} title={prediction.title} big progress={scrollProgress} />
         </div>
-        <div>
+        <div className='column gap12'>
           <PredictionStatus
             group={prediction.group}
             state={prediction.state}
@@ -81,31 +82,34 @@ export const PredictionDetail = () => {
             closed={prediction.closed}
             created={prediction.created}
           />
-          <h2>Правила</h2>
-          <div>{prediction.rules}</div>
-        </div>
-        <div>
-          {prediction.choices?.map((choice) => (
-            <div
-              key={choice.id}
-              className={`${style.item}${selectedChoice?.id === choice.id ? ` ${style.active}` : ''}`}
-              onClick={() => setSelectedChoice(choice)}>
-              <div className='grow column'>
-                <span className='clamp-1'>{choice.title}</span>
-                <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
+          <div>
+            <h2>Правила</h2>
+            <div>{prediction.rules}</div>
+          </div>
+          <div>
+            {prediction.choices?.map((choice) => (
+              <div
+                key={choice.id}
+                className={`${style.item}${selectedChoice?.id === choice.id ? ` ${style.active}` : ''}`}
+                onClick={() => setSelectedChoice(choice)}>
+                <div className='grow column'>
+                  <span className='clamp-1'>{choice.title}</span>
+                  <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
+                </div>
+                <div className='row center gap8'>
+                  <span className={style.value}>{((choice.volume / prediction.volume) * 100).toFixed(0)}%</span>
+                  <span className={style.change}>
+                    <IconSprite name='arrow_down' />
+                    <span>4%</span>
+                  </span>
+                </div>
               </div>
-              <div className='row center gap8'>
-                <span className={style.value}>{((choice.volume / prediction.volume) * 100).toFixed(0)}%</span>
-                <span className={style.change}>
-                  <IconSprite name='arrow_down' />
-                  <span>4%</span>
-                </span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <PredictionTabs prediction={prediction} />
         </div>
-        <PredictionTabs prediction={prediction} />
       </div>
+
       <TradePanel prediction={prediction} selectedChoice={selectedChoice} />
     </div>
   )
