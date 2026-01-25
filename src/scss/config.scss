@@ -1,6 +1,5 @@
 :root {
   // new colors
-  // --colors-white: #fff;
   // --colors-failure: #ed4b9e;
   // --colors-failure33: #ed4b9e33;
   // --colors-primary: #1fc7d4;
@@ -47,7 +46,6 @@
   // --shadows-inset: inset 0px 2px 2px -1px rgba(74, 74, 104, 0.1);
   // --shadows-tooltip: 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px -8px rgba(14, 14, 44, 0.1);
 
-  --colors-white: #fff;
   --color-primary: #fff;
   // --color-fg-default: #fff;
   --color-secondary: #99a;
@@ -97,7 +95,6 @@
   --size-surface: 1360px;
   --size-modal: 500px;
   --size-container: 1000px;
-  --padding: 8px;
   --radius: 8px;
   --font-size-h1: 24px;
   --font-size-h2: 20px;
@@ -105,16 +102,6 @@
   --font-size: 16px;
   --font-size-sm: 14px;
   --font-size-xs: 12px;
-  --size-2: 2px;
-  --size-4: 4px;
-  --size-8: 8px;
-  --size-12: 12px;
-  --size-16: 16px;
-  --size-20: 20px;
-  --size-checkbox: 24px;
-  // Other
-  --text-weight: 600;
-  --timer: 0.9s;
 
   // Shadows
   --shadow: 0px 0px 0px 4px var(--color-shadow);

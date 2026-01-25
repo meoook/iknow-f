@@ -22,7 +22,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   const [isTilt, setIsTilt] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleCreateBet = () => {
+  const handleCreateBet = async () => {
     if (!selectedChoice) return
     const balance = currency === 'CASH' ? user?.balances.CASH : user?.balances.POINT
     if (Number(amount) > (balance || 0)) {
@@ -30,7 +30,14 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
       setTimeout(() => setIsTilt(false), 1000)
       return
     }
-    createBet({ choice_id: selectedChoice.id, currency, amount: Number(amount) })
+
+    try {
+      await createBet({ choice_id: selectedChoice.id, currency, amount: Number(amount) }).unwrap()
+      setAmount('0')
+    } catch (e) {
+      setIsTilt(true)
+      setTimeout(() => setIsTilt(false), 1000)
+    }
   }
 
   const setMaxAmount = () => {
@@ -52,16 +59,11 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '')
     const num = parseInt(raw, 10)
-    if (raw === '') {
-      setAmount('0')
-      return
-    }
-    if (num > MAX_VALUE) return
-    setAmount(num.toString())
+    if (raw === '') setAmount('0')
+    else if (num <= MAX_VALUE) setAmount(num.toString())
   }
 
   const displayValue = formatWithCommas(amount)
-
   const displayPayout = Number(amount) > 0 && selectedChoice && selectedChoice.multiplier > 1
 
   return (

@@ -1,7 +1,17 @@
 .main {
-  display: flex;
-  gap: 24px;
   position: relative;
+  display: flex;
+  padding-top: 16px;
+  padding-bottom: 124px;
+  gap: 24px;
+}
+
+.sticky {
+  position: sticky;
+  top: 104px;
+  background-color: var(--color-body);
+  z-index: 1;
+  // padding-top: 4px;
 }
 
 // ITEM

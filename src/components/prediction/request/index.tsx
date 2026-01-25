@@ -4,6 +4,7 @@ import IconSprite from '../../../elements/icon/Icon'
 import Loader from '../../../elements/loader'
 import VoteItem from '../vote'
 import PredictionHead from '../../head'
+import PredictionStatus from '../../status'
 
 export default function RequestItem({ request, isLast }: { request: IRequest; isLast?: boolean }) {
   const iClass = request.state === 'REJECTED' ? style.red : request.state === 'VALIDATE' ? style.blue : style.green
@@ -14,8 +15,8 @@ export default function RequestItem({ request, isLast }: { request: IRequest; is
 
         <div className={style.main}>
           <div className='column gap12 grow'>
-            <PredictionHead title={request.title} group={request.group} state={request.state} date={request.end_date} />
-
+            <PredictionHead title={request.title} />
+            <PredictionStatus group={request.group} state={request.state} date={request.end_date} />
             <p className={style.rules}>{request.rules}</p>
 
             <div className={style.chips}>

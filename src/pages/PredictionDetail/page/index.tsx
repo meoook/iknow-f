@@ -1,4 +1,4 @@
-import style from './prediction.module.scss'
+import style from './page.module.scss'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { intlNumber } from '../../../hooks/hooks'
@@ -9,6 +9,7 @@ import Loader from '../../../elements/loader'
 import TradePanel from '../panel'
 import PredictionTabs from '../tabs'
 import PredictionHead from '../../../components/head'
+import PredictionStatus from '../../../components/status'
 
 export const PredictionDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -21,12 +22,25 @@ export const PredictionDetail = () => {
   })
 
   const [selectedChoice, setSelectedChoice] = useState<IChoice | null>(null)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
     if (prediction && prediction.choices && prediction.choices.length > 0 && !selectedChoice) {
       setSelectedChoice(prediction.choices[0])
     }
   }, [prediction, selectedChoice])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      const maxScroll = 100 // Дистанция, за которую произойдет полное изменение
+      const progress = Math.min(scrollY / maxScroll, 1)
+      setScrollProgress(progress)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   if (isLoading) {
     return (
@@ -55,18 +69,18 @@ export const PredictionDetail = () => {
 
   return (
     <div className={style.main}>
-      <div className='column gap20 grow'>
-        <PredictionHead
-          icon={prediction.icon}
-          title={prediction.title}
-          group={prediction.group}
-          state={prediction.state}
-          date={prediction.end_date}
-          closed={prediction.closed}
-          created={prediction.created}
-          big
-        />
+      <div className='column gap12 grow'>
+        <div className={style.sticky}>
+          <PredictionHead icon={prediction.icon} title={prediction.title} big progress={scrollProgress} />
+        </div>
         <div>
+          <PredictionStatus
+            group={prediction.group}
+            state={prediction.state}
+            date={prediction.end_date}
+            closed={prediction.closed}
+            created={prediction.created}
+          />
           <h2>Правила</h2>
           <div>{prediction.rules}</div>
         </div>

@@ -3,6 +3,7 @@ import type { IMyBet } from '../../../types/app.types'
 import VoteItem from '../vote'
 import { Link } from 'react-router-dom'
 import PredictionHead from '../../head'
+import PredictionStatus from '../../status'
 import Progress from '../../../elements/progress'
 
 interface ToggleProps {
@@ -18,9 +19,8 @@ export default function BetItem({ bet }: ToggleProps) {
     <Link to={`/prediction/${bet.prediction.id}`} className={style.bet}>
       {bet.state !== 'ACTIVE' && <div className={badgeStyle}>{bet.state}</div>}
       <div className={style.main}>
-        <PredictionHead
-          icon={bet.prediction.icon}
-          title={bet.prediction.title}
+        <PredictionHead icon={bet.prediction.icon} title={bet.prediction.title} />
+        <PredictionStatus
           group={bet.prediction.group}
           state={bet.state}
           date={bet.prediction.end_date}
