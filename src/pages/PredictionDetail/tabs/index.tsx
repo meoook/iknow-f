@@ -109,7 +109,7 @@ function PredictionTabComments({ loading, comments }: { loading: boolean; commen
               <span className={style.name}>
                 {comment.username.length > 20 ? `${comment.username.slice(0, 17)}...` : comment.username}
               </span>
-              <span className={style.time}>{formatRelativeTime(comment.created)}</span>
+              <span className='label'>{formatRelativeTime(comment.created)}</span>
             </div>
             <div className={style.text}>{comment.text}</div>
             <div className={style.footer}>
@@ -134,15 +134,16 @@ function PredictionTabBets({ prediction }: PredictionTabsProps) {
         <div key={bet.id} className='row gap12 center'>
           <Avatar src={bet.avatar} />
           <div className='row grow gap4'>
-            <span>{bet.username.length > 20 ? `${bet.username.slice(0, 17)}...` : bet.username}</span>
-            <span>ставка</span>
-            <span>
+            <b>{bet.username.length > 20 ? `${bet.username.slice(0, 17)}...` : bet.username}</b>
+            <span className='color-gray'>ставка</span>
+            <b className='color-green'>
               {bet.currency === 'POINT' ? '¢' : '$'}
               {bet.amount.toFixed(2)}
-            </span>
-            <span>на {bet.title}</span>
+            </b>
+            <span className='color-gray'>на</span>
+            <b>{bet.title}</b>
           </div>
-          <div className=''>{formatRelativeTime(bet.created)}</div>
+          <div className='color-gray'>{formatRelativeTime(bet.created)}</div>
         </div>
       ))}
       <div className='row gap12 center middle'>

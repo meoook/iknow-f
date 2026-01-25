@@ -191,6 +191,10 @@
     color: var(--color-blue);
   }
 
+  &-gray {
+    color: var(--color-secondary);
+  }
+
   &-brand {
     color: var(--color-brand);
   }
@@ -275,16 +279,17 @@
 .label {
   color: var(--color-secondary);
   font-size: var(--font-size-xs);
+  white-space: nowrap;
 }
 
 .noscroll {
   overflow-y: auto;
 
   // Скрываем скроллбар для Webkit браузеров (Chrome, Safari, Edge)
-  &::-webkit-scrollbar {
-    width: 0;
-    display: none;
-  }
+  // &::-webkit-scrollbar {
+  //   width: 0;
+  //   display: none;
+  // }
 
   // Скрываем скроллбар для Firefox
   scrollbar-width: none;

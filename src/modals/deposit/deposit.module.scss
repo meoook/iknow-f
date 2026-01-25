@@ -2,8 +2,8 @@
   box-sizing: border-box;
   width: 400px;
   max-height: calc(100vh - 140px);
-  white-space: normal;
   text-align: center;
+
   & img {
     object-fit: contain;
     height: 240px;
@@ -32,6 +32,7 @@
 
   & button {
     padding: 4px;
+
     &:hover {
       color: var(--color-brand);
     }

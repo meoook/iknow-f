@@ -2,26 +2,31 @@
   position: relative;
   display: inline-flex;
 }
+
 .btn {
   padding: 5px 2px 5px 8px;
   border-radius: var(--radius);
   cursor: pointer;
   display: flex;
   align-items: center;
+
   &:hover {
     background-color: var(--color-hover);
   }
 }
+
 .user {
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 4px 12px;
   color: var(--color-orange);
-  & > div {
+
+  &>div {
     line-height: 16px;
     overflow: hidden;
   }
+
   & .username {
     font-size: var(--font-size-sm);
     color: var(--color-secondary);
@@ -32,6 +37,7 @@
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
   }
+
   &:hover {
     color: var(--color-brand);
   }
@@ -62,6 +68,7 @@
     gap: 8px;
     line-height: 20px;
     font-weight: 500;
+    white-space: nowrap;
 
     &:hover {
       background-color: var(--color-hover);
@@ -71,6 +78,7 @@
   .item {
     color: var(--color-primary);
   }
+
   .link {
     color: var(--color-secondary);
   }
@@ -81,6 +89,7 @@
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
