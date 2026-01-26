@@ -66,12 +66,31 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   const displayValue = formatWithCommas(amount)
   const displayPayout = Number(amount) > 0 && selectedChoice && selectedChoice.multiplier > 1
 
+  if (prediction.state === 'ENDED') {
+    const winChoice = prediction.choices.find((choice) => choice.win)
+
+    return (
+      <aside className={style.panel}>
+        <div className={style.bet}>
+          <div className={style.win}>
+            <IconSprite name='crown' size={48} color='var(--color-brand)' />
+            <h3 className='clamp-3'>{winChoice?.title || 'Победитель не определен'}</h3>
+            <h3 className='color-blue'>${new Intl.NumberFormat('en-US').format(prediction.volume)}</h3>
+          </div>
+        </div>
+        <div className={style.terms}>
+          Сделав ставку, вы соглашаетесь с <a href='#'>условиями</a>.
+        </div>
+      </aside>
+    )
+  }
+
   return (
     <aside className={style.panel}>
       <div className={style.bet}>
         <div className='row center gap12'>
           <img className={style.icon} src={prediction.icon || `${config.imgBaseUrl}/icon/no_icon.png`} alt='' />
-          <h3 className='clamp-2'>{selectedChoice?.title || 'Select an option'}</h3>
+          <h3 className='clamp-2'>{selectedChoice?.title || 'Выберите вариант'}</h3>
         </div>
 
         <div className={style.tabs}>
