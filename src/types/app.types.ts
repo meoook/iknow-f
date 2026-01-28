@@ -7,6 +7,7 @@ export interface ISettings {
   min_point: number
   min_cash_create: number
   min_point_create: number
+  delete: number
 }
 
 export interface INotification {

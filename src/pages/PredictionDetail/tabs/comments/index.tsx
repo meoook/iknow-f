@@ -1,19 +1,22 @@
+import { useMemo } from 'react'
 import style from './comments.module.scss'
 import { useAppSelector } from '../../../../hooks/useRedux'
-import { useAddLikeMutation, useRemoveLikeMutation } from '../../../../services/api'
+import { useAddLikeMutation, useDeleteCommentMutation, useRemoveLikeMutation } from '../../../../services/api'
 import type { IComment } from '../../../../types/app.types'
 import { formatRelativeTime } from '../../../../utils/date'
 import IconSprite from '../../../../elements/icon/Icon'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
-import { useClickOutside } from '../../../../hooks/hooks'
+import { useClickOutside, useModal } from '../../../../hooks/hooks'
+import Modal from '../../../../elements/modal'
 
 interface PredictionTabCommentsProps {
   loading: boolean
+  prediction: number
   comments?: IComment[]
 }
 
-export default function PredictionTabComments({ loading, comments }: PredictionTabCommentsProps) {
+export default function PredictionTabComments({ loading, prediction, comments }: PredictionTabCommentsProps) {
   const { user } = useAppSelector((state) => state.auth)
 
   if (loading) return <Empty title='Загрузка...' loading={true} />
@@ -22,16 +25,28 @@ export default function PredictionTabComments({ loading, comments }: PredictionT
   return (
     <div className={style.comments}>
       {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} authed={!!user} />
+        <Comment key={comment.id} comment={comment} authed={!!user} prediction={prediction} />
       ))}
     </div>
   )
 }
 
-function Comment({ comment, authed }: { comment: IComment; authed: boolean }) {
+function Comment({ comment, authed, prediction }: { comment: IComment; authed: boolean; prediction: number }) {
   const [likeComment] = useAddLikeMutation()
   const [dislikeComment] = useRemoveLikeMutation()
+  const [deleteComment] = useDeleteCommentMutation()
   const [menuRef, isMenuOpen, menuToogle] = useClickOutside()
+  const [modal, open, close] = useModal()
+
+  const { settings } = useAppSelector((state) => state.app)
+
+  const canDelete = useMemo(() => {
+    if (!comment.owner) return false
+    const created = new Date(comment.created).getTime()
+    const now = new Date().getTime()
+    const diffHours = (now - created) / (1000 * 60 * 60)
+    return diffHours <= settings.delete
+  }, [comment.owner, comment.created, settings.delete])
 
   const toggleLike = (comment: IComment) => {
     if (!authed) return
@@ -43,7 +58,7 @@ function Comment({ comment, authed }: { comment: IComment; authed: boolean }) {
     <div className='row gap12'>
       <Avatar src={comment.avatar} size='medium' />
       <div className='column start grow'>
-        <div className='row center justify w100' ref={menuRef}>
+        <div className='row center justify w100'>
           <div className='row center gap12'>
             <b>{comment.username.length > 20 ? `${comment.username.slice(0, 17)}...` : comment.username}</b>
             <span className='label'>{formatRelativeTime(comment.created)}</span>
@@ -53,11 +68,21 @@ function Comment({ comment, authed }: { comment: IComment; authed: boolean }) {
               <IconSprite name='more' size={18} />
             </button>
             {isMenuOpen && (
-              <div className={style.dropdown}>
-                <button className='btn' onClick={() => toggleLike(comment)}>
-                  {comment.is_liked ? 'Отменить лайк' : 'Лайк'}
-                </button>
-              </div>
+              <>
+                <Modal modal={modal} close={close}>
+                  <div>Жалоба</div>
+                </Modal>
+                <div className={style.dropdown}>
+                  <button className='btn' onClick={open}>
+                    Пожаловаться
+                  </button>
+                  {canDelete && (
+                    <button className='btn' onClick={() => deleteComment({ prediction: prediction, comment: comment.id })}>
+                      Удалить
+                    </button>
+                  )}
+                </div>
+              </>
             )}
           </div>
         </div>

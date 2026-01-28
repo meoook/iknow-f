@@ -174,9 +174,9 @@ export const api = createApi({
       }),
       invalidatesTags: ['Comments'],
     }),
-    deleteComment: builder.mutation<void, { predictionId: number; commentId: number }>({
-      query: ({ predictionId, commentId }) => ({
-        url: `prediction/${predictionId}/comments/${commentId}`,
+    deleteComment: builder.mutation<void, { prediction: number; comment: number }>({
+      query: ({ prediction, comment }) => ({
+        url: `prediction/${prediction}/comments/${comment}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Comments'],

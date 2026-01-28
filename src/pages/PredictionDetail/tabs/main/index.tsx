@@ -85,7 +85,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
               </div>
             </div>
 
-            <PredictionTabComments loading={isLoading} comments={data?.data} />
+            <PredictionTabComments loading={isLoading} prediction={prediction.id} comments={data?.data} />
           </>
         )}
 
