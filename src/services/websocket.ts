@@ -34,7 +34,7 @@ class WebSocketService {
   private reconnectTimer: number | null = null
   private intentionalDisconnect = false
   private token: string = ''
-  private isConnected = false
+  private isConnected: boolean = false
 
   connect(token?: string | null) {
     // const token = localStorage.getItem('auth_token')
@@ -79,12 +79,6 @@ class WebSocketService {
     }
   }
 
-  private handleMessage(msg: WsInMessage) {
-    if (msg.type === WsInEvent.notify) store.dispatch(addNotification(msg.value))
-    else if (msg.type === WsInEvent.balance) store.dispatch(setBalance(msg.value))
-    else console.log(`Unknown message type: ${msg.type} with value: ${msg.value}`)
-  }
-
   private attemptReconnect() {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
       console.error('Max reconnection attempts reached')
@@ -116,6 +110,12 @@ class WebSocketService {
     }
     this.reconnectAttempts = 0
     this.isConnected = false
+  }
+
+  private handleMessage(msg: WsInMessage) {
+    if (msg.type === WsInEvent.notify) store.dispatch(addNotification(msg.value))
+    else if (msg.type === WsInEvent.balance) store.dispatch(setBalance(msg.value))
+    else console.log(`Unknown message type: ${msg.type} with value: ${msg.value}`)
   }
 
   private send(type: WsOutEvent, value: any) {

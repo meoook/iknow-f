@@ -1,5 +1,6 @@
 import type { Middleware } from '@reduxjs/toolkit'
 import { api } from '../services/api'
+import { wsService } from '../services/websocket'
 
 /**
  * Middleware для автоматической загрузки данных пользователя:
@@ -28,10 +29,18 @@ export const authMiddleware: Middleware = (store) => {
       store.dispatch(api.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
     }
 
-    // Загружаем уведомления после успешного получения данных пользователя
+    // Загружаем уведомления и подключаем сокет после успешного получения данных пользователя
     if (api.endpoints.getUser.matchFulfilled(action)) {
       // @ts-ignore - RTK Query dispatch type mismatch
       store.dispatch(api.endpoints.getNotifications.initiate(undefined, { forceRefetch: true }))
+
+      const state = store.getState() as any
+      if (state.auth.token) wsService.connect(state.auth.token)
+    }
+
+    // Отключаем сокет при выходе или ошибке получения пользователя
+    if (api.endpoints.singOut.matchFulfilled(action) || api.endpoints.getUser.matchRejected(action)) {
+      wsService.disconnect()
     }
 
     return result
