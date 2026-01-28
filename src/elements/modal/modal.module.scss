@@ -9,7 +9,7 @@
   align-items: center;
   background-color: var(--color-shadow);
   backdrop-filter: blur(2px);
-  z-index: 2;
+  z-index: 10;
 }
 .modal {
   position: relative;

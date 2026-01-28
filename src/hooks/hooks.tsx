@@ -63,16 +63,16 @@ export const useModal = (): [boolean, () => void, () => void] => {
     setModal(true)
     const scrollY_ = window.scrollY
     setScrollY(scrollY_)
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY_}px`;
-    document.body.style.width = '100%';
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY_}px`
+    document.body.style.width = '100%'
   }
   const close = () => {
     setModal(false)
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    window.scrollTo(0, scrollY);
+    document.body.style.position = ''
+    document.body.style.top = ''
+    document.body.style.width = ''
+    window.scrollTo(0, scrollY)
   }
   return [modal, open, close]
 }

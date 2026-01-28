@@ -53,9 +53,16 @@ function Comment({ comment, authed, prediction }: { comment: IComment; authed: b
     if (comment.is_liked) dislikeComment({ comment: comment.id })
     else likeComment({ comment: comment.id })
   }
+  const handleModalOpen = () => {
+    menuToogle(undefined as any)
+    open()
+  }
 
   return (
     <div className='row gap12'>
+      <Modal modal={modal} close={close}>
+        <div>Жалоба</div>
+      </Modal>
       <Avatar src={comment.avatar} size='medium' />
       <div className='column start grow'>
         <div className='row center justify w100'>
@@ -69,16 +76,17 @@ function Comment({ comment, authed, prediction }: { comment: IComment; authed: b
             </button>
             {isMenuOpen && (
               <>
-                <Modal modal={modal} close={close}>
-                  <div>Жалоба</div>
-                </Modal>
                 <div className={style.dropdown}>
-                  <button className='btn' onClick={open}>
-                    Пожаловаться
+                  <button className={style.btn} onClick={handleModalOpen}>
+                    <IconSprite name='flag' size={24} />
+                    <span>Пожаловаться</span>
                   </button>
                   {canDelete && (
-                    <button className='btn' onClick={() => deleteComment({ prediction: prediction, comment: comment.id })}>
-                      Удалить
+                    <button
+                      className={style.btn}
+                      onClick={() => deleteComment({ prediction: prediction, comment: comment.id })}>
+                      <IconSprite name='delete' size={24} />
+                      <span>Удалить</span>
                     </button>
                   )}
                 </div>

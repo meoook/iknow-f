@@ -11,7 +11,7 @@ const getInitialTheme = (): 'light' | 'dark' => {
 
 const initialState: IAppState = {
   theme: getInitialTheme(),
-  settings: { multiplier: 0, fee: 0 },
+  settings: { multiplier: 0, fee: 0, min_cash: 0, min_point: 0, min_cash_create: 0, min_point_create: 0, delete: 0 },
   notifications: [],
   unreadCount: 0,
 }
@@ -24,10 +24,10 @@ const applyTheme = (theme: 'light' | 'dark') => {
     root.style.setProperty('--color-secondary', '#444')
     root.style.setProperty('--color-body', '#fff')
     root.style.setProperty('--color-head', '#fff')
-    root.style.setProperty('--color-dialog', '#e9e9e9')
+    root.style.setProperty('--color-dialog', '#fff')
     root.style.setProperty('--color-input', '#fff')
-    root.style.setProperty('--color-active', '#ddd')
-    root.style.setProperty('--color-hover', '#e0e0e0')
+    root.style.setProperty('--color-active', '#f0f0f0')
+    root.style.setProperty('--color-hover', '#f4f5f6')
   } else {
     root.style.removeProperty('--color-primary')
     root.style.removeProperty('--color-secondary')

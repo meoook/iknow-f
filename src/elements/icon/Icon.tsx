@@ -16,6 +16,7 @@ export type IconName =
   | 'exit'
   | 'favorite'
   | 'finish'
+  | 'flag'
   | 'info'
   | 'menu'
   | 'metamask'
