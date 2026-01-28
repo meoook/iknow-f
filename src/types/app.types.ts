@@ -1,6 +1,6 @@
 import type { TCurrency } from './auth.types'
 
-export interface IConfig {
+export interface ISettings {
   multiplier: number
   fee: number
   min_cash: number
@@ -20,7 +20,7 @@ export interface INotification {
 
 export interface IAppState {
   theme: 'light' | 'dark'
-  config: IConfig
+  settings: ISettings
   notifications: INotification[]
   unreadCount: number
 }
@@ -148,7 +148,9 @@ export interface IComment {
   text: string
   username: string
   avatar: string
-  likes: number
+  reactions: number
+  is_liked: boolean
+  owner: boolean
   created: string
 }
 

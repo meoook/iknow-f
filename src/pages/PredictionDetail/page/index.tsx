@@ -7,7 +7,7 @@ import { useGetPredictionQuery } from '../../../services/api'
 import IconSprite from '../../../elements/icon/Icon'
 import Loader from '../../../elements/loader'
 import TradePanel from '../panel'
-import PredictionTabs from '../tabs'
+import PredictionTabs from '../tabs/main'
 import PredictionHead from '../../../components/head'
 import PredictionStatus from '../../../components/status'
 
@@ -109,7 +109,6 @@ export const PredictionDetail = () => {
           <PredictionTabs prediction={prediction} />
         </div>
       </div>
-
       <TradePanel prediction={prediction} selectedChoice={selectedChoice} />
     </div>
   )

@@ -14,7 +14,7 @@ import type {
   IBet,
   IComment,
   ICommentCreate,
-  IConfig,
+  ISettings,
 } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
@@ -31,7 +31,7 @@ export const api = createApi({
   tagTypes: ['User', 'Requests', 'Predictions', 'MyBets', 'Bets', 'Groups', 'Comments'],
   endpoints: (builder) => ({
     // Client endpoints
-    getConfig: builder.query<IConfig, void>({
+    getConfig: builder.query<ISettings, void>({
       query: () => 'config',
     }),
     deposit: builder.mutation<void, void>({
@@ -161,16 +161,37 @@ export const api = createApi({
     }),
     getComments: builder.query<PaginatedResponse<IComment>, { id: number; limit?: number; offset?: number }>({
       query: ({ id, limit = 10, offset = 0 }) => ({
-        url: 'comment',
-        params: { prediction: id, limit, offset },
+        url: `prediction/${id}/comments`,
+        params: { limit, offset },
       }),
       providesTags: ['Comments'],
     }),
     createComment: builder.mutation<IComment, ICommentCreate>({
       query: (payload) => ({
-        url: 'comment',
+        url: `prediction/${payload.prediction}/comments`,
         method: 'POST',
         body: payload,
+      }),
+      invalidatesTags: ['Comments'],
+    }),
+    deleteComment: builder.mutation<void, { predictionId: number; commentId: number }>({
+      query: ({ predictionId, commentId }) => ({
+        url: `prediction/${predictionId}/comments/${commentId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Comments'],
+    }),
+    addLike: builder.mutation<void, { comment: number }>({
+      query: ({ comment }) => ({
+        url: `comments/${comment}/like`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Comments'],
+    }),
+    removeLike: builder.mutation<void, { comment: number }>({
+      query: ({ comment }) => ({
+        url: `comments/${comment}/like`,
+        method: 'DELETE',
       }),
       invalidatesTags: ['Comments'],
     }),
@@ -212,6 +233,9 @@ export const {
   useGetBetsQuery,
   useGetCommentsQuery,
   useCreateCommentMutation,
+  useDeleteCommentMutation,
+  useAddLikeMutation,
+  useRemoveLikeMutation,
   // ------
   useSetTelegramMutation,
   useGetRequestsQuery,

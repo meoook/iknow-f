@@ -13,8 +13,9 @@ interface TradePanelProps {
 }
 
 export default function TradePanel({ prediction, selectedChoice }: TradePanelProps) {
-  const MAX_VALUE: number = 99999999
+  const MAX_VALUE: number = 9999999
   const { user, loading } = useAppSelector((state) => state.auth)
+  const { settings } = useAppSelector((state) => state.app)
   const [createBet, { isLoading }] = useCreateMyBetMutation()
 
   const [currency, setCurrency] = useState<TCurrency>('CASH')
@@ -64,7 +65,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   }
 
   const displayValue = formatWithCommas(amount)
-  const displayPayout = Number(amount) > 0 && selectedChoice && selectedChoice.multiplier > 1
+  const displayPayout = currency !== 'POINT' && Number(amount) > 0 && selectedChoice && selectedChoice.multiplier > 1
 
   if (prediction.state === 'ENDED') {
     const winChoice = prediction.choices.find((choice) => choice.win)
@@ -79,7 +80,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
           </div>
         </div>
         <div className={style.terms}>
-          Сделав ставку, вы соглашаетесь с <a href='#'>условиями</a>.
+          Сделав ставку, вы соглашаетесь с <a href='#'>условиями</a>
         </div>
       </aside>
     )
@@ -131,7 +132,11 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
             </div>
           </div>
 
-          <div className={style.quickWrapper}>
+          <div className='row justify center'>
+            <div className='row center gap4'>
+              <span className='label'>Мин.</span>
+              <span className='label'>{currency === 'POINT' ? `¢${settings.min_point}` : `$${settings.min_cash}`}</span>
+            </div>
             <div className='row gap8'>
               <button
                 className='btn gray chip'
@@ -185,7 +190,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
         </button>
       </div>
       <div className={style.terms}>
-        Сделав ставку, вы соглашаетесь с <a href='#'>условиями</a>.
+        Сделав ставку, вы соглашаетесь с <a href='#'>условиями</a>
       </div>
     </aside>
   )

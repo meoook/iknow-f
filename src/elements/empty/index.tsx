@@ -1,14 +1,16 @@
 import style from './empty.module.scss'
 import IconSprite from '../icon/Icon'
 import Loader from '../loader'
+import type { IconName } from '../icon/Icon'
 
 interface EmptyProps {
   title: string
   loading?: boolean
   size?: number
+  icon?: IconName
 }
 
-export default function Empty({ title, loading, size }: EmptyProps) {
+export default function Empty({ title, loading, size, icon = 'draft' }: EmptyProps) {
   let classSize = style.empty
   const iconSize = size ? size : 24
   if (!size) undefined
@@ -17,7 +19,7 @@ export default function Empty({ title, loading, size }: EmptyProps) {
   else if (size >= 20) classSize += ` ${style.text20}`
   return (
     <div className={classSize}>
-      {loading ? <Loader /> : <IconSprite name='draft' size={iconSize} />}
+      {loading ? <Loader /> : <IconSprite name={icon} size={iconSize} />}
       <div>{title}</div>
     </div>
   )

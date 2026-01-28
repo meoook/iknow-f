@@ -1,12 +1,20 @@
 import style from './tabs.module.scss'
 import { useState } from 'react'
-import { useCreateCommentMutation, useGetBetsQuery, useGetCommentsQuery } from '../../../services/api'
-import type { IComment, IPredictionDetail } from '../../../types/app.types'
-import { formatRelativeTime } from '../../../utils/date'
-import IconSprite from '../../../elements/icon/Icon'
-import Avatar from '../../../elements/avatar'
-import Loader from '../../../elements/loader'
-import Empty from '../../../elements/empty'
+import {
+  useAddLikeMutation,
+  useCreateCommentMutation,
+  useGetBetsQuery,
+  useGetCommentsQuery,
+  useRemoveLikeMutation,
+} from '../../../../services/api'
+import type { IComment, IPredictionDetail } from '../../../../types/app.types'
+import { formatRelativeTime } from '../../../../utils/date'
+import IconSprite from '../../../../elements/icon/Icon'
+import Avatar from '../../../../elements/avatar'
+import Loader from '../../../../elements/loader'
+import Empty from '../../../../elements/empty'
+import { useAppSelector } from '../../../../hooks/useRedux'
+import PredictionTabComments from '../comments'
 
 interface PredictionTabsProps {
   prediction: IPredictionDetail
@@ -51,9 +59,9 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
         </button>
       </div>
 
-      <div>
+      <div className='column gap16'>
         {activeTab === 'comments' && (
-          <div className='column gap16'>
+          <>
             <form className={style.input} onSubmit={handleSubmit}>
               <input className='outline' name='comment' placeholder='Добавить комментарий' required />
               <button type='submit' disabled={isPosting}>
@@ -73,54 +81,18 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
               </div>
               <div className={style.warning}>
                 <IconSprite name='draft' size={14} />
-                <span>Остерегайтесь внешних ссылок.</span>
+                <span>Остерегайтесь внешних ссылок</span>
               </div>
             </div>
 
-            <div className={style.commentList}>
-              <PredictionTabComments loading={isLoading} comments={data?.data} />
-            </div>
-          </div>
+            <PredictionTabComments loading={isLoading} comments={data?.data} />
+          </>
         )}
 
-        {activeTab === 'holders' && (
-          <div className='column gap12 center' style={{ padding: '40px 0', color: 'var(--color-secondary)' }}>
-            <IconSprite name='star' size={48} />
-            <span>Список топ-холдеров скоро появится</span>
-          </div>
-        )}
+        {activeTab === 'holders' && <Empty title='Список топ-холдеров скоро появится' size={48} icon='star' />}
 
         {activeTab === 'activity' && <PredictionTabBets prediction={prediction} />}
       </div>
-    </div>
-  )
-}
-
-function PredictionTabComments({ loading, comments }: { loading: boolean; comments: IComment[] | undefined }) {
-  if (loading) return <Empty title='Загрузка...' loading={true} />
-  if (!comments?.length) return <Empty title='Нет комментариев' size={24} />
-  return (
-    <div className='column gap12'>
-      {comments.map((comment) => (
-        <div key={comment.id} className={style.commentItem}>
-          <Avatar src={comment.avatar} size='medium' />
-          <div className={style.content}>
-            <div className={style.head}>
-              <span className={style.name}>
-                {comment.username.length > 20 ? `${comment.username.slice(0, 17)}...` : comment.username}
-              </span>
-              <span className='label'>{formatRelativeTime(comment.created)}</span>
-            </div>
-            <div className={style.text}>{comment.text}</div>
-            <div className={style.footer}>
-              <div className={style.like}>
-                <IconSprite name='favorite' size={16} />
-                <span>2</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
     </div>
   )
 }
@@ -129,7 +101,7 @@ function PredictionTabBets({ prediction }: PredictionTabsProps) {
   const { data, isLoading } = useGetBetsQuery({ id: prediction.id })
   if (isLoading) return <Empty title='Загрузка...' loading={true} />
   return (
-    <div className='column gap12'>
+    <>
       {data?.data.map((bet) => (
         <div key={bet.id} className='row gap12 center'>
           <Avatar src={bet.avatar} />
@@ -150,6 +122,6 @@ function PredictionTabBets({ prediction }: PredictionTabsProps) {
         <Loader />
         <span>Загрузка...</span>
       </div>
-    </div>
+    </>
   )
 }

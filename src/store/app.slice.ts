@@ -11,7 +11,7 @@ const getInitialTheme = (): 'light' | 'dark' => {
 
 const initialState: IAppState = {
   theme: getInitialTheme(),
-  config: { multiplier: 0, fee: 0 },
+  settings: { multiplier: 0, fee: 0 },
   notifications: [],
   unreadCount: 0,
 }
@@ -59,7 +59,7 @@ const appSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(api.endpoints.getConfig.matchFulfilled, (state, action) => {
-      state.config = action.payload
+      state.settings = action.payload
     })
     builder.addMatcher(api.endpoints.getNotifications.matchFulfilled, (state, action) => {
       state.notifications = action.payload

@@ -1,6 +1,6 @@
 // import React from 'react'
 
-type IconName =
+export type IconName =
   | 'activity'
   | 'arrow_down'
   | 'bell'
@@ -20,6 +20,7 @@ type IconName =
   | 'menu'
   | 'metamask'
   | 'moon'
+  | 'more'
   | 'phantom'
   | 'search'
   | 'star'
