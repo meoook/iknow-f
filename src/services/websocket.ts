@@ -5,6 +5,7 @@ import { setBalance } from '../store/auth.slice'
 
 const WsOutEvent = {
   auth: 'auth',
+  logout: 'logout',
 } as const
 
 type WsOutEvent = (typeof WsOutEvent)[keyof typeof WsOutEvent]
@@ -48,7 +49,7 @@ class WebSocketService {
         this.clearReconnectTimer()
 
         // Re-authenticate if we have a token and it's not already in the queue
-        if (this.token && !this.messageQueue.find(m => m.type === WsOutEvent.auth)) {
+        if (this.token && !this.messageQueue.find((m) => m.type === WsOutEvent.auth)) {
           this.auth(this.token)
         }
 
@@ -135,6 +136,11 @@ class WebSocketService {
   auth(token: string) {
     this.token = token
     this.send(WsOutEvent.auth, token)
+  }
+
+  logout() {
+    this.token = ''
+    this.send(WsOutEvent.logout, null)
   }
 
   // sendMarkAllAsRead() {

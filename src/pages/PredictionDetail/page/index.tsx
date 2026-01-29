@@ -13,13 +13,7 @@ import PredictionStatus from '../../../components/status'
 
 export const PredictionDetail = () => {
   const { id } = useParams<{ id: string }>()
-  const {
-    data: prediction,
-    isLoading,
-    isError,
-  } = useGetPredictionQuery(Number(id), {
-    skip: !id,
-  })
+  const { data: prediction, isLoading, isError } = useGetPredictionQuery(Number(id), { skip: !id })
 
   const [selectedChoice, setSelectedChoice] = useState<IChoice | null>(null)
   const [scrollProgress, setScrollProgress] = useState(0)

@@ -1,7 +1,6 @@
 import style from './notify.module.scss'
 import { useClickOutside } from '../../hooks/hooks'
 import { useAppSelector } from '../../hooks/useRedux'
-import IconSprite from '../../elements/icon/Icon'
 import type { INotification } from '../../types/app.types'
 import { formatRelativeTime } from '../../utils/date'
 import {
@@ -10,8 +9,9 @@ import {
   useDeleteNotificationMutation,
   useDeleteAllNotificationsMutation,
 } from '../../services/api'
+import IconSprite from '../../elements/icon/Icon'
 
-export const NotificationBell = () => {
+export default function NotificationBell() {
   const [readAll] = useReadAllNotificationsMutation()
   const [deleteAll] = useDeleteAllNotificationsMutation()
   const { notifications, unreadCount } = useAppSelector((state) => state.app)

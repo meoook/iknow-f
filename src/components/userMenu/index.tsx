@@ -4,16 +4,17 @@ import { useState, useRef } from 'react'
 import { useSingOutMutation } from '../../services/api'
 import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
 import { toggleTheme } from '../../store/app.slice'
+import { useModal } from '../../hooks/hooks'
+import { wsService } from '../../services/websocket'
+import type { IUser } from '../../types/auth.types'
 import IconSprite from '../../elements/icon/Icon'
-import { NotificationBell } from '../notification'
+import Modal from '../../elements/modal'
+import ModalDeposit from '../../modals/deposit'
+import ModalLogin from '../../modals/login'
+import NotificationBell from '../notification'
 import Balance from '../balance'
 import Avatar from '../../elements/avatar'
 import Toggle from '../toggle'
-import ModalLogin from '../../modals/login'
-import Modal from '../../elements/modal'
-import { useModal } from '../../hooks/hooks'
-import type { IUser } from '../../types/auth.types'
-import ModalDeposit from '../../modals/deposit'
 
 export default function UserMenu() {
   const { loading, user } = useAppSelector((state) => state.auth)
@@ -27,6 +28,7 @@ export default function UserMenu() {
   const logOut = () => {
     setIsMenuOpen(false)
     signOut()
+    wsService.logout()
   }
 
   const handleToggleTheme = () => {
