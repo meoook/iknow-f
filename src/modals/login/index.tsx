@@ -4,8 +4,14 @@ import { useEmailNonceMutation, useEmailAuthMutation, useW3authMutation, useW3no
 import { web3AuthService } from '../../services/web3Auth'
 import IconSprite from '../../elements/icon/Icon'
 import { EMAIL_REGEX } from '../../config/config'
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
+import { setShowLoginModal } from '../../store/auth.slice'
+import Modal from '../../elements/modal'
 
-export default function ModalLogin({ closeModal }: { closeModal: () => void }) {
+export default function ModalLogin() {
+  const dispatch = useAppDispatch()
+  const { showLoginModal } = useAppSelector((state) => state.auth)
+
   const initialEmail = localStorage.getItem('email') || ''
   const firstInput = useRef<HTMLInputElement>(null)
   const [email, setEmail] = useState(initialEmail)
@@ -18,6 +24,10 @@ export default function ModalLogin({ closeModal }: { closeModal: () => void }) {
   const [emailAuth, { isLoading: isEmailLoading }] = useEmailAuthMutation()
   const [w3auth, { isLoading: isWeb3Loading }] = useW3authMutation()
   const [w3nonce] = useW3nonceMutation()
+
+  const close = () => {
+    dispatch(setShowLoginModal(false))
+  }
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailValid(EMAIL_REGEX.test(e.target.value))
@@ -76,7 +86,7 @@ export default function ModalLogin({ closeModal }: { closeModal: () => void }) {
     try {
       await emailAuth({ email, nonce: nonce.join('') })
         .unwrap()
-        .then(() => closeModal())
+        .then(() => close())
     } catch (err: any) {
       setError(err.data?.message || 'Invalid code')
     }
@@ -89,104 +99,109 @@ export default function ModalLogin({ closeModal }: { closeModal: () => void }) {
       const { signature, message } = await web3AuthService.authenticateWithWeb3(w3nonce, type)
       await w3auth({ message, signature })
         .unwrap()
-        .then(() => closeModal())
+        .then(() => close())
     } catch (err: any) {
       setError(err.message || 'Web3 login failed')
     }
   }
 
   return (
-    <div className={style.wrapper}>
-      <h1 className='column center'>Добро пожаловать в Vanga</h1>
-      {error && <div className='login-error'>{error}</div>}
+    <Modal close={close} modal={showLoginModal}>
+      <div className={style.wrapper}>
+        <h1 className='column center'>Добро пожаловать в Vanga</h1>
+        {error && <div className='login-error'>{error}</div>}
 
-      <div className={style.steps} style={{ gridTemplateRows: step === 'email' ? '1fr 0fr' : '0fr 1fr' }}>
-        <div className={style.stepItem}>
-          <div className='column gap20'>
-            <button disabled={isOauthLoading} className='btn blue big'>
-              <IconSprite name='vk' size={28} />
-              Войти с VK ID
-            </button>
-
-            <div className='row center gap20'>
-              <hr className='grow' />
-              <span>ИЛИ</span>
-              <hr className='grow' />
-            </div>
-
-            <div className={style.email}>
-              <input
-                name='email'
-                type='email'
-                value={email}
-                onChange={handleEmailChange}
-                placeholder='Почтовый адрес'
-              />
-              <button
-                type='submit'
-                className='btn blue'
-                disabled={!emailValid || isOauthLoading}
-                onClick={handleEmailLogin}>
-                Продолжить
+        <div className={style.steps} style={{ gridTemplateRows: step === 'email' ? '1fr 0fr' : '0fr 1fr' }}>
+          <div className={style.stepItem}>
+            <div className='column gap20'>
+              <button disabled={isOauthLoading} className='btn blue big'>
+                <IconSprite name='vk' size={28} />
+                Войти с VK ID
               </button>
-            </div>
 
-            <div className='row center gap20'>
-              <button
-                onClick={() => handleWeb3Login('metamask')}
-                disabled={isWeb3Loading}
-                className='btn gray grow big'>
-                <IconSprite name='metamask' size={28} />
-                Metamask
-              </button>
-              <button onClick={() => handleWeb3Login('phantom')} disabled={isWeb3Loading} className='btn gray grow big'>
-                <IconSprite name='phantom' size={28} />
-                Phantom
-              </button>
-            </div>
-          </div>
-        </div>
+              <div className='row center gap20'>
+                <hr className='grow' />
+                <span>ИЛИ</span>
+                <hr className='grow' />
+              </div>
 
-        <div className={style.stepItem}>
-          <div className='column center gap20'>
-            <div className='column center gap10'>
-              <h2>Введите код</h2>
-              <p className='color-gray'>Мы отправили 6-значный код на {email}</p>
-            </div>
-
-            <div className={style.nonceInputs}>
-              {nonce.map((digit, i) => (
+              <div className={style.email}>
                 <input
-                  key={i}
-                  id={`nonce-${i}`}
-                  type='text'
-                  inputMode='numeric'
-                  value={digit}
-                  onChange={(e) => handleNonceChange(i, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(i, e)}
-                  onPaste={handlePaste}
-                  maxLength={1}
-                  className={style.nonceCell}
-                  ref={i === 0 ? firstInput : undefined}
+                  name='email'
+                  type='email'
+                  value={email}
+                  onChange={handleEmailChange}
+                  placeholder='Почтовый адрес'
                 />
-              ))}
+                <button
+                  type='submit'
+                  className='btn blue'
+                  disabled={!emailValid || isOauthLoading}
+                  onClick={handleEmailLogin}>
+                  Продолжить
+                </button>
+              </div>
+
+              <div className='row center gap20'>
+                <button
+                  onClick={() => handleWeb3Login('metamask')}
+                  disabled={isWeb3Loading}
+                  className='btn gray grow big'>
+                  <IconSprite name='metamask' size={28} />
+                  Metamask
+                </button>
+                <button
+                  onClick={() => handleWeb3Login('phantom')}
+                  disabled={isWeb3Loading}
+                  className='btn gray grow big'>
+                  <IconSprite name='phantom' size={28} />
+                  Phantom
+                </button>
+              </div>
             </div>
+          </div>
 
-            <button
-              className='btn blue big w100'
-              disabled={nonce.some((d) => !d) || isEmailLoading}
-              onClick={handleNonceLogin}>
-              Подтвердить
-            </button>
+          <div className={style.stepItem}>
+            <div className='column center gap20'>
+              <div className='column center gap10'>
+                <h2>Введите код</h2>
+                <p className='color-gray'>Мы отправили 6-значный код на {email}</p>
+              </div>
 
-            <button className='btn text' onClick={() => setStep('email')}>
-              Изменить почту
-            </button>
+              <div className={style.nonceInputs}>
+                {nonce.map((digit, i) => (
+                  <input
+                    key={i}
+                    id={`nonce-${i}`}
+                    type='text'
+                    inputMode='numeric'
+                    value={digit}
+                    onChange={(e) => handleNonceChange(i, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(i, e)}
+                    onPaste={handlePaste}
+                    maxLength={1}
+                    className={style.nonceCell}
+                    ref={i === 0 ? firstInput : undefined}
+                  />
+                ))}
+              </div>
+
+              <button
+                className='btn blue big w100'
+                disabled={nonce.some((d) => !d) || isEmailLoading}
+                onClick={handleNonceLogin}>
+                Подтвердить
+              </button>
+
+              <button className='btn text' onClick={() => setStep('email')}>
+                Изменить почту
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <small className='column center color-gray'>Условия использования</small>
-    </div>
+        <small className='column center color-gray'>Условия использования</small>
+      </div>
+    </Modal>
   )
 }

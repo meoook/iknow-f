@@ -2,12 +2,12 @@ import style from './header.module.scss'
 import { useState } from 'react'
 import { useAppSelector } from '../../hooks/useRedux'
 import { Link, NavLink } from 'react-router-dom'
-import { useModal } from '../../hooks/hooks'
-import Modal from '../../elements/modal'
-import ModalLogin from '../../modals/login'
 import IconSprite from '../../elements/icon/Icon'
 import Logo from './logo'
 import UserMenu from '../userMenu'
+import { useModal } from '../../hooks/hooks'
+import Modal from '../../elements/modal'
+import ModalHow from '../../modals/how'
 
 export default function Header() {
   const { user, loading } = useAppSelector((state) => state.auth)
@@ -20,9 +20,6 @@ export default function Header() {
 
   return (
     <>
-      <Modal close={close} modal={modal}>
-        <ModalLogin closeModal={close} />
-      </Modal>
       <header>
         <div className={style.head}>
           <Link className={style.logo} to='/'>
@@ -35,10 +32,15 @@ export default function Header() {
               <IconSprite name='search' />
             </form>
             {!user && !loading && (
-              <button className={style.tultip} onClick={open}>
-                <IconSprite name='tultip' size={14} />
-                <span>Как это работает?</span>
-              </button>
+              <>
+                <Modal modal={modal} close={close}>
+                  <ModalHow />
+                </Modal>
+                <button className={style.tultip} onClick={open}>
+                  <IconSprite name='tultip' size={14} />
+                  <span>Как это работает?</span>
+                </button>
+              </>
             )}
           </div>
           <UserMenu />

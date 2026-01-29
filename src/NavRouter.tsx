@@ -9,6 +9,7 @@ import { useAppSelector } from './hooks/useRedux'
 import Header from './components/header'
 import { PredictionDetail } from './pages/PredictionDetail/page'
 import { useGetConfigQuery } from './services/api'
+import ModalLogin from './modals/login'
 
 export default function NavRouter() {
   useGetConfigQuery()
@@ -19,6 +20,7 @@ export default function NavRouter() {
 
   return (
     <BrowserRouter>
+      <ModalLogin />
       <Header />
       <main>
         <ScrollToTop />
@@ -72,7 +74,6 @@ function LayoutNotAuthed() {
   if (token) return <Navigate to='/' replace />
   return <Outlet />
 }
-
 // Scroll to top on route change
 function ScrollToTop() {
   const { pathname } = useLocation()

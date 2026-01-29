@@ -1,32 +1,30 @@
 import style from './tabs.module.scss'
 import { useState } from 'react'
-import {
-  useAddLikeMutation,
-  useCreateCommentMutation,
-  useGetBetsQuery,
-  useGetCommentsQuery,
-  useRemoveLikeMutation,
-} from '../../../../services/api'
+import { useCreateCommentMutation, useGetBetsQuery, useGetCommentsQuery } from '../../../../services/api'
 import type { IComment, IPredictionDetail } from '../../../../types/app.types'
 import { formatRelativeTime } from '../../../../utils/date'
 import IconSprite from '../../../../elements/icon/Icon'
 import Avatar from '../../../../elements/avatar'
 import Loader from '../../../../elements/loader'
 import Empty from '../../../../elements/empty'
-import { useAppSelector } from '../../../../hooks/useRedux'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
 import PredictionTabComments from '../comments'
+import { setShowLoginModal } from '../../../../store/auth.slice'
 
 interface PredictionTabsProps {
   prediction: IPredictionDetail
 }
 
 export default function PredictionTabs({ prediction }: PredictionTabsProps) {
+  const dispatch = useAppDispatch()
+  const { user } = useAppSelector((state) => state.auth)
+  const [createComment, { isLoading: isPosting }] = useCreateCommentMutation()
   const [activeTab, setActiveTab] = useState<'comments' | 'holders' | 'activity'>('comments')
   const { data, isLoading } = useGetCommentsQuery({ id: prediction.id })
-  const [createComment, { isLoading: isPosting }] = useCreateCommentMutation()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!user) return dispatch(setShowLoginModal(true))
     const form = e.currentTarget
     const formData = new FormData(form)
     const text = formData.get('comment') as string

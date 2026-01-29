@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import style from './comments.module.scss'
-import { useAppSelector } from '../../../../hooks/useRedux'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
 import { useAddLikeMutation, useDeleteCommentMutation, useRemoveLikeMutation } from '../../../../services/api'
 import type { IComment } from '../../../../types/app.types'
 import { formatRelativeTime } from '../../../../utils/date'
@@ -10,6 +10,7 @@ import Empty from '../../../../elements/empty'
 import { useClickOutside, useModal } from '../../../../hooks/hooks'
 import Modal from '../../../../elements/modal'
 import ModalReport from '../../../../modals/report'
+import { setShowLoginModal } from '../../../../store/auth.slice'
 
 interface PredictionTabCommentsProps {
   loading: boolean
@@ -17,7 +18,15 @@ interface PredictionTabCommentsProps {
   comments?: IComment[]
 }
 
+interface CommentProps {
+  comment: IComment
+  authed: boolean
+  prediction: number
+  dispatch: any
+}
+
 export default function PredictionTabComments({ loading, prediction, comments }: PredictionTabCommentsProps) {
+  const dispatch = useAppDispatch()
   const { user } = useAppSelector((state) => state.auth)
 
   if (loading) return <Empty title='Загрузка...' loading={true} />
@@ -26,13 +35,13 @@ export default function PredictionTabComments({ loading, prediction, comments }:
   return (
     <div className={style.comments}>
       {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} authed={!!user} prediction={prediction} />
+        <Comment key={comment.id} comment={comment} authed={!!user} prediction={prediction} dispatch={dispatch} />
       ))}
     </div>
   )
 }
 
-function Comment({ comment, authed, prediction }: { comment: IComment; authed: boolean; prediction: number }) {
+function Comment({ comment, authed, prediction, dispatch }: CommentProps) {
   const [likeComment] = useAddLikeMutation()
   const [dislikeComment] = useRemoveLikeMutation()
   const [deleteComment] = useDeleteCommentMutation()
@@ -50,11 +59,12 @@ function Comment({ comment, authed, prediction }: { comment: IComment; authed: b
   }, [comment.owner, comment.created, settings.delete])
 
   const toggleLike = (comment: IComment) => {
-    if (!authed) return
+    if (!authed) return dispatch(setShowLoginModal(true))
     if (comment.is_liked) dislikeComment({ comment: comment.id })
     else likeComment({ comment: comment.id })
   }
   const handleModalOpen = () => {
+    if (!authed) return dispatch(setShowLoginModal(true))
     menuToogle(undefined as any)
     open()
   }

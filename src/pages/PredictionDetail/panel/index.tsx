@@ -1,7 +1,8 @@
 import style from './panel.module.scss'
 import { useRef, useState } from 'react'
-import { useAppSelector } from '../../../hooks/useRedux'
+import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux'
 import { useCreateMyBetMutation } from '../../../services/api'
+import { setShowLoginModal } from '../../../store/auth.slice'
 import type { IChoice, IPredictionDetail } from '../../../types/app.types'
 import type { TCurrency } from '../../../types/auth.types'
 import { config } from '../../../config/config'
@@ -16,6 +17,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   const MAX_VALUE: number = 9999999
   const { user, loading } = useAppSelector((state) => state.auth)
   const { settings } = useAppSelector((state) => state.app)
+  const dispatch = useAppDispatch()
   const [createBet, { isLoading }] = useCreateMyBetMutation()
 
   const [currency, setCurrency] = useState<TCurrency>('CASH')
@@ -24,8 +26,12 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   const inputRef = useRef<HTMLInputElement>(null)
 
   const handleCreateBet = async () => {
+    if (!user) {
+      dispatch(setShowLoginModal(true))
+      return
+    }
     if (!selectedChoice) return
-    const balance = currency === 'CASH' ? user?.balances.CASH : user?.balances.POINT
+    const balance = currency === 'CASH' ? user.balances.CASH : user.balances.POINT
     if (Number(amount) > (balance || 0)) {
       setIsTilt(true)
       setTimeout(() => setIsTilt(false), 1000)

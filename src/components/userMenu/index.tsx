@@ -4,13 +4,13 @@ import { useState, useRef } from 'react'
 import { useSingOutMutation } from '../../services/api'
 import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
 import { toggleTheme } from '../../store/app.slice'
+import { setShowLoginModal } from '../../store/auth.slice'
 import { useModal } from '../../hooks/hooks'
 import { wsService } from '../../services/websocket'
 import type { IUser } from '../../types/auth.types'
 import IconSprite from '../../elements/icon/Icon'
 import Modal from '../../elements/modal'
 import ModalDeposit from '../../modals/deposit'
-import ModalLogin from '../../modals/login'
 import NotificationBell from '../notification'
 import Balance from '../balance'
 import Avatar from '../../elements/avatar'
@@ -154,13 +154,10 @@ function UserButtons({ user }: { user: IUser }) {
 }
 
 function NotAuthButtons() {
-  const [modal, open, close] = useModal()
+  const dispatch = useAppDispatch()
   return (
     <>
-      <Modal close={close} modal={modal}>
-        <ModalLogin closeModal={close} />
-      </Modal>
-      <button className='btn blue' onClick={open}>
+      <button className='btn blue' onClick={() => dispatch(setShowLoginModal(true))}>
         Войти
       </button>
     </>
