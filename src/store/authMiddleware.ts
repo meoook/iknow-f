@@ -29,13 +29,13 @@ export const authMiddleware: Middleware = (store) => {
       store.dispatch(api.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
     }
 
-    // Загружаем уведомления и подключаем сокет после успешного получения данных пользователя
+    // Загружаем уведомления и аутентифицируем сокет после успешного получения данных пользователя
     if (api.endpoints.getUser.matchFulfilled(action)) {
       // @ts-ignore - RTK Query dispatch type mismatch
       store.dispatch(api.endpoints.getNotifications.initiate(undefined, { forceRefetch: true }))
 
       const state = store.getState() as any
-      if (state.auth.token) wsService.connect(state.auth.token)
+      if (state.auth.token) wsService.auth(state.auth.token)
     }
 
     // Отключаем сокет при выходе или ошибке получения пользователя

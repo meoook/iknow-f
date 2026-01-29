@@ -4,7 +4,7 @@ import { Home } from './pages/Home'
 import { Group } from './pages/Group'
 import { Requests } from './pages/Requests'
 import { Profile } from './pages/Profile'
-// import { wsService } from './services/websocket'
+import { wsService } from './services/websocket'
 import { useAppSelector } from './hooks/useRedux'
 import Header from './components/header'
 import { PredictionDetail } from './pages/PredictionDetail/page'
@@ -12,16 +12,10 @@ import { useGetConfigQuery } from './services/api'
 
 export default function NavRouter() {
   useGetConfigQuery()
-  // const { user, token } = useAppSelector((state) => state.auth)
 
-  // useEffect(() => {
-  //   if (user) wsService.connect(token)
-  //   else wsService.disconnect()
-
-  //   return () => {
-  //     wsService.disconnect()
-  //   }
-  // }, [user, token])
+  useEffect(() => {
+    wsService.connect()
+  }, [])
 
   return (
     <BrowserRouter>
