@@ -23,6 +23,7 @@ export type IconName =
   | 'moon'
   | 'more'
   | 'phantom'
+  | 'report'
   | 'search'
   | 'star'
   | 'success'

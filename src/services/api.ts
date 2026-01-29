@@ -195,6 +195,14 @@ export const api = createApi({
       }),
       invalidatesTags: ['Comments'],
     }),
+    reportComment: builder.mutation<void, { comment: number; reason: string; text: string }>({
+      query: ({ comment, reason, text }) => ({
+        url: `comments/${comment}/report`,
+        method: 'POST',
+        body: { reason, text },
+      }),
+      invalidatesTags: ['Comments'],
+    }),
 
     // Public endpoints
     getPredictions: builder.query<PaginatedResponse<IPrediction>, void>({
@@ -236,6 +244,7 @@ export const {
   useDeleteCommentMutation,
   useAddLikeMutation,
   useRemoveLikeMutation,
+  useReportCommentMutation,
   // ------
   useSetTelegramMutation,
   useGetRequestsQuery,

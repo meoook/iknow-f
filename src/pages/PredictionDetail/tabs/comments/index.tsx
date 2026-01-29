@@ -9,6 +9,7 @@ import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
 import { useClickOutside, useModal } from '../../../../hooks/hooks'
 import Modal from '../../../../elements/modal'
+import ModalReport from '../../../../modals/report'
 
 interface PredictionTabCommentsProps {
   loading: boolean
@@ -61,7 +62,7 @@ function Comment({ comment, authed, prediction }: { comment: IComment; authed: b
   return (
     <div className='row gap12'>
       <Modal modal={modal} close={close}>
-        <div>Жалоба</div>
+        <ModalReport commentId={comment.id} close={close} />
       </Modal>
       <Avatar src={comment.avatar} size='medium' />
       <div className='column start grow'>
@@ -78,14 +79,14 @@ function Comment({ comment, authed, prediction }: { comment: IComment; authed: b
               <>
                 <div className={style.dropdown}>
                   <button className={style.btn} onClick={handleModalOpen}>
-                    <IconSprite name='flag' size={24} />
+                    <IconSprite name='flag' size={18} />
                     <span>Пожаловаться</span>
                   </button>
                   {canDelete && (
                     <button
                       className={style.btn}
                       onClick={() => deleteComment({ prediction: prediction, comment: comment.id })}>
-                      <IconSprite name='delete' size={24} />
+                      <IconSprite name='delete' size={18} />
                       <span>Удалить</span>
                     </button>
                   )}
