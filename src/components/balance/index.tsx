@@ -1,5 +1,5 @@
 import style from './balance.module.scss'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 interface BalanceProps {
   name: string
@@ -8,27 +8,45 @@ interface BalanceProps {
 }
 
 export default function Balance({ name, balance, currency }: BalanceProps) {
+  const targetValue = typeof balance === 'string' ? Number(balance) || 0 : balance
   const [displayValue, setDisplayValue] = useState(0)
+  const prevValueRef = useRef(0)
 
   useEffect(() => {
-    const targetValue = typeof balance === 'string' ? Number(balance) : balance
+    const startValue = prevValueRef.current
+    const diff = targetValue - startValue
+
+    if (Math.abs(diff) < 0.01) {
+      setDisplayValue(targetValue)
+      prevValueRef.current = targetValue
+      return
+    }
+
     const duration = 1200
-    const steps = 60
-    const increment = targetValue / steps
-    let current = 0
+    const fps = 60
+    const totalFrames = (duration / 1000) * fps
+    const increment = diff / totalFrames
+    let current = startValue
 
     const timer = setInterval(() => {
       current += increment
-      if (current >= targetValue) {
+
+      const isComplete = diff > 0 ? current >= targetValue : current <= targetValue
+
+      if (isComplete) {
         setDisplayValue(targetValue)
+        prevValueRef.current = targetValue
         clearInterval(timer)
       } else {
         setDisplayValue(current)
       }
-    }, duration / steps)
+    }, 1000 / fps)
 
-    return () => clearInterval(timer)
-  }, [balance])
+    return () => {
+      clearInterval(timer)
+      prevValueRef.current = current
+    }
+  }, [targetValue])
 
   const getCurrencySymbol = (curr?: string): string => {
     if (!curr) return ''
