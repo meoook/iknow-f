@@ -10,6 +10,7 @@ import TradePanel from '../panel'
 import PredictionTabs from '../tabs/main'
 import PredictionHead from '../../../components/head'
 import PredictionStatus from '../../../components/status'
+import { wsService } from '../../../services/websocket'
 
 export const PredictionDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -23,6 +24,17 @@ export const PredictionDetail = () => {
       setSelectedChoice(prediction.choices[0])
     }
   }, [prediction, selectedChoice])
+
+  useEffect(() => {
+    if (!prediction?.id) return
+    const id = Number(prediction.id)
+
+    wsService.predictionJoin(id)
+
+    return () => {
+      wsService.predictionLeave(id)
+    }
+  }, [prediction?.id])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,11 +103,8 @@ export const PredictionDetail = () => {
                   <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
                 </div>
                 <div className='row center gap8'>
-                  <span className={style.value}>{((choice.volume / prediction.volume) * 100).toFixed(0)}%</span>
-                  <span className={style.change}>
-                    <IconSprite name='arrow_down' />
-                    <span>4%</span>
-                  </span>
+                  <h1 className={style.value}>{((choice.volume / prediction.volume) * 100).toFixed(2)}%</h1>
+                  <h1 className={style.change}>{choice.multiplier}X</h1>
                 </div>
               </div>
             ))}

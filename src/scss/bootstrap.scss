@@ -275,6 +275,9 @@
 .grow {
   flex-grow: 1;
 }
+.nowrap {
+  white-space: nowrap;
+}
 
 .label {
   color: var(--color-secondary);

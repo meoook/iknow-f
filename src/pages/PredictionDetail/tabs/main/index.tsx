@@ -1,7 +1,7 @@
 import style from './tabs.module.scss'
 import { useState } from 'react'
 import { useCreateCommentMutation, useGetBetsQuery, useGetCommentsQuery } from '../../../../services/api'
-import type { IComment, IPredictionDetail } from '../../../../types/app.types'
+import type { IPredictionDetail } from '../../../../types/app.types'
 import { formatRelativeTime } from '../../../../utils/date'
 import IconSprite from '../../../../elements/icon/Icon'
 import Avatar from '../../../../elements/avatar'
@@ -48,7 +48,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
         <button
           className={`${style.tab}${activeTab === 'holders' ? ' active' : ''}`}
           onClick={() => setActiveTab('holders')}>
-          Топ Холдеров
+          Топ предсказателей
         </button>
         <button
           className={`${style.tab}${activeTab === 'activity' ? ' active' : ''}`}
@@ -74,7 +74,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
                 </div>
                 <label className={style.holders}>
                   <input type='checkbox' />
-                  Холдеры
+                  Предсказатели
                 </label>
               </div>
               <div className={style.warning}>
@@ -87,7 +87,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
           </>
         )}
 
-        {activeTab === 'holders' && <Empty title='Список топ-холдеров скоро появится' size={48} icon='star' />}
+        {activeTab === 'holders' && <Empty title='Список топ-предсказателей скоро появится' size={48} icon='star' />}
 
         {activeTab === 'activity' && <PredictionTabBets prediction={prediction} />}
       </div>
@@ -113,7 +113,7 @@ function PredictionTabBets({ prediction }: PredictionTabsProps) {
             <span className='color-gray'>на</span>
             <b>{bet.title}</b>
           </div>
-          <div className='color-gray'>{formatRelativeTime(bet.created)}</div>
+          <div className='color-gray nowrap'>{formatRelativeTime(bet.created)}</div>
         </div>
       ))}
       <div className='row gap12 center middle'>

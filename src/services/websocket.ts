@@ -2,10 +2,14 @@ import { config } from '../config/config'
 import { store } from '../store/store'
 import { addNotification } from '../store/app.slice'
 import { setBalance } from '../store/auth.slice'
+import { api } from './api'
+import type { IPredictionDetail } from '../types/app.types'
 
 const WsOutEvent = {
   auth: 'auth',
   logout: 'logout',
+  prediction_join: 'prediction_join',
+  prediction_left: 'prediction_left',
 } as const
 
 type WsOutEvent = (typeof WsOutEvent)[keyof typeof WsOutEvent]
@@ -13,6 +17,7 @@ type WsOutEvent = (typeof WsOutEvent)[keyof typeof WsOutEvent]
 const WsInEvent = {
   notify: 'notify',
   balance: 'balance',
+  prediction_refresh: 'prediction_refresh',
 } as const
 
 type WsInEvent = (typeof WsInEvent)[keyof typeof WsInEvent]
@@ -112,6 +117,7 @@ class WebSocketService {
   private handleMessage(msg: WsInMessage) {
     if (msg.type === WsInEvent.notify) store.dispatch(addNotification(msg.value))
     else if (msg.type === WsInEvent.balance) store.dispatch(setBalance(msg.value))
+    else if (msg.type === WsInEvent.prediction_refresh) this.predictionUpdate(msg.value)
     else console.log(`Unknown message type: ${msg.type} with value: ${msg.value}`)
   }
 
@@ -132,7 +138,20 @@ class WebSocketService {
     }
   }
 
-  // Notification commands
+  // Incoming events
+
+  private predictionUpdate(prediction: IPredictionDetail) {
+    if (prediction && prediction.id) {
+      store.dispatch(
+        (api.util as any).updateQueryData('getPrediction', prediction.id, (draft: IPredictionDetail) => {
+          Object.assign(draft, prediction)
+        }),
+      )
+    }
+  }
+
+  // Outgoing commands
+
   auth(token: string) {
     this.token = token
     this.send(WsOutEvent.auth, token)
@@ -143,17 +162,13 @@ class WebSocketService {
     this.send(WsOutEvent.logout, null)
   }
 
-  // sendMarkAllAsRead() {
-  //   this.send(WsOutEvent.notification_all_read, null)
-  // }
+  predictionJoin(predictionId: number) {
+    this.send(WsOutEvent.prediction_join, predictionId)
+  }
 
-  // sendRemoveNotification(notificationId: string) {
-  //   this.send(WsOutEvent.notification_remove, notificationId)
-  // }
-
-  // sendClearAllNotifications() {
-  //   this.send(WsOutEvent.notification_clear, null)
-  // }
+  predictionLeave(predictionId: number) {
+    this.send(WsOutEvent.prediction_left, predictionId)
+  }
 }
 
 export const wsService = new WebSocketService()

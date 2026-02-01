@@ -21,7 +21,7 @@ const applyTheme = (theme: 'light' | 'dark') => {
   const root = document.documentElement
   if (theme === 'light') {
     root.style.setProperty('--color-primary', '#222')
-    root.style.setProperty('--color-secondary', '#444')
+    root.style.setProperty('--color-secondary', '#888')
     root.style.setProperty('--color-body', '#fff')
     root.style.setProperty('--color-head', '#fff')
     root.style.setProperty('--color-dialog', '#fff')

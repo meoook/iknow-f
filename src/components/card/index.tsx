@@ -26,7 +26,7 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
           <div className={`${style.bar} ${color}`} style={{ width: prediction.multiplier + '%' }}>
             &nbsp;
           </div>
-          <span>{prediction.multiplier.toFixed(0) || 0}</span>
+          <span>{prediction.multiplier.toFixed(0) || 0}X</span>
         </div>
       </div>
       <div className='row center justify'>

@@ -55,11 +55,10 @@
   }
 
   .change {
-    display: flex;
-    align-items: center;
-    min-width: 54px;
+    min-width: 124px;
     gap: 2px;
     color: var(--color-green);
-    font-size: var(--font-size-xs);
+    // font-size: var(--font-size-xs);
+    text-align: right;
   }
 }
