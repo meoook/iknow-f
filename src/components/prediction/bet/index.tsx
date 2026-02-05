@@ -21,7 +21,7 @@ export default function BetItem({ bet }: ToggleProps) {
       <div className={style.main}>
         <PredictionHead icon={bet.prediction.icon} title={bet.prediction.title} />
         <PredictionStatus
-          group={bet.prediction.group}
+          tags={bet.prediction.tags}
           state={bet.state}
           date={bet.prediction.end_date}
           created={bet.created}

@@ -47,7 +47,7 @@ export interface IRequest {
   state: string
   reject_reason: string
   group: string
-  tag: string
+  tags: string[]
   icon?: string
   title: string
   rules: string
@@ -91,6 +91,7 @@ export interface IPredictionDetail {
   state: TPredictionState
   title: string
   group: string
+  tags: string[]
   icon: string
   volume: number
   multiplier: number
@@ -105,6 +106,7 @@ interface IBetPrediction {
   id: number
   title: string
   group: string
+  tags: string[]
   icon: string
   volume: number
   end_date: string

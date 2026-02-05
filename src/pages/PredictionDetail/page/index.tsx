@@ -82,7 +82,7 @@ export const PredictionDetail = () => {
         </div>
         <div className='column gap12'>
           <PredictionStatus
-            group={prediction.group}
+            tags={prediction.tags}
             state={prediction.state}
             date={prediction.end_date}
             closed={prediction.closed}
