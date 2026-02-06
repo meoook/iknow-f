@@ -6,7 +6,6 @@ import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
 import { toggleTheme } from '../../store/app.slice'
 import { setShowLoginModal } from '../../store/auth.slice'
 import { useModal } from '../../hooks/hooks'
-import { wsService } from '../../services/websocket'
 import type { IUser } from '../../types/auth.types'
 import IconSprite from '../../elements/icon/Icon'
 import Modal from '../../elements/modal'
@@ -28,7 +27,6 @@ export default function UserMenu() {
   const logOut = () => {
     setIsMenuOpen(false)
     signOut()
-    wsService.logout()
   }
 
   const handleToggleTheme = () => {

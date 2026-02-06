@@ -4,7 +4,7 @@ import { Home } from './pages/Home'
 import { Group } from './pages/Group'
 import { Requests } from './pages/Requests'
 import { Profile } from './pages/Profile'
-import { wsService } from './services/websocket'
+import { wsManger } from './services/websocket'
 import { useAppSelector } from './hooks/useRedux'
 import Header from './components/header'
 import { PredictionDetail } from './pages/PredictionDetail/page'
@@ -15,7 +15,7 @@ export default function NavRouter() {
   useGetConfigQuery()
 
   useEffect(() => {
-    wsService.connect()
+    wsManger.connect()
   }, [])
 
   return (

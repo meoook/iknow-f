@@ -2,7 +2,6 @@ import { configureStore } from '@reduxjs/toolkit'
 import { api } from '../services/api'
 import authReducer from './auth.slice'
 import appReducer from './app.slice'
-import { websocketMiddleware } from './websocketMiddleware'
 import { authMiddleware } from './authMiddleware'
 
 export const store = configureStore({
@@ -12,7 +11,7 @@ export const store = configureStore({
     app: appReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware, websocketMiddleware, authMiddleware),
+    getDefaultMiddleware().concat(api.middleware, authMiddleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

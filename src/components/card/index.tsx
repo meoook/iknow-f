@@ -11,10 +11,11 @@ interface PredictionCardProps {
 export default function PredictionCard({ prediction }: PredictionCardProps) {
   const volume = intlNumber('ru-RU', prediction.volume)
   const color = prediction.multiplier > 80 ? style.red : prediction.multiplier > 50 ? style.orange : style.green
+  const src = prediction.icon ? `${config.imgBaseUrl}${prediction.icon}` : `${config.imgBaseUrl}/icon/no_icon.png`
   return (
     <Link to={`/prediction/${prediction.id}`} className={style.card}>
       <div className='row center gap8'>
-        <img src={prediction.icon || `${config.imgBaseUrl}/icon/no_icon.png`} alt={prediction.title} />
+        <img src={src} alt={prediction.title} />
         <h3 className='clamp-2' title={prediction.title}>
           {prediction.title}
         </h3>

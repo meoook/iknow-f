@@ -15,7 +15,7 @@ export default function RequestItem({ request, isLast }: { request: IRequest; is
 
         <div className={style.main}>
           <div className='column gap12 grow'>
-            <PredictionHead title={request.title} />
+            <PredictionHead title={request.title} icon={request.icon} />
             <PredictionStatus tags={request.tags} state={request.state} date={request.end_date} />
             <p className={style.rules}>{request.rules}</p>
 

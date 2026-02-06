@@ -92,11 +92,12 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
     )
   }
 
+  const src = prediction.icon ? `${config.imgBaseUrl}${prediction.icon}` : `${config.imgBaseUrl}/icon/no_icon.png`
   return (
     <aside className={style.panel}>
       <div className={style.bet}>
         <div className='row center gap12'>
-          <img className={style.icon} src={prediction.icon || `${config.imgBaseUrl}/icon/no_icon.png`} alt='' />
+          <img className={style.icon} src={src} alt='' />
           <h3 className='clamp-2'>{selectedChoice?.title || 'Выберите вариант'}</h3>
         </div>
 

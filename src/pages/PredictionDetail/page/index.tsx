@@ -10,7 +10,7 @@ import TradePanel from '../panel'
 import PredictionTabs from '../tabs/main'
 import PredictionHead from '../../../components/head'
 import PredictionStatus from '../../../components/status'
-import { wsService } from '../../../services/websocket'
+import { wsManger } from '../../../services/websocket'
 
 export const PredictionDetail = () => {
   const { id } = useParams<{ id: string }>()
@@ -29,10 +29,10 @@ export const PredictionDetail = () => {
     if (!prediction?.id) return
     const id = Number(prediction.id)
 
-    wsService.predictionJoin(id)
+    wsManger.predictionJoin(id)
 
     return () => {
-      wsService.predictionLeave(id)
+      wsManger.predictionLeave(id)
     }
   }, [prediction?.id])
 

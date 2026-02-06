@@ -11,10 +11,11 @@ interface PredictionHeadProps {
 export default function PredictionHead({ icon, title, big, progress }: PredictionHeadProps) {
   const MIN_SCALE = 0.8
   const scale = Math.max(MIN_SCALE, 1 - 0.9 * (progress || 0))
+  const src = icon ? `${config.imgBaseUrl}${icon}` : `${config.imgBaseUrl}/icon/no_icon.png`
   return (
     <div className={style.head}>
       <div className='row center gap12' style={{ transform: `scale(${scale})` }}>
-        <img src={icon || `${config.imgBaseUrl}/icon/no_icon.png`} alt={title} />
+        <img src={src} alt={title} />
         {big ? <h1>{title}</h1> : <h3>{title}</h3>}
       </div>
       <div className={style.hr} style={{ opacity: progress || 0 }} />
