@@ -35,6 +35,9 @@ nav {
   justify-content: space-between;
   color: var(--color-secondary);
 
+  overflow-x: scroll;
+  scrollbar-width: none;
+
   .item {
     display: inline-flex;
     align-items: center;

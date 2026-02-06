@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Outlet, useLocation, Navigate } from 'react-router-dom'
 import { Home } from './pages/Home'
 import { Group } from './pages/Group'
 import { Requests } from './pages/Requests'
@@ -11,6 +11,7 @@ import Footer from './components/footer'
 import { PredictionDetail } from './pages/PredictionDetail/page'
 import { useGetConfigQuery } from './services/api'
 import ModalLogin from './modals/login'
+import Page404 from './pages/404'
 
 export default function NavRouter() {
   useGetConfigQuery()
@@ -55,7 +56,8 @@ export default function NavRouter() {
           <Route path='/' element={<Home />} />
 
           {/* 404 fallback */}
-          <Route path='*' element={<Navigate to='/' replace />} />
+          <Route path='*' element={<Page404 />} />
+          {/* <Route path='*' element={<Navigate to='/' replace />} /> */}
         </Routes>
       </main>
       <Footer />
