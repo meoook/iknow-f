@@ -7,6 +7,7 @@ import { Profile } from './pages/Profile'
 import { wsManger } from './services/websocket'
 import { useAppSelector } from './hooks/useRedux'
 import Header from './components/header'
+import Footer from './components/footer'
 import { PredictionDetail } from './pages/PredictionDetail/page'
 import { useGetConfigQuery } from './services/api'
 import ModalLogin from './modals/login'
@@ -57,6 +58,7 @@ export default function NavRouter() {
           <Route path='*' element={<Navigate to='/' replace />} />
         </Routes>
       </main>
+      <Footer />
     </BrowserRouter>
   )
 }
@@ -78,7 +80,10 @@ function LayoutNotAuthed() {
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }, [pathname])
   return null
 }

@@ -86,7 +86,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
           </div>
         </div>
         <div className={style.terms}>
-          Сделав ставку, вы соглашаетесь с <a href='#'>условиями</a>
+          Сделав ставку, вы соглашаетесь с <a href='/terms'>условиями</a>
         </div>
       </aside>
     )
@@ -197,7 +197,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
         </button>
       </div>
       <div className={style.terms}>
-        Сделав ставку, вы соглашаетесь с <a href='#'>условиями</a>
+        Сделав ставку, вы соглашаетесь с <a href='/terms'>условиями</a>
       </div>
     </aside>
   )
