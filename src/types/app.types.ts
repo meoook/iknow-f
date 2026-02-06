@@ -56,6 +56,7 @@ export interface IRequest {
   currency: TCurrency
   amount: number
   end_date: string
+  created: number
 }
 
 const TPredictionState = {
