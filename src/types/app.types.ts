@@ -16,7 +16,7 @@ export interface INotification {
   alert_type: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR'
   title: string
   text: string
-  created: string
+  created: number
 }
 
 export interface IAppState {
@@ -99,7 +99,7 @@ export interface IPredictionDetail {
   end_date: string
   rules: string
   closed: string
-  created: string
+  created: number
   choices: IChoice[]
 }
 
@@ -126,7 +126,7 @@ export interface IMyBet {
   currency: TCurrency
   amount: number
   win: number
-  created: string
+  created: number
   choice: IBetChoice
   prediction: IBetPrediction
 }
@@ -144,7 +144,7 @@ export interface IBet {
   currency: TCurrency
   amount: number
   title: string
-  created: string
+  created: number
 }
 
 export interface IComment {
@@ -155,10 +155,17 @@ export interface IComment {
   reactions: number
   is_liked: boolean
   owner: boolean
-  created: string
+  created: number
 }
 
 export interface ICommentCreate {
   prediction: number
+  text: string
+}
+
+export interface ICommentReport {
+  prediction: number
+  comment: number
+  reason: string
   text: string
 }

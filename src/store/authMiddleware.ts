@@ -1,6 +1,6 @@
 import type { Middleware } from '@reduxjs/toolkit'
 import { api } from '../services/api'
-import { wsManger } from '../services/websocket'
+import { wsManager } from '../services/websocket'
 
 /**
  * Middleware для автоматической загрузки данных пользователя:
@@ -35,12 +35,12 @@ export const authMiddleware: Middleware = (store) => {
       store.dispatch(api.endpoints.getNotifications.initiate(undefined, { forceRefetch: true }))
 
       const state = store.getState() as any
-      if (state.auth.token) wsManger.auth(state.auth.token)
+      if (state.auth.token) wsManager.auth(state.auth.token)
     }
 
     // Отключаем сокет при выходе или ошибке получения пользователя
     if (api.endpoints.singOut.matchFulfilled(action) || api.endpoints.getUser.matchRejected(action)) {
-      wsManger.logout()
+      wsManager.logout()
     }
 
     return result

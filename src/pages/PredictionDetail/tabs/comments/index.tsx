@@ -1,16 +1,16 @@
-import { useMemo } from 'react'
 import style from './comments.module.scss'
+import type { IComment } from '../../../../types/app.types'
+import { useMemo } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
 import { useAddLikeMutation, useDeleteCommentMutation, useRemoveLikeMutation } from '../../../../services/api'
-import type { IComment } from '../../../../types/app.types'
+import { useClickOutside, useModal } from '../../../../hooks/hooks'
 import { formatRelativeTime } from '../../../../utils/date'
+import { setShowLoginModal } from '../../../../store/auth.slice'
 import IconSprite from '../../../../elements/icon/Icon'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
-import { useClickOutside, useModal } from '../../../../hooks/hooks'
 import Modal from '../../../../elements/modal'
 import ModalReport from '../../../../modals/report'
-import { setShowLoginModal } from '../../../../store/auth.slice'
 
 interface PredictionTabCommentsProps {
   loading: boolean
@@ -60,8 +60,8 @@ function Comment({ comment, authed, prediction, dispatch }: CommentProps) {
 
   const toggleLike = (comment: IComment) => {
     if (!authed) return dispatch(setShowLoginModal(true))
-    if (comment.is_liked) dislikeComment({ comment: comment.id })
-    else likeComment({ comment: comment.id })
+    if (comment.is_liked) dislikeComment({ prediction, comment: comment.id })
+    else likeComment({ prediction, comment: comment.id })
   }
   const handleModalOpen = () => {
     if (!authed) return dispatch(setShowLoginModal(true))
@@ -72,7 +72,7 @@ function Comment({ comment, authed, prediction, dispatch }: CommentProps) {
   return (
     <div className='row gap12'>
       <Modal modal={modal} close={close}>
-        <ModalReport commentId={comment.id} close={close} />
+        <ModalReport prediction={prediction} commentId={comment.id} close={close} />
       </Modal>
       <Avatar src={comment.avatar} size='medium' />
       <div className='column start grow'>

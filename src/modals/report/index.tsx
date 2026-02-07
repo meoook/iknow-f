@@ -11,7 +11,13 @@ const REASONS = [
   { value: 'OTHER', label: 'Другое' },
 ]
 
-export default function ModalReport({ commentId, close }: { commentId: number; close: () => void }) {
+interface ModalReportProps {
+  prediction: number
+  commentId: number
+  close: () => void
+}
+
+export default function ModalReport({ prediction, commentId, close }: ModalReportProps) {
   const [text, setText] = useState('')
   const [reason, setReason] = useState('OTHER')
   const [reportSend] = useReportCommentMutation()
@@ -28,7 +34,7 @@ export default function ModalReport({ commentId, close }: { commentId: number; c
 
   const handleSubmit = () => {
     if (text.length > 0) {
-      reportSend({ comment: commentId, reason, text })
+      reportSend({ prediction, comment: commentId, reason, text })
         .unwrap()
         .then(() => close())
     }

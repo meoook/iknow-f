@@ -1,4 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import type { EntityState } from '@reduxjs/toolkit'
+import { createEntityAdapter } from '@reduxjs/toolkit'
+import { wsManager } from './websocket'
 import { config } from '../config/config'
 import type { IUser, IAuthResponse } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
@@ -15,8 +18,13 @@ import type {
   IComment,
   ICommentCreate,
   ISettings,
+  ICommentReport,
 } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
+
+export const commentsAdapter = createEntityAdapter<IComment>({
+  sortComparer: (a, b) => b.created - a.created,
+})
 
 export const api = createApi({
   reducerPath: 'api',
@@ -28,7 +36,7 @@ export const api = createApi({
       return headers
     },
   }),
-  tagTypes: ['User', 'Requests', 'Predictions', 'MyBets', 'Bets', 'Groups', 'Comments'],
+  tagTypes: ['User', 'Requests', 'Predictions', 'MyBets', 'Bets', 'Groups'],
   endpoints: (builder) => ({
     // Client endpoints
     getConfig: builder.query<ISettings, void>({
@@ -159,12 +167,68 @@ export const api = createApi({
       }),
       providesTags: ['Bets'],
     }),
-    getComments: builder.query<PaginatedResponse<IComment>, { id: number; limit?: number; offset?: number }>({
+
+    // Comments endpoints
+    getComments: builder.query<EntityState<IComment, number>, { id: number; limit?: number; offset?: number }>({
       query: ({ id, limit = 10, offset = 0 }) => ({
         url: `prediction/${id}/comments`,
         params: { limit, offset },
       }),
-      providesTags: ['Comments'],
+      transformResponse: (response: PaginatedResponse<IComment>) => {
+        return commentsAdapter.setAll(commentsAdapter.getInitialState(), response.data)
+      },
+      async onCacheEntryAdded(arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
+        try {
+          await cacheDataLoaded
+        } catch {
+          return
+        }
+        wsManager.predictionJoin(arg.id)
+
+        const handleCreated = (comment: IComment) => {
+          updateCachedData((draft) => {
+            commentsAdapter.addOne(draft, comment)
+          })
+        }
+        const handleUpdated = (comment: IComment) => {
+          updateCachedData((draft) => {
+            commentsAdapter.upsertOne(draft, comment)
+          })
+        }
+        const handleDeleted = (id: number) => {
+          updateCachedData((draft) => {
+            commentsAdapter.removeOne(draft, id)
+          })
+        }
+        const handleLike = (id: number) => {
+          updateCachedData((draft) => {
+            const comment = draft.entities[id]
+            if (comment) commentsAdapter.updateOne(draft, { id, changes: { reactions: (comment.reactions || 0) + 1 } })
+          })
+        }
+        const handleDislike = (id: number) => {
+          updateCachedData((draft) => {
+            const comment = draft.entities[id]
+            if (comment) commentsAdapter.updateOne(draft, { id, changes: { reactions: (comment.reactions || 0) - 1 } })
+          })
+        }
+
+        wsManager.subscribe('comment.created', handleCreated)
+        wsManager.subscribe('comment.updated', handleUpdated)
+        wsManager.subscribe('comment.deleted', handleDeleted)
+        wsManager.subscribe('comment.like', handleLike)
+        wsManager.subscribe('comment.dislike', handleDislike)
+
+        await cacheEntryRemoved
+
+        wsManager.predictionLeave(arg.id)
+
+        wsManager.unsubscribe('comment.created', handleCreated)
+        wsManager.unsubscribe('comment.updated', handleUpdated)
+        wsManager.unsubscribe('comment.deleted', handleDeleted)
+        wsManager.unsubscribe('comment.like', handleLike)
+        wsManager.unsubscribe('comment.dislike', handleDislike)
+      },
     }),
     createComment: builder.mutation<IComment, ICommentCreate>({
       query: (payload) => ({
@@ -172,36 +236,90 @@ export const api = createApi({
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['Comments'],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled
+        dispatch(
+          api.util.updateQueryData('getComments', { id: arg.prediction }, (draft) => {
+            commentsAdapter.addOne(draft, data)
+          }),
+        )
+      },
     }),
     deleteComment: builder.mutation<void, { prediction: number; comment: number }>({
       query: ({ prediction, comment }) => ({
         url: `prediction/${prediction}/comments/${comment}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Comments'],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const patch = dispatch(
+          api.util.updateQueryData('getComments', { id: arg.prediction }, (draft) => {
+            commentsAdapter.removeOne(draft, arg.comment)
+          }),
+        )
+
+        try {
+          await queryFulfilled
+        } catch {
+          patch.undo()
+        }
+      },
     }),
-    addLike: builder.mutation<void, { comment: number }>({
-      query: ({ comment }) => ({
-        url: `comments/${comment}/like`,
+    addLike: builder.mutation<void, { prediction: number; comment: number }>({
+      query: ({ prediction, comment }) => ({
+        url: `prediction/${prediction}/comments/${comment}/like`,
         method: 'POST',
       }),
-      invalidatesTags: ['Comments'],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const patch = dispatch(
+          api.util.updateQueryData('getComments', { id: arg.prediction }, (draft) => {
+            const comment = draft.entities[arg.comment]
+            if (comment) {
+              commentsAdapter.updateOne(draft, {
+                id: arg.comment,
+                changes: { reactions: (comment.reactions || 0) + 1, is_liked: true },
+              })
+            }
+          }),
+        )
+
+        try {
+          await queryFulfilled
+        } catch {
+          patch.undo()
+        }
+      },
     }),
-    removeLike: builder.mutation<void, { comment: number }>({
-      query: ({ comment }) => ({
-        url: `comments/${comment}/like`,
+    removeLike: builder.mutation<void, { prediction: number; comment: number }>({
+      query: ({ prediction, comment }) => ({
+        url: `prediction/${prediction}/comments/${comment}/like`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Comments'],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const patch = dispatch(
+          api.util.updateQueryData('getComments', { id: arg.prediction }, (draft) => {
+            const comment = draft.entities[arg.comment]
+            if (comment) {
+              commentsAdapter.updateOne(draft, {
+                id: arg.comment,
+                changes: { reactions: (comment.reactions || 0) - 1, is_liked: false },
+              })
+            }
+          }),
+        )
+
+        try {
+          await queryFulfilled
+        } catch {
+          patch.undo()
+        }
+      },
     }),
-    reportComment: builder.mutation<void, { comment: number; reason: string; text: string }>({
-      query: ({ comment, reason, text }) => ({
-        url: `comments/${comment}/report`,
+    reportComment: builder.mutation<void, ICommentReport>({
+      query: ({ prediction, comment, reason, text }) => ({
+        url: `prediction/${prediction}/comments/${comment}/report`,
         method: 'POST',
         body: { reason, text },
       }),
-      invalidatesTags: ['Comments'],
     }),
 
     // Public endpoints

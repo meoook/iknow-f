@@ -4,7 +4,7 @@ import { Home } from './pages/Home'
 import { Group } from './pages/Group'
 import { Requests } from './pages/Requests'
 import { Profile } from './pages/Profile'
-import { wsManger } from './services/websocket'
+import { wsManager } from './services/websocket'
 import { useAppSelector } from './hooks/useRedux'
 import Header from './components/header'
 import Footer from './components/footer'
@@ -17,7 +17,7 @@ export default function NavRouter() {
   useGetConfigQuery()
 
   useEffect(() => {
-    wsManger.connect()
+    wsManager.connect()
   }, [])
 
   return (
@@ -73,11 +73,11 @@ function LayoutProtected() {
 }
 
 // Layout for auth-only routes (login page)
-function LayoutNotAuthed() {
-  const token = useAppSelector((state) => state.auth.token)
-  if (token) return <Navigate to='/' replace />
-  return <Outlet />
-}
+// function LayoutNotAuthed() {
+//   const token = useAppSelector((state) => state.auth.token)
+//   if (token) return <Navigate to='/' replace />
+//   return <Outlet />
+// }
 // Scroll to top on route change
 function ScrollToTop() {
   const { pathname } = useLocation()

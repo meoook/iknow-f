@@ -6,7 +6,7 @@ interface PredictionStatusProps {
   state: string
   date: string
   closed?: string
-  created?: string
+  created?: number
 }
 
 export default function PredictionStatus({ tags, state, date, closed, created }: PredictionStatusProps) {
