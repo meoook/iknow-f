@@ -23,6 +23,9 @@ const WsInEvent = {
   comment_deleted: 'comment.deleted',
   comment_like: 'comment.like',
   comment_dislike: 'comment.dislike',
+  request_created: 'request.created',
+  request_updated: 'request.updated',
+  request_deleted: 'request.deleted',
 } as const
 
 type WsInEvent = (typeof WsInEvent)[keyof typeof WsInEvent]

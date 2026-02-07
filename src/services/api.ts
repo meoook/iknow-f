@@ -97,27 +97,27 @@ export const apiBase = createApi({
     getNotifications: builder.query<INotification[], void>({
       query: () => 'auth/user/notification',
     }),
-    readNotification: builder.mutation<void, number>({
-      query: (payload) => ({
-        url: `auth/user/notification/${payload}`,
-        method: 'PUT',
-      }),
-    }),
     readAllNotifications: builder.mutation<void, void>({
       query: () => ({
         url: 'auth/user/notification/all/read',
         method: 'PUT',
       }),
     }),
-    deleteNotification: builder.mutation<void, number>({
-      query: (payload) => ({
-        url: `auth/user/notification/${payload}`,
-        method: 'DELETE',
-      }),
-    }),
     deleteAllNotifications: builder.mutation<void, void>({
       query: () => ({
         url: 'auth/user/notification/all/delete',
+        method: 'DELETE',
+      }),
+    }),
+    readNotification: builder.mutation<void, number>({
+      query: (payload) => ({
+        url: `auth/user/notification/${payload}`,
+        method: 'PUT',
+      }),
+    }),
+    deleteNotification: builder.mutation<void, number>({
+      query: (payload) => ({
+        url: `auth/user/notification/${payload}`,
         method: 'DELETE',
       }),
     }),
