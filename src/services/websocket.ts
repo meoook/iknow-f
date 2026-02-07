@@ -2,7 +2,7 @@ import { config } from '../config/config'
 import { store } from '../store/store'
 import { addNotification } from '../store/app.slice'
 import { setBalance } from '../store/auth.slice'
-import { api } from './api'
+import { apiBase } from './api'
 import type { IPredictionDetail } from '../types/app.types'
 
 const WsOutEvent = {
@@ -151,7 +151,7 @@ class WebSocketManager {
   private predictionUpdate(prediction: IPredictionDetail) {
     if (prediction && prediction.id) {
       store.dispatch(
-        (api.util as any).updateQueryData('getPrediction', prediction.id, (draft: IPredictionDetail) => {
+        (apiBase.util as any).updateQueryData('getPrediction', prediction.id, (draft: IPredictionDetail) => {
           Object.assign(draft, prediction)
         }),
       )

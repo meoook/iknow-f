@@ -1,8 +1,14 @@
+import React from 'react'
 import style from './comments.module.scss'
-import type { IComment } from '../../../../types/app.types'
 import { useMemo } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
-import { useAddLikeMutation, useDeleteCommentMutation, useRemoveLikeMutation } from '../../../../services/api'
+import {
+  useAddLikeMutation,
+  useDeleteCommentMutation,
+  useGetCommentsQuery,
+  useRemoveLikeMutation,
+} from '../../../../services/comments/api'
+import { commentsSelectors } from '../../../../services/comments/adapter'
 import { useClickOutside, useModal } from '../../../../hooks/hooks'
 import { formatRelativeTime } from '../../../../utils/date'
 import { setShowLoginModal } from '../../../../store/auth.slice'
@@ -15,50 +21,59 @@ import ModalReport from '../../../../modals/report'
 interface PredictionTabCommentsProps {
   loading: boolean
   prediction: number
-  comments?: IComment[]
+  commentIds: number[]
 }
 
 interface CommentProps {
-  comment: IComment
+  commentId: number
   authed: boolean
   prediction: number
-  dispatch: any
 }
 
-export default function PredictionTabComments({ loading, prediction, comments }: PredictionTabCommentsProps) {
-  const dispatch = useAppDispatch()
+export default function PredictionTabComments({ loading, prediction, commentIds }: PredictionTabCommentsProps) {
   const { user } = useAppSelector((state) => state.auth)
 
   if (loading) return <Empty title='Загрузка...' loading={true} />
-  if (!comments?.length) return <Empty title='Нет комментариев' size={24} />
+  if (!commentIds.length) return <Empty title='Нет комментариев' size={24} />
 
   return (
     <div className={style.comments}>
-      {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} authed={!!user} prediction={prediction} dispatch={dispatch} />
+      {commentIds.map((commentId) => (
+        <Comment key={commentId} commentId={commentId} authed={!!user} prediction={prediction} />
       ))}
     </div>
   )
 }
 
-function Comment({ comment, authed, prediction, dispatch }: CommentProps) {
+const CommentBase = ({ commentId, authed, prediction }: CommentProps) => {
+  const dispatch = useAppDispatch()
+  const { comment } = useGetCommentsQuery(
+    { id: prediction },
+    {
+      selectFromResult: ({ data }) => ({
+        comment: data ? commentsSelectors.selectById(data, commentId) : undefined,
+      }),
+    },
+  )
+
+  if (!comment) return null
+
   const [likeComment] = useAddLikeMutation()
   const [dislikeComment] = useRemoveLikeMutation()
   const [deleteComment] = useDeleteCommentMutation()
   const [menuRef, isMenuOpen, menuToogle] = useClickOutside()
   const [modal, open, close] = useModal()
 
-  const { settings } = useAppSelector((state) => state.app)
+  const deleteHours = useAppSelector((s) => s.app.settings.delete)
 
   const canDelete = useMemo(() => {
     if (!comment.owner) return false
     const created = new Date(comment.created).getTime()
-    const now = new Date().getTime()
-    const diffHours = (now - created) / (1000 * 60 * 60)
-    return diffHours <= settings.delete
-  }, [comment.owner, comment.created, settings.delete])
+    const diffHours = (Date.now() - created) / 36e5
+    return diffHours <= deleteHours
+  }, [comment.owner, comment.created, deleteHours])
 
-  const toggleLike = (comment: IComment) => {
+  const toggleLike = () => {
     if (!authed) return dispatch(setShowLoginModal(true))
     if (comment.is_liked) dislikeComment({ prediction, comment: comment.id })
     else likeComment({ prediction, comment: comment.id })
@@ -106,7 +121,7 @@ function Comment({ comment, authed, prediction, dispatch }: CommentProps) {
           </div>
         </div>
         <div className={style.text}>{comment.text}</div>
-        <button className={`${style.like}${comment.is_liked ? ' active' : ''}`} onClick={() => toggleLike(comment)}>
+        <button className={`${style.like}${comment.is_liked ? ' active' : ''}`} onClick={toggleLike}>
           <IconSprite name='favorite' size={16} />
           <span>{comment.reactions}</span>
         </button>
@@ -114,3 +129,5 @@ function Comment({ comment, authed, prediction, dispatch }: CommentProps) {
     </div>
   )
 }
+
+const Comment = React.memo(CommentBase)

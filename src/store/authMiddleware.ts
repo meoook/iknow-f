@@ -1,5 +1,5 @@
 import type { Middleware } from '@reduxjs/toolkit'
-import { api } from '../services/api'
+import { apiBase } from '../services/api'
 import { wsManager } from '../services/websocket'
 
 /**
@@ -15,7 +15,7 @@ export const authMiddleware: Middleware = (store) => {
     if (state.auth.token && !state.auth.user) {
       // Токен есть (из localStorage), но пользователя нет - загружаем
       // @ts-ignore - RTK Query dispatch type mismatch
-      store.dispatch(api.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
+      store.dispatch(apiBase.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
     }
   }, 0)
 
@@ -24,22 +24,22 @@ export const authMiddleware: Middleware = (store) => {
     const result = next(action)
 
     // После успешной аутентификации или инициализации автоматически загружаем пользователя
-    if (api.endpoints.w3auth.matchFulfilled(action) || api.endpoints.emailAuth.matchFulfilled(action)) {
+    if (apiBase.endpoints.w3auth.matchFulfilled(action) || apiBase.endpoints.emailAuth.matchFulfilled(action)) {
       // @ts-ignore - RTK Query dispatch type mismatch
-      store.dispatch(api.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
+      store.dispatch(apiBase.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
     }
 
     // Загружаем уведомления и аутентифицируем сокет после успешного получения данных пользователя
-    if (api.endpoints.getUser.matchFulfilled(action)) {
+    if (apiBase.endpoints.getUser.matchFulfilled(action)) {
       // @ts-ignore - RTK Query dispatch type mismatch
-      store.dispatch(api.endpoints.getNotifications.initiate(undefined, { forceRefetch: true }))
+      store.dispatch(apiBase.endpoints.getNotifications.initiate(undefined, { forceRefetch: true }))
 
       const state = store.getState() as any
       if (state.auth.token) wsManager.auth(state.auth.token)
     }
 
     // Отключаем сокет при выходе или ошибке получения пользователя
-    if (api.endpoints.singOut.matchFulfilled(action) || api.endpoints.getUser.matchRejected(action)) {
+    if (apiBase.endpoints.singOut.matchFulfilled(action) || apiBase.endpoints.getUser.matchRejected(action)) {
       wsManager.logout()
     }
 

@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { IAppState, INotification } from '../types/app.types'
-import { api } from '../services/api'
+import { apiBase } from '../services/api'
 
 // Функция для определения начальной темы
 const getInitialTheme = (): 'light' | 'dark' => {
@@ -58,27 +58,27 @@ const appSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(api.endpoints.getConfig.matchFulfilled, (state, action) => {
+    builder.addMatcher(apiBase.endpoints.getConfig.matchFulfilled, (state, action) => {
       state.settings = action.payload
     })
-    builder.addMatcher(api.endpoints.getNotifications.matchFulfilled, (state, action) => {
+    builder.addMatcher(apiBase.endpoints.getNotifications.matchFulfilled, (state, action) => {
       state.notifications = action.payload
       state.unreadCount = action.payload.filter((n) => !n.read).length
     })
-    builder.addMatcher(api.endpoints.readNotification.matchFulfilled, (state, action) => {
+    builder.addMatcher(apiBase.endpoints.readNotification.matchFulfilled, (state, action) => {
       const notification = state.notifications.find((n) => n.id === action.meta.arg.originalArgs)
       if (notification && !notification.read) {
         notification.read = true
         state.unreadCount = Math.max(0, state.unreadCount - 1)
       }
     })
-    builder.addMatcher(api.endpoints.readAllNotifications.matchFulfilled, (state) => {
+    builder.addMatcher(apiBase.endpoints.readAllNotifications.matchFulfilled, (state) => {
       state.notifications.forEach((n) => {
         n.read = true
       })
       state.unreadCount = 0
     })
-    builder.addMatcher(api.endpoints.deleteNotification.matchFulfilled, (state, action) => {
+    builder.addMatcher(apiBase.endpoints.deleteNotification.matchFulfilled, (state, action) => {
       const index = state.notifications.findIndex((n) => n.id === action.meta.arg.originalArgs)
       if (index !== -1) {
         const notification = state.notifications[index]
@@ -86,7 +86,7 @@ const appSlice = createSlice({
         state.notifications.splice(index, 1)
       }
     })
-    builder.addMatcher(api.endpoints.deleteAllNotifications.matchFulfilled, (state) => {
+    builder.addMatcher(apiBase.endpoints.deleteAllNotifications.matchFulfilled, (state) => {
       state.notifications = []
       state.unreadCount = 0
     })

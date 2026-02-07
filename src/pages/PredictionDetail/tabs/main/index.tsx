@@ -1,20 +1,17 @@
 import style from './tabs.module.scss'
-import { useState } from 'react'
-import {
-  useCreateCommentMutation,
-  useGetBetsQuery,
-  useGetCommentsQuery,
-  commentsAdapter,
-} from '../../../../services/api'
 import type { IPredictionDetail } from '../../../../types/app.types'
+import { useState } from 'react'
+import { useGetBetsQuery } from '../../../../services/api'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
+import { useCreateCommentMutation } from '../../../../services/comments/api'
+import { useCommentIds } from '../../../../services/comments/adapter'
+import { setShowLoginModal } from '../../../../store/auth.slice'
 import { formatRelativeTime } from '../../../../utils/date'
 import IconSprite from '../../../../elements/icon/Icon'
 import Avatar from '../../../../elements/avatar'
 import Loader from '../../../../elements/loader'
 import Empty from '../../../../elements/empty'
-import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
 import PredictionTabComments from '../comments'
-import { setShowLoginModal } from '../../../../store/auth.slice'
 
 interface PredictionTabsProps {
   prediction: IPredictionDetail
@@ -25,9 +22,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
   const { user } = useAppSelector((state) => state.auth)
   const [createComment, { isLoading: isPosting }] = useCreateCommentMutation()
   const [activeTab, setActiveTab] = useState<'comments' | 'holders' | 'activity'>('comments')
-  const { data, isLoading } = useGetCommentsQuery({ id: prediction.id })
-  const comments = data ? commentsAdapter.getSelectors().selectAll(data) : []
-
+  const { commentIds, isLoading } = useCommentIds(prediction.id)
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!user) return dispatch(setShowLoginModal(true))
@@ -49,7 +44,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
         <button
           className={`${style.tab}${activeTab === 'comments' ? ' active' : ''}`}
           onClick={() => setActiveTab('comments')}>
-          Комментарии {comments.length ? `(${comments.length})` : ''}
+          Комментарии {commentIds.length ? `(${commentIds.length})` : ''}
         </button>
         <button
           className={`${style.tab}${activeTab === 'holders' ? ' active' : ''}`}
@@ -89,7 +84,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
               </div>
             </div>
 
-            <PredictionTabComments loading={isLoading} prediction={prediction.id} comments={comments} />
+            <PredictionTabComments loading={isLoading} prediction={prediction.id} commentIds={commentIds} />
           </>
         )}
 
