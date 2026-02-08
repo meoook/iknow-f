@@ -2,18 +2,36 @@ import { apiBase } from '../api'
 
 import type { EntityState } from '@reduxjs/toolkit'
 import type { PaginatedResponse, IComment, ICommentCreate, ICommentReport } from '../../types/app.types'
-import { commentsAdapter } from './adapter'
+import { commentsAdapter, commentsSelectors } from './adapter'
 import { wsManager } from '../websocket'
 
 export const commentsApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({
-    getComments: builder.query<EntityState<IComment, number>, { id: number; limit?: number; offset?: number }>({
+    getComments: builder.query<
+      EntityState<IComment, number> & { total: number },
+      { id: number; limit?: number; offset?: number }
+    >({
       query: ({ id, limit = 10, offset = 0 }) => ({
         url: `prediction/${id}/comments`,
         params: { limit, offset },
       }),
+      serializeQueryArgs: ({ queryArgs }) => {
+        return { id: queryArgs.id }
+      },
+      merge: (currentCache, newItems) => {
+        if (currentCache.total !== newItems.total) {
+          currentCache.total = newItems.total
+        }
+        commentsAdapter.addMany(currentCache, commentsSelectors.selectAll(newItems))
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.offset !== previousArg?.offset
+      },
       transformResponse: (response: PaginatedResponse<IComment>) => {
-        return commentsAdapter.setAll(commentsAdapter.getInitialState(), response.data)
+        return {
+          ...commentsAdapter.setAll(commentsAdapter.getInitialState(), response.data),
+          total: response.total,
+        }
       },
       async onCacheEntryAdded(arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
         try {
@@ -25,7 +43,11 @@ export const commentsApi = apiBase.injectEndpoints({
 
         const handleCreated = (comment: IComment) => {
           updateCachedData((draft) => {
-            commentsAdapter.addOne(draft, comment)
+            const exists = draft.ids.includes(comment.id)
+            if (!exists) {
+              commentsAdapter.addOne(draft, comment)
+              if (draft.total !== undefined) draft.total += 1
+            }
           })
         }
         const handleUpdated = (comment: IComment) => {
@@ -36,6 +58,7 @@ export const commentsApi = apiBase.injectEndpoints({
         const handleDeleted = (id: number) => {
           updateCachedData((draft) => {
             commentsAdapter.removeOne(draft, id)
+            if (draft.total !== undefined) draft.total -= 1
           })
         }
         const handleLike = (id: number) => {
@@ -110,13 +133,10 @@ export const commentsApi = apiBase.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const patch = dispatch(
           commentsApi.util.updateQueryData('getComments', { id: arg.prediction }, (draft) => {
-            const comment = draft.entities[arg.comment]
-            if (comment) {
-              commentsAdapter.updateOne(draft, {
-                id: arg.comment,
-                changes: { reactions: (comment.reactions || 0) + 1, is_liked: true },
-              })
-            }
+            commentsAdapter.updateOne(draft, {
+              id: arg.comment,
+              changes: { reactions: draft.entities[arg.comment]!.reactions + 1, is_liked: true },
+            })
           }),
         )
 
@@ -135,13 +155,10 @@ export const commentsApi = apiBase.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const patch = dispatch(
           commentsApi.util.updateQueryData('getComments', { id: arg.prediction }, (draft) => {
-            const comment = draft.entities[arg.comment]
-            if (comment) {
-              commentsAdapter.updateOne(draft, {
-                id: arg.comment,
-                changes: { reactions: (comment.reactions || 0) - 1, is_liked: false },
-              })
-            }
+            commentsAdapter.updateOne(draft, {
+              id: arg.comment,
+              changes: { reactions: draft.entities[arg.comment]!.reactions - 1, is_liked: false },
+            })
           }),
         )
 

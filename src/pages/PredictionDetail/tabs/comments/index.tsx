@@ -1,6 +1,6 @@
 import React from 'react'
 import style from './comments.module.scss'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
 import {
   useAddLikeMutation,
@@ -22,6 +22,8 @@ interface PredictionTabCommentsProps {
   loading: boolean
   prediction: number
   commentIds: number[]
+  loadMore: () => void
+  hasMore: boolean
 }
 
 interface CommentProps {
@@ -30,8 +32,36 @@ interface CommentProps {
   prediction: number
 }
 
-export default function PredictionTabComments({ loading, prediction, commentIds }: PredictionTabCommentsProps) {
+export default function PredictionTabComments({
+  loading,
+  prediction,
+  commentIds,
+  loadMore,
+  hasMore,
+}: PredictionTabCommentsProps) {
   const { user } = useAppSelector((state) => state.auth)
+  const observerTarget = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          loadMore()
+        }
+      },
+      { threshold: 1.0 },
+    )
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current)
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current)
+      }
+    }
+  }, [hasMore, loading, loadMore])
 
   if (loading) return <Empty title='Загрузка...' loading={true} />
   if (!commentIds.length) return <Empty title='Нет комментариев' size={24} />
@@ -41,6 +71,7 @@ export default function PredictionTabComments({ loading, prediction, commentIds 
       {commentIds.map((commentId) => (
         <Comment key={commentId} commentId={commentId} authed={!!user} prediction={prediction} />
       ))}
+      <div ref={observerTarget} style={{ height: 20, margin: '10px 0' }} />
     </div>
   )
 }

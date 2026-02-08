@@ -1,6 +1,7 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction, type Update } from '@reduxjs/toolkit'
 import type { IAppState, INotification } from '../types/app.types'
 import { apiBase } from '../services/api'
+import { notificationAdapter } from './notification.adapter'
 
 // Функция для определения начальной темы
 const getInitialTheme = (): 'light' | 'dark' => {
@@ -12,8 +13,7 @@ const getInitialTheme = (): 'light' | 'dark' => {
 const initialState: IAppState = {
   theme: getInitialTheme(),
   settings: { multiplier: 0, fee: 0, min_cash: 0, min_point: 0, min_cash_create: 0, min_point_create: 0, delete: 0 },
-  notifications: [],
-  unreadCount: 0,
+  notifications: notificationAdapter.getInitialState(),
 }
 
 // Применяем тему к CSS переменным
@@ -53,8 +53,7 @@ const appSlice = createSlice({
       applyTheme(state.theme)
     },
     addNotification: (state, action: PayloadAction<INotification>) => {
-      state.notifications.unshift(action.payload)
-      if (!action.payload.read) state.unreadCount += 1
+      notificationAdapter.addOne(state.notifications, action.payload)
     },
   },
   extraReducers: (builder) => {
@@ -62,33 +61,26 @@ const appSlice = createSlice({
       state.settings = action.payload
     })
     builder.addMatcher(apiBase.endpoints.getNotifications.matchFulfilled, (state, action) => {
-      state.notifications = action.payload
-      state.unreadCount = action.payload.filter((n) => !n.read).length
+      notificationAdapter.setAll(state.notifications, action.payload)
     })
     builder.addMatcher(apiBase.endpoints.readNotification.matchFulfilled, (state, action) => {
-      const notification = state.notifications.find((n) => n.id === action.meta.arg.originalArgs)
-      if (notification && !notification.read) {
-        notification.read = true
-        state.unreadCount = Math.max(0, state.unreadCount - 1)
-      }
+      notificationAdapter.updateOne(state.notifications, {
+        id: action.meta.arg.originalArgs,
+        changes: { read: true },
+      })
     })
     builder.addMatcher(apiBase.endpoints.readAllNotifications.matchFulfilled, (state) => {
-      state.notifications.forEach((n) => {
-        n.read = true
-      })
-      state.unreadCount = 0
+      const updates: Update<INotification, number>[] = state.notifications.ids.map((id) => ({
+        id,
+        changes: { read: true },
+      }))
+      notificationAdapter.updateMany(state.notifications, updates)
     })
     builder.addMatcher(apiBase.endpoints.deleteNotification.matchFulfilled, (state, action) => {
-      const index = state.notifications.findIndex((n) => n.id === action.meta.arg.originalArgs)
-      if (index !== -1) {
-        const notification = state.notifications[index]
-        if (!notification.read) state.unreadCount = Math.max(0, state.unreadCount - 1)
-        state.notifications.splice(index, 1)
-      }
+      notificationAdapter.removeOne(state.notifications, action.meta.arg.originalArgs)
     })
     builder.addMatcher(apiBase.endpoints.deleteAllNotifications.matchFulfilled, (state) => {
-      state.notifications = []
-      state.unreadCount = 0
+      notificationAdapter.removeAll(state.notifications)
     })
   },
 })

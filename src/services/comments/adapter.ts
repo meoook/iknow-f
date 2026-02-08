@@ -8,24 +8,13 @@ export const commentsAdapter = createEntityAdapter<IComment>({
 
 export const commentsSelectors = commentsAdapter.getSelectors()
 
-export const useComments = (id: number) => {
-  return useGetCommentsQuery(
-    { id },
-    {
-      selectFromResult: ({ data, isLoading }) => ({
-        comments: data ? commentsSelectors.selectAll(data) : [],
-        isLoading,
-      }),
-    },
-  )
-}
-
 export const useCommentIds = (predictionId: number) => {
   return useGetCommentsQuery(
     { id: predictionId },
     {
       selectFromResult: ({ data, isLoading }) => ({
         commentIds: data?.ids ?? [],
+        total: data?.total ?? 0,
         isLoading,
       }),
     },

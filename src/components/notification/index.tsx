@@ -1,7 +1,6 @@
+import React from 'react'
 import style from './notify.module.scss'
 import { useClickOutside } from '../../hooks/hooks'
-import { useAppSelector } from '../../hooks/useRedux'
-import type { INotification } from '../../types/app.types'
 import { formatRelativeTime } from '../../utils/date'
 import {
   useReadAllNotificationsMutation,
@@ -11,10 +10,13 @@ import {
 } from '../../services/api'
 import IconSprite from '../../elements/icon/Icon'
 
+import { useNotificationIds, useNotification, useUnreadCount } from '../../store/notification.adapter'
+
 export default function NotificationBell() {
   const [readAll] = useReadAllNotificationsMutation()
   const [deleteAll] = useDeleteAllNotificationsMutation()
-  const { notifications, unreadCount } = useAppSelector((state) => state.app)
+  const notificationIds = useNotificationIds()
+  const unreadCount = useUnreadCount()
   const [menuRef, isMenuOpen, menuToogle] = useClickOutside()
 
   const handleDeleteAll = () => {
@@ -37,7 +39,7 @@ export default function NotificationBell() {
         <div className={style.dropdown}>
           <div className={style.header}>
             <h3>Уведомления</h3>
-            {notifications.length > 0 && (
+            {notificationIds.length > 0 && (
               <button onClick={handleDeleteAll} className='btn btn-icon' title='Удалить все'>
                 <IconSprite name='delete' size={24} />
               </button>
@@ -45,15 +47,13 @@ export default function NotificationBell() {
           </div>
 
           <div className={`${style.list} noscroll`}>
-            {notifications.length === 0 ? (
+            {notificationIds.length === 0 ? (
               <div className={style.empty}>
                 <IconSprite name='bell-z' />
                 <div>Нет уведомлений</div>
               </div>
             ) : (
-              notifications.map((notification) => (
-                <NotificationItem key={notification.id} notification={notification} />
-              ))
+              notificationIds.map((id) => <Notification key={id} notificationId={id as number} />)
             )}
           </div>
         </div>
@@ -62,9 +62,12 @@ export default function NotificationBell() {
   )
 }
 
-function NotificationItem({ notification }: { notification: INotification }) {
+const NotificationItem = ({ notificationId }: { notificationId: number }) => {
+  const notification = useNotification(notificationId)
   const [readOne] = useReadNotificationMutation()
   const [deleteOne] = useDeleteNotificationMutation()
+
+  if (!notification) return null
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -90,3 +93,5 @@ function NotificationItem({ notification }: { notification: INotification }) {
     </div>
   )
 }
+
+const Notification = React.memo(NotificationItem)

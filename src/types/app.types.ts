@@ -1,3 +1,4 @@
+import type { EntityState } from '@reduxjs/toolkit'
 import type { TCurrency } from './auth.types'
 
 export interface ISettings {
@@ -22,8 +23,7 @@ export interface INotification {
 export interface IAppState {
   theme: 'light' | 'dark'
   settings: ISettings
-  notifications: INotification[]
-  unreadCount: number
+  notifications: EntityState<INotification, number>
 }
 
 export interface PaginatedResponse<T> {

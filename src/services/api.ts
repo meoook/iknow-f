@@ -32,7 +32,7 @@ export const apiBase = createApi({
       return headers
     },
   }),
-  tagTypes: ['User', 'Requests', 'Predictions', 'MyBets', 'Bets', 'Groups'],
+  tagTypes: ['Requests', 'Predictions', 'MyBets', 'Bets', 'Groups'],
   endpoints: (builder) => ({
     // Client endpoints
     getConfig: builder.query<ISettings, void>({
@@ -92,7 +92,6 @@ export const apiBase = createApi({
     }),
     getUser: builder.query<IUser, void>({
       query: () => 'auth/user',
-      providesTags: ['User'],
     }),
     getNotifications: builder.query<INotification[], void>({
       query: () => 'auth/user/notification',
@@ -128,7 +127,6 @@ export const apiBase = createApi({
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['User'],
     }),
 
     // Protected endpoints
