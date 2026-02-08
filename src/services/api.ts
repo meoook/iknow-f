@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { createEntityAdapter } from '@reduxjs/toolkit'
+import { createEntityAdapter, type EntityState } from '@reduxjs/toolkit'
 import { config } from '../config/config'
 import type { IUser, IAuthResponse } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
@@ -17,6 +17,9 @@ import type {
   ISettings,
 } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
+
+import { requestsAdapter } from './requests/adapter'
+import { wsManager } from './websocket'
 
 export const commentsAdapter = createEntityAdapter<IComment>({
   sortComparer: (a, b) => b.created - a.created,
@@ -130,9 +133,39 @@ export const apiBase = createApi({
     }),
 
     // Protected endpoints
-    getRequests: builder.query<PaginatedResponse<IRequest>, void>({
+    getRequests: builder.query<EntityState<IRequest, number>, void>({
       query: () => 'request',
       providesTags: ['Requests'],
+      transformResponse: (response: PaginatedResponse<IRequest>) => {
+        return requestsAdapter.setAll(requestsAdapter.getInitialState(), response.data)
+      },
+      async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
+        try {
+          await cacheDataLoaded
+        } catch {
+          return
+        }
+
+        const handleUpdated = (request: IRequest) => {
+          updateCachedData((draft) => {
+            requestsAdapter.upsertOne(draft, request)
+          })
+        }
+
+        const handleCreated = (request: IRequest) => {
+          updateCachedData((draft) => {
+            requestsAdapter.addOne(draft, request)
+          })
+        }
+
+        wsManager.subscribe('request.updated', handleUpdated)
+        wsManager.subscribe('request.created', handleCreated)
+
+        await cacheEntryRemoved
+
+        wsManager.unsubscribe('request.updated', handleUpdated)
+        wsManager.unsubscribe('request.created', handleCreated)
+      },
     }),
     createRequest: builder.mutation<any, IRequestCreate>({
       query: (payload) => ({

@@ -3,7 +3,7 @@ import type { IPredictionDetail } from '../../../../types/app.types'
 import { useState } from 'react'
 import { useGetBetsQuery } from '../../../../services/api'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
-import { commentsApi, useCreateCommentMutation } from '../../../../services/comments/api'
+import { useCreateCommentMutation } from '../../../../services/comments/api'
 import { useCommentIds } from '../../../../services/comments/adapter'
 import { setShowLoginModal } from '../../../../store/auth.slice'
 import { formatRelativeTime } from '../../../../utils/date'
@@ -22,15 +22,8 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
   const { user } = useAppSelector((state) => state.auth)
   const [createComment, { isLoading: isPosting }] = useCreateCommentMutation()
   const [activeTab, setActiveTab] = useState<'comments' | 'holders' | 'activity'>('comments')
-  const { commentIds, isLoading, total } = useCommentIds(prediction.id)
-  const [offset, setOffset] = useState(0)
+  const { total } = useCommentIds(prediction.id)
 
-  const loadMore = () => {
-    if (commentIds.length >= total) return
-    const newOffset = offset + 10
-    setOffset(newOffset)
-    dispatch(commentsApi.endpoints.getComments.initiate({ id: prediction.id, offset: newOffset }))
-  }
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!user) return dispatch(setShowLoginModal(true))
@@ -52,7 +45,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
         <button
           className={`${style.tab}${activeTab === 'comments' ? ' active' : ''}`}
           onClick={() => setActiveTab('comments')}>
-          Комментарии{commentIds.length ? ` (${commentIds.length})` : ''}
+          Комментарии{total ? ` (${total})` : ''}
         </button>
         <button
           className={`${style.tab}${activeTab === 'holders' ? ' active' : ''}`}
@@ -92,13 +85,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
               </div>
             </div>
 
-            <PredictionTabComments
-              loading={isLoading}
-              prediction={prediction.id}
-              commentIds={commentIds}
-              loadMore={loadMore}
-              hasMore={commentIds.length < total}
-            />
+            <PredictionTabComments prediction={prediction.id} />
           </>
         )}
 

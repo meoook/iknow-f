@@ -24,9 +24,6 @@ export const commentsApi = apiBase.injectEndpoints({
         }
         commentsAdapter.addMany(currentCache, commentsSelectors.selectAll(newItems))
       },
-      forceRefetch({ currentArg, previousArg }) {
-        return currentArg?.offset !== previousArg?.offset
-      },
       transformResponse: (response: PaginatedResponse<IComment>) => {
         return {
           ...commentsAdapter.setAll(commentsAdapter.getInitialState(), response.data),

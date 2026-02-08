@@ -12,10 +12,11 @@ export const useCommentIds = (predictionId: number) => {
   return useGetCommentsQuery(
     { id: predictionId },
     {
-      selectFromResult: ({ data, isLoading }) => ({
+      selectFromResult: ({ data, isLoading, isFetching }) => ({
         commentIds: data?.ids ?? [],
         total: data?.total ?? 0,
         isLoading,
+        isFetching,
       }),
     },
   )

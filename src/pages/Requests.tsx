@@ -1,6 +1,7 @@
 import Modal from '../elements/modal'
 import type { IMyBet, IRequest } from '../types/app.types'
-import { useGetRequestsQuery, useGetMyBetsQuery } from '../services/api'
+import { useGetMyBetsQuery } from '../services/api'
+import { useRequests } from '../services/requests/adapter'
 import { useModal } from '../hooks/hooks'
 import ModalPrediction from '../modals/prediction'
 import RequestItem from '../components/prediction/request'
@@ -8,7 +9,7 @@ import BetItem from '../components/prediction/bet'
 import Empty from '../elements/empty'
 
 export const Requests = () => {
-  const { data, isLoading, error } = useGetRequestsQuery()
+  const { requests, isLoading, isError: error } = useRequests()
   const { data: bets, isLoading: betsLoading, error: betsError } = useGetMyBetsQuery()
   const [modal, open, close] = useModal()
 
@@ -25,13 +26,13 @@ export const Requests = () => {
           </button>
         </div>
         <hr />
-        {data?.data.length !== 0 && (
+        {requests.length !== 0 && (
           <>
             <div className='column gap12'>
               {isLoading && <div>Загрузка прогнозов...</div>}
               {error && <div className='error'>Ошибка загрузки прогнозов</div>}
-              {data?.data.map((request: IRequest, idx: number) => (
-                <RequestItem key={request.id} request={request} isLast={data?.data.length === idx + 1} />
+              {requests.map((request: IRequest, idx: number) => (
+                <RequestItem key={request.id} request={request} isLast={requests.length === idx + 1} />
               ))}
             </div>
             <hr className='hide' />

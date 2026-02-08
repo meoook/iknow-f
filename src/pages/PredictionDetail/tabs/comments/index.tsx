@@ -1,29 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState, useRef, useMemo } from 'react'
 import style from './comments.module.scss'
-import { useEffect, useMemo, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
+import { commentsApi } from '../../../../services/comments/api'
+import { commentsSelectors, useCommentIds } from '../../../../services/comments/adapter'
 import {
   useAddLikeMutation,
+  useRemoveLikeMutation,
   useDeleteCommentMutation,
   useGetCommentsQuery,
-  useRemoveLikeMutation,
 } from '../../../../services/comments/api'
-import { commentsSelectors } from '../../../../services/comments/adapter'
-import { useClickOutside, useModal } from '../../../../hooks/hooks'
-import { formatRelativeTime } from '../../../../utils/date'
 import { setShowLoginModal } from '../../../../store/auth.slice'
+import { formatRelativeTime } from '../../../../utils/date'
+import { useClickOutside, useModal } from '../../../../hooks/hooks'
+import ModalReport from '../../../../modals/report'
 import IconSprite from '../../../../elements/icon/Icon'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
 import Modal from '../../../../elements/modal'
-import ModalReport from '../../../../modals/report'
 
-interface PredictionTabCommentsProps {
-  loading: boolean
+export interface PredictionTabCommentsProps {
   prediction: number
-  commentIds: number[]
-  loadMore: () => void
-  hasMore: boolean
 }
 
 interface CommentProps {
@@ -32,20 +28,27 @@ interface CommentProps {
   prediction: number
 }
 
-export default function PredictionTabComments({
-  loading,
-  prediction,
-  commentIds,
-  loadMore,
-  hasMore,
-}: PredictionTabCommentsProps) {
-  const { user } = useAppSelector((state) => state.auth)
+export default function PredictionTabComments({ prediction }: PredictionTabCommentsProps) {
+  const limit = 10
+  const dispatch = useAppDispatch()
   const observerTarget = useRef<HTMLDivElement>(null)
+  const { user } = useAppSelector((state) => state.auth)
+  const { commentIds, isLoading, total, isFetching } = useCommentIds(prediction)
+  const [offset, setOffset] = useState(0)
+
+  const loadMore = () => {
+    if (commentIds.length >= total || isFetching) return
+    const newOffset = offset + limit
+    setOffset(newOffset)
+    dispatch(
+      commentsApi.endpoints.getComments.initiate({ id: prediction, limit, offset: newOffset }, { forceRefetch: true }),
+    )
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
+        if (entries[0].isIntersecting && commentIds.length < total && !isLoading && !isFetching) {
           loadMore()
         }
       },
@@ -61,9 +64,9 @@ export default function PredictionTabComments({
         observer.unobserve(observerTarget.current)
       }
     }
-  }, [hasMore, loading, loadMore])
+  }, [commentIds.length, total, isLoading, isFetching, loadMore])
 
-  if (loading) return <Empty title='Загрузка...' loading={true} />
+  if (isLoading) return <Empty title='Загрузка...' loading={true} />
   if (!commentIds.length) return <Empty title='Нет комментариев' size={24} />
 
   return (
