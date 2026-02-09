@@ -16,7 +16,7 @@ type WsOutEvent = (typeof WsOutEvent)[keyof typeof WsOutEvent]
 
 const WsInEvent = {
   notify: 'notify',
-  balance: 'balance',
+  balance_updated: 'balance.updated',
   prediction_updated: 'prediction.updated',
   comment_created: 'comment.created',
   comment_updated: 'comment.updated',
@@ -26,6 +26,10 @@ const WsInEvent = {
   request_created: 'request.created',
   request_updated: 'request.updated',
   request_deleted: 'request.deleted',
+  mybet_created: 'my.bet.created',
+  mybet_updated: 'my.bet.updated',
+  bet_created: 'bet.created',
+  bet_updated: 'bet.updated',
 } as const
 
 type WsInEvent = (typeof WsInEvent)[keyof typeof WsInEvent]
@@ -111,7 +115,7 @@ class WebSocketManager {
 
   private handleMessage(msg: WsInMessage) {
     if (msg.type === WsInEvent.notify) store.dispatch(addNotification(msg.value))
-    else if (msg.type === WsInEvent.balance) store.dispatch(setBalance(msg.value))
+    else if (msg.type === WsInEvent.balance_updated) store.dispatch(setBalance(msg.value))
     else if (msg.type === WsInEvent.prediction_updated) this.predictionUpdate(msg.value)
     else {
       const handlers = this.handlers.get(msg.type)

@@ -2,13 +2,8 @@ import React, { useEffect, useState, useRef, useMemo } from 'react'
 import style from './comments.module.scss'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
 import { commentsApi } from '../../../../services/comments/api'
-import { commentsSelectors, useCommentIds } from '../../../../services/comments/adapter'
-import {
-  useAddLikeMutation,
-  useRemoveLikeMutation,
-  useDeleteCommentMutation,
-  useGetCommentsQuery,
-} from '../../../../services/comments/api'
+import { useComment, useCommentIds } from '../../../../services/comments/adapter'
+import { useAddLikeMutation, useRemoveLikeMutation, useDeleteCommentMutation } from '../../../../services/comments/api'
 import { setShowLoginModal } from '../../../../store/auth.slice'
 import { formatRelativeTime } from '../../../../utils/date'
 import { useClickOutside, useModal } from '../../../../hooks/hooks'
@@ -19,21 +14,15 @@ import Empty from '../../../../elements/empty'
 import Modal from '../../../../elements/modal'
 
 export interface PredictionTabCommentsProps {
-  prediction: number
+  predictionId: number
 }
 
-interface CommentProps {
-  commentId: number
-  authed: boolean
-  prediction: number
-}
-
-export default function PredictionTabComments({ prediction }: PredictionTabCommentsProps) {
+export default function PredictionTabComments({ predictionId }: PredictionTabCommentsProps) {
   const limit = 10
   const dispatch = useAppDispatch()
   const observerTarget = useRef<HTMLDivElement>(null)
   const { user } = useAppSelector((state) => state.auth)
-  const { commentIds, isLoading, total, isFetching } = useCommentIds(prediction)
+  const { commentIds, isLoading, total, isFetching } = useCommentIds(predictionId)
   const [offset, setOffset] = useState(0)
 
   const loadMore = () => {
@@ -41,28 +30,24 @@ export default function PredictionTabComments({ prediction }: PredictionTabComme
     const newOffset = offset + limit
     setOffset(newOffset)
     dispatch(
-      commentsApi.endpoints.getComments.initiate({ id: prediction, limit, offset: newOffset }, { forceRefetch: true }),
+      commentsApi.endpoints.getComments.initiate(
+        { id: predictionId, limit, offset: newOffset },
+        { forceRefetch: true },
+      ),
     )
   }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && commentIds.length < total && !isLoading && !isFetching) {
-          loadMore()
-        }
+        if (entries[0].isIntersecting && commentIds.length < total && !isLoading && !isFetching) loadMore()
       },
       { threshold: 1.0 },
     )
-
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current)
-    }
+    if (observerTarget.current) observer.observe(observerTarget.current)
 
     return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current)
-      }
+      if (observerTarget.current) observer.unobserve(observerTarget.current)
     }
   }, [commentIds.length, total, isLoading, isFetching, loadMore])
 
@@ -72,23 +57,22 @@ export default function PredictionTabComments({ prediction }: PredictionTabComme
   return (
     <div className={style.comments}>
       {commentIds.map((commentId) => (
-        <Comment key={commentId} commentId={commentId} authed={!!user} prediction={prediction} />
+        <Comment key={commentId} authed={!!user} predictionId={predictionId} commentId={commentId} />
       ))}
-      <div ref={observerTarget} style={{ height: 20, margin: '10px 0' }} />
+      <div ref={observerTarget} className='more' />
     </div>
   )
 }
 
-const CommentBase = ({ commentId, authed, prediction }: CommentProps) => {
+interface CommentProps {
+  authed: boolean
+  predictionId: number
+  commentId: number
+}
+
+const CommentBase = ({ authed, predictionId, commentId }: CommentProps) => {
   const dispatch = useAppDispatch()
-  const { comment } = useGetCommentsQuery(
-    { id: prediction },
-    {
-      selectFromResult: ({ data }) => ({
-        comment: data ? commentsSelectors.selectById(data, commentId) : undefined,
-      }),
-    },
-  )
+  const comment = useComment(predictionId, commentId)
 
   if (!comment) return null
 
@@ -109,8 +93,8 @@ const CommentBase = ({ commentId, authed, prediction }: CommentProps) => {
 
   const toggleLike = () => {
     if (!authed) return dispatch(setShowLoginModal(true))
-    if (comment.is_liked) dislikeComment({ prediction, comment: comment.id })
-    else likeComment({ prediction, comment: comment.id })
+    if (comment.is_liked) dislikeComment({ predictionId, commentId: comment.id })
+    else likeComment({ predictionId, commentId: comment.id })
   }
   const handleModalOpen = () => {
     if (!authed) return dispatch(setShowLoginModal(true))
@@ -121,7 +105,7 @@ const CommentBase = ({ commentId, authed, prediction }: CommentProps) => {
   return (
     <div className='row gap12'>
       <Modal modal={modal} close={close}>
-        <ModalReport prediction={prediction} commentId={comment.id} close={close} />
+        <ModalReport predictionId={predictionId} commentId={comment.id} close={close} />
       </Modal>
       <Avatar src={comment.avatar} size='medium' />
       <div className='column start grow'>
@@ -144,7 +128,7 @@ const CommentBase = ({ commentId, authed, prediction }: CommentProps) => {
                   {canDelete && (
                     <button
                       className={style.btn}
-                      onClick={() => deleteComment({ prediction: prediction, comment: comment.id })}>
+                      onClick={() => deleteComment({ predictionId, commentId: comment.id })}>
                       <IconSprite name='delete' size={18} />
                       <span>Удалить</span>
                     </button>

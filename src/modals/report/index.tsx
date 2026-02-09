@@ -12,12 +12,12 @@ const REASONS = [
 ]
 
 interface ModalReportProps {
-  prediction: number
+  predictionId: number
   commentId: number
   close: () => void
 }
 
-export default function ModalReport({ prediction, commentId, close }: ModalReportProps) {
+export default function ModalReport({ predictionId, commentId, close }: ModalReportProps) {
   const [text, setText] = useState('')
   const [reason, setReason] = useState('OTHER')
   const [reportSend] = useReportCommentMutation()
@@ -34,7 +34,7 @@ export default function ModalReport({ prediction, commentId, close }: ModalRepor
 
   const handleSubmit = () => {
     if (text.length > 0) {
-      reportSend({ prediction, comment: commentId, reason, text })
+      reportSend({ predictionId, commentId, reason, text })
         .unwrap()
         .then(() => close())
     }

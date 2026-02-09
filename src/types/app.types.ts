@@ -31,6 +31,34 @@ export interface PaginatedResponse<T> {
   data: T[]
 }
 
+type IPaginatedRequest<RequireId extends boolean = false> = RequireId extends true
+  ? {
+      id: number
+      limit?: number
+      offset?: number
+    }
+  : {
+      limit?: number
+      offset?: number
+    }
+
+export type PaginatedArg<RequireId extends boolean = false> = RequireId extends true
+  ? IPaginatedRequest<true>
+  : IPaginatedRequest | undefined
+
+export type EntityStateWithTotal<T> = EntityState<T, number> & { total: number }
+// interface PaginatedBase {
+//   limit?: number
+//   offset?: number
+// }
+
+// type PaginatedWithId = PaginatedBase & {
+//   id: number
+// }
+
+// type OptionalQueryArg<T> = T | undefined
+// type RequiredQueryArg<T> = T
+
 export interface IRequestCreate {
   icon?: File
   title: string
@@ -164,8 +192,8 @@ export interface ICommentCreate {
 }
 
 export interface ICommentReport {
-  prediction: number
-  comment: number
+  predictionId: number
+  commentId: number
   reason: string
   text: string
 }

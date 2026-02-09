@@ -53,7 +53,7 @@ export default function NotificationBell() {
                 <div>Нет уведомлений</div>
               </div>
             ) : (
-              notificationIds.map((id) => <Notification key={id} notificationId={id as number} />)
+              notificationIds.map((id) => <Notification key={id} notificationId={id} />)
             )}
           </div>
         </div>

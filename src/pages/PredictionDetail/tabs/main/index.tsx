@@ -1,17 +1,14 @@
 import style from './tabs.module.scss'
 import type { IPredictionDetail } from '../../../../types/app.types'
 import { useState } from 'react'
-import { useGetBetsQuery } from '../../../../services/api'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
 import { useCreateCommentMutation } from '../../../../services/comments/api'
 import { useCommentIds } from '../../../../services/comments/adapter'
 import { setShowLoginModal } from '../../../../store/auth.slice'
-import { formatRelativeTime } from '../../../../utils/date'
 import IconSprite from '../../../../elements/icon/Icon'
-import Avatar from '../../../../elements/avatar'
-import Loader from '../../../../elements/loader'
 import Empty from '../../../../elements/empty'
 import PredictionTabComments from '../comments'
+import PredictionTabBets from '../bets'
 
 interface PredictionTabsProps {
   prediction: IPredictionDetail
@@ -85,43 +82,14 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
               </div>
             </div>
 
-            <PredictionTabComments prediction={prediction.id} />
+            <PredictionTabComments predictionId={prediction.id} />
           </>
         )}
 
         {activeTab === 'holders' && <Empty title='Список топ-предсказателей скоро появится' size={48} icon='star' />}
 
-        {activeTab === 'activity' && <PredictionTabBets prediction={prediction} />}
+        {activeTab === 'activity' && <PredictionTabBets predictionId={prediction.id} />}
       </div>
     </div>
-  )
-}
-
-function PredictionTabBets({ prediction }: PredictionTabsProps) {
-  const { data, isLoading } = useGetBetsQuery({ id: prediction.id })
-  if (isLoading) return <Empty title='Загрузка...' loading={true} />
-  return (
-    <>
-      {data?.data.map((bet) => (
-        <div key={bet.id} className='row gap12 center'>
-          <Avatar src={bet.avatar} />
-          <div className='row grow gap4'>
-            <b>{bet.username.length > 20 ? `${bet.username.slice(0, 17)}...` : bet.username}</b>
-            <span className='color-gray'>ставка</span>
-            <b className='color-green'>
-              {bet.currency === 'POINT' ? '¢' : '$'}
-              {bet.amount.toFixed(2)}
-            </b>
-            <span className='color-gray'>на</span>
-            <b>{bet.title}</b>
-          </div>
-          <div className='color-gray nowrap'>{formatRelativeTime(bet.created)}</div>
-        </div>
-      ))}
-      <div className='row gap12 center middle'>
-        <Loader />
-        <span>Загрузка...</span>
-      </div>
-    </>
   )
 }

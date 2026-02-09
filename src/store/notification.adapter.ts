@@ -11,13 +11,11 @@ export const notificationSelectors = notificationAdapter.getSelectors((state: Ro
 
 export const useNotificationIds = () => useAppSelector(notificationSelectors.selectIds)
 
-export const useNotification = (id: number) => {
+export const useNotification = (id: number): INotification | undefined => {
   return useAppSelector((state) => notificationSelectors.selectById(state, id))
 }
 
 export const useUnreadCount = () => {
-  return useAppSelector((state) => {
-    const notifications = notificationSelectors.selectAll(state)
-    return notifications.filter((n) => !n.read).length
-  })
+  const notifications = useAppSelector(notificationSelectors.selectAll)
+  return notifications.filter((n) => !n.read).length
 }

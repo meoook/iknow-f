@@ -287,6 +287,11 @@
   border: 1px solid var(--color-border);
   border-radius: 4px;
   color: var(--color-secondary);
+
+  max-width: 240px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .label {
@@ -309,4 +314,9 @@
   scrollbar-gutter: stable;
   // Скрываем скроллбар для IE/Edge (старые версии)
   -ms-overflow-style: none;
+}
+
+.more {
+  height: 50px;
+  margin: 20px 0;
 }

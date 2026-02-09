@@ -1,12 +1,16 @@
+import React from 'react'
 import style from './request.module.scss'
-import type { IRequest } from '../../../types/app.types'
+import { useRequest } from '../../../services/requests/adapter'
 import IconSprite from '../../../elements/icon/Icon'
 import Loader from '../../../elements/loader'
 import VoteItem from '../vote'
 import PredictionHead from '../../head'
 import PredictionStatus from '../../status'
 
-export default function RequestItem({ request, isLast }: { request: IRequest; isLast?: boolean }) {
+const RequestItem = ({ requestId, isLast }: { requestId: number; isLast?: boolean }) => {
+  const request = useRequest(requestId)
+  if (!request) return null
+
   const iClass = request.state === 'REJECTED' ? style.red : request.state === 'VALIDATE' ? style.blue : style.green
   return (
     <>
@@ -63,3 +67,4 @@ export default function RequestItem({ request, isLast }: { request: IRequest; is
     </>
   )
 }
+export default React.memo(RequestItem)

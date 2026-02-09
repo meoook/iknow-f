@@ -1,34 +1,29 @@
 import { apiBase } from '../api'
-
-import type { EntityState } from '@reduxjs/toolkit'
-import type { PaginatedResponse, IComment, ICommentCreate, ICommentReport } from '../../types/app.types'
+import type {
+  PaginatedResponse,
+  PaginatedArg,
+  IComment,
+  ICommentCreate,
+  ICommentReport,
+  EntityStateWithTotal,
+} from '../../types/app.types'
 import { commentsAdapter, commentsSelectors } from './adapter'
 import { wsManager } from '../websocket'
 
 export const commentsApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({
-    getComments: builder.query<
-      EntityState<IComment, number> & { total: number },
-      { id: number; limit?: number; offset?: number }
-    >({
-      query: ({ id, limit = 10, offset = 0 }) => ({
+    getComments: builder.query<EntityStateWithTotal<IComment>, PaginatedArg<true>>({
+      query: ({ id, ...rest }) => ({
         url: `prediction/${id}/comments`,
-        params: { limit, offset },
+        params: rest,
       }),
-      serializeQueryArgs: ({ queryArgs }) => {
-        return { id: queryArgs.id }
-      },
-      merge: (currentCache, newItems) => {
-        if (currentCache.total !== newItems.total) {
-          currentCache.total = newItems.total
-        }
-        commentsAdapter.addMany(currentCache, commentsSelectors.selectAll(newItems))
-      },
       transformResponse: (response: PaginatedResponse<IComment>) => {
-        return {
-          ...commentsAdapter.setAll(commentsAdapter.getInitialState(), response.data),
-          total: response.total,
-        }
+        return { ...commentsAdapter.setAll(commentsAdapter.getInitialState(), response.data), total: response.total }
+      },
+      serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
+      merge: (currentCache, newItems) => {
+        if (currentCache.total !== newItems.total) currentCache.total = newItems.total
+        commentsAdapter.addMany(currentCache, commentsSelectors.selectAll(newItems))
       },
       async onCacheEntryAdded(arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
         try {
@@ -103,15 +98,15 @@ export const commentsApi = apiBase.injectEndpoints({
         )
       },
     }),
-    deleteComment: builder.mutation<void, { prediction: number; comment: number }>({
-      query: ({ prediction, comment }) => ({
-        url: `prediction/${prediction}/comments/${comment}`,
+    deleteComment: builder.mutation<void, { predictionId: number; commentId: number }>({
+      query: ({ predictionId, commentId }) => ({
+        url: `prediction/${predictionId}/comments/${commentId}`,
         method: 'DELETE',
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const patch = dispatch(
-          commentsApi.util.updateQueryData('getComments', { id: arg.prediction }, (draft) => {
-            commentsAdapter.removeOne(draft, arg.comment)
+          commentsApi.util.updateQueryData('getComments', { id: arg.predictionId }, (draft) => {
+            commentsAdapter.removeOne(draft, arg.commentId)
           }),
         )
 
@@ -122,17 +117,17 @@ export const commentsApi = apiBase.injectEndpoints({
         }
       },
     }),
-    addLike: builder.mutation<void, { prediction: number; comment: number }>({
-      query: ({ prediction, comment }) => ({
-        url: `prediction/${prediction}/comments/${comment}/like`,
+    addLike: builder.mutation<void, { predictionId: number; commentId: number }>({
+      query: ({ predictionId, commentId }) => ({
+        url: `prediction/${predictionId}/comments/${commentId}/like`,
         method: 'POST',
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const patch = dispatch(
-          commentsApi.util.updateQueryData('getComments', { id: arg.prediction }, (draft) => {
+          commentsApi.util.updateQueryData('getComments', { id: arg.predictionId }, (draft) => {
             commentsAdapter.updateOne(draft, {
-              id: arg.comment,
-              changes: { reactions: draft.entities[arg.comment]!.reactions + 1, is_liked: true },
+              id: arg.commentId,
+              changes: { reactions: draft.entities[arg.commentId]!.reactions + 1, is_liked: true },
             })
           }),
         )
@@ -144,17 +139,17 @@ export const commentsApi = apiBase.injectEndpoints({
         }
       },
     }),
-    removeLike: builder.mutation<void, { prediction: number; comment: number }>({
-      query: ({ prediction, comment }) => ({
-        url: `prediction/${prediction}/comments/${comment}/like`,
+    removeLike: builder.mutation<void, { predictionId: number; commentId: number }>({
+      query: ({ predictionId, commentId }) => ({
+        url: `prediction/${predictionId}/comments/${commentId}/like`,
         method: 'DELETE',
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const patch = dispatch(
-          commentsApi.util.updateQueryData('getComments', { id: arg.prediction }, (draft) => {
+          commentsApi.util.updateQueryData('getComments', { id: arg.predictionId }, (draft) => {
             commentsAdapter.updateOne(draft, {
-              id: arg.comment,
-              changes: { reactions: draft.entities[arg.comment]!.reactions - 1, is_liked: false },
+              id: arg.commentId,
+              changes: { reactions: draft.entities[arg.commentId]!.reactions - 1, is_liked: false },
             })
           }),
         )
@@ -167,7 +162,7 @@ export const commentsApi = apiBase.injectEndpoints({
       },
     }),
     reportComment: builder.mutation<void, ICommentReport>({
-      query: ({ prediction, comment, reason, text }) => ({
+      query: ({ predictionId: prediction, commentId: comment, reason, text }) => ({
         url: `prediction/${prediction}/comments/${comment}/report`,
         method: 'POST',
         body: { reason, text },

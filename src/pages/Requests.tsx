@@ -1,7 +1,6 @@
 import Modal from '../elements/modal'
-import type { IMyBet, IRequest } from '../types/app.types'
-import { useGetMyBetsQuery } from '../services/api'
-import { useRequests } from '../services/requests/adapter'
+import { useRequestIds } from '../services/requests/adapter'
+import { useMybetIds } from '../store/mybet.adapter'
 import { useModal } from '../hooks/hooks'
 import ModalPrediction from '../modals/prediction'
 import RequestItem from '../components/prediction/request'
@@ -9,8 +8,8 @@ import BetItem from '../components/prediction/bet'
 import Empty from '../elements/empty'
 
 export const Requests = () => {
-  const { requests, isLoading, isError: error } = useRequests()
-  const { data: bets, isLoading: betsLoading, error: betsError } = useGetMyBetsQuery()
+  const { requestIds, isLoading, isError } = useRequestIds()
+  const { mybetIds, isLoading: betsLoading, isError: betsError } = useMybetIds()
   const [modal, open, close] = useModal()
 
   return (
@@ -26,13 +25,13 @@ export const Requests = () => {
           </button>
         </div>
         <hr />
-        {requests.length !== 0 && (
+        {requestIds.length !== 0 && (
           <>
             <div className='column gap12'>
-              {isLoading && <div>Загрузка прогнозов...</div>}
-              {error && <div className='error'>Ошибка загрузки прогнозов</div>}
-              {requests.map((request: IRequest, idx: number) => (
-                <RequestItem key={request.id} request={request} isLast={requests.length === idx + 1} />
+              {isLoading && <Empty title='Загрузка прогнозов...' loading={true} />}
+              {isError && <Empty title='Ошибка загрузки прогнозов' />}
+              {requestIds.map((requestId: number, idx: number) => (
+                <RequestItem key={requestId} requestId={requestId} isLast={idx === requestIds.length - 1} />
               ))}
             </div>
             <hr className='hide' />
@@ -41,13 +40,13 @@ export const Requests = () => {
           </>
         )}
         <div className='column gap12'>
-          {bets?.data.length === 0 && <Empty title='У вас нет активных прогнозов' />}
+          {mybetIds.length === 0 && <Empty title='У вас нет активных прогнозов' />}
           {betsLoading && <Empty title='Загрузка прогнозов...' loading={true} />}
           {betsError && <Empty title='Ошибка загрузки прогнозов' />}
-          {bets?.data.length !== 0 && (
+          {mybetIds.length !== 0 && (
             <>
-              {bets?.data.map((bet: IMyBet) => (
-                <BetItem key={bet.id} bet={bet} />
+              {mybetIds.map((betId: number) => (
+                <BetItem key={betId} betId={betId} />
               ))}
             </>
           )}

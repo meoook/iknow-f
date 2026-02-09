@@ -1,16 +1,19 @@
+import React from 'react'
 import style from './bet.module.scss'
-import type { IMyBet } from '../../../types/app.types'
 import VoteItem from '../vote'
 import { Link } from 'react-router-dom'
 import PredictionHead from '../../head'
 import PredictionStatus from '../../status'
 import Progress from '../../../elements/progress'
+import { useMybet } from '../../../store/mybet.adapter'
 
 interface ToggleProps {
-  bet: IMyBet
+  betId: number
 }
 
-export default function BetItem({ bet }: ToggleProps) {
+const BetItem = ({ betId }: ToggleProps) => {
+  const bet = useMybet(betId)
+  if (!bet) return null
   let badgeStyle = style.badge
   if (bet.state === 'WIN') badgeStyle += ` ${style.green}`
   else if (bet.state === 'LOSE') badgeStyle += ` ${style.red}`
@@ -32,3 +35,5 @@ export default function BetItem({ bet }: ToggleProps) {
     </Link>
   )
 }
+
+export default React.memo(BetItem)

@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { createEntityAdapter, type EntityState } from '@reduxjs/toolkit'
 import { config } from '../config/config'
 import type { IUser, IAuthResponse } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
@@ -13,17 +12,16 @@ import type {
   IRequestCreate,
   PaginatedResponse,
   IBet,
-  IComment,
   ISettings,
+  PaginatedArg,
+  EntityStateWithTotal,
 } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
 import { requestsAdapter } from './requests/adapter'
 import { wsManager } from './websocket'
-
-export const commentsAdapter = createEntityAdapter<IComment>({
-  sortComparer: (a, b) => b.created - a.created,
-})
+import { mybetAdapter } from '../store/mybet.adapter'
+import { betAdapter } from '../store/bet.adapter'
 
 export const apiBase = createApi({
   reducerPath: 'api',
@@ -35,7 +33,7 @@ export const apiBase = createApi({
       return headers
     },
   }),
-  tagTypes: ['Requests', 'Predictions', 'MyBets', 'Bets', 'Groups'],
+  tagTypes: ['Predictions', 'MyBets', 'Bets', 'Groups'],
   endpoints: (builder) => ({
     // Client endpoints
     getConfig: builder.query<ISettings, void>({
@@ -133,11 +131,13 @@ export const apiBase = createApi({
     }),
 
     // Protected endpoints
-    getRequests: builder.query<EntityState<IRequest, number>, void>({
-      query: () => 'request',
-      providesTags: ['Requests'],
+    getRequests: builder.query<EntityStateWithTotal<IRequest>, PaginatedArg>({
+      query: (params) => ({
+        url: 'request',
+        params,
+      }),
       transformResponse: (response: PaginatedResponse<IRequest>) => {
-        return requestsAdapter.setAll(requestsAdapter.getInitialState(), response.data)
+        return { ...requestsAdapter.setAll(requestsAdapter.getInitialState(), response.data), total: response.total }
       },
       async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
         try {
@@ -146,9 +146,9 @@ export const apiBase = createApi({
           return
         }
 
-        const handleUpdated = (request: IRequest) => {
+        const handleUpdated = (request: Partial<IRequest>) => {
           updateCachedData((draft) => {
-            requestsAdapter.upsertOne(draft, request)
+            if (request.id) requestsAdapter.updateOne(draft, { id: request.id, changes: request })
           })
         }
 
@@ -157,47 +157,128 @@ export const apiBase = createApi({
             requestsAdapter.addOne(draft, request)
           })
         }
+        const handleDeleted = (id: number) => {
+          updateCachedData((draft) => {
+            requestsAdapter.removeOne(draft, id)
+          })
+        }
 
         wsManager.subscribe('request.updated', handleUpdated)
         wsManager.subscribe('request.created', handleCreated)
+        wsManager.subscribe('request.deleted', handleDeleted)
 
         await cacheEntryRemoved
 
         wsManager.unsubscribe('request.updated', handleUpdated)
         wsManager.unsubscribe('request.created', handleCreated)
+        wsManager.unsubscribe('request.deleted', handleDeleted)
       },
     }),
-    createRequest: builder.mutation<any, IRequestCreate>({
+    createRequest: builder.mutation<IRequest, IRequestCreate>({
       query: (payload) => ({
         url: 'request',
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['Requests'],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled
+        dispatch(
+          apiBase.util.updateQueryData('getRequests', undefined, (draft) => {
+            requestsAdapter.addOne(draft, data)
+          }),
+        )
+      },
     }),
-    getMyBets: builder.query<PaginatedResponse<IMyBet>, void>({
-      query: () => 'bet/my',
-      providesTags: ['MyBets'],
+    getMyBets: builder.query<EntityStateWithTotal<IMyBet>, PaginatedArg>({
+      query: (params) => ({
+        url: 'bet/my',
+        params,
+      }),
+      transformResponse: (response: PaginatedResponse<IMyBet>) => {
+        return { ...mybetAdapter.setAll(mybetAdapter.getInitialState(), response.data), total: response.total }
+      },
+      async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
+        try {
+          await cacheDataLoaded
+        } catch {
+          return
+        }
+
+        const handleUpdated = (bet: Partial<IMyBet>) => {
+          updateCachedData((draft) => {
+            if (bet.id) mybetAdapter.updateOne(draft, { id: bet.id, changes: bet })
+          })
+        }
+
+        const handleCreated = (bet: IMyBet) => {
+          updateCachedData((draft) => {
+            mybetAdapter.addOne(draft, bet)
+          })
+        }
+
+        wsManager.subscribe('my.bet.updated', handleUpdated)
+        wsManager.subscribe('my.bet.created', handleCreated)
+
+        await cacheEntryRemoved
+
+        wsManager.unsubscribe('my.bet.updated', handleUpdated)
+        wsManager.unsubscribe('my.bet.created', handleCreated)
+      },
     }),
-    createMyBet: builder.mutation<void, IBetCreate>({
+    createMyBet: builder.mutation<IMyBet, IBetCreate>({
       query: (payload) => ({
         url: 'bet/my',
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['MyBets'],
-    }),
-    getBets: builder.query<PaginatedResponse<IBet>, { id: number; limit?: number; offset?: number }>({
-      query: ({ id, limit = 10, offset = 0 }) => ({
-        url: 'bet',
-        params: { prediction: id, limit, offset },
-      }),
-      providesTags: ['Bets'],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        const { data } = await queryFulfilled
+        dispatch(
+          apiBase.util.updateQueryData('getMyBets', undefined, (draft) => {
+            mybetAdapter.addOne(draft, data)
+          }),
+        )
+      },
     }),
 
     // Public endpoints
-    getPredictions: builder.query<PaginatedResponse<IPrediction>, void>({
-      query: () => 'prediction',
+    getBets: builder.query<EntityStateWithTotal<IBet>, PaginatedArg<true>>({
+      query: ({ id, ...rest }) => ({
+        url: `prediction/${id}/bets`,
+        params: rest,
+      }),
+      transformResponse: (response: PaginatedResponse<IBet>) => {
+        return { ...betAdapter.setAll(betAdapter.getInitialState(), response.data), total: response.total }
+      },
+      serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
+      merge: (currentCache, newItems) => {
+        currentCache.entities = { ...currentCache.entities, ...newItems.entities }
+        currentCache.ids = [...currentCache.ids, ...newItems.ids]
+        currentCache.total = newItems.total
+      },
+      async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
+        try {
+          await cacheDataLoaded
+        } catch {
+          return
+        }
+
+        const handleCreated = (bet: IBet) => {
+          updateCachedData((draft) => {
+            betAdapter.addOne(draft, bet)
+          })
+        }
+
+        wsManager.subscribe('bet.created', handleCreated)
+        await cacheEntryRemoved
+        wsManager.unsubscribe('bet.created', handleCreated)
+      },
+    }),
+    getPredictions: builder.query<PaginatedResponse<IPrediction>, PaginatedArg>({
+      query: (params) => ({
+        url: 'prediction',
+        params,
+      }),
       providesTags: ['Predictions'],
     }),
     searchPredictions: builder.query<any[], string>({
@@ -206,7 +287,6 @@ export const apiBase = createApi({
     }),
     getPrediction: builder.query<IPredictionDetail, number>({
       query: (id) => `prediction/${id}`,
-      // providesTags: ['Predictions'],
     }),
   }),
 })
