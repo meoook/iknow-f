@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react'
-import style from './comments.module.scss'
 import { useAppDispatch } from '../../../../hooks/useRedux'
 import { commentsApi } from '../../../../services/comments/api'
 import { useBet, useBetIds } from '../../../../store/bet.adapter'
