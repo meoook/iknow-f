@@ -1,0 +1,47 @@
+.container {
+  position: fixed;
+  bottom: 24px;
+  right: calc(50% - 40px);
+  // width: 44px;
+  // height: 44px;
+  padding: 8px 16px 8px 18px;
+  // border-radius: 50%;
+  border-radius: 40px;
+  // background-color: var(--color-brand);
+  // color: #fff;
+  background-color: var(--color-hover);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease-in-out;
+  z-index: 15;
+  box-shadow: 0 0 6px var(--color-shadow);
+  border: 1px solid var(--color-shadow);
+  gap: 4px;
+
+  &.visible {
+    opacity: 0.85;
+    visibility: visible;
+  }
+
+  &:hover {
+    opacity: 1;
+    // background-color: var(--color-hover);
+    // transform: translateY(-2px);
+  }
+}
+@media screen and (max-width: 1000px) {
+  .container {
+    right: 40px;
+  }
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}

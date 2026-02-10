@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import PredictionCard from '../components/card'
-import Empty from '../elements/empty'
 import { usePredictionIds } from '../store/prediction.adapter'
 import { useAppDispatch } from '../hooks/useRedux'
 import { apiBase } from '../services/api'
+import PredictionCard from '../components/card'
+import Empty from '../elements/empty'
 
 export const Home = () => {
   const limit = 10

@@ -43,13 +43,7 @@ export const Requests = () => {
           {mybetIds.length === 0 && <Empty title='У вас нет активных прогнозов' />}
           {betsLoading && <Empty title='Загрузка прогнозов...' loading={true} />}
           {betsError && <Empty title='Ошибка загрузки прогнозов' />}
-          {mybetIds.length !== 0 && (
-            <>
-              {mybetIds.map((betId: number) => (
-                <BetItem key={betId} betId={betId} />
-              ))}
-            </>
-          )}
+          {mybetIds.length !== 0 && mybetIds.map((betId: number) => <BetItem key={betId} betId={betId} />)}
         </div>
       </div>
     </>

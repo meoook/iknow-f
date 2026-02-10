@@ -12,6 +12,7 @@ import { PredictionDetail } from './pages/PredictionDetail/page'
 import { useGetConfigQuery } from './services/api'
 import ModalLogin from './modals/login'
 import Page404 from './pages/404'
+import BackToTop from './components/totop'
 
 export default function NavRouter() {
   useGetConfigQuery()
@@ -26,6 +27,7 @@ export default function NavRouter() {
       <Header />
       <main>
         <ScrollToTop />
+        <BackToTop />
         <Routes>
           {/* Protected routes */}
           <Route element={<LayoutProtected />}>
