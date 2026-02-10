@@ -1,17 +1,23 @@
+import React from 'react'
 import style from './card.module.scss'
-import type { IPrediction } from '../../types/app.types'
 import { config } from '../../config/config'
 import { intlNumber } from '../../hooks/hooks'
 import { Link } from 'react-router-dom'
+import { useAppSelector } from '../../hooks/useRedux'
+import { usePrediction } from '../../store/prediction.adapter'
 
 interface PredictionCardProps {
-  prediction: IPrediction
+  predictionId: number
 }
 
-export default function PredictionCard({ prediction }: PredictionCardProps) {
+const PredictionCard = ({ predictionId }: PredictionCardProps) => {
+  const prediction = usePrediction(predictionId)
+  if (!prediction) return null
   const volume = intlNumber('ru-RU', prediction.volume)
+  const { settings } = useAppSelector((state) => state.app)
   const color = prediction.multiplier > 80 ? style.red : prediction.multiplier > 50 ? style.orange : style.green
   const src = prediction.icon ? `${config.imgBaseUrl}${prediction.icon}` : `${config.imgBaseUrl}/icon/no_icon.png`
+  const percent = Math.round((prediction.multiplier / settings.multiplier) * 100)
   return (
     <Link to={`/prediction/${prediction.id}`} className={style.card}>
       <div className='row center gap8'>
@@ -24,7 +30,7 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
       <div className='column grow'>
         <span className='label'>Разница</span>
         <div className={style.progress}>
-          <div className={`${style.bar} ${color}`} style={{ width: prediction.multiplier + '%' }}>
+          <div className={`${style.bar} ${color}`} style={{ width: percent + '%' }}>
             &nbsp;
           </div>
           <span>{prediction.multiplier.toFixed(0) || 0}X</span>
@@ -43,3 +49,4 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
     </Link>
   )
 }
+export default React.memo(PredictionCard)

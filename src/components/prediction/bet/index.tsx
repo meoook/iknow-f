@@ -20,7 +20,7 @@ const BetItem = ({ betId }: ToggleProps) => {
   else if (bet.state === 'CANCEL') badgeStyle += ` ${style.orange}`
   return (
     <Link to={`/prediction/${bet.prediction.id}`} className={style.bet}>
-      {bet.state !== 'ACTIVE' && <div className={badgeStyle}>{bet.state}</div>}
+      {['WIN', 'LOSE', 'CANCEL'].includes(bet.state) && <div className={badgeStyle}>{bet.state}</div>}
       <div className={style.main}>
         <PredictionHead icon={bet.prediction.icon} title={bet.prediction.title} />
         <PredictionStatus

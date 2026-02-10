@@ -35,15 +35,15 @@ export default function ModalPrediction({ close }: { close: () => void }) {
 
   const validForm = (): boolean => {
     const currentBalance = user?.balances[formData.currency] || 0
-    if (formData.title.trim() === '') console.log('title')
-    if (formData.rules.trim() === '') console.log('rules')
-    if (formData.vote.trim() === '') console.log('vote')
-    if (formData.choices.length === 0) console.log('choices')
-    if (formData.choices.includes(formData.vote) === false) console.log('vote_choice')
-    if (!['CASH', 'POINT'].includes(formData.currency)) console.log('currency')
-    if (formData.amount <= 0) console.log('amount')
-    if (formData.amount > currentBalance) console.log('amount')
-    if (formData.end_date === '') console.log('end_date')
+    // if (formData.title.trim() === '') console.log('title')
+    // if (formData.rules.trim() === '') console.log('rules')
+    // if (formData.vote.trim() === '') console.log('vote')
+    // if (formData.choices.length === 0) console.log('choices')
+    // if (formData.choices.includes(formData.vote) === false) console.log('vote_choice')
+    // if (!['CASH', 'POINT'].includes(formData.currency)) console.log('currency')
+    // if (formData.amount <= 0) console.log('amount')
+    // if (formData.amount > currentBalance) console.log('amount')
+    // if (formData.end_date === '') console.log('end_date')
 
     return (
       formData.title.trim() !== '' &&

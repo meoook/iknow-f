@@ -14,8 +14,8 @@ export default function PredictionTabBets({ predictionId }: PredictionTabBetsPro
   const limit = 10
   const dispatch = useAppDispatch()
   const observerTarget = useRef<HTMLDivElement>(null)
-  const { betIds, isLoading, total, isFetching } = useBetIds(predictionId)
   const [offset, setOffset] = useState(0)
+  const { betIds, isLoading, total, isFetching } = useBetIds(predictionId)
 
   const loadMore = () => {
     if (betIds.length >= total || isFetching) return

@@ -22,6 +22,7 @@ import { requestsAdapter } from './requests/adapter'
 import { wsManager } from './websocket'
 import { mybetAdapter } from '../store/mybet.adapter'
 import { betAdapter } from '../store/bet.adapter'
+import { predictionAdapter } from '../store/prediction.adapter'
 
 export const apiBase = createApi({
   reducerPath: 'api',
@@ -191,7 +192,7 @@ export const apiBase = createApi({
     }),
     getMyBets: builder.query<EntityStateWithTotal<IMyBet>, PaginatedArg>({
       query: (params) => ({
-        url: 'bet/my',
+        url: 'bets',
         params,
       }),
       transformResponse: (response: PaginatedResponse<IMyBet>) => {
@@ -227,7 +228,7 @@ export const apiBase = createApi({
     }),
     createMyBet: builder.mutation<IMyBet, IBetCreate>({
       query: (payload) => ({
-        url: 'bet/my',
+        url: 'bets',
         method: 'POST',
         body: payload,
       }),
@@ -274,16 +275,20 @@ export const apiBase = createApi({
         wsManager.unsubscribe('bet.created', handleCreated)
       },
     }),
-    getPredictions: builder.query<PaginatedResponse<IPrediction>, PaginatedArg>({
+    getPredictions: builder.query<EntityStateWithTotal<IPrediction>, PaginatedArg>({
       query: (params) => ({
         url: 'prediction',
         params,
       }),
-      providesTags: ['Predictions'],
+      transformResponse: (response: PaginatedResponse<IPrediction>) => {
+        return {
+          ...predictionAdapter.setAll(predictionAdapter.getInitialState(), response.data),
+          total: response.total,
+        }
+      },
     }),
     searchPredictions: builder.query<any[], string>({
       query: (searchQuery) => `prediction/search?q=${encodeURIComponent(searchQuery)}`,
-      providesTags: ['Predictions'],
     }),
     getPrediction: builder.query<IPredictionDetail, number>({
       query: (id) => `prediction/${id}`,

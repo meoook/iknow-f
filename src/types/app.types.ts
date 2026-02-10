@@ -105,6 +105,7 @@ export interface IPrediction {
   volume: number
   multiplier: number
   end_date: string
+  created: number
 }
 
 export interface IChoice {
