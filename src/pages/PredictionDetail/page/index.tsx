@@ -11,10 +11,11 @@ import PredictionTabs from '../tabs/main'
 import PredictionHead from '../../../components/head'
 import PredictionStatus from '../../../components/status'
 import { wsManager } from '../../../services/websocket'
+import Empty from '../../../elements/empty'
 
 export default function PredictionDetail() {
   const { id } = useParams<{ id: string }>()
-  const { data: prediction, isLoading, isError } = useGetPredictionQuery(Number(id), { skip: !id })
+  const { data: prediction, isLoading, isError, error } = useGetPredictionQuery(Number(id), { skip: !id })
 
   const [selectedChoice, setSelectedChoice] = useState<IChoice | null>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -50,24 +51,21 @@ export default function PredictionDetail() {
   if (isLoading) {
     return (
       <div className={style.main}>
-        <Loader />
-        <span>Загрузка...</span>
+        <Empty title='Загрузка...' loading />
       </div>
     )
   }
-  if (isError) {
+  if (error && !('status' in error && error.status === 404)) {
     return (
       <div className={style.main}>
-        <IconSprite name='error' />
-        <span>Ошибка загрузки</span>
+        <Empty title='Ошибка загрузки' icon='error' />
       </div>
     )
   }
   if (!prediction) {
     return (
       <div className={style.main}>
-        <IconSprite name='draft' />
-        <span>Предсказание не найдено</span>
+        <Empty title='Предсказание не найдено' icon='draft' />
       </div>
     )
   }
