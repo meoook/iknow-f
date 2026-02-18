@@ -27,7 +27,7 @@ export default function VoteItem({ vote, currency, amount, bet }: VoteItemProps)
       {bet?.state === 'WIN' && (
         <div>
           <h3 className='label'>Выигрыш</h3>
-          <div>{bet.win.toFixed(2)}</div>
+          <div>{bet.payout.toFixed(2)}</div>
         </div>
       )}
       {bet?.state === 'ACTIVE' && (

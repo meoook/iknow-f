@@ -5,7 +5,7 @@ import { apiBase } from '../services/api'
 import PredictionCard from '../components/card'
 import Empty from '../elements/empty'
 
-export const Home = () => {
+export default function Home() {
   const limit = 10
   const dispatch = useAppDispatch()
   const observerTarget = useRef<HTMLDivElement>(null)

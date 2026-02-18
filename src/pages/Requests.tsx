@@ -7,7 +7,7 @@ import RequestItem from '../components/prediction/request'
 import BetItem from '../components/prediction/bet'
 import Empty from '../elements/empty'
 
-export const Requests = () => {
+export default function Requests() {
   const { requestIds, isLoading, isError } = useRequestIds()
   const { mybetIds, isLoading: betsLoading, isError: betsError } = useMybetIds()
   const [modal, open, close] = useModal()

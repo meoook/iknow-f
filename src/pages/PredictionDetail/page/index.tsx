@@ -12,7 +12,7 @@ import PredictionHead from '../../../components/head'
 import PredictionStatus from '../../../components/status'
 import { wsManager } from '../../../services/websocket'
 
-export const PredictionDetail = () => {
+export default function PredictionDetail() {
   const { id } = useParams<{ id: string }>()
   const { data: prediction, isLoading, isError } = useGetPredictionQuery(Number(id), { skip: !id })
 

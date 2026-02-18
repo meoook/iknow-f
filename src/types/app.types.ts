@@ -154,7 +154,7 @@ export interface IMyBet {
   state: 'ACTIVE' | 'WIN' | 'LOSE' | 'CANCEL'
   currency: TCurrency
   amount: number
-  win: number
+  payout: number
   created: number
   choice: IBetChoice
   prediction: IBetPrediction
