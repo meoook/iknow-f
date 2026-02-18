@@ -73,7 +73,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   const displayValue = formatWithCommas(amount)
   const displayPayout = currency !== 'POINT' && Number(amount) > 0 && selectedChoice && selectedChoice.multiplier > 1
 
-  if (prediction.state === 'ENDED') {
+  if (['DISPUTE', 'ENDED'].includes(prediction.state)) {
     const winChoice = prediction.choices.find((choice) => choice.win)
 
     return (
@@ -85,9 +85,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
             <h3 className='color-blue'>${new Intl.NumberFormat('en-US').format(prediction.volume)}</h3>
           </div>
         </div>
-        <div className={style.terms}>
-          Сделав ставку, вы соглашаетесь с <a href='/terms'>условиями</a>
-        </div>
+        <TOS />
       </aside>
     )
   }
@@ -196,9 +194,16 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
           Сделать ставку
         </button>
       </div>
-      <div className={style.terms}>
-        Сделав ставку, вы соглашаетесь с <a href='/terms'>условиями</a>
-      </div>
+      <TOS />
     </aside>
+  )
+}
+
+
+const TOS = () => {
+  return (
+    <div className={style.terms}>
+      Сделав ставку, вы соглашаетесь с <a href='/terms'>условиями</a>
+    </div>
   )
 }

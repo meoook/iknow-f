@@ -155,10 +155,10 @@ class WebSocketManager {
 
   // Incoming events
 
-  private predictionUpdate(prediction: IPredictionDetail) {
+  private predictionUpdate(prediction: Partial<IPredictionDetail>) {
     if (prediction && prediction.id) {
       store.dispatch(
-        (apiBase.util as any).updateQueryData('getPrediction', prediction.id, (draft: IPredictionDetail) => {
+        apiBase.util.updateQueryData('getPrediction', prediction.id, (draft: IPredictionDetail) => {
           Object.assign(draft, prediction)
         }),
       )
