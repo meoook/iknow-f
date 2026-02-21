@@ -6,9 +6,9 @@ import { useCreateCommentMutation } from '../../../../services/comments/api'
 import { useCommentIds } from '../../../../services/comments/adapter'
 import { setShowLoginModal } from '../../../../store/auth.slice'
 import IconSprite from '../../../../elements/icon/Icon'
-import Empty from '../../../../elements/empty'
 import PredictionTabComments from '../comments'
 import PredictionTabBets from '../bets'
+import PredictionTabTop from '../top'
 
 interface PredictionTabsProps {
   prediction: IPredictionDetail
@@ -86,7 +86,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
           </>
         )}
 
-        {activeTab === 'holders' && <Empty title='Список топ-предсказателей скоро появится' size={48} icon='star' />}
+        {activeTab === 'holders' && <PredictionTabTop predictionId={prediction.id} />}
 
         {activeTab === 'activity' && <PredictionTabBets predictionId={prediction.id} />}
       </div>

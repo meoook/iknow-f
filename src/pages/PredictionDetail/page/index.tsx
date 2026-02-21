@@ -1,21 +1,19 @@
 import style from './page.module.scss'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { intlNumber } from '../../../hooks/hooks'
-import type { IChoice } from '../../../types/app.types'
 import { useGetPredictionQuery } from '../../../services/api'
-import IconSprite from '../../../elements/icon/Icon'
-import Loader from '../../../elements/loader'
+import { intlNumber } from '../../../hooks/hooks'
+import { wsManager } from '../../../services/websocket'
+import type { IChoice } from '../../../types/app.types'
 import TradePanel from '../panel'
 import PredictionTabs from '../tabs/main'
 import PredictionHead from '../../../components/head'
 import PredictionStatus from '../../../components/status'
-import { wsManager } from '../../../services/websocket'
 import Empty from '../../../elements/empty'
 
 export default function PredictionDetail() {
   const { id } = useParams<{ id: string }>()
-  const { data: prediction, isLoading, isError, error } = useGetPredictionQuery(Number(id), { skip: !id })
+  const { data: prediction, isLoading, error } = useGetPredictionQuery(Number(id), { skip: !id })
 
   const [selectedChoice, setSelectedChoice] = useState<IChoice | null>(null)
   const [scrollProgress, setScrollProgress] = useState(0)

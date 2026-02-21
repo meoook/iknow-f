@@ -178,14 +178,13 @@ class WebSocketManager {
   }
 
   predictionJoin(predictionId: number) {
-    console.log('predictionJoin', predictionId)
     const count = this.rooms.get(predictionId) || 0
     this.rooms.set(predictionId, count + 1)
     if (count === 0) this.send(WsOutEvent.prediction_join, predictionId)
+    console.log('predictionJoin', predictionId, this.rooms)
   }
 
   predictionLeave(predictionId: number) {
-    console.log('predictionLeave', predictionId)
     const count = this.rooms.get(predictionId)
     if (!count) return
 
@@ -195,6 +194,7 @@ class WebSocketManager {
     } else {
       this.rooms.set(predictionId, count - 1)
     }
+    console.log('predictionLeave', predictionId, this.rooms)
   }
 }
 

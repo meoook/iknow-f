@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useAppDispatch } from '../../../../hooks/useRedux'
-import { commentsApi } from '../../../../services/comments/api'
 import { useBet, useBetIds } from '../../../../store/bet.adapter'
 import { formatRelativeTime } from '../../../../utils/date'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
+import { apiBase } from '../../../../services/api'
 
 export interface PredictionTabBetsProps {
   predictionId: number
@@ -21,12 +21,7 @@ export default function PredictionTabBets({ predictionId }: PredictionTabBetsPro
     if (betIds.length >= total || isFetching) return
     const newOffset = offset + limit
     setOffset(newOffset)
-    dispatch(
-      commentsApi.endpoints.getComments.initiate(
-        { id: predictionId, limit, offset: newOffset },
-        { forceRefetch: true },
-      ),
-    )
+    dispatch(apiBase.endpoints.getBets.initiate({ id: predictionId, limit, offset: newOffset }, { forceRefetch: true }))
   }
 
   useEffect(() => {
@@ -65,7 +60,7 @@ const BetBase = ({ predictionId, betId }: BetProps) => {
   if (!bet) return null
 
   return (
-    <div key={betId} className='row gap12 center'>
+    <div key={betId} className='row gap8 center'>
       <Avatar src={bet.avatar} />
       <div className='row grow gap4'>
         <b>{bet.username.length > 20 ? `${bet.username.slice(0, 17)}...` : bet.username}</b>

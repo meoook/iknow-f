@@ -15,6 +15,7 @@ import type {
   ISettings,
   PaginatedArg,
   EntityStateWithTotal,
+  ITopHolder,
 } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
@@ -23,6 +24,7 @@ import { wsManager } from './websocket'
 import { mybetAdapter } from '../store/mybet.adapter'
 import { betAdapter } from '../store/bet.adapter'
 import { predictionAdapter } from '../store/prediction.adapter'
+import { topAdapter, topSelectors } from '../store/top.adapter'
 
 export const apiBase = createApi({
   reducerPath: 'api',
@@ -243,6 +245,24 @@ export const apiBase = createApi({
     }),
 
     // Public endpoints
+    searchPredictions: builder.query<any[], string>({
+      query: (searchQuery) => `prediction/search?q=${encodeURIComponent(searchQuery)}`,
+    }),
+    getPredictions: builder.query<EntityStateWithTotal<IPrediction>, PaginatedArg>({
+      query: (params) => ({
+        url: 'prediction',
+        params,
+      }),
+      transformResponse: (response: PaginatedResponse<IPrediction>) => {
+        return {
+          ...predictionAdapter.setAll(predictionAdapter.getInitialState(), response.data),
+          total: response.total,
+        }
+      },
+    }),
+    getPrediction: builder.query<IPredictionDetail, number>({
+      query: (id) => `prediction/${id}`,
+    }),
     getBets: builder.query<EntityStateWithTotal<IBet>, PaginatedArg<true>>({
       query: ({ id, ...rest }) => ({
         url: `prediction/${id}/bets`,
@@ -275,23 +295,19 @@ export const apiBase = createApi({
         wsManager.unsubscribe('bet.created', handleCreated)
       },
     }),
-    getPredictions: builder.query<EntityStateWithTotal<IPrediction>, PaginatedArg>({
-      query: (params) => ({
-        url: 'prediction',
-        params,
+    getTop: builder.query<EntityStateWithTotal<ITopHolder, string>, PaginatedArg<true>>({
+      query: ({ id, ...rest }) => ({
+        url: `prediction/${id}/top`,
+        params: rest,
       }),
-      transformResponse: (response: PaginatedResponse<IPrediction>) => {
-        return {
-          ...predictionAdapter.setAll(predictionAdapter.getInitialState(), response.data),
-          total: response.total,
-        }
+      transformResponse: (response: PaginatedResponse<ITopHolder>) => {
+        return { ...topAdapter.setAll(topAdapter.getInitialState(), response.data), total: response.total }
       },
-    }),
-    searchPredictions: builder.query<any[], string>({
-      query: (searchQuery) => `prediction/search?q=${encodeURIComponent(searchQuery)}`,
-    }),
-    getPrediction: builder.query<IPredictionDetail, number>({
-      query: (id) => `prediction/${id}`,
+      serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
+      merge: (currentCache, newItems) => {
+        if (currentCache.total !== newItems.total) currentCache.total = newItems.total
+        topAdapter.addMany(currentCache, topSelectors.selectAll(newItems))
+      },
     }),
   }),
 })
@@ -315,6 +331,7 @@ export const {
   useGetMyBetsQuery,
   useCreateMyBetMutation,
   useGetBetsQuery,
+  useGetTopQuery,
   // ------
   useSetTelegramMutation,
   useGetRequestsQuery,

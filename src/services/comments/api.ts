@@ -31,7 +31,7 @@ export const commentsApi = apiBase.injectEndpoints({
         } catch {
           return
         }
-        wsManager.predictionJoin(arg.id)
+        // wsManager.predictionJoin(arg.id)
 
         const handleCreated = (comment: IComment) => {
           updateCachedData((draft) => {
@@ -74,7 +74,7 @@ export const commentsApi = apiBase.injectEndpoints({
 
         await cacheEntryRemoved
 
-        wsManager.predictionLeave(arg.id)
+        // wsManager.predictionLeave(arg.id)
 
         wsManager.unsubscribe('comment.created', handleCreated)
         wsManager.unsubscribe('comment.updated', handleUpdated)

@@ -1,4 +1,4 @@
-import type { EntityState } from '@reduxjs/toolkit'
+import type { EntityId, EntityState } from '@reduxjs/toolkit'
 import type { TCurrency } from './auth.types'
 
 export interface ISettings {
@@ -46,7 +46,7 @@ export type PaginatedArg<RequireId extends boolean = false> = RequireId extends 
   ? IPaginatedRequest<true>
   : IPaginatedRequest | undefined
 
-export type EntityStateWithTotal<T> = EntityState<T, number> & { total: number }
+export type EntityStateWithTotal<T, Id extends EntityId = number> = EntityState<T, Id> & { total: number }
 // interface PaginatedBase {
 //   limit?: number
 //   offset?: number
@@ -174,6 +174,13 @@ export interface IBet {
   amount: number
   title: string
   created: number
+}
+
+export interface ITopHolder {
+  total: number
+  username: string
+  avatar: string
+  currency: TCurrency
 }
 
 export interface IComment {
