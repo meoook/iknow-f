@@ -62,7 +62,7 @@ const BetBase = ({ predictionId, betId }: BetProps) => {
   return (
     <div key={betId} className='row gap8 center'>
       <Avatar src={bet.avatar} />
-      <div className='row grow gap4'>
+      <div className='row grow gap4 lh-1'>
         <b>{bet.username.length > 20 ? `${bet.username.slice(0, 17)}...` : bet.username}</b>
         <span className='color-gray'>ставка</span>
         <b className='color-green'>

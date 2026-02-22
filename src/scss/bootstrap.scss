@@ -203,25 +203,38 @@
 .container {
   width: var(--size-container);
   margin-inline: auto;
-  padding-top: 32px;
+  padding-top: 18px;
 }
 
 .shimmer {
-  animation: shimmer 1.5s infinite;
-  background: linear-gradient(90deg, transparent 5%, var(--color-border) 50%, transparent 95%);
-  position: relative;
+  display: block;
+  animation: shimmer 3.5s infinite;
+  background: var(--color-shimmer);
   height: 100%;
   width: 100%;
   overflow: hidden;
+  background-repeat: no-repeat;
+  background-size: 800px 100px;
 }
 
 @keyframes shimmer {
   0% {
-    transform: translateX(-100%);
+    opacity: 0.4;
   }
-
+  10% {
+    opacity: 0.4;
+  }
+  35% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.4;
+  }
   100% {
-    transform: translateX(100%);
+    opacity: 0.4;
   }
 }
 
@@ -319,4 +332,8 @@
 .more {
   height: 50px;
   margin: 20px 0;
+}
+
+.lh-1 {
+  line-height: 1;
 }

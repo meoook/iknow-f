@@ -9,8 +9,8 @@ import { EMAIL_REGEX } from '../config/config'
 type TabType = 'profile' | 'account' | 'trading' | 'notifications' | 'builder' | 'export'
 
 export default function Profile() {
-  const user = useAppSelector((state) => state.auth.user)
-  const loading = useAppSelector((state) => state.auth.loading)
+  // const user = useAppSelector((state) => state.auth.user)
+  const { user, loading } = useAppSelector((state) => state.auth)
   const [activeTab, setActiveTab] = useState<TabType>('profile')
   // const [setEmail, { isLoading: isEmailLoading }] = useSetEmailMutation()
 
