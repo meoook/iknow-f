@@ -16,6 +16,7 @@ import type {
   PaginatedArg,
   EntityStateWithTotal,
   ITopHolder,
+  ITx,
 } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
@@ -25,6 +26,7 @@ import { mybetAdapter } from '../store/mybet.adapter'
 import { betAdapter } from '../store/bet.adapter'
 import { predictionAdapter } from '../store/prediction.adapter'
 import { topAdapter, topSelectors } from '../store/top.adapter'
+import { txAdapter } from '../store/tx.adapter'
 
 export const apiBase = createApi({
   reducerPath: 'api',
@@ -243,6 +245,15 @@ export const apiBase = createApi({
         )
       },
     }),
+    getTx: builder.query<EntityStateWithTotal<ITx>, PaginatedArg>({
+      query: (params) => ({
+        url: 'tx',
+        params,
+      }),
+      transformResponse: (response: PaginatedResponse<ITx>) => {
+        return { ...txAdapter.setAll(txAdapter.getInitialState(), response.data), total: response.total }
+      },
+    }),
 
     // Public endpoints
     searchPredictions: builder.query<any[], string>({
@@ -332,6 +343,7 @@ export const {
   useCreateMyBetMutation,
   useGetBetsQuery,
   useGetTopQuery,
+  useGetTxQuery,
   // ------
   useSetTelegramMutation,
   useGetRequestsQuery,

@@ -33,14 +33,14 @@ export interface PaginatedResponse<T> {
 
 type IPaginatedRequest<RequireId extends boolean = false> = RequireId extends true
   ? {
-      id: number
-      limit?: number
-      offset?: number
-    }
+    id: number
+    limit?: number
+    offset?: number
+  }
   : {
-      limit?: number
-      offset?: number
-    }
+    limit?: number
+    offset?: number
+  }
 
 export type PaginatedArg<RequireId extends boolean = false> = RequireId extends true
   ? IPaginatedRequest<true>
@@ -204,4 +204,12 @@ export interface ICommentReport {
   commentId: number
   reason: string
   text: string
+}
+
+export interface ITx {
+  id: number
+  currency: TCurrency
+  direction: 'IN' | 'OUT'
+  amount: number
+  created: number
 }
