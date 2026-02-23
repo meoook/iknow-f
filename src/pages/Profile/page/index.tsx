@@ -12,6 +12,7 @@ export default function Profile() {
 
   return (
     <div className='container'>
+      {/* row to column on mobile */}
       <div className='row'>
         <div className={style.sidebar}>
           <button

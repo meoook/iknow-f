@@ -1,4 +1,4 @@
-import style from './user.module.scss'
+import style from './tx.module.scss'
 import IconSprite from '../../../elements/icon/Icon'
 import Avatar from '../../../elements/avatar'
 import { useEffect, useState } from 'react'
@@ -52,9 +52,9 @@ export default function ProfileUser({ user, loading }: { user: IUser | null; loa
 
   if (loading) {
     return (
-      <>
-        <h1>Настройки профиля</h1>
-        <div className={style.head}>
+      <div className='profile-content'>
+        <h1 className='profile-title'>Настройки профиля</h1>
+        <div className='row center gap12'>
           <div className={`${style.avatar} shimmer`} />
           <div className={`${style.btn} shimmer`} />
         </div>
@@ -69,14 +69,14 @@ export default function ProfileUser({ user, loading }: { user: IUser | null; loa
           <div className={`${style.textarea} shimmer`} />
         </div>
         <div className={`${style.btn} shimmer`} />
-      </>
+      </div>
     )
   }
   return (
-    <>
-      <h1>Настройки профиля</h1>
+    <div className='profile-content'>
+      <h1 className='profile-title'>Настройки профиля</h1>
 
-      <div className={style.head}>
+      <div className='profile-avatar-section'>
         <Avatar src={user?.avatar} size='big' />
         <button className='btn gray' onClick={handleAvatarUpload}>
           <IconSprite name='upload' size={20} />
@@ -128,6 +128,6 @@ export default function ProfileUser({ user, loading }: { user: IUser | null; loa
       <button className='btn blue' onClick={handleSaveChanges}>
         Сохранить
       </button>
-    </>
+    </div>
   )
 }

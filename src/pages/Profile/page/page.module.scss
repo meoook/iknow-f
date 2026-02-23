@@ -32,7 +32,54 @@
 
 .main {
   flex: 1;
+  max-width: 750px;
   padding-top: 18px;
   padding-left: 48px;
-  max-width: 750px;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .profile-page {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 1rem 0;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--color-input);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-border);
+      border-radius: 2px;
+    }
+  }
+
+  .sidebar-item {
+    white-space: nowrap;
+    padding: 0.75rem 1.25rem;
+
+    &.active::before {
+      left: 0;
+      right: 0;
+      top: auto;
+      bottom: 0;
+      width: auto;
+      height: 3px;
+    }
+  }
+
+  .profile-main {
+    padding: 2rem 1.5rem;
+  }
 }

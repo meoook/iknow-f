@@ -46,44 +46,6 @@
   }
 }
 
-.profile-main {
-  flex: 1;
-  padding-left: 48px;
-  max-width: 1000px;
-}
-
-.profile-content {
-  max-width: 750px;
-}
-
-.profile-title {
-  margin-bottom: 2rem;
-}
-
-.profile-avatar-section {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.avatar-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--color-input);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
 .placeholder-text {
   color: var(--color-secondary);
   font-size: 15px;
