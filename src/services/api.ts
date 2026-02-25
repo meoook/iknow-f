@@ -99,6 +99,20 @@ export const apiBase = createApi({
     getUser: builder.query<IUser, void>({
       query: () => 'auth/user',
     }),
+    setEmail: builder.mutation<Partial<IUser>, { email: string }>({
+      query: (payload) => ({
+        url: 'auth/user/email',
+        method: 'PUT',
+        body: payload,
+      }),
+    }),
+    setUsername: builder.mutation<Partial<IUser>, { username: string }>({
+      query: (payload) => ({
+        url: 'auth/user',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
     getNotifications: builder.query<INotification[], void>({
       query: () => 'auth/user/notification',
     }),
@@ -332,6 +346,8 @@ export const {
   useEmailAuthMutation,
   useGetUserQuery,
   useSingOutMutation,
+  useSetEmailMutation,
+  useSetUsernameMutation,
   // Notifications
   useReadNotificationMutation,
   useReadAllNotificationsMutation,

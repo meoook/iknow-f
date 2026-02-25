@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react'
 import type { IUser } from '../../../types/auth.types'
 import IconSprite from '../../../elements/icon/Icon'
 import Avatar from '../../../elements/avatar'
+import { useSetUsernameMutation } from '../../../services/api'
 
 export default function ProfileAccount({ user, loading }: { user: IUser | null; loading: boolean }) {
   const [formData, setFormData] = useState({ username: user?.username || '', bio: '' })
   const [errors, setErrors] = useState({ username: '' })
+  const [setUsername, { error: setUsernameError }] = useSetUsernameMutation()
 
   useEffect(() => {
     if (user) {
@@ -30,6 +32,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
     setErrors(newErrors)
 
     if (!newErrors.username) {
+      setUsername({ username: formData.username })
       try {
         // TODO: Добавить сохранение username и bio когда API будет готово
         console.log('Saving changes:', formData)
@@ -88,6 +91,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
           placeholder='Никнейм'
         />
         {errors.username && <span className='error-msg'>{errors.username}</span>}
+        {setUsernameError && <span className='error-msg'>Такой никнейм уже существует</span>}
       </div>
 
       <div className='form-row'>

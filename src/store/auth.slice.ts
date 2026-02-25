@@ -67,6 +67,12 @@ const authSlice = createSlice({
         state.user = null
         localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
       })
+      .addMatcher(apiBase.endpoints.setEmail.matchFulfilled, (state, action) => {
+        if (state.user && action.payload.email) state.user.email = action.payload.email
+      })
+      .addMatcher(apiBase.endpoints.setUsername.matchFulfilled, (state, action) => {
+        if (state.user && action.payload.username) state.user.username = action.payload.username
+      })
   },
 })
 
