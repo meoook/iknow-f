@@ -1,34 +1,23 @@
 import style from './page.module.scss'
 import { useState } from 'react'
 import { useAppSelector } from '../../../hooks/useRedux'
-import ProfileUser from '../user'
+import ProfileAccount from '../account'
 
-type TabType = 'profile' | 'account' | 'trading' | 'notifications' | 'builder' | 'transactions'
+type TabType = 'account' | 'notifications' | 'transactions' | 'security'
 
 export default function Profile() {
   // const user = useAppSelector((state) => state.auth.user)
   const { user, loading } = useAppSelector((state) => state.auth)
-  const [activeTab, setActiveTab] = useState<TabType>('profile')
+  const [activeTab, setActiveTab] = useState<TabType>('account')
 
   return (
     <div className='container'>
-      {/* row to column on mobile */}
-      <div className='row'>
+      <div className={style.profile}>
         <div className={style.sidebar}>
-          <button
-            className={`${style.item} ${activeTab === 'profile' ? 'active' : ''}`}
-            onClick={() => setActiveTab('profile')}>
-            Профиль
-          </button>
           <button
             className={`${style.item} ${activeTab === 'account' ? 'active' : ''}`}
             onClick={() => setActiveTab('account')}>
-            Счет
-          </button>
-          <button
-            className={`${style.item} ${activeTab === 'trading' ? 'active' : ''}`}
-            onClick={() => setActiveTab('trading')}>
-            Торговля
+            Профиль
           </button>
           <button
             className={`${style.item} ${activeTab === 'notifications' ? 'active' : ''}`}
@@ -36,19 +25,22 @@ export default function Profile() {
             Уведомления
           </button>
           <button
-            className={`${style.item} ${activeTab === 'builder' ? 'active' : ''}`}
-            onClick={() => setActiveTab('builder')}>
-            Коды
-          </button>
-          <button
             className={`${style.item} ${activeTab === 'transactions' ? 'active' : ''}`}
             onClick={() => setActiveTab('transactions')}>
             Транзакции
           </button>
+          <button
+            className={`${style.item} ${activeTab === 'security' ? 'active' : ''}`}
+            onClick={() => setActiveTab('security')}>
+            Безопасность
+          </button>
         </div>
 
         <div className={style.main}>
-          {activeTab === 'profile' && <ProfileUser user={user} loading={loading} />}
+          {activeTab === 'account' && <ProfileAccount user={user} loading={loading} />}
+          {activeTab === 'notifications' && <div>Xxx</div>}
+          {activeTab === 'transactions' && <div>Xxx</div>}
+          {activeTab === 'security' && <div>Xxx</div>}
           <div>Xxx</div>
           <div>Xxx</div>
           <div>Xxx</div>

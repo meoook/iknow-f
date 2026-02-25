@@ -8,6 +8,8 @@
   gap: 6px;
   width: 180px;
   padding-top: 12px;
+  background: var(--color-body);
+  z-index: 2;
 }
 
 .item {
@@ -37,9 +39,13 @@
   padding-left: 48px;
 }
 
+.profile {
+  display: flex;
+}
+
 // Responsive design
 @media (max-width: 768px) {
-  .profile-page {
+  .profile {
     flex-direction: column;
   }
 
@@ -50,6 +56,7 @@
     padding: 1rem 0;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
+    transform: translateY(-20px);
 
     &::-webkit-scrollbar {
       height: 4px;
@@ -65,21 +72,12 @@
     }
   }
 
-  .sidebar-item {
+  .item {
     white-space: nowrap;
     padding: 0.75rem 1.25rem;
-
-    &.active::before {
-      left: 0;
-      right: 0;
-      top: auto;
-      bottom: 0;
-      width: auto;
-      height: 3px;
-    }
   }
 
-  .profile-main {
-    padding: 2rem 1.5rem;
+  .main {
+    padding: 32px 24px;
   }
 }
