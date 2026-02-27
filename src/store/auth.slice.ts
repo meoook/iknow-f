@@ -73,8 +73,11 @@ const authSlice = createSlice({
       .addMatcher(apiBase.endpoints.setEmail.matchFulfilled, (state, action) => {
         if (state.user && action.payload.email) state.user.email = action.payload.email
       })
-      .addMatcher(apiBase.endpoints.setUsername.matchFulfilled, (state, action) => {
-        if (state.user && action.payload.username) state.user.username = action.payload.username
+      .addMatcher(apiBase.endpoints.setUserParams.matchFulfilled, (state, action) => {
+        if (state.user) Object.assign(state.user, action.payload)
+        // if (state.user && action.payload.username) state.user.username = action.payload.username
+        // if (state.user && action.payload.email_notify !== undefined) state.user.email_notify = action.payload.email_notify
+        // if (state.user && action.payload.telegram_notify !== undefined) state.user.telegram_notify = action.payload.telegram_notify
       })
   },
 })

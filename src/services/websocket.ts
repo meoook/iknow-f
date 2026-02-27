@@ -1,7 +1,7 @@
 import { config } from '../config/config'
 import { store } from '../store/store'
 import { addNotification } from '../store/app.slice'
-import { setBalance } from '../store/auth.slice'
+import { setBalance, updateUser } from '../store/auth.slice'
 import { apiBase } from './api'
 import type { IPredictionDetail } from '../types/app.types'
 
@@ -17,6 +17,7 @@ type WsOutEvent = (typeof WsOutEvent)[keyof typeof WsOutEvent]
 const WsInEvent = {
   notify: 'notify',
   balance_updated: 'balance.updated',
+  telegram_verified: 'telegram.verified',
   prediction_updated: 'prediction.updated',
   comment_created: 'comment.created',
   comment_updated: 'comment.updated',
@@ -117,6 +118,7 @@ class WebSocketManager {
     if (msg.type === WsInEvent.notify) store.dispatch(addNotification(msg.value))
     else if (msg.type === WsInEvent.balance_updated) store.dispatch(setBalance(msg.value))
     else if (msg.type === WsInEvent.prediction_updated) this.predictionUpdate(msg.value)
+    else if (msg.type === WsInEvent.telegram_verified) this.telegramVerified(msg.value)
     else {
       const handlers = this.handlers.get(msg.type)
       handlers?.forEach((h) => h(msg.value))
@@ -163,6 +165,10 @@ class WebSocketManager {
         }),
       )
     }
+  }
+
+  private telegramVerified(telegram_id: string) {
+    if (telegram_id) store.dispatch(updateUser({ telegram_id }))
   }
 
   // Outgoing commands

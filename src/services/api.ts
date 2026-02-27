@@ -107,10 +107,10 @@ export const apiBase = createApi({
         body: payload,
       }),
     }),
-    setUsername: builder.mutation<Partial<IUser>, { username: string }>({
+    setUserParams: builder.mutation<Partial<IUser>, Partial<IUser>>({
       query: (payload) => ({
         url: 'auth/user',
-        method: 'POST',
+        method: 'PUT',
         body: payload,
       }),
     }),
@@ -354,12 +354,11 @@ export const {
   useW3authMutation,
   useEmailNonceMutation,
   useEmailAuthMutation,
-  useSingOutMutation,
   // User
   useGetUserQuery,
+  useSingOutMutation,
   useSetEmailMutation,
-  useSetUsernameMutation,
-  useGetTelegramNonceMutation,
+  useSetUserParamsMutation,
   // Notifications
   useReadNotificationMutation,
   useReadAllNotificationsMutation,

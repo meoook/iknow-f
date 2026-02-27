@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { IUser } from '../../../types/auth.types'
 import IconSprite from '../../../elements/icon/Icon'
 import Avatar from '../../../elements/avatar'
-import { useSetUsernameMutation } from '../../../services/api'
+import { useSetUserParamsMutation } from '../../../services/api'
 import { LOCAL_STORAGE_TOKEN_KEY, updateUser } from '../../../store/auth.slice'
 import { useAppDispatch } from '../../../hooks/useRedux'
 import { config } from '../../../config/config'
@@ -12,7 +12,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
   const dispatch = useAppDispatch()
   const [formData, setFormData] = useState({ username: user?.username || '', bio: '' })
   const [errors, setErrors] = useState({ username: '' })
-  const [setUsername, { error: setUsernameError }] = useSetUsernameMutation()
+  const [setUserParams, { error: setUserParamsError }] = useSetUserParamsMutation()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [uploadProgress, setUploadProgress] = useState<number | null>(null)
@@ -47,7 +47,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
       newErrors.username = 'Никнейм должен быть не менее 4 символов'
     }
     setErrors(newErrors)
-    if (!newErrors.username) setUsername({ username: formData.username })
+    if (!newErrors.username) setUserParams({ username: formData.username })
   }
 
   const handleFileChange = (event: Event) => {
@@ -167,7 +167,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
           placeholder='Никнейм'
         />
         {errors.username && <span className='error-msg'>{errors.username}</span>}
-        {setUsernameError && <span className='error-msg'>Такой никнейм уже существует</span>}
+        {setUserParamsError && <span className='error-msg'>Такой никнейм уже существует</span>}
       </div>
 
       <div className='form-row'>
