@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { IAuthState, IBalanceUpdate } from '../types/auth.types'
+import type { IAuthState, IBalanceUpdate, IUser } from '../types/auth.types'
 import { apiBase } from '../services/api'
 
 export const LOCAL_STORAGE_TOKEN_KEY: string = 'token'
@@ -20,6 +20,9 @@ const authSlice = createSlice({
     },
     setBalance: (state, action: PayloadAction<IBalanceUpdate>) => {
       if (state.user) state.user.balances[action.payload.currency] = action.payload.amount
+    },
+    updateUser: (state, action: PayloadAction<Partial<IUser>>) => {
+      if (state.user) Object.assign(state.user, action.payload)
     },
     setShowLoginModal: (state, action: PayloadAction<boolean>) => {
       state.showLoginModal = action.payload
@@ -76,5 +79,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { setLoading, setBalance, setShowLoginModal } = authSlice.actions
+export const { setLoading, setBalance, updateUser, setShowLoginModal } = authSlice.actions
 export default authSlice.reducer

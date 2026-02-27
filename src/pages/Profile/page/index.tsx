@@ -2,6 +2,8 @@ import style from './page.module.scss'
 import { useState } from 'react'
 import { useAppSelector } from '../../../hooks/useRedux'
 import ProfileAccount from '../account'
+import ProfileNotifications from '../notifications'
+import ProfileTxs from '../transactions'
 
 type TabType = 'account' | 'notifications' | 'transactions' | 'security'
 
@@ -38,8 +40,8 @@ export default function Profile() {
 
         <div className={style.main}>
           {activeTab === 'account' && <ProfileAccount user={user} loading={loading} />}
-          {activeTab === 'notifications' && <div>Xxx</div>}
-          {activeTab === 'transactions' && <div>Xxx</div>}
+          {activeTab === 'notifications' && <ProfileNotifications user={user} loading={loading} />}
+          {activeTab === 'transactions' && <ProfileTxs />}
           {activeTab === 'security' && <div>Xxx</div>}
           <div>Xxx</div>
           <div>Xxx</div>

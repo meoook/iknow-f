@@ -1,133 +1,77 @@
 import style from './tx.module.scss'
-import IconSprite from '../../../elements/icon/Icon'
-import Avatar from '../../../elements/avatar'
-import { useEffect, useState } from 'react'
-import { EMAIL_REGEX } from '../../../config/config'
-import type { IUser } from '../../../types/auth.types'
+import React, { useEffect, useRef, useState } from 'react'
+import { useAppDispatch } from '../../../hooks/useRedux'
+import { apiBase } from '../../../services/api'
+import { useTx, useTxIds } from '../../../store/tx.adapter'
+import Empty from '../../../elements/empty'
 
-export default function ProfileUser({ user, loading }: { user: IUser | null; loading: boolean }) {
-  // const [setEmail, { isLoading: isEmailLoading }] = useSetEmailMutation()
+export default function ProfileTxs() {
+  const limit = 10
+  const dispatch = useAppDispatch()
+  const observerTarget = useRef<HTMLDivElement>(null)
+  const { txIds, isLoading, total, isFetching } = useTxIds()
+  const [offset, setOffset] = useState(0)
 
-  const [formData, setFormData] = useState({ email: user?.email || '', username: user?.username || '', bio: '' })
-  const [errors, setErrors] = useState({ email: '', username: '' })
+  const loadMore = () => {
+    if (txIds.length >= total || isFetching) return
+    const newOffset = offset + limit
+    setOffset(newOffset)
+    dispatch(apiBase.endpoints.getTx.initiate({ limit, offset: newOffset }, { forceRefetch: true }))
+  }
 
   useEffect(() => {
-    if (user) {
-      setFormData({
-        email: user.email || '',
-        username: user.username || '',
-        bio: '', // Assuming bio might be added later to IUser
-      })
-    }
-  }, [user])
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-    // Очистка ошибки при изменении поля
-    if (errors[name as keyof typeof errors]) setErrors((prev) => ({ ...prev, [name]: '' }))
-  }
-
-  const handleSaveChanges = async () => {
-    const newErrors = { email: '', username: '' }
-    if (formData.email && !EMAIL_REGEX.test(formData.email)) newErrors.email = 'Invalid email format'
-    if (formData.username && formData.username.length < 3) newErrors.username = 'Username must be at least 3 characters'
-    setErrors(newErrors)
-
-    if (!newErrors.email && !newErrors.username) {
-      try {
-        // if (formData.email !== user?.email) await setEmail({ email: formData.email }).unwrap()
-        // TODO: Добавить сохранение username и bio когда API будет готово
-        console.log('Saving changes:', formData)
-      } catch (error) {
-        console.error('Failed to save changes:', error)
-      }
-    }
-  }
-
-  const handleAvatarUpload = () => {
-    // TODO: Реализовать загрузку аватара
-    console.log('Upload avatar')
-  }
-
-  if (loading) {
-    return (
-      <div className='profile-content'>
-        <h1 className='profile-title'>Настройки профиля</h1>
-        <div className='row center gap12'>
-          <div className={`${style.avatar} shimmer`} />
-          <div className={`${style.btn} shimmer`} />
-        </div>
-        {['Почта', 'Никнейм'].map((i) => (
-          <div className='form-row' key={i}>
-            <label>{i}</label>
-            <div className={`${style.input} shimmer`} />
-          </div>
-        ))}
-        <div className='form-row'>
-          <label>О себе</label>
-          <div className={`${style.textarea} shimmer`} />
-        </div>
-        <div className={`${style.btn} shimmer`} />
-      </div>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && txIds.length < total && !isLoading && !isFetching) loadMore()
+      },
+      { threshold: 1.0 },
     )
-  }
+    if (observerTarget.current) observer.observe(observerTarget.current)
+    return () => {
+      if (observerTarget.current) observer.unobserve(observerTarget.current)
+    }
+  }, [txIds.length, total, isLoading, isFetching, loadMore])
+
+  if (isLoading) return <Empty title='Загрузка...' loading={true} />
+  if (!txIds.length) return <Empty title='Нет транзакций' size={24} />
+
   return (
-    <div className='profile-content'>
-      <h1 className='profile-title'>Настройки профиля</h1>
-
-      <div className='profile-avatar-section'>
-        <Avatar src={user?.avatar} size='big' />
-        <button className='btn gray' onClick={handleAvatarUpload}>
-          <IconSprite name='upload' size={20} />
-          <span>Загрузить</span>
-        </button>
+    <div className='column gap8'>
+      <h1>Транзакции</h1>
+      <hr />
+      <div className='column gap12'>
+        {txIds.map((txId) => (
+          <Tx key={txId} txId={txId} />
+        ))}
       </div>
-
-      <div className='form-row'>
-        <label htmlFor='email'>Почта</label>
-        <input
-          type='email'
-          id='email'
-          name='email'
-          value={formData.email}
-          onChange={handleInputChange}
-          className={errors.email ? 'outline error' : 'outline'}
-          placeholder='your@email.com'
-        />
-        {errors.email && <span className='error-msg'>{errors.email}</span>}
-      </div>
-
-      <div className='form-row'>
-        <label htmlFor='username'>Никнейм</label>
-        <input
-          type='text'
-          id='username'
-          name='username'
-          value={formData.username}
-          onChange={handleInputChange}
-          className={errors.username ? 'outline error' : 'outline'}
-          placeholder='Никнейм'
-        />
-        {errors.username && <span className='error-msg'>{errors.username}</span>}
-      </div>
-
-      <div className='form-row'>
-        <label htmlFor='bio'>О себе</label>
-        <textarea
-          id='bio'
-          name='bio'
-          value={formData.bio}
-          onChange={handleInputChange}
-          className='outline'
-          placeholder='О себе'
-          rows={4}
-        />
-      </div>
-
-      <button className='btn blue' onClick={handleSaveChanges}>
-        Сохранить
-      </button>
+      <div ref={observerTarget} className='more' />
     </div>
   )
 }
+
+const TxBase = ({ txId }: { txId: number }) => {
+  const tx = useTx(txId)
+  if (!tx) return null
+
+  const positive = tx.direction === 'IN'
+  return (
+    <div className='row center justify gap4 lh-1'>
+      <div className='column gap4 grow'>
+        <b>{positive ? 'Пополнение' : 'Вывод'}</b>
+        <div className='row gap8 label'>
+          <b>{new Date(tx.created).toLocaleDateString()}</b>
+          <b>{new Date(tx.created).toLocaleTimeString()}</b>
+        </div>
+      </div>
+      <h2 className='row gap8'>
+        <b className={positive ? 'color-green' : 'color-red'}>
+          {positive ? '+' : '-'}
+          {tx.currency === 'POINT' ? '¢' : '$'}
+          {tx.amount.toFixed(2)}
+        </b>
+      </h2>
+    </div>
+  )
+}
+
+const Tx = React.memo(TxBase)

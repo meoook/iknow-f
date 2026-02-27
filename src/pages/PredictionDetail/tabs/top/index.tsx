@@ -42,7 +42,7 @@ export default function PredictionTabTop({ predictionId }: PredictionTabTopProps
   return (
     <>
       {topIds.map((topId) => (
-        <Bet key={topId} predictionId={predictionId} topId={topId} />
+        <TopUser key={topId} predictionId={predictionId} topId={topId} />
       ))}
       <div ref={observerTarget} className='more' />
     </>
@@ -54,12 +54,12 @@ interface BetProps {
   topId: string
 }
 
-const BetBase = ({ predictionId, topId }: BetProps) => {
+const TopUserBase = ({ predictionId, topId }: BetProps) => {
   const topUser = useTop(predictionId, topId)
   if (!topUser) return null
 
   return (
-    <div key={topId} className='row justify center'>
+    <div className='row justify center'>
       <div className='row center gap8 lh-1'>
         <Avatar src={topUser.avatar} />
         <b>{topUser.username.length > 20 ? `${topUser.username.slice(0, 17)}...` : topUser.username}</b>
@@ -74,4 +74,4 @@ const BetBase = ({ predictionId, topId }: BetProps) => {
   )
 }
 
-const Bet = React.memo(BetBase)
+const TopUser = React.memo(TopUserBase)

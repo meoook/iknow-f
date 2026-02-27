@@ -69,6 +69,14 @@ a:visited {
   text-decoration: none;
   color: inherit;
   transition: all 0.3s;
+  &.underline {
+    text-decoration: underline;
+    // text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+  &.brand {
+    color: var(--color-brand);
+  }
 }
 
 button,

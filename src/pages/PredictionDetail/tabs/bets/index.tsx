@@ -60,7 +60,7 @@ const BetBase = ({ predictionId, betId }: BetProps) => {
   if (!bet) return null
 
   return (
-    <div key={betId} className='row gap8 center'>
+    <div className='row gap8 center'>
       <Avatar src={bet.avatar} />
       <div className='row grow gap4 lh-1'>
         <b>{bet.username.length > 20 ? `${bet.username.slice(0, 17)}...` : bet.username}</b>

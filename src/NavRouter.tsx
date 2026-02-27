@@ -70,7 +70,7 @@ export default function NavRouter() {
 // Layout for protected routes
 function LayoutProtected() {
   const token = useAppSelector((state) => state.auth.token)
-  if (!token) return <Navigate to='/login' replace />
+  if (!token) return <Navigate to='/' replace />
   return <Outlet />
 }
 

@@ -1,0 +1,18 @@
+.tg_block {
+  min-height: 50px;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.nonce {
+  padding: 11px 16px;
+  margin-right: 16px;
+  // font-size: var(--font-size-lg);
+  font-weight: 600;
+  letter-spacing: 3px;
+  line-height: 1;
+  color: #f9ecc4;
+  background: var(--color-orange-dark);
+  border-radius: 8px;
+}

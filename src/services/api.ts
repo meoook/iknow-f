@@ -96,6 +96,7 @@ export const apiBase = createApi({
         method: 'DELETE',
       }),
     }),
+    // User endpoints
     getUser: builder.query<IUser, void>({
       query: () => 'auth/user',
     }),
@@ -113,6 +114,22 @@ export const apiBase = createApi({
         body: payload,
       }),
     }),
+    // setAvatar: builder.mutation({
+    //   query: (file: File) => {
+    //     const formData = new FormData()
+    //     formData.append('file', file)
+
+    //     return {
+    //       url: 'auth/user/avatar',
+    //       method: 'POST',
+    //       body: formData,
+    //     }
+    //   },
+    // }),
+    getTelegramNonce: builder.mutation<{ nonce: string }, void>({
+      query: () => 'auth/user/telegram',
+    }),
+    // Notifications endpoints
     getNotifications: builder.query<INotification[], void>({
       query: () => 'auth/user/notification',
     }),
@@ -138,14 +155,6 @@ export const apiBase = createApi({
       query: (payload) => ({
         url: `auth/user/notification/${payload}`,
         method: 'DELETE',
-      }),
-    }),
-    // User endpoints
-    setTelegram: builder.mutation<IAuthResponse, { nonce: string }>({
-      query: (payload) => ({
-        url: 'auth/user/telegram',
-        method: 'POST',
-        body: payload,
       }),
     }),
 
@@ -340,14 +349,17 @@ export const apiBase = createApi({
 export const {
   useGetConfigQuery,
   useDepositMutation,
+  // Auth
   useW3nonceMutation,
   useW3authMutation,
   useEmailNonceMutation,
   useEmailAuthMutation,
-  useGetUserQuery,
   useSingOutMutation,
+  // User
+  useGetUserQuery,
   useSetEmailMutation,
   useSetUsernameMutation,
+  useGetTelegramNonceMutation,
   // Notifications
   useReadNotificationMutation,
   useReadAllNotificationsMutation,
@@ -361,7 +373,6 @@ export const {
   useGetTopQuery,
   useGetTxQuery,
   // ------
-  useSetTelegramMutation,
   useGetRequestsQuery,
   useGetPredictionsQuery,
   useSearchPredictionsQuery,
