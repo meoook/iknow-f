@@ -359,6 +359,7 @@ export const {
   useSingOutMutation,
   useSetEmailMutation,
   useSetUserParamsMutation,
+  useGetTelegramNonceMutation,
   // Notifications
   useReadNotificationMutation,
   useReadAllNotificationsMutation,
