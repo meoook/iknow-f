@@ -2,17 +2,26 @@ import style from './notifications.module.scss'
 import { useState } from 'react'
 import { config } from '../../../config/config'
 import type { IUser } from '../../../types/auth.types'
-import { useGetTelegramNonceMutation } from '../../../services/api'
+import { useGetTelegramNonceMutation, useSetUserParamsMutation } from '../../../services/api'
 import Toggle from '../../../components/toggle'
 
 export default function ProfileNotifications({ user, loading }: { user: IUser | null; loading: boolean }) {
   const [getTelegramNonce] = useGetTelegramNonceMutation()
+  const [setUserParams] = useSetUserParamsMutation()
 
   const [nonce, setNonce] = useState('')
 
   const getCode = async () => {
     const srvData = await getTelegramNonce()
     if (srvData.data) setNonce(`${srvData.data.nonce}`)
+  }
+
+  const toggleTelegram = () => {
+    setUserParams({ telegram_notify: !user?.telegram_notify })
+  }
+
+  const toggleMail = () => {
+    setUserParams({ email_notify: !user?.email_notify })
   }
 
   if (loading) {
@@ -72,7 +81,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
       </div>
       {user?.telegram_id && (
         <div className='row center gap8'>
-          <Toggle checked={user?.telegram_notify} />
+          <Toggle checked={user?.telegram_notify} onChange={toggleTelegram} />
           <div>Получать уведомления в Telegram</div>
         </div>
       )}
@@ -84,7 +93,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
       </div>
       {user?.email && (
         <div className='row center gap8'>
-          <Toggle checked={user?.email_notify} />
+          <Toggle checked={user?.email_notify} onChange={toggleMail} />
           <div>Получать уведомления на почту</div>
         </div>
       )}

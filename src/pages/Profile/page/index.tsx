@@ -4,8 +4,9 @@ import { useAppSelector } from '../../../hooks/useRedux'
 import ProfileAccount from '../account'
 import ProfileNotifications from '../notifications'
 import ProfileTxs from '../transactions'
+import ProfileWithdraw from '../withdraw'
 
-type TabType = 'account' | 'notifications' | 'transactions' | 'security'
+type TabType = 'account' | 'notifications' | 'transactions' | 'security' | 'withdraw'
 
 export default function Profile() {
   // const user = useAppSelector((state) => state.auth.user)
@@ -36,81 +37,19 @@ export default function Profile() {
             onClick={() => setActiveTab('security')}>
             Безопасность
           </button>
+          <button
+            className={`${style.item} ${activeTab === 'withdraw' ? 'active' : ''}`}
+            onClick={() => setActiveTab('withdraw')}>
+            Вывод средств
+          </button>
         </div>
 
         <div className={style.main}>
           {activeTab === 'account' && <ProfileAccount user={user} loading={loading} />}
           {activeTab === 'notifications' && <ProfileNotifications user={user} loading={loading} />}
           {activeTab === 'transactions' && <ProfileTxs />}
-          {activeTab === 'security' && <div>Xxx</div>}
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
-          <div>Xxx</div>
+          {activeTab === 'security' && <div>xxx</div>}
+          {activeTab === 'withdraw' && <ProfileWithdraw user={user} loading={loading} />}
         </div>
       </div>
     </div>
