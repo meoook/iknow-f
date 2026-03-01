@@ -8,7 +8,6 @@ const initialState: IAuthState = {
   token: localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY),
   loading: !!localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY),
   user: null,
-  showLoginModal: false,
 }
 
 const authSlice = createSlice({
@@ -24,9 +23,6 @@ const authSlice = createSlice({
     updateUser: (state, action: PayloadAction<Partial<IUser>>) => {
       if (state.user) Object.assign(state.user, action.payload)
     },
-    setShowLoginModal: (state, action: PayloadAction<boolean>) => {
-      state.showLoginModal = action.payload
-    },
   },
   extraReducers: (builder) => {
     // Handle login mutations from RTK Query
@@ -34,7 +30,6 @@ const authSlice = createSlice({
       .addMatcher(apiBase.endpoints.w3auth.matchFulfilled, (state, action) => {
         state.token = action.payload.token
         // state.loading = false
-        state.showLoginModal = false
         localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload.token)
       })
       .addMatcher(apiBase.endpoints.w3auth.matchRejected, (state) => {
@@ -46,7 +41,6 @@ const authSlice = createSlice({
       .addMatcher(apiBase.endpoints.emailAuth.matchFulfilled, (state, action) => {
         state.token = action.payload.token
         // state.loading = false
-        state.showLoginModal = false
         localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, action.payload.token)
       })
       .addMatcher(apiBase.endpoints.emailAuth.matchRejected, (state) => {
@@ -82,5 +76,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { setLoading, setBalance, updateUser, setShowLoginModal } = authSlice.actions
+export const { setLoading, setBalance, updateUser } = authSlice.actions
 export default authSlice.reducer

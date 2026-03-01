@@ -4,12 +4,11 @@ import { useState, useRef } from 'react'
 import { useSingOutMutation } from '../../services/api'
 import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
 import { toggleTheme } from '../../store/app.slice'
-import { setShowLoginModal } from '../../store/auth.slice'
-import { useModal } from '../../hooks/hooks'
+import { useModalContext } from '../../context/ModalContext'
 import type { IUser } from '../../types/auth.types'
 import IconSprite from '../../elements/icon/Icon'
-import Modal from '../../elements/modal'
 import ModalDeposit from '../../modals/deposit'
+import ModalLogin from '../../modals/login'
 import NotificationBell from '../notification'
 import Balance from '../balance'
 import Avatar from '../../elements/avatar'
@@ -135,15 +134,12 @@ export default function UserMenu() {
 }
 
 function UserButtons({ user }: { user: IUser }) {
-  const [modal, open, close] = useModal()
+  const { openModal } = useModalContext()
   return (
     <>
-      <Modal close={close} modal={modal}>
-        <ModalDeposit />
-      </Modal>
       <Balance name='Баллы' balance={user.balances.POINT} />
       <Balance name='Кэш' balance={user.balances.CASH} currency='USD' />
-      <button className='btn blue' onClick={open}>
+      <button className='btn blue' onClick={() => openModal(ModalDeposit)}>
         Депозит
       </button>
       <NotificationBell />
@@ -152,10 +148,10 @@ function UserButtons({ user }: { user: IUser }) {
 }
 
 function NotAuthButtons() {
-  const dispatch = useAppDispatch()
+  const { openModal } = useModalContext()
   return (
     <>
-      <button className='btn blue' onClick={() => dispatch(setShowLoginModal(true))}>
+      <button className='btn blue' onClick={() => openModal(ModalLogin)}>
         Войти
       </button>
     </>

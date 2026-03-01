@@ -30,7 +30,6 @@ export interface IAuthState {
   user: IUser | null
   token: string | null
   loading: boolean
-  showLoginModal: boolean
 }
 
 export interface IAuthResponse {

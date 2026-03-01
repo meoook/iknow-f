@@ -1,28 +1,24 @@
 import style from './modal.module.scss'
 import IconSprite from '../icon/Icon'
+import { useModalContext } from '../../context/ModalContext'
 
-interface ModalProps {
-  modal: boolean
-  close: () => void
-  children?: React.ReactNode
-}
-
-export default function Modal({ modal, close, children }: ModalProps) {
+export default function ModalRenderer() {
+  const { modal, closeModal } = useModalContext()
   const handle = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
   }
+  if (!modal) return null
+
+  const { component: Component, props } = modal
+
   return (
-    <>
-      {modal && (
-        <div className={style.bg} onClick={close}>
-          <div className={style.modal} onClick={handle}>
-            <button className={style.close} onClick={close}>
-              <IconSprite name='close' />
-            </button>
-            {children}
-          </div>
-        </div>
-      )}
-    </>
+    <div className={style.bg} onClick={closeModal}>
+      <div className={style.modal} onClick={handle}>
+        <button className={style.close} onClick={closeModal}>
+          <IconSprite name='close' />
+        </button>
+        <Component {...props} close={closeModal} />
+      </div>
+    </div>
   )
 }

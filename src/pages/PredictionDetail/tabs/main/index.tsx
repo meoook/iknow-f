@@ -1,10 +1,11 @@
 import style from './tabs.module.scss'
 import type { IPredictionDetail } from '../../../../types/app.types'
 import { useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
+import { useAppSelector } from '../../../../hooks/useRedux'
 import { useCreateCommentMutation } from '../../../../services/comments/api'
 import { useCommentIds } from '../../../../services/comments/adapter'
-import { setShowLoginModal } from '../../../../store/auth.slice'
+import { useModalContext } from '../../../../context/ModalContext'
+import ModalLogin from '../../../../modals/login'
 import IconSprite from '../../../../elements/icon/Icon'
 import PredictionTabComments from '../comments'
 import PredictionTabBets from '../bets'
@@ -15,7 +16,7 @@ interface PredictionTabsProps {
 }
 
 export default function PredictionTabs({ prediction }: PredictionTabsProps) {
-  const dispatch = useAppDispatch()
+  const { openModal } = useModalContext()
   const { user } = useAppSelector((state) => state.auth)
   const [createComment, { isLoading: isPosting }] = useCreateCommentMutation()
   const [activeTab, setActiveTab] = useState<'comments' | 'holders' | 'activity'>('comments')
@@ -23,7 +24,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!user) return dispatch(setShowLoginModal(true))
+    if (!user) return openModal(ModalLogin)
     const form = e.currentTarget
     const formData = new FormData(form)
     const text = formData.get('comment') as string

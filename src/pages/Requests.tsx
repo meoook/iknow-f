@@ -1,7 +1,6 @@
-import Modal from '../elements/modal'
 import { useRequestIds } from '../services/requests/adapter'
 import { useMybetIds } from '../store/mybet.adapter'
-import { useModal } from '../hooks/hooks'
+import { useModalContext } from '../context/ModalContext'
 import ModalPrediction from '../modals/prediction'
 import RequestItem from '../components/prediction/request'
 import BetItem from '../components/prediction/bet'
@@ -10,17 +9,14 @@ import Empty from '../elements/empty'
 export default function Requests() {
   const { requestIds, isLoading, isError } = useRequestIds()
   const { mybetIds, isLoading: betsLoading, isError: betsError } = useMybetIds()
-  const [modal, open, close] = useModal()
+  const { openModal } = useModalContext()
 
   return (
     <>
-      <Modal close={close} modal={modal}>
-        <ModalPrediction close={close} />
-      </Modal>
       <div className='container'>
         <div className='row center justify'>
           <h1>Мои прогнозы</h1>
-          <button className='btn blue' onClick={open}>
+          <button className='btn blue' onClick={() => openModal(ModalPrediction)}>
             Создать
           </button>
         </div>

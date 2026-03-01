@@ -10,9 +10,10 @@ import PredictionDetail from './pages/PredictionDetail/page'
 import Header from './components/header'
 import Footer from './components/footer'
 import Page404 from './pages/404'
-import ModalLogin from './modals/login'
 import BackToTop from './components/totop'
 import { Group } from './pages/Group'
+import { ModalProvider } from './context/ModalContext'
+import ModalRenderer from './elements/modal'
 
 export default function NavRouter() {
   useGetConfigQuery()
@@ -22,48 +23,50 @@ export default function NavRouter() {
   }, [])
 
   return (
-    <BrowserRouter>
-      <ModalLogin />
-      <Header />
-      <main>
-        <ScrollToTop />
-        <BackToTop />
-        <Routes>
-          {/* Protected routes */}
-          <Route element={<LayoutProtected />}>
-            <Route path='/predictions' element={<Requests />} />
-            <Route path='/profile' element={<Profile />} />
-          </Route>
+    <ModalProvider>
+      <BrowserRouter>
+        <ModalRenderer />
+        <Header />
+        <main>
+          <ScrollToTop />
+          <BackToTop />
+          <Routes>
+            {/* Protected routes */}
+            <Route element={<LayoutProtected />}>
+              <Route path='/predictions' element={<Requests />} />
+              <Route path='/profile' element={<Profile />} />
+            </Route>
 
-          {/* Auth-only routes (redirect if already authenticated) */}
-          {/* <Route element={<LayoutNotAuthed />}>
-            <Route path='/login' element={<Login />} />
-          </Route> */}
+            {/* Auth-only routes (redirect if already authenticated) */}
+            {/* <Route element={<LayoutNotAuthed />}>
+              <Route path='/login' element={<Login />} />
+            </Route> */}
 
-          {/* Public routes */}
-          <Route path='/politics' element={<Home />} />
-          <Route path='/sport' element={<Home />} />
-          <Route path='/finance' element={<Home />} />
-          <Route path='/crypto' element={<Home />} />
-          <Route path='/geopolitics' element={<Home />} />
-          <Route path='/technology' element={<Home />} />
-          <Route path='/culture' element={<Home />} />
-          <Route path='/world' element={<Home />} />
-          <Route path='/economy' element={<Home />} />
-          <Route path='/elections' element={<Home />} />
-          <Route path='/mentions' element={<Home />} />
-          <Route path='/other' element={<Home />} />
-          <Route path='/group/:id' element={<Group />} />
-          <Route path='/prediction/:id' element={<PredictionDetail />} />
-          <Route path='/' element={<Home />} />
+            {/* Public routes */}
+            <Route path='/politics' element={<Home />} />
+            <Route path='/sport' element={<Home />} />
+            <Route path='/finance' element={<Home />} />
+            <Route path='/crypto' element={<Home />} />
+            <Route path='/geopolitics' element={<Home />} />
+            <Route path='/technology' element={<Home />} />
+            <Route path='/culture' element={<Home />} />
+            <Route path='/world' element={<Home />} />
+            <Route path='/economy' element={<Home />} />
+            <Route path='/elections' element={<Home />} />
+            <Route path='/mentions' element={<Home />} />
+            <Route path='/other' element={<Home />} />
+            <Route path='/group/:id' element={<Group />} />
+            <Route path='/prediction/:id' element={<PredictionDetail />} />
+            <Route path='/' element={<Home />} />
 
-          {/* 404 fallback */}
-          <Route path='*' element={<Page404 />} />
-          {/* <Route path='*' element={<Navigate to='/' replace />} /> */}
-        </Routes>
-      </main>
-      <Footer />
-    </BrowserRouter>
+            {/* 404 fallback */}
+            <Route path='*' element={<Page404 />} />
+            {/* <Route path='*' element={<Navigate to='/' replace />} /> */}
+          </Routes>
+        </main>
+        <Footer />
+      </BrowserRouter>
+    </ModalProvider>
   )
 }
 
@@ -80,6 +83,7 @@ function LayoutProtected() {
 //   if (token) return <Navigate to='/' replace />
 //   return <Outlet />
 // }
+
 // Scroll to top on route change
 function ScrollToTop() {
   const { pathname } = useLocation()

@@ -5,14 +5,13 @@ import { Link, NavLink } from 'react-router-dom'
 import IconSprite from '../../elements/icon/Icon'
 import Logo from './logo'
 import UserMenu from '../userMenu'
-import { useModal } from '../../hooks/hooks'
-import Modal from '../../elements/modal'
+import { useModalContext } from '../../context/ModalContext'
 import ModalHow from '../../modals/how'
 
 export default function Header() {
   const { user, loading } = useAppSelector((state) => state.auth)
   const [filter, setFilter] = useState('top')
-  const [modal, open, close] = useModal()
+  const { openModal } = useModalContext()
 
   const handleF = (e: React.MouseEvent<HTMLButtonElement>) => {
     setFilter(e.currentTarget.name)
@@ -33,10 +32,7 @@ export default function Header() {
             </form>
             {!user && !loading && (
               <>
-                <Modal modal={modal} close={close}>
-                  <ModalHow />
-                </Modal>
-                <button className={style.tultip} onClick={open}>
+                <button className={style.tultip} onClick={() => openModal(ModalHow)}>
                   <IconSprite name='tultip' size={14} />
                   <span>Как это работает?</span>
                 </button>

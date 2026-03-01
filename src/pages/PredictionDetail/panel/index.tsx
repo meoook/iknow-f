@@ -1,8 +1,9 @@
 import style from './panel.module.scss'
 import { useRef, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux'
+import { useAppSelector } from '../../../hooks/useRedux'
 import { useCreateMyBetMutation } from '../../../services/api'
-import { setShowLoginModal } from '../../../store/auth.slice'
+import { useModalContext } from '../../../context/ModalContext'
+import ModalLogin from '../../../modals/login'
 import type { IChoice, IPredictionDetail } from '../../../types/app.types'
 import type { TCurrency } from '../../../types/auth.types'
 import { config } from '../../../config/config'
@@ -17,7 +18,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   const MAX_VALUE: number = 9999999
   const { user, loading } = useAppSelector((state) => state.auth)
   const { settings } = useAppSelector((state) => state.app)
-  const dispatch = useAppDispatch()
+  const { openModal } = useModalContext()
   const [createBet, { isLoading }] = useCreateMyBetMutation()
 
   const [currency, setCurrency] = useState<TCurrency>('CASH')
@@ -27,7 +28,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
 
   const handleCreateBet = async () => {
     if (!user) {
-      dispatch(setShowLoginModal(true))
+      openModal(ModalLogin)
       return
     }
     if (!selectedChoice) return
@@ -198,7 +199,6 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
     </aside>
   )
 }
-
 
 const TOS = () => {
   return (

@@ -4,14 +4,14 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks/useRedux'
 import { commentsApi } from '../../../../services/comments/api'
 import { useComment, useCommentIds } from '../../../../services/comments/adapter'
 import { useAddLikeMutation, useRemoveLikeMutation, useDeleteCommentMutation } from '../../../../services/comments/api'
-import { setShowLoginModal } from '../../../../store/auth.slice'
 import { formatRelativeTime } from '../../../../utils/date'
-import { useClickOutside, useModal } from '../../../../hooks/hooks'
+import { useClickOutside } from '../../../../hooks/hooks'
+import { useModalContext } from '../../../../context/ModalContext'
 import ModalReport from '../../../../modals/report'
+import ModalLogin from '../../../../modals/login'
 import IconSprite from '../../../../elements/icon/Icon'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
-import Modal from '../../../../elements/modal'
 
 export interface PredictionTabCommentsProps {
   predictionId: number
@@ -71,7 +71,6 @@ interface CommentProps {
 }
 
 const CommentBase = ({ authed, predictionId, commentId }: CommentProps) => {
-  const dispatch = useAppDispatch()
   const comment = useComment(predictionId, commentId)
 
   if (!comment) return null
@@ -80,7 +79,7 @@ const CommentBase = ({ authed, predictionId, commentId }: CommentProps) => {
   const [dislikeComment] = useRemoveLikeMutation()
   const [deleteComment] = useDeleteCommentMutation()
   const [menuRef, isMenuOpen, menuToogle] = useClickOutside()
-  const [modal, open, close] = useModal()
+  const { openModal } = useModalContext()
 
   const deleteHours = useAppSelector((s) => s.app.settings.delete)
 
@@ -92,21 +91,18 @@ const CommentBase = ({ authed, predictionId, commentId }: CommentProps) => {
   }, [comment.owner, comment.created, deleteHours])
 
   const toggleLike = () => {
-    if (!authed) return dispatch(setShowLoginModal(true))
+    if (!authed) return openModal(ModalLogin)
     if (comment.is_liked) dislikeComment({ predictionId, commentId: comment.id })
     else likeComment({ predictionId, commentId: comment.id })
   }
   const handleModalOpen = () => {
-    if (!authed) return dispatch(setShowLoginModal(true))
+    if (!authed) return openModal(ModalLogin)
     menuToogle(undefined as any)
-    open()
+    openModal(ModalReport, { predictionId, commentId: comment.id })
   }
 
   return (
     <div className='row gap12'>
-      <Modal modal={modal} close={close}>
-        <ModalReport predictionId={predictionId} commentId={comment.id} close={close} />
-      </Modal>
       <Avatar src={comment.avatar} size='medium' />
       <div className='column start grow'>
         <div className='row center justify w100'>
