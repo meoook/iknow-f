@@ -1,17 +1,28 @@
 import style from './page.module.scss'
-import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useAppSelector } from '../../../hooks/useRedux'
 import ProfileAccount from '../account'
 import ProfileNotifications from '../notifications'
 import ProfileTxs from '../transactions'
 import ProfileWithdraw from '../withdraw'
+import ProfileSecurity from '../security'
 
 type TabType = 'account' | 'notifications' | 'transactions' | 'security' | 'withdraw'
 
 export default function Profile() {
   // const user = useAppSelector((state) => state.auth.user)
   const { user, loading } = useAppSelector((state) => state.auth)
-  const [activeTab, setActiveTab] = useState<TabType>('account')
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const tabParam = searchParams.get('tab') as TabType | null
+  const validTabs: TabType[] = ['account', 'notifications', 'transactions', 'security', 'withdraw']
+  const activeTab: TabType = tabParam && validTabs.includes(tabParam) ? tabParam : 'account'
+
+  const setActiveTab = (tab: TabType) => {
+    const newParams = new URLSearchParams(searchParams)
+    newParams.set('tab', tab)
+    setSearchParams(newParams)
+  }
 
   return (
     <div className='container'>
@@ -48,7 +59,7 @@ export default function Profile() {
           {activeTab === 'account' && <ProfileAccount user={user} loading={loading} />}
           {activeTab === 'notifications' && <ProfileNotifications user={user} loading={loading} />}
           {activeTab === 'transactions' && <ProfileTxs />}
-          {activeTab === 'security' && <div>xxx</div>}
+          {activeTab === 'security' && <ProfileSecurity user={user} loading={loading} />}
           {activeTab === 'withdraw' && <ProfileWithdraw user={user} loading={loading} />}
         </div>
       </div>

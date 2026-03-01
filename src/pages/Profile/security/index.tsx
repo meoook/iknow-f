@@ -1,13 +1,11 @@
-import style from './user.module.scss'
+import style from './security.module.scss'
 import IconSprite from '../../../elements/icon/Icon'
 import Avatar from '../../../elements/avatar'
 import { useEffect, useState } from 'react'
 import { EMAIL_REGEX } from '../../../config/config'
 import type { IUser } from '../../../types/auth.types'
 
-export default function ProfileUser({ user, loading }: { user: IUser | null; loading: boolean }) {
-  // const [setEmail, { isLoading: isEmailLoading }] = useSetEmailMutation()
-
+export default function ProfileSecurity({ user, loading }: { user: IUser | null; loading: boolean }) {
   const [formData, setFormData] = useState({ email: user?.email || '', username: user?.username || '', bio: '' })
   const [errors, setErrors] = useState({ email: '', username: '' })
 
@@ -73,61 +71,14 @@ export default function ProfileUser({ user, loading }: { user: IUser | null; loa
     )
   }
   return (
-    <>
-      <h1>Настройки профиля</h1>
+    <div className='column gap12'>
+      <h1>Настройки безопасности</h1>
+      <hr />
 
       <div className={style.head}>
-        <Avatar src={user?.avatar} size='big' />
-        <button className='btn gray' onClick={handleAvatarUpload}>
-          <IconSprite name='upload' size={20} />
-          <span>Загрузить</span>
-        </button>
+        хахахах
       </div>
 
-      <div className='form-row'>
-        <label htmlFor='email'>Почта</label>
-        <input
-          type='email'
-          id='email'
-          name='email'
-          value={formData.email}
-          onChange={handleInputChange}
-          className={errors.email ? 'outline error' : 'outline'}
-          placeholder='your@email.com'
-        />
-        {errors.email && <span className='error-msg'>{errors.email}</span>}
-      </div>
-
-      <div className='form-row'>
-        <label htmlFor='username'>Никнейм</label>
-        <input
-          type='text'
-          id='username'
-          name='username'
-          value={formData.username}
-          onChange={handleInputChange}
-          className={errors.username ? 'outline error' : 'outline'}
-          placeholder='Никнейм'
-        />
-        {errors.username && <span className='error-msg'>{errors.username}</span>}
-      </div>
-
-      <div className='form-row'>
-        <label htmlFor='bio'>О себе</label>
-        <textarea
-          id='bio'
-          name='bio'
-          value={formData.bio}
-          onChange={handleInputChange}
-          className='outline'
-          placeholder='О себе'
-          rows={4}
-        />
-      </div>
-
-      <button className='btn blue' onClick={handleSaveChanges}>
-        Сохранить
-      </button>
-    </>
+    </div>
   )
 }

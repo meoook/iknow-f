@@ -47,8 +47,10 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
     )
   }
   return (
-    <div className='column gap8'>
-      <h1>Уведомления в Telegram</h1>
+    <div className='column gap12'>
+      <h1>Уведомления</h1>
+      <hr />
+      <h2>Telegram</h2>
       <div className={style.tg_block}>
         {nonce ? (
           <div className='row center'>
@@ -86,7 +88,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
         </div>
       )}
       <hr />
-      <h1>Уведомления на почту</h1>
+      <h2>Почта</h2>
       <div>
         <label>Почта</label>
         <input type='email' value={user?.email} disabled />

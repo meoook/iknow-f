@@ -36,7 +36,7 @@ export default function ProfileTxs() {
   if (!txIds.length) return <Empty title='Нет транзакций' size={24} />
 
   return (
-    <div className='column gap8'>
+    <div className='column gap12'>
       <h1>Транзакции</h1>
       <hr />
       <div className='column gap12'>

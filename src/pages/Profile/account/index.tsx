@@ -122,8 +122,9 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
   }
 
   return (
-    <>
+    <div className='column gap12'>
       <h1>Настройки профиля</h1>
+      <hr />
 
       <div className={style.head}>
         <div className={style.avatarWrap}>
@@ -155,37 +156,39 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
         </div>
       </div>
 
-      <div className='form-row'>
-        <label htmlFor='username'>Никнейм</label>
-        <input
-          type='text'
-          id='username'
-          name='username'
-          value={formData.username}
-          onChange={handleInputChange}
-          className={errors.username ? 'outline error' : 'outline'}
-          placeholder='Никнейм'
-        />
-        {errors.username && <span className='error-msg'>{errors.username}</span>}
-        {setUserParamsError && <span className='error-msg'>Такой никнейм уже существует</span>}
-      </div>
+      <div>
+        <div className='form-row'>
+          <label htmlFor='username'>Никнейм</label>
+          <input
+            type='text'
+            id='username'
+            name='username'
+            value={formData.username}
+            onChange={handleInputChange}
+            className={errors.username ? 'outline error' : 'outline'}
+            placeholder='Никнейм'
+          />
+          {errors.username && <span className='error-msg'>{errors.username}</span>}
+          {setUserParamsError && <span className='error-msg'>Такой никнейм уже существует</span>}
+        </div>
 
-      <div className='form-row'>
-        <label htmlFor='bio'>О себе</label>
-        <textarea
-          id='bio'
-          name='bio'
-          value={formData.bio}
-          onChange={handleInputChange}
-          className='outline'
-          placeholder='О себе'
-          rows={4}
-        />
-      </div>
+        <div className='form-row'>
+          <label htmlFor='bio'>О себе</label>
+          <textarea
+            id='bio'
+            name='bio'
+            value={formData.bio}
+            onChange={handleInputChange}
+            className='outline'
+            placeholder='О себе'
+            rows={4}
+          />
+        </div>
 
-      <button className='btn blue' onClick={handleSaveChanges}>
-        Сохранить
-      </button>
-    </>
+        <button className='btn blue' onClick={handleSaveChanges}>
+          Сохранить
+        </button>
+      </div>
+    </div>
   )
 }
