@@ -5,17 +5,15 @@ import ProfileAccount from '../account'
 import ProfileNotifications from '../notifications'
 import ProfileTxs from '../transactions'
 import ProfileWithdraw from '../withdraw'
-import ProfileSecurity from '../security'
 
-type TabType = 'account' | 'notifications' | 'transactions' | 'security' | 'withdraw'
+type TabType = 'account' | 'notifications' | 'transactions' | 'withdraw'
 
 export default function Profile() {
-  // const user = useAppSelector((state) => state.auth.user)
   const { user, loading } = useAppSelector((state) => state.auth)
   const [searchParams, setSearchParams] = useSearchParams()
 
   const tabParam = searchParams.get('tab') as TabType | null
-  const validTabs: TabType[] = ['account', 'notifications', 'transactions', 'security', 'withdraw']
+  const validTabs: TabType[] = ['account', 'notifications', 'transactions', 'withdraw']
   const activeTab: TabType = tabParam && validTabs.includes(tabParam) ? tabParam : 'account'
 
   const setActiveTab = (tab: TabType) => {
@@ -44,11 +42,6 @@ export default function Profile() {
             Транзакции
           </button>
           <button
-            className={`${style.item} ${activeTab === 'security' ? 'active' : ''}`}
-            onClick={() => setActiveTab('security')}>
-            Безопасность
-          </button>
-          <button
             className={`${style.item} ${activeTab === 'withdraw' ? 'active' : ''}`}
             onClick={() => setActiveTab('withdraw')}>
             Вывод средств
@@ -59,7 +52,6 @@ export default function Profile() {
           {activeTab === 'account' && <ProfileAccount user={user} loading={loading} />}
           {activeTab === 'notifications' && <ProfileNotifications user={user} loading={loading} />}
           {activeTab === 'transactions' && <ProfileTxs />}
-          {activeTab === 'security' && <ProfileSecurity user={user} loading={loading} />}
           {activeTab === 'withdraw' && <ProfileWithdraw user={user} loading={loading} />}
         </div>
       </div>

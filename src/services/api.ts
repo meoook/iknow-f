@@ -81,10 +81,6 @@ export const apiBase = createApi({
         method: 'POST',
         body: payload,
       }),
-      transformErrorResponse: (response: any) => {
-        if (response.status === 'FETCH_ERROR') return 'server unreacheble'
-        return 'invalid nonce'
-      },
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         dispatch(setLoading(true))
         await queryFulfilled
@@ -99,6 +95,19 @@ export const apiBase = createApi({
     // User endpoints
     getUser: builder.query<IUser, void>({
       query: () => 'auth/user',
+    }),
+    emailApprove: builder.mutation<void, { email: string; nonce: string }>({
+      query: (payload) => ({
+        url: 'auth/email',
+        method: 'POST',
+        body: payload,
+      }),
+      transformErrorResponse: (response: any) => {
+        console.log(response.data.detail)
+        if (response.status === 'FETCH_ERROR') return 'сервер не доступен'
+        if (response.status === 400 && response.data.detail === 'nonce timeout') return 'код просрочен'
+        return 'Неверный код'
+      },
     }),
     setEmail: builder.mutation<Partial<IUser>, { email: string }>({
       query: (payload) => ({
@@ -356,6 +365,7 @@ export const {
   useEmailAuthMutation,
   // User
   useGetUserQuery,
+  useEmailApproveMutation,
   useSingOutMutation,
   useSetEmailMutation,
   useSetUserParamsMutation,

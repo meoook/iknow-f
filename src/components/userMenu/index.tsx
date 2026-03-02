@@ -105,7 +105,8 @@ export default function UserMenu() {
             </button>
             {user && (
               <Link to='/predictions' className={style.item}>
-                Мое участие
+                <IconSprite name='bank' size={20} color='var(--color-green)' />
+                <span>Мое участие</span>
               </Link>
             )}
             <hr />

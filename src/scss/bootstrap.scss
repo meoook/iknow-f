@@ -213,8 +213,8 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
-  background-repeat: no-repeat;
-  background-size: 800px 100px;
+  // background-repeat: no-repeat;
+  // background-size: 800px 100px;
 }
 
 @keyframes shimmer {
@@ -336,4 +336,11 @@
 
 .lh-1 {
   line-height: 1;
+}
+
+.error {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-red);
 }

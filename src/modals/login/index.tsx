@@ -36,7 +36,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
       localStorage.setItem('email', email)
       setStep('nonce')
     } catch (err: any) {
-      setError(err.data?.message || 'Login failed')
+      setError(err.data?.message || 'Ошибка входа')
     }
   }
 
@@ -51,7 +51,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
         .unwrap()
         .then(() => close())
     } catch (err: any) {
-      setError(err.data?.message || 'Invalid code')
+      setError(err.data?.message || 'Неверный код')
     }
   }
 

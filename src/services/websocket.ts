@@ -18,6 +18,7 @@ const WsInEvent = {
   notify: 'notify',
   balance_updated: 'balance.updated',
   telegram_verified: 'telegram.verified',
+  email_verified: 'email.verified',
   prediction_updated: 'prediction.updated',
   comment_created: 'comment.created',
   comment_updated: 'comment.updated',
@@ -119,6 +120,7 @@ class WebSocketManager {
     else if (msg.type === WsInEvent.balance_updated) store.dispatch(setBalance(msg.value))
     else if (msg.type === WsInEvent.prediction_updated) this.predictionUpdate(msg.value)
     else if (msg.type === WsInEvent.telegram_verified) this.telegramVerified(msg.value)
+    else if (msg.type === WsInEvent.email_verified) this.emailVerified(msg.value)
     else {
       const handlers = this.handlers.get(msg.type)
       handlers?.forEach((h) => h(msg.value))
@@ -169,6 +171,10 @@ class WebSocketManager {
 
   private telegramVerified(telegram_id: string) {
     if (telegram_id) store.dispatch(updateUser({ telegram_id }))
+  }
+
+  private emailVerified(email: string) {
+    if (email) store.dispatch(updateUser({ email }))
   }
 
   // Outgoing commands

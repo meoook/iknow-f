@@ -1,19 +1,25 @@
 import style from './notifications.module.scss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { config, EMAIL_REGEX } from '../../../config/config'
 import type { IUser } from '../../../types/auth.types'
 import { useGetTelegramNonceMutation, useSetUserParamsMutation, useEmailNonceMutation } from '../../../services/api'
 import Toggle from '../../../elements/toggle'
 import IconSprite from '../../../elements/icon/Icon'
+import { useModalContext } from '../../../services/ModalContext'
+import ModalApprove from '../../../modals/approve'
 
 export default function ProfileNotifications({ user, loading }: { user: IUser | null; loading: boolean }) {
   const [getTelegramNonce] = useGetTelegramNonceMutation()
   const [setUserParams] = useSetUserParamsMutation()
-  const [emailNonce, { isLoading: isOauthLoading }] = useEmailNonceMutation()
+  const [emailNonce] = useEmailNonceMutation()
+  const { openModal } = useModalContext()
 
   const [nonce, setNonce] = useState('')
   const [email, setEmail] = useState(user?.email || '')
-  const [changing, setChanging] = useState(false)
+
+  useEffect(() => {
+    if (user?.email) setEmail(user?.email)
+  }, [user?.email])
 
   const getCode = async () => {
     const srvData = await getTelegramNonce()
@@ -33,9 +39,9 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
   }
 
   const handleEmailSave = async () => {
-    setChanging(false)
-    if (email === user?.email) return
-    await emailNonce({ email }).unwrap()
+    await emailNonce({ email })
+      .unwrap()
+      .then(() => openModal(ModalApprove, { email }))
   }
 
   if (loading) {
@@ -102,18 +108,10 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
       <hr />
       <h2>Почта</h2>
       <div className={style.email}>
-        <input name='email' type='email' value={email} onChange={handleEmailChange} disabled={!changing} />
-        {changing ? (
-          <button
-            className={`${style.btn} green`}
-            onClick={handleEmailSave}
-            disabled={!EMAIL_REGEX.exec(email)}
-            title='сохранить'>
+        <input type='email' value={email} onChange={handleEmailChange} disabled={!!user?.email} />
+        {!user?.email && EMAIL_REGEX.test(email) && (
+          <button className={`${style.btn} green`} onClick={handleEmailSave} title='сохранить'>
             <IconSprite name='check' />
-          </button>
-        ) : (
-          <button className={style.btn} onClick={() => setChanging(true)} title='изменить'>
-            <IconSprite name='pencil' />
           </button>
         )}
       </div>
