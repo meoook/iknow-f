@@ -1,8 +1,15 @@
 import style from './how.module.scss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import IconSprite from '../../elements/icon/Icon'
+import { useModalContext } from '../../services/ModalContext'
 
 export default function ModalHow() {
+  const { setCloseOutside } = useModalContext()
+
+  useEffect(() => {
+    setCloseOutside(true)
+  }, [setCloseOutside])
+
   return (
     <div className={`${style.wrapper} noscroll`}>
       <Step1 />
