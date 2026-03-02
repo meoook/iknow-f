@@ -1,10 +1,14 @@
 import style from './withdraw.module.scss'
+import { useEffect, useState } from 'react'
 import type { IUser } from '../../../types/auth.types'
-import { useState } from 'react'
 
 export default function ProfileWithdraw({ user, loading }: { user: IUser | null; loading: boolean }) {
   const [address, setAddress] = useState(user?.address || '')
   const [amount, setAmount] = useState('')
+
+  useEffect(() => {
+    if (user?.address) setAddress(user.address)
+  }, [user?.address])
 
   const handleWithdraw = () => {
     console.log(address, amount)

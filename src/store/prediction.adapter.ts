@@ -1,6 +1,6 @@
 import { createEntityAdapter } from '@reduxjs/toolkit'
 import { useGetPredictionsQuery } from '../services/api'
-import type { IPrediction } from '../types/app.types'
+import type { IPrediction, PaginatedArg } from '../types/app.types'
 
 export const predictionAdapter = createEntityAdapter<IPrediction>({
   sortComparer: (a, b) => b.created - a.created,
@@ -8,8 +8,8 @@ export const predictionAdapter = createEntityAdapter<IPrediction>({
 
 export const predictionSelectors = predictionAdapter.getSelectors()
 
-export const usePredictionIds = () => {
-  return useGetPredictionsQuery(undefined, {
+export const usePredictionIds = (params?: PaginatedArg) => {
+  return useGetPredictionsQuery(params, {
     selectFromResult: ({ data, isLoading, isFetching, isError }) => ({
       predictionIds: data ? predictionSelectors.selectIds(data) : [],
       total: data?.total ?? 0,

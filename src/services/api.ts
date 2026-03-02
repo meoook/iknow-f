@@ -24,7 +24,7 @@ import { requestsAdapter } from './requests/adapter'
 import { wsManager } from './websocket'
 import { mybetAdapter } from '../store/mybet.adapter'
 import { betAdapter } from '../store/bet.adapter'
-import { predictionAdapter } from '../store/prediction.adapter'
+import { predictionAdapter, predictionSelectors } from '../store/prediction.adapter'
 import { topAdapter, topSelectors } from '../store/top.adapter'
 import { txAdapter } from '../store/tx.adapter'
 
@@ -38,7 +38,7 @@ export const apiBase = createApi({
       return headers
     },
   }),
-  tagTypes: ['Predictions', 'MyBets', 'Bets', 'Groups'],
+  tagTypes: ['Predictions', 'MyBets', 'Bets'],
   endpoints: (builder) => ({
     // Client endpoints
     getConfig: builder.query<ISettings, void>({
@@ -302,6 +302,19 @@ export const apiBase = createApi({
           total: response.total,
         }
       },
+      serializeQueryArgs: ({ queryArgs }) => ({ group: queryArgs?.group }),
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg?.offset === 0) {
+          currentCache.entities = newItems.entities
+          currentCache.ids = newItems.ids
+        } else {
+          predictionAdapter.addMany(currentCache, predictionSelectors.selectAll(newItems))
+        }
+        if (currentCache.total !== newItems.total) currentCache.total = newItems.total
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.offset !== previousArg?.offset || currentArg?.group !== previousArg?.group
+      }
     }),
     getPrediction: builder.query<IPredictionDetail, number>({
       query: (id) => `prediction/${id}`,

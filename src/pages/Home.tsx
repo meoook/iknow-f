@@ -1,22 +1,32 @@
 import { useEffect, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { usePredictionIds } from '../store/prediction.adapter'
-import { useAppDispatch } from '../hooks/useRedux'
-import { apiBase } from '../services/api'
+
 import PredictionCard from '../components/card'
 import Empty from '../elements/empty'
 
 export default function Home() {
   const limit = 10
-  const dispatch = useAppDispatch()
+
   const observerTarget = useRef<HTMLDivElement>(null)
+  const { pathname } = useLocation()
+
+  const group = pathname === '/' ? undefined : pathname.slice(1)
   const [offset, setOffset] = useState(0)
-  const { predictionIds, isLoading, total, isFetching, isError } = usePredictionIds()
+
+  useEffect(() => {
+    setOffset(0)
+  }, [group])
+
+  const { predictionIds, isLoading, total, isFetching, isError } = usePredictionIds({
+    limit,
+    offset,
+    ...(group && { group }),
+  })
 
   const loadMore = () => {
     if (predictionIds.length >= total || isFetching) return
-    const newOffset = offset + limit
-    setOffset(newOffset)
-    dispatch(apiBase.endpoints.getPredictions.initiate({ limit, offset: newOffset }, { forceRefetch: true }))
+    setOffset((prev) => prev + limit)
   }
 
   useEffect(() => {

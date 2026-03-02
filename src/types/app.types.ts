@@ -36,10 +36,12 @@ type IPaginatedRequest<RequireId extends boolean = false> = RequireId extends tr
     id: number
     limit?: number
     offset?: number
+    group?: string
   }
   : {
     limit?: number
     offset?: number
+    group?: string
   }
 
 export type PaginatedArg<RequireId extends boolean = false> = RequireId extends true
