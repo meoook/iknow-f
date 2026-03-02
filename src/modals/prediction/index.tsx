@@ -11,7 +11,11 @@ import Loader from '../../elements/loader'
 const VOTE_YES_NAME = 'Да / Сбудется'
 const VOTE_NO_NAME = 'Нет / Не сбудется'
 
-export default function ModalPrediction({ close }: { close: () => void }) {
+interface ModalPredictionProps {
+  close: () => void
+}
+
+export default function ModalPrediction({ close }: ModalPredictionProps) {
   const user = useAppSelector((state) => state.auth.user)
   const [createRequest, { isLoading, isError }] = useCreateRequestMutation()
   const [formData, setFormData] = useState<IRequestCreate>({

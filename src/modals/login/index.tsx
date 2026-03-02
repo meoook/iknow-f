@@ -97,6 +97,11 @@ export default function ModalLogin({ close }: ModalLoginProps) {
     }
   }
 
+  const stepBack = () => {
+    setStep('email')
+    setNonce(['', '', '', '', '', ''])
+  }
+
   return (
     <div className={style.wrapper}>
       <h1 className='column center'>Добро пожаловать в Vanga</h1>
@@ -150,8 +155,8 @@ export default function ModalLogin({ close }: ModalLoginProps) {
         </div>
 
         <div className={style.stepItem}>
-          <div className='column center gap20'>
-            <div className='column center gap10'>
+          <div className='column center gap12'>
+            <div className='column center gap8'>
               <h2>Введите код</h2>
               <p className='color-gray'>Мы отправили 6-значный код на {email}</p>
             </div>
@@ -181,7 +186,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
               Подтвердить
             </button>
 
-            <button className='btn text' onClick={() => setStep('email')}>
+            <button className='btn text' onClick={stepBack}>
               Изменить почту
             </button>
           </div>

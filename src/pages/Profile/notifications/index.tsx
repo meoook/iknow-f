@@ -1,15 +1,19 @@
 import style from './notifications.module.scss'
 import { useState } from 'react'
-import { config } from '../../../config/config'
+import { config, EMAIL_REGEX } from '../../../config/config'
 import type { IUser } from '../../../types/auth.types'
-import { useGetTelegramNonceMutation, useSetUserParamsMutation } from '../../../services/api'
+import { useGetTelegramNonceMutation, useSetUserParamsMutation, useEmailNonceMutation } from '../../../services/api'
 import Toggle from '../../../components/toggle'
+import IconSprite from '../../../elements/icon/Icon'
 
 export default function ProfileNotifications({ user, loading }: { user: IUser | null; loading: boolean }) {
   const [getTelegramNonce] = useGetTelegramNonceMutation()
   const [setUserParams] = useSetUserParamsMutation()
+  const [emailNonce, { isLoading: isOauthLoading }] = useEmailNonceMutation()
 
   const [nonce, setNonce] = useState('')
+  const [email, setEmail] = useState(user?.email || '')
+  const [changing, setChanging] = useState(false)
 
   const getCode = async () => {
     const srvData = await getTelegramNonce()
@@ -22,6 +26,16 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
 
   const toggleMail = () => {
     setUserParams({ email_notify: !user?.email_notify })
+  }
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }
+
+  const handleEmailSave = async () => {
+    setChanging(false)
+    if (email === user?.email) return
+    await emailNonce({ email }).unwrap()
   }
 
   if (loading) {
@@ -51,6 +65,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
       <h1>Уведомления</h1>
       <hr />
       <h2>Telegram</h2>
+      {user?.telegram_id && <div>Telegram id: {user.telegram_id}</div>}
       <div className={style.tg_block}>
         {nonce ? (
           <div className='row center'>
@@ -65,18 +80,15 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
             </div>
           </div>
         ) : (
-          <div className='row center gap8'>
+          <div className='row center gap8 lh-1'>
             {!user?.telegram_id ? (
               <button className='btn green' onClick={getCode}>
                 Подключить
               </button>
             ) : (
-              <>
-                <div>Telegram id: {user?.telegram_id}</div>
-                <button className='btn orange' onClick={getCode}>
-                  Изменить
-                </button>
-              </>
+              <button className='btn orange' onClick={getCode}>
+                Изменить
+              </button>
             )}
           </div>
         )}
@@ -89,9 +101,21 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
       )}
       <hr />
       <h2>Почта</h2>
-      <div>
-        <label>Почта</label>
-        <input type='email' value={user?.email} disabled />
+      <div className={style.email}>
+        <input name='email' type='email' value={email} onChange={handleEmailChange} disabled={!changing} />
+        {changing ? (
+          <button
+            className={`${style.btn} green`}
+            onClick={handleEmailSave}
+            disabled={!EMAIL_REGEX.exec(email)}
+            title='сохранить'>
+            <IconSprite name='check' />
+          </button>
+        ) : (
+          <button className={style.btn} onClick={() => setChanging(true)} title='изменить'>
+            <IconSprite name='pencil' />
+          </button>
+        )}
       </div>
       {user?.email && (
         <div className='row center gap8'>

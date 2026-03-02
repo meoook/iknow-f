@@ -1,9 +1,10 @@
 import style from './deposit.module.scss'
 import qrCode from '../../assets/qr-code.png'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useDepositMutation } from '../../services/api'
 import IconSprite from '../../elements/icon/Icon'
+import { useModalContext } from '../../services/ModalContext'
 
 const CHAINS = [
   { value: 'ETH', label: 'ETH' },
@@ -32,6 +33,12 @@ const ADDRESSES = {
 }
 
 export default function ModalDeposit() {
+  const { setCloseOutside } = useModalContext()
+
+  useEffect(() => {
+    setCloseOutside(true)
+  }, [setCloseOutside])
+
   const user = useAppSelector((state) => state.auth.user)
   const [deposit] = useDepositMutation()
   const [chain, setChain] = useState('TRX')

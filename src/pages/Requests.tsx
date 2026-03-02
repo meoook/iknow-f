@@ -1,6 +1,6 @@
 import { useRequestIds } from '../services/requests/adapter'
 import { useMybetIds } from '../store/mybet.adapter'
-import { useModalContext } from '../context/ModalContext'
+import { useModalContext } from '../services/ModalContext'
 import ModalPrediction from '../modals/prediction'
 import RequestItem from '../components/prediction/request'
 import BetItem from '../components/prediction/bet'

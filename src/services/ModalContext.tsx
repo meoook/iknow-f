@@ -3,12 +3,14 @@ import { createContext, useCallback, useContext, useRef, useState } from 'react'
 interface ModalState {
   component: React.ComponentType<any>
   props?: Record<string, any>
+  closeOutside?: boolean
 }
 
 interface ModalContextValue {
   modal: ModalState | null
   openModal: (component: React.ComponentType<any>, props?: Record<string, any>) => void
   closeModal: () => void
+  setCloseOutside: (value: boolean) => void
 }
 
 const ModalContext = createContext<ModalContextValue | null>(null)
@@ -22,7 +24,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
     document.body.style.position = 'fixed'
     document.body.style.top = `-${scrollY.current}px`
     document.body.style.width = '100%'
-    setModal({ component, props })
+    setModal({ component, props, closeOutside: false })
   }, [])
 
   const closeModal = useCallback(() => {
@@ -33,7 +35,13 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
     setModal(null)
   }, [])
 
-  return <ModalContext.Provider value={{ modal, openModal, closeModal }}>{children}</ModalContext.Provider>
+  const setCloseOutside = useCallback((closeOutside: boolean) => {
+    setModal((prev) => (prev ? { ...prev, closeOutside } : null))
+  }, [])
+
+  return (
+    <ModalContext.Provider value={{ modal, openModal, closeModal, setCloseOutside }}>{children}</ModalContext.Provider>
+  )
 }
 
 export function useModalContext(): ModalContextValue {

@@ -12,7 +12,7 @@ import Footer from './components/footer'
 import Page404 from './pages/404'
 import BackToTop from './components/totop'
 import { Group } from './pages/Group'
-import { ModalProvider } from './context/ModalContext'
+import { ModalProvider } from './services/ModalContext'
 import ModalRenderer from './elements/modal'
 
 export default function NavRouter() {

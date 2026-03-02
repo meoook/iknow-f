@@ -5,7 +5,7 @@ import { Link, NavLink } from 'react-router-dom'
 import IconSprite from '../../elements/icon/Icon'
 import Logo from './logo'
 import UserMenu from '../userMenu'
-import { useModalContext } from '../../context/ModalContext'
+import { useModalContext } from '../../services/ModalContext'
 import ModalHow from '../../modals/how'
 
 export default function Header() {

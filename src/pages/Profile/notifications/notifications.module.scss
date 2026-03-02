@@ -16,3 +16,28 @@
   background: var(--color-orange-dark);
   border-radius: 8px;
 }
+
+.email {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  & input {
+    padding-right: 50px;
+  }
+}
+
+.btn {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  padding-inline: 12px;
+  background-color: var(--color-blue);
+
+  &:global(.green) {
+    background-color: var(--color-green);
+  }
+}
