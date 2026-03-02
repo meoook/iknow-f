@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { config, EMAIL_REGEX } from '../../../config/config'
 import type { IUser } from '../../../types/auth.types'
 import { useGetTelegramNonceMutation, useSetUserParamsMutation, useEmailNonceMutation } from '../../../services/api'
-import Toggle from '../../../components/toggle'
+import Toggle from '../../../elements/toggle'
 import IconSprite from '../../../elements/icon/Icon'
 
 export default function ProfileNotifications({ user, loading }: { user: IUser | null; loading: boolean }) {

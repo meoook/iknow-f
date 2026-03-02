@@ -4,7 +4,7 @@ import { useAppSelector } from '../../hooks/useRedux'
 import { useCreateRequestMutation } from '../../services/api'
 import type { IRequestCreate } from '../../types/app.types'
 import type { TCurrency } from '../../types/auth.types'
-import DateSelect from '../../components/dateselect'
+import DateSelect from '../../elements/dateselect'
 import IconSprite from '../../elements/icon/Icon'
 import Loader from '../../elements/loader'
 

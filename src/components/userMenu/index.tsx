@@ -10,9 +10,9 @@ import IconSprite from '../../elements/icon/Icon'
 import ModalDeposit from '../../modals/deposit'
 import ModalLogin from '../../modals/login'
 import NotificationBell from '../notification'
-import Balance from '../balance'
+import Balance from '../../elements/balance'
 import Avatar from '../../elements/avatar'
-import Toggle from '../toggle'
+import Toggle from '../../elements/toggle'
 
 export default function UserMenu() {
   const { loading, user } = useAppSelector((state) => state.auth)
@@ -104,11 +104,9 @@ export default function UserMenu() {
               <Toggle checked={theme === 'dark'} />
             </button>
             {user && (
-              <>
-                <Link to='/predictions' className={style.item}>
-                  Мое участие
-                </Link>
-              </>
+              <Link to='/predictions' className={style.item}>
+                Мое участие
+              </Link>
             )}
             <hr />
             <a className={style.link} href='/terms'>
