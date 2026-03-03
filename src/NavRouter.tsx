@@ -11,7 +11,6 @@ import Header from './components/header'
 import Footer from './components/footer'
 import Page404 from './pages/404'
 import BackToTop from './elements/totop'
-import { Group } from './pages/Group'
 import { ModalProvider } from './services/ModalContext'
 import ModalRenderer from './elements/modal'
 
@@ -55,7 +54,6 @@ export default function NavRouter() {
             <Route path='/elections' element={<Home />} />
             <Route path='/mentions' element={<Home />} />
             <Route path='/other' element={<Home />} />
-            <Route path='/group/:id' element={<Group />} />
             <Route path='/prediction/:id' element={<PredictionDetail />} />
             <Route path='/' element={<Home />} />
 

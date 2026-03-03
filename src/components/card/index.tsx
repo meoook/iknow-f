@@ -12,9 +12,9 @@ interface PredictionCardProps {
 
 const PredictionCard = ({ predictionId }: PredictionCardProps) => {
   const prediction = usePrediction(predictionId)
+  const { settings } = useAppSelector((state) => state.app)
   if (!prediction) return null
   const volume = intlNumber('ru-RU', prediction.volume)
-  const { settings } = useAppSelector((state) => state.app)
   const color = prediction.multiplier > 80 ? style.red : prediction.multiplier > 50 ? style.orange : style.green
   const src = prediction.icon ? `${config.imgBaseUrl}${prediction.icon}` : `${config.imgBaseUrl}/icon/no_icon.png`
   const percent = Math.round((prediction.multiplier / settings.multiplier) * 100)

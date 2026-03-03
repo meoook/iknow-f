@@ -38,7 +38,6 @@ export const apiBase = createApi({
       return headers
     },
   }),
-  tagTypes: ['Predictions', 'MyBets', 'Bets'],
   endpoints: (builder) => ({
     // Client endpoints
     getConfig: builder.query<ISettings, void>({
@@ -288,12 +287,16 @@ export const apiBase = createApi({
     }),
 
     // Public endpoints
-    searchPredictions: builder.query<any[], string>({
-      query: (searchQuery) => `prediction/search?q=${encodeURIComponent(searchQuery)}`,
+    searchPredictions: builder.mutation<any[], string>({
+      // query: (searchQuery) => `prediction/search?q=${encodeURIComponent(searchQuery)}`,
+      query: (searchQuery) => ({
+        url: 'prediction/search',
+        params: { q: searchQuery },
+      }),
     }),
     getPredictions: builder.query<EntityStateWithTotal<IPrediction>, PaginatedArg>({
       query: (params) => ({
-        url: 'prediction',
+        url: 'prediction/search',
         params,
       }),
       transformResponse: (response: PaginatedResponse<IPrediction>) => {
@@ -314,7 +317,7 @@ export const apiBase = createApi({
       },
       forceRefetch({ currentArg, previousArg }) {
         return currentArg?.offset !== previousArg?.offset || currentArg?.group !== previousArg?.group
-      }
+      },
     }),
     getPrediction: builder.query<IPredictionDetail, number>({
       query: (id) => `prediction/${id}`,
@@ -398,6 +401,6 @@ export const {
   // ------
   useGetRequestsQuery,
   useGetPredictionsQuery,
-  useSearchPredictionsQuery,
+  useSearchPredictionsMutation,
   useGetPredictionQuery,
 } = apiBase

@@ -7,6 +7,7 @@ import Logo from './logo'
 import UserMenu from '../userMenu'
 import { useModalContext } from '../../services/ModalContext'
 import ModalHow from '../../modals/how'
+import PredictionSearch from '../search'
 
 export default function Header() {
   const { user, loading } = useAppSelector((state) => state.auth)
@@ -26,10 +27,7 @@ export default function Header() {
             <h2>Vanga</h2>
           </Link>
           <div className='row center gap20 w100'>
-            <form className={style.input}>
-              <input name='search' placeholder='Поиск' />
-              <IconSprite name='search' />
-            </form>
+            <PredictionSearch />
             {!user && !loading && (
               <>
                 <button className={style.tultip} onClick={() => openModal(ModalHow)}>

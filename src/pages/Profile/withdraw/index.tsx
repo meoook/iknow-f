@@ -43,6 +43,7 @@ export default function ProfileWithdraw({ user, loading }: { user: IUser | null;
       <input
         name='address'
         type='text'
+        className='outline'
         placeholder='Адрес кошелька'
         value={address}
         onChange={(e) => setAddress(e.target.value)}
@@ -50,6 +51,7 @@ export default function ProfileWithdraw({ user, loading }: { user: IUser | null;
       <input
         name='amount'
         type='decimal'
+        className='outline'
         placeholder='Сумма'
         value={amount}
         onChange={(e) => setAmount(e.target.value)}

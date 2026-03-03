@@ -161,7 +161,6 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
           <label htmlFor='username'>Никнейм</label>
           <input
             type='text'
-            id='username'
             name='username'
             value={formData.username}
             onChange={handleInputChange}
@@ -175,7 +174,6 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
         <div className='form-row'>
           <label htmlFor='bio'>О себе</label>
           <textarea
-            id='bio'
             name='bio'
             value={formData.bio}
             onChange={handleInputChange}
