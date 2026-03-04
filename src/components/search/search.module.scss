@@ -1,4 +1,4 @@
-.searchWrapper {
+.wrapper {
   position: relative;
   width: 100%;
   max-width: 600px;
@@ -21,7 +21,16 @@
 
   &:focus-within {
     box-shadow: var(--shadow-active);
-    border-color: var(--color-primary);
+    // border-color: var(--color-primary);
+  }
+
+  &:hover:not(:focus-within) {
+    background-color: var(--color-dialog);
+  }
+
+  &:global(.open) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
   & input {
@@ -32,7 +41,6 @@
     background: transparent;
     border: none;
     outline: none;
-    font-size: 14px;
 
     &::placeholder {
       color: var(--color-secondary);
@@ -49,17 +57,17 @@
   }
 }
 
-.clearBtn {
+.clear {
   position: absolute;
-  right: 12px;
+  right: 6px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px;
   border-radius: 50%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--color-secondary);
@@ -68,7 +76,7 @@
     color 0.2s;
 
   &:hover {
-    background: var(--color-bg-hover);
+    background: var(--color-hover);
     color: var(--color-primary);
   }
 
@@ -80,29 +88,40 @@
 
 .dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% - 1px);
   left: 0;
   right: 0;
-  background: var(--color-bg-secondary);
+  background: var(--color-head);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+  // border-radius: var(--radius);
   box-shadow: var(--shadow-large);
-  z-index: 100;
+  z-index: 6;
   max-height: 300px;
   overflow-y: auto;
+  scrollbar-width: none;
   padding: 8px 0;
   animation: slideDown 0.2s ease-out;
 }
 
-.dropdownItem {
-  padding: 10px 16px;
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
   cursor: pointer;
-  font-size: 14px;
   color: var(--color-primary);
   transition: background 0.2s;
 
   &:hover {
-    background: var(--color-bg-hover);
+    background: var(--color-hover);
+  }
+  & img {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
   }
 }
 

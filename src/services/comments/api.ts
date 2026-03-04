@@ -18,7 +18,10 @@ export const commentsApi = apiBase.injectEndpoints({
         params: rest,
       }),
       transformResponse: (response: PaginatedResponse<IComment>) => {
-        return { ...commentsAdapter.setAll(commentsAdapter.getInitialState(), response.data), total: response.total }
+        return {
+          ...commentsAdapter.setAll(commentsAdapter.getInitialState(), response.data ?? []),
+          total: response.total ?? 0,
+        }
       },
       serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
       merge: (currentCache, newItems) => {

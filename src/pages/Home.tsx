@@ -6,7 +6,7 @@ import PredictionCard from '../components/card'
 import Empty from '../elements/empty'
 
 export default function Home() {
-  const limit = 10
+  const limit = 20
 
   const observerTarget = useRef<HTMLDivElement>(null)
   const { pathname } = useLocation()

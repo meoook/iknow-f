@@ -17,11 +17,12 @@ import type {
   EntityStateWithTotal,
   ITopHolder,
   ITx,
+  IPredictionSearch,
 } from '../types/app.types'
 import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
 
-import { requestsAdapter } from './requests/adapter'
 import { wsManager } from './websocket'
+import { requestsAdapter } from './requests/adapter'
 import { mybetAdapter } from '../store/mybet.adapter'
 import { betAdapter } from '../store/bet.adapter'
 import { predictionAdapter, predictionSelectors } from '../store/prediction.adapter'
@@ -102,7 +103,6 @@ export const apiBase = createApi({
         body: payload,
       }),
       transformErrorResponse: (response: any) => {
-        console.log(response.data.detail)
         if (response.status === 'FETCH_ERROR') return 'сервер не доступен'
         if (response.status === 400 && response.data.detail === 'nonce timeout') return 'код просрочен'
         return 'Неверный код'
@@ -173,7 +173,10 @@ export const apiBase = createApi({
         params,
       }),
       transformResponse: (response: PaginatedResponse<IRequest>) => {
-        return { ...requestsAdapter.setAll(requestsAdapter.getInitialState(), response.data), total: response.total }
+        return {
+          ...requestsAdapter.setAll(requestsAdapter.getInitialState(), response?.data ?? []),
+          total: response?.total ?? 0,
+        }
       },
       async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
         try {
@@ -231,7 +234,10 @@ export const apiBase = createApi({
         params,
       }),
       transformResponse: (response: PaginatedResponse<IMyBet>) => {
-        return { ...mybetAdapter.setAll(mybetAdapter.getInitialState(), response.data), total: response.total }
+        return {
+          ...mybetAdapter.setAll(mybetAdapter.getInitialState(), response?.data ?? []),
+          total: response?.total ?? 0,
+        }
       },
       async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
         try {
@@ -282,13 +288,12 @@ export const apiBase = createApi({
         params,
       }),
       transformResponse: (response: PaginatedResponse<ITx>) => {
-        return { ...txAdapter.setAll(txAdapter.getInitialState(), response.data), total: response.total }
+        return { ...txAdapter.setAll(txAdapter.getInitialState(), response.data ?? []), total: response.total ?? 0 }
       },
     }),
 
     // Public endpoints
-    searchPredictions: builder.mutation<any[], string>({
-      // query: (searchQuery) => `prediction/search?q=${encodeURIComponent(searchQuery)}`,
+    searchPredictions: builder.mutation<IPredictionSearch[], string>({
       query: (searchQuery) => ({
         url: 'prediction/search',
         params: { q: searchQuery },
@@ -296,13 +301,13 @@ export const apiBase = createApi({
     }),
     getPredictions: builder.query<EntityStateWithTotal<IPrediction>, PaginatedArg>({
       query: (params) => ({
-        url: 'prediction/search',
+        url: 'prediction',
         params,
       }),
       transformResponse: (response: PaginatedResponse<IPrediction>) => {
         return {
-          ...predictionAdapter.setAll(predictionAdapter.getInitialState(), response.data),
-          total: response.total,
+          ...predictionAdapter.setAll(predictionAdapter.getInitialState(), response.data ?? []),
+          total: response.total ?? 0,
         }
       },
       serializeQueryArgs: ({ queryArgs }) => ({ group: queryArgs?.group }),
@@ -328,7 +333,7 @@ export const apiBase = createApi({
         params: rest,
       }),
       transformResponse: (response: PaginatedResponse<IBet>) => {
-        return { ...betAdapter.setAll(betAdapter.getInitialState(), response.data), total: response.total }
+        return { ...betAdapter.setAll(betAdapter.getInitialState(), response.data ?? []), total: response.total ?? 0 }
       },
       serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
       merge: (currentCache, newItems) => {
@@ -360,7 +365,7 @@ export const apiBase = createApi({
         params: rest,
       }),
       transformResponse: (response: PaginatedResponse<ITopHolder>) => {
-        return { ...topAdapter.setAll(topAdapter.getInitialState(), response.data), total: response.total }
+        return { ...topAdapter.setAll(topAdapter.getInitialState(), response.data ?? []), total: response.total ?? 0 }
       },
       serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
       merge: (currentCache, newItems) => {

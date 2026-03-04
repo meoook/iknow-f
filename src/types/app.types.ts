@@ -33,16 +33,16 @@ export interface PaginatedResponse<T> {
 
 type IPaginatedRequest<RequireId extends boolean = false> = RequireId extends true
   ? {
-    id: number
-    limit?: number
-    offset?: number
-    group?: string
-  }
+      id: number
+      limit?: number
+      offset?: number
+      group?: string
+    }
   : {
-    limit?: number
-    offset?: number
-    group?: string
-  }
+      limit?: number
+      offset?: number
+      group?: string
+    }
 
 export type PaginatedArg<RequireId extends boolean = false> = RequireId extends true
   ? IPaginatedRequest<true>
@@ -132,6 +132,13 @@ export interface IPredictionDetail {
   closed: string
   created: number
   choices: IChoice[]
+}
+
+export interface IPredictionSearch {
+  id: number
+  title: string
+  icon: string
+  volume: number
 }
 
 interface IBetPrediction {
