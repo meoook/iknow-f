@@ -13,6 +13,8 @@ import Page404 from './pages/404'
 import BackToTop from './elements/totop'
 import { ModalProvider } from './services/ModalContext'
 import ModalRenderer from './elements/modal'
+import PageTos from './pages/Tos'
+import PagePrivacy from './pages/privacy'
 
 export default function NavRouter() {
   useGetConfigQuery()
@@ -55,6 +57,8 @@ export default function NavRouter() {
             <Route path='/mentions' element={<Home />} />
             <Route path='/other' element={<Home />} />
             <Route path='/prediction/:id' element={<PredictionDetail />} />
+            <Route path='/tos' element={<PageTos />} />
+            <Route path='/privacy' element={<PagePrivacy />} />
             <Route path='/' element={<Home />} />
 
             {/* 404 fallback */}

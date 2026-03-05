@@ -220,6 +220,15 @@ img {
   background-color: rgba(var(--color-primary), 0.8);
 }
 
+p {
+  &.upper {
+    text-transform: uppercase;
+  }
+}
+ol.start {
+  margin: 14px 0 8px;
+}
+
 section {
   padding-top: 24px;
   padding-bottom: 24px;

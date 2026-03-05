@@ -110,15 +110,15 @@ export default function UserMenu() {
               </Link>
             )}
             <hr />
-            <a className={style.link} href='/terms'>
+            <Link className={style.link} to='/tos'>
               Условия использования
-            </a>
-            <a className={style.link} href='/about'>
+            </Link>
+            <Link className={style.link} to='/about'>
               О приложении
-            </a>
-            <a className={style.link} href='/docs'>
+            </Link>
+            <Link className={style.link} to='/docs'>
               Документация
-            </a>
+            </Link>
             {user && (
               <button className={style.item} onClick={logOut}>
                 <IconSprite name='exit' size={20} color='var(--color-red)' />

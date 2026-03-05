@@ -1,6 +1,7 @@
 import style from './footer.module.scss'
 import Icon from '../../elements/icon/Icon'
 import Logo from '../header/logo'
+import { Link } from 'react-router-dom'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -18,20 +19,8 @@ export default function Footer() {
 
         <hr />
 
-        <div className={style.bottom}>
-          <div className={style.left}>
-            <div className={style.links}>
-              <span>Unknown Origin Ltd. © {currentYear}</span>
-              <span>/</span>
-              <a href='/privacy'>Privacy</a>
-              <span>/</span>
-              <a href='/terms'>Terms of Use</a>
-              <span>/</span>
-              <a href='/help'>Help Center</a>
-              <span>/</span>
-              <a href='/docs'>Docs</a>
-            </div>
-
+        <div className='column gap20'>
+          <div className={style.bottom}>
             <div className={style.socials}>
               <a href='mailto:hello@i-vanga.com' target='_blank' rel='noreferrer'>
                 <Icon name='mail' size={20} />
@@ -49,9 +38,22 @@ export default function Footer() {
                 <Icon name='tiktok' size={20} />
               </a>
             </div>
+
+            <div className={style.links}>
+              <span>Unknown Origin Ltd. © {currentYear}</span>
+              <span className={style.dot}>·</span>
+              <Link to='/privacy'>Конфиденциальность</Link>
+              <span className={style.dot}>·</span>
+              <Link to='/tos'>Условия использования</Link>
+              <span className={style.dot}>·</span>
+              <Link to='/help'>Центр помощи</Link>
+              <span className={style.dot}>·</span>
+              <Link to='/docs'>Документация</Link>
+            </div>
+            <div />
           </div>
 
-          <div className={style.right}>
+          <div className={style.about}>
             <p>
               i-Vanga работает по всему миру через отдельные юридические лица. <a href='/us'>i-Vanga</a> управляется
               Unknown Origin Ltd. i-Vanga, a CFTC-regulated Designated Contract Market. Эта международная платформа не

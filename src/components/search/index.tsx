@@ -43,12 +43,12 @@ export default function PredictionSearch() {
     if (!isSearchOpen) searchToggle({} as any)
   }
 
-  const handleBlur = (e: React.FocusEvent) => {
-    // Если фокус переходит на элемент внутри нашего оберточного div, не закрываем
-    if (searchRef.current && !searchRef.current.contains(e.relatedTarget as Node)) {
-      if (isSearchOpen) searchToggle({} as any)
-    }
-  }
+  // const handleBlur = (e: React.FocusEvent) => {
+  //   // Если фокус переходит на элемент внутри нашего оберточного div, не закрываем
+  //   if (searchRef.current && !searchRef.current.contains(e.relatedTarget as Node)) {
+  //     if (isSearchOpen) searchToggle({} as any)
+  //   }
+  // }
 
   const opened = isSearchOpen && (isLoading || isSuccess || searchValue)
 
@@ -61,7 +61,7 @@ export default function PredictionSearch() {
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           onFocus={handleFocus}
-          onBlur={handleBlur}
+          // onBlur={handleBlur}
           autoComplete='off'
         />
         <IconSprite name='search' />
@@ -97,7 +97,7 @@ const SearchItem = ({ prediction, clear }: { prediction: IPredictionSearch; clea
         <img src={src} alt={prediction.title} />
         <span className='clamp-1'>{prediction.title}</span>
       </div>
-      <div className='color-green'>{volume}</div>
+      <div className='color-green'>${volume}</div>
     </Link>
   )
 }

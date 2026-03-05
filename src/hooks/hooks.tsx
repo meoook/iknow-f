@@ -56,27 +56,6 @@ export const useComponentSize = <T extends HTMLElement>(componentRef: React.RefO
   return width
 }
 
-export const useModal = (): [boolean, () => void, () => void] => {
-  const [modal, setModal] = useState(false)
-  const [scrollY, setScrollY] = useState(0)
-  const open = () => {
-    setModal(true)
-    const scrollY_ = window.scrollY
-    setScrollY(scrollY_)
-    document.body.style.position = 'fixed'
-    document.body.style.top = `-${scrollY_}px`
-    document.body.style.width = '100%'
-  }
-  const close = () => {
-    setModal(false)
-    document.body.style.position = ''
-    document.body.style.top = ''
-    document.body.style.width = ''
-    window.scrollTo(0, scrollY)
-  }
-  return [modal, open, close]
-}
-
 export const intlNumber = (lang: string, amount: number): string => {
   return Intl.NumberFormat(lang, {
     notation: 'compact',
