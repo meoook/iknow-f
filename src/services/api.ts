@@ -29,13 +29,24 @@ import { predictionAdapter, predictionSelectors } from '../store/prediction.adap
 import { topAdapter, topSelectors } from '../store/top.adapter'
 import { txAdapter } from '../store/tx.adapter'
 
+const getCookie = (name: string) => {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop()?.split(';').shift()
+}
+
 export const apiBase = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl: config.apiBaseUrl,
+    credentials: 'include',
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
-      if (token) headers.set('Authorization', `Bearer ${token}`)
+      const csrf = getCookie('csrftoken')
+
+      if (csrf) headers.set('X-CSRFToken', csrf)
+
+      // const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
+      // if (token) headers.set('Authorization', `Bearer ${token}`)
       return headers
     },
   }),

@@ -179,6 +179,11 @@ class WebSocketManager {
 
   // Outgoing commands
 
+  reconnect() {
+    this.ws?.close()
+    this.connect()
+  }
+
   auth(token: string) {
     this.token = token
     this.send(WsOutEvent.auth, token)

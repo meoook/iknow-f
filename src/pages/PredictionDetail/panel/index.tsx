@@ -8,6 +8,7 @@ import type { IChoice, IPredictionDetail } from '../../../types/app.types'
 import type { TCurrency } from '../../../types/auth.types'
 import { config } from '../../../config/config'
 import IconSprite from '../../../elements/icon/Icon'
+import { Link } from 'react-router-dom'
 
 interface TradePanelProps {
   prediction: IPredictionDetail
@@ -203,7 +204,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
 const TOS = () => {
   return (
     <div className={style.terms}>
-      Сделав ставку, вы соглашаетесь с <a href='/terms'>условиями</a>
+      Сделав ставку, вы соглашаетесь с <Link to='/tos'>условиями</Link>
     </div>
   )
 }
