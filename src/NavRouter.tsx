@@ -2,7 +2,6 @@ import { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Outlet, useLocation, Navigate } from 'react-router-dom'
 import { useAppSelector } from './hooks/useRedux'
 import { useGetConfigQuery } from './services/api'
-import { wsManager } from './services/websocket'
 import Header from './components/header'
 import Footer from './components/footer'
 import BackToTop from './elements/totop'
@@ -20,10 +19,6 @@ const PagePrivacy = lazy(() => import('./pages/privacy'))
 
 export default function NavRouter() {
   useGetConfigQuery()
-
-  useEffect(() => {
-    wsManager.connect()
-  }, [])
 
   return (
     <ModalProvider>
@@ -78,8 +73,8 @@ export default function NavRouter() {
 
 // Layout for protected routes
 function LayoutProtected() {
-  const user = useAppSelector((state) => state.auth.user)
-  if (!user) return <Navigate to='/' replace />
+  const { user, loading } = useAppSelector((state) => state.auth)
+  if (!user && !loading) return <Navigate to='/' replace />
   return <Outlet />
 }
 

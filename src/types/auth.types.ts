@@ -28,10 +28,9 @@ export interface IUser {
 
 export interface IAuthState {
   user: IUser | null
-  token: string | null
   loading: boolean
 }
 
 export interface IAuthResponse {
-  token: string
+  user: IUser
 }

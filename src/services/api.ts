@@ -19,7 +19,7 @@ import type {
   ITx,
   IPredictionSearch,
 } from '../types/app.types'
-import { LOCAL_STORAGE_TOKEN_KEY, setLoading } from '../store/auth.slice'
+import { setLoading } from '../store/auth.slice'
 
 import { wsManager } from './websocket'
 import { requestsAdapter } from './requests/adapter'
@@ -28,12 +28,7 @@ import { betAdapter } from '../store/bet.adapter'
 import { predictionAdapter, predictionSelectors } from '../store/prediction.adapter'
 import { topAdapter, topSelectors } from '../store/top.adapter'
 import { txAdapter } from '../store/tx.adapter'
-
-const getCookie = (name: string) => {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()?.split(';').shift()
-}
+import { getCookie } from '../utils/date'
 
 export const apiBase = createApi({
   reducerPath: 'api',
@@ -42,11 +37,7 @@ export const apiBase = createApi({
     credentials: 'include',
     prepareHeaders: (headers) => {
       const csrf = getCookie('csrftoken')
-
       if (csrf) headers.set('X-CSRFToken', csrf)
-
-      // const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
-      // if (token) headers.set('Authorization', `Bearer ${token}`)
       return headers
     },
   }),
@@ -133,18 +124,21 @@ export const apiBase = createApi({
         body: payload,
       }),
     }),
-    // setAvatar: builder.mutation({
-    //   query: (file: File) => {
-    //     const formData = new FormData()
-    //     formData.append('file', file)
+    setAvatar: builder.mutation<Partial<IUser>, File>({
+      query: (file: File) => {
+        const formData = new FormData()
+        formData.append('avatar', file)
 
-    //     return {
-    //       url: 'auth/user/avatar',
-    //       method: 'POST',
-    //       body: formData,
-    //     }
-    //   },
-    // }),
+        return {
+          url: 'auth/user/avatar',
+          method: 'POST',
+          body: formData,
+        }
+      },
+      transformResponse: (response: any) => {
+        return { avatar: `${response.avatar}?t=${Date.now()}` }
+      },
+    }),
     getTelegramNonce: builder.mutation<{ nonce: string }, void>({
       query: () => 'auth/user/telegram',
     }),
@@ -401,6 +395,7 @@ export const {
   useSingOutMutation,
   useSetEmailMutation,
   useSetUserParamsMutation,
+  useSetAvatarMutation,
   useGetTelegramNonceMutation,
   // Notifications
   useReadNotificationMutation,

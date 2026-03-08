@@ -6,7 +6,6 @@ import { apiBase } from './api'
 import type { IPredictionDetail } from '../types/app.types'
 
 const WsOutEvent = {
-  auth: 'auth',
   logout: 'logout',
   prediction_join: 'prediction.join',
   prediction_left: 'prediction.left',
@@ -45,7 +44,6 @@ type Handler = (data: any) => void
 
 class WebSocketManager {
   private ws: WebSocket | null = null
-  private token: string = ''
   private rooms = new Map<number, number>()
   private messageQueue: { type: WsOutEvent; value: any }[] = []
   private handlers = new Map<WsInEvent, Set<Handler>>()
@@ -65,8 +63,6 @@ class WebSocketManager {
         console.log('WebSocket connected')
         this.reconnectAttempts = 0
         this.clearReconnectTimer()
-        // Re-authenticate if we have a token and it's not already in the queue
-        if (this.token && !this.messageQueue.find((m) => m.type === WsOutEvent.auth)) this.auth(this.token)
         // Re-join rooms if we have any
         this.rooms.forEach((room) => {
           this.send(WsOutEvent.prediction_join, room)
@@ -184,13 +180,7 @@ class WebSocketManager {
     this.connect()
   }
 
-  auth(token: string) {
-    this.token = token
-    this.send(WsOutEvent.auth, token)
-  }
-
   logout() {
-    this.token = ''
     this.send(WsOutEvent.logout, null)
   }
 

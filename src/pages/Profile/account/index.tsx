@@ -1,18 +1,15 @@
 import style from './account.module.scss'
 import { useEffect, useRef, useState } from 'react'
+import { useSetAvatarMutation, useSetUserParamsMutation } from '../../../services/api'
 import type { IUser } from '../../../types/auth.types'
 import IconSprite from '../../../elements/icon/Icon'
 import Avatar from '../../../elements/avatar'
-import { useSetUserParamsMutation } from '../../../services/api'
-import { LOCAL_STORAGE_TOKEN_KEY, updateUser } from '../../../store/auth.slice'
-import { useAppDispatch } from '../../../hooks/useRedux'
-import { config } from '../../../config/config'
 
 export default function ProfileAccount({ user, loading }: { user: IUser | null; loading: boolean }) {
-  const dispatch = useAppDispatch()
   const [formData, setFormData] = useState({ username: user?.username || '', bio: '' })
   const [errors, setErrors] = useState({ username: '' })
   const [setUserParams, { error: setUserParamsError }] = useSetUserParamsMutation()
+  const [setAvatar] = useSetAvatarMutation()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [uploadProgress, setUploadProgress] = useState<number | null>(null)
@@ -59,45 +56,33 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
     uploadAvatar(file)
   }
 
-  const uploadAvatar = (file: File) => {
+  const uploadAvatar = async (file: File) => {
     setUploadProgress(0)
     setUploadError(null)
 
-    const formData = new FormData()
-    formData.append('avatar', file)
+    const interval = setInterval(() => {
+      setUploadProgress((prev) => {
+        if (prev === null) return 0
+        if (prev >= 90) return prev
+        return prev + Math.floor(Math.random() * 5) + 1
+      })
+    }, 100)
 
-    const xhr = new XMLHttpRequest()
+    try {
+      await setAvatar(file).unwrap()
+      clearInterval(interval)
+      setUploadProgress(100)
+      // dispatch(updateUser({ avatar: res.avatar }))
 
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 100))
-    }
-
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try {
-          const data = JSON.parse(xhr.responseText) as { avatar: string }
-          // Добавляем timestamp для сброса кеша браузера
-          const cacheBusted = `${data.avatar}?t=${Date.now()}`
-          dispatch(updateUser({ avatar: cacheBusted }))
-        } catch {
-          // если ответ не JSON — просто закрываем прогресс
-        }
+      // Даем пользователю увидеть 100% перед скрытием
+      setTimeout(() => {
         setUploadProgress(null)
-      } else {
-        setUploadError('Ошибка загрузки')
-        setUploadProgress(null)
-      }
-    }
-
-    xhr.onerror = () => {
-      setUploadError('Ошибка сети')
+      }, 1000)
+    } catch (err: any) {
+      clearInterval(interval)
       setUploadProgress(null)
+      setUploadError(err?.data?.detail || 'Ошибка при загрузке аватара')
     }
-
-    xhr.open('POST', `${config.apiBaseUrl}/auth/user/avatar`)
-    const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
-    if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`)
-    xhr.send(formData)
   }
 
   if (loading) {

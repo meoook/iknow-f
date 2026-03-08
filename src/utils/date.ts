@@ -17,3 +17,9 @@ export const formatRelativeTime = (date: string | number | Date): string => {
 
   return 'только что'
 }
+
+export const getCookie = (name: string) => {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop()?.split(';').shift()
+}
