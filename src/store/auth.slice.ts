@@ -21,6 +21,10 @@ const authSlice = createSlice({
     updateUser: (state, action: PayloadAction<Partial<IUser>>) => {
       if (state.user) Object.assign(state.user, action.payload)
     },
+    clearUser: (state) => {
+      state.user = null
+      state.loading = false
+    },
   },
   extraReducers: (builder) => {
     // Handle login mutations from RTK Query
@@ -57,9 +61,6 @@ const authSlice = createSlice({
       })
       .addMatcher(apiBase.endpoints.setUserParams.matchFulfilled, (state, action) => {
         if (state.user) Object.assign(state.user, action.payload)
-        // if (state.user && action.payload.username) state.user.username = action.payload.username
-        // if (state.user && action.payload.email_notify !== undefined) state.user.email_notify = action.payload.email_notify
-        // if (state.user && action.payload.telegram_notify !== undefined) state.user.telegram_notify = action.payload.telegram_notify
       })
       .addMatcher(apiBase.endpoints.setAvatar.matchFulfilled, (state, action) => {
         if (state.user) Object.assign(state.user, action.payload)
@@ -67,5 +68,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { setLoading, setBalance, updateUser } = authSlice.actions
+export const { setLoading, setBalance, updateUser, clearUser } = authSlice.actions
 export default authSlice.reducer
