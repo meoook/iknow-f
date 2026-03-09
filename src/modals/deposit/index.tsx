@@ -1,22 +1,22 @@
 import style from './deposit.module.scss'
-import qrCode from '../../assets/qr-code.png'
+import QRCode from '../../components/QRCode'
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useDepositMutation } from '../../services/api'
 import IconSprite from '../../elements/icon/Icon'
 import { useModalContext } from '../../services/ModalContext'
+import solanaLogo from '../../assets/solana.svg'
+import etheriumLogo from '../../assets/etherium.svg'
+import bscLogo from '../../assets/bsc.svg'
+import polygonLogo from '../../assets/polygon.svg'
+import tronLogo from '../../assets/tron.svg'
 
 const CHAINS = [
-  { value: 'ETH', label: 'ETH' },
-  { value: 'BTC', label: 'BTC' },
-  { value: 'BNB', label: 'BNB' },
-  { value: 'SOL', label: 'SOL' },
-  { value: 'ADA', label: 'ADA' },
-  { value: 'MATIC', label: 'MATIC' },
-  { value: 'XRP', label: 'XRP' },
-  { value: 'DOGE', label: 'DOGE' },
-  { value: 'TRX', label: 'TRX' },
-  { value: 'LTC', label: 'LTC' },
+  { value: 'ETH', label: 'ETH', logo: etheriumLogo },
+  { value: 'BNB', label: 'BNB', logo: bscLogo },
+  { value: 'SOL', label: 'SOL', logo: solanaLogo },
+  { value: 'MATIC', label: 'MATIC', logo: polygonLogo },
+  { value: 'TRX', label: 'TRX', logo: tronLogo },
 ]
 
 const ADDRESSES = {
@@ -72,7 +72,7 @@ export default function ModalDeposit() {
             </option>
           ))}
         </select>
-        <img src={qrCode} />
+        <QRCode text={address} size={240} logoUrl={CHAINS.find((c) => c.value === chain)?.logo} />
         <div className={style.address} onClick={handleCopy}>
           <span>{address}</span>
           <button>

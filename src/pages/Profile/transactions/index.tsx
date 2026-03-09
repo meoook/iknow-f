@@ -1,4 +1,4 @@
-import style from './tx.module.scss'
+// import style from './tx.module.scss'
 import React, { useEffect, useRef, useState } from 'react'
 import { useAppDispatch } from '../../../hooks/useRedux'
 import { apiBase } from '../../../services/api'

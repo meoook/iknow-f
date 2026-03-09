@@ -15,7 +15,7 @@ const Profile = lazy(() => import('./pages/Profile/page'))
 const PredictionDetail = lazy(() => import('./pages/PredictionDetail/page'))
 const Page404 = lazy(() => import('./pages/404'))
 const PageTos = lazy(() => import('./pages/Tos'))
-const PagePrivacy = lazy(() => import('./pages/privacy'))
+const PagePrivacy = lazy(() => import('./pages/Privacy'))
 
 export default function NavRouter() {
   useGetConfigQuery()

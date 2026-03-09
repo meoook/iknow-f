@@ -28,7 +28,7 @@ export const commentsApi = apiBase.injectEndpoints({
         if (currentCache.total !== newItems.total) currentCache.total = newItems.total
         commentsAdapter.addMany(currentCache, commentsSelectors.selectAll(newItems))
       },
-      async onCacheEntryAdded(arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
+      async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
         try {
           await cacheDataLoaded
         } catch {

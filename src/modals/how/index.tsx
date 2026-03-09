@@ -1,6 +1,6 @@
 import style from './how.module.scss'
-import { useEffect, useState } from 'react'
-import IconSprite from '../../elements/icon/Icon'
+import { useEffect } from 'react'
+
 import { useModalContext } from '../../services/ModalContext'
 
 export default function ModalHow() {
