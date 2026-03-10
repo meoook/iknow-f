@@ -33,7 +33,7 @@ import { getCookie } from '../utils/date'
 export const apiBase = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: config.apiBaseUrl,
+    baseUrl: import.meta.env.VITE_API_URL,
     credentials: 'include',
     prepareHeaders: (headers) => {
       const csrf = getCookie('csrftoken')

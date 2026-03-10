@@ -36,7 +36,6 @@ export const authMiddleware: Middleware = (store) => {
         wsManager.logout()
         stopPolling()
       }
-      console.log('POOLING')
     }, 10000)
   }
 
