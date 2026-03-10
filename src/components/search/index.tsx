@@ -6,7 +6,6 @@ import IconSprite from '../../elements/icon/Icon'
 import Empty from '../../elements/empty'
 import type { IPredictionSearch } from '../../types/app.types'
 import { Link } from 'react-router-dom'
-import { config } from '../../config/config'
 
 export default function PredictionSearch() {
   const [searchValue, setSearchValue] = useState('')
@@ -89,7 +88,8 @@ export default function PredictionSearch() {
 }
 
 const SearchItem = ({ prediction, clear }: { prediction: IPredictionSearch; clear: () => void }) => {
-  const src = prediction.icon ? `${config.imgBaseUrl}${prediction.icon}` : `${config.imgBaseUrl}/icon/no_icon.png`
+  const imgUrl = import.meta.env.VITE_IMG_URL
+  const src = prediction.icon ? `${imgUrl}${prediction.icon}` : `${imgUrl}/icon/no_icon.png`
   const volume = intlNumber('en-US', prediction.volume)
   return (
     <Link to={`/prediction/${prediction.id}`} className={style.item} onClick={clear}>

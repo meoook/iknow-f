@@ -6,7 +6,6 @@ import { useModalContext } from '../../../services/ModalContext'
 import ModalLogin from '../../../modals/login'
 import type { IChoice, IPredictionDetail } from '../../../types/app.types'
 import type { TCurrency } from '../../../types/auth.types'
-import { config } from '../../../config/config'
 import IconSprite from '../../../elements/icon/Icon'
 import { Link } from 'react-router-dom'
 
@@ -92,7 +91,8 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
     )
   }
 
-  const src = prediction.icon ? `${config.imgBaseUrl}${prediction.icon}` : `${config.imgBaseUrl}/icon/no_icon.png`
+  const imgUrl = import.meta.env.VITE_IMG_URL
+  const src = prediction.icon ? `${imgUrl}${prediction.icon}` : `${imgUrl}/icon/no_icon.png`
   return (
     <aside className={style.panel}>
       <div className={style.bet}>

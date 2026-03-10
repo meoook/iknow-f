@@ -1,4 +1,3 @@
-import { config } from '../config/config'
 import { store } from '../store/store'
 import { addNotification } from '../store/app.slice'
 import { setBalance, updateUser } from '../store/auth.slice'
@@ -57,7 +56,7 @@ class WebSocketManager {
     if (this.ws && (this.ws.readyState === WebSocket.CONNECTING || this.ws.readyState === WebSocket.OPEN)) return
 
     try {
-      this.ws = new WebSocket(config.wsUrl)
+      this.ws = new WebSocket(import.meta.env.VITE_WS_URL)
 
       this.ws.onopen = () => {
         console.log('WebSocket connected')

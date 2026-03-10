@@ -1,5 +1,4 @@
 import style from './head.module.scss'
-import { config } from '../../config/config'
 
 interface PredictionHeadProps {
   icon?: string
@@ -11,7 +10,8 @@ interface PredictionHeadProps {
 export default function PredictionHead({ icon, title, big, progress }: PredictionHeadProps) {
   const MIN_SCALE = 0.8
   const scale = Math.max(MIN_SCALE, 1 - 0.9 * (progress || 0))
-  const src = icon ? `${config.imgBaseUrl}${icon}` : `${config.imgBaseUrl}/icon/no_icon.png`
+  const imgUrl = import.meta.env.VITE_IMG_URL
+  const src = icon ? `${imgUrl}${icon}` : `${imgUrl}/icon/no_icon.png`
   return (
     <div className={style.head}>
       <div className='row center gap12' style={{ transform: `scale(${scale})` }}>

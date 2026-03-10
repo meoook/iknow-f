@@ -1,6 +1,5 @@
 import React from 'react'
 import style from './card.module.scss'
-import { config } from '../../config/config'
 import { intlNumber } from '../../hooks/hooks'
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/useRedux'
@@ -16,7 +15,8 @@ const PredictionCard = ({ predictionId }: PredictionCardProps) => {
   if (!prediction) return null
   const volume = intlNumber('ru-RU', prediction.volume)
   const color = prediction.multiplier > 80 ? style.red : prediction.multiplier > 50 ? style.orange : style.green
-  const src = prediction.icon ? `${config.imgBaseUrl}${prediction.icon}` : `${config.imgBaseUrl}/icon/no_icon.png`
+  const imgUrl = import.meta.env.VITE_IMG_URL
+  const src = prediction.icon ? `${imgUrl}${prediction.icon}` : `${imgUrl}/icon/no_icon.png`
   const percent = Math.round((prediction.multiplier / settings.multiplier) * 100)
   return (
     <Link to={`/prediction/${prediction.id}`} className={style.card}>
