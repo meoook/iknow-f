@@ -852,7 +852,6 @@ class Qr8BitByte {
   private _bytes: Uint8Array<ArrayBuffer>
 
   constructor(data: string) {
-    console.log('Change1')
     this._bytes = new TextEncoder().encode(data)
   }
 

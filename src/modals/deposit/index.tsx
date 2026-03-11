@@ -1,5 +1,5 @@
 import style from './deposit.module.scss'
-import QRCodeSvg from '../../components/QRCode'
+import QRCodeSvg from '../../components/QRCode2'
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useDepositMutation } from '../../services/api'

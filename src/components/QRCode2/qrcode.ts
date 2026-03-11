@@ -648,86 +648,6 @@ function qrPolynomial(num: number[], shift: number) {
   return _this
 }
 
-class QRPolynomial {
-  num: Uint8Array
-
-  constructor(num: Uint8Array, shift = 0) {
-    let offset = 0
-    const len = num.length
-
-    while (offset < len && num[offset] === 0) offset++
-
-    const newLen = len - offset + shift
-    const res = new Uint8Array(newLen)
-
-    for (let i = 0; i < len - offset; i++) {
-      res[i] = num[i + offset]
-    }
-
-    this.num = res
-  }
-
-  getAt(index: number) {
-    return this.num[index]
-  }
-
-  getLength() {
-    return this.num.length
-  }
-
-  multiply(e: QRPolynomial) {
-    const a = this.num
-    const b = e.num
-
-    const alen = a.length
-    const blen = b.length
-
-    const result = new Uint8Array(alen + blen - 1)
-
-    const EXP = QrMath.EXP_TABLE
-    const LOG = QrMath.LOG_TABLE
-
-    for (let i = 0; i < alen; i++) {
-      const ai = a[i]
-      if (ai === 0) continue
-
-      const logAi = LOG[ai]
-
-      for (let j = 0; j < blen; j++) {
-        const bj = b[j]
-        if (bj === 0) continue
-
-        result[i + j] ^= EXP[logAi + LOG[bj]]
-      }
-    }
-
-    return new QRPolynomial(result)
-  }
-
-  mod(e: QRPolynomial): QRPolynomial {
-    let result = this.num.slice()
-
-    const EXP = QrMath.EXP_TABLE
-    const LOG = QrMath.LOG_TABLE
-
-    while (result.length >= e.num.length) {
-      const ratio = LOG[result[0]] - LOG[e.num[0]]
-
-      for (let i = 0; i < e.num.length; i++) {
-        result[i] ^= EXP[LOG[e.num[i]] + ratio]
-      }
-
-      // remove leading zeros
-      let offset = 0
-      while (offset < result.length && result[offset] === 0) offset++
-
-      result = result.slice(offset)
-    }
-
-    return new QRPolynomial(result)
-  }
-}
-
 const QRRSBlock = (() => {
   const RS_BLOCK_TABLE = [
     [1, 26, 19],
@@ -932,7 +852,6 @@ class Qr8BitByte {
   private _bytes: Uint8Array<ArrayBuffer>
 
   constructor(data: string) {
-    console.log('Change1')
     this._bytes = new TextEncoder().encode(data)
   }
 

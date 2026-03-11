@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import QrCode from './qrcode'
+import { QrCode, Ecc } from './qr_new'
 
 interface QRCodeSvgProps {
   text: string
@@ -17,15 +17,11 @@ export default function QRCodeSvg({
   color = '#FFFFFF', // Default dots color
 }: QRCodeSvgProps) {
   const qr = useMemo(() => {
-    // Determine type number (1-40) based on text length, or just use 0 for auto
     // Error correction level H (30%) allows covering the center with a logo
-    const q = new QrCode(0, 'H')
-    q.addData(text)
-    q.make()
-    return q
+    return QrCode.encodeText(text, Ecc.HIGH)
   }, [text])
 
-  const moduleCount = qr.getModuleCount()
+  const moduleCount = qr.size
   const cellSize = size / moduleCount
   const logoSize = size * 0.25 // Logo takes up 25% of the QR code
   const logoPosition = (size - logoSize) / 2
@@ -86,7 +82,7 @@ export default function QRCodeSvg({
 
   for (let row = 0; row < moduleCount; row++) {
     for (let col = 0; col < moduleCount; col++) {
-      const isDark = qr.isDark(row, col)
+      const isDark = qr.getModule(col, row)
 
       if (!isDark) continue // Skip white cells
       if (isLogoArea(row, col)) continue // Skip cells beneath the logo
