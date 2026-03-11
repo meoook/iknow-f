@@ -1,5 +1,5 @@
 import style from './deposit.module.scss'
-import QRCode from '../../components/QRCode'
+import QRCodeSvg from '../../components/QRCode'
 import { useEffect, useState } from 'react'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useDepositMutation } from '../../services/api'
@@ -72,7 +72,7 @@ export default function ModalDeposit() {
             </option>
           ))}
         </select>
-        <QRCode text={address} size={240} logoUrl={CHAINS.find((c) => c.value === chain)?.logo} />
+        <QRCodeSvg text={address} size={240} logoUrl={CHAINS.find((c) => c.value === chain)?.logo} />
         <div className={style.address} onClick={handleCopy}>
           <span>{address}</span>
           <button>
