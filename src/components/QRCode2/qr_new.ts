@@ -3,23 +3,16 @@ type byte = number
 type int = number
 
 export class QrCode {
-  public static encodeText(text: string, ecl: Ecc): QrCode {
+  public static encodeText(text: string): QrCode {
     const segs: Array<QrSegment> = QrSegment.makeSegments(text)
-    return QrCode.encodeSegments(segs, ecl)
-  }
-
-  public static encodeBinary(data: Readonly<Array<byte>>, ecl: Ecc): QrCode {
-    const seg: QrSegment = QrSegment.makeBytes(data)
-    return QrCode.encodeSegments([seg], ecl)
+    return QrCode.encodeSegments(segs)
   }
 
   public static encodeSegments(
     segs: Readonly<Array<QrSegment>>,
-    ecl: Ecc,
     minVersion: int = 1,
     maxVersion: int = 40,
     mask: int = -1,
-    boostEcl: boolean = true,
   ): QrCode {
     if (
       !(QrCode.MIN_VERSION <= minVersion && minVersion <= maxVersion && maxVersion <= QrCode.MAX_VERSION) ||
@@ -31,29 +24,25 @@ export class QrCode {
     let version: int
     let dataUsedBits: int
     for (version = minVersion; ; version++) {
-      const dataCapacityBits: int = QrCode.getNumDataCodewords(version, ecl) * 8
+      const dataCapacityBits: int = QrCode.getNumDataCodewords(version) * 8
       const usedBits: number = QrSegment.getTotalBits(segs, version)
       if (usedBits <= dataCapacityBits) {
         dataUsedBits = usedBits
         break
       }
-      if (version >= maxVersion) throw new RangeError('Data too long')
-    }
-
-    for (const newEcl of [Ecc.MEDIUM, Ecc.QUARTILE, Ecc.HIGH]) {
-      if (boostEcl && dataUsedBits <= QrCode.getNumDataCodewords(version, newEcl) * 8) ecl = newEcl
+    if (version >= maxVersion) throw new RangeError('Data too long')
     }
 
     let bb: Array<bit> = []
     for (const seg of segs) {
-      appendBits(seg.mode.modeBits, 4, bb)
-      appendBits(seg.numChars, seg.mode.numCharCountBits(version), bb)
+      appendBits(4, 4, bb)
+      appendBits(seg.numChars, [8, 16, 16][Math.floor((version + 7) / 17)], bb)
       for (const b of seg.getData()) bb.push(b)
     }
     assert(bb.length == dataUsedBits)
 
     // Add terminator and pad up to a byte if applicable
-    const dataCapacityBits: int = QrCode.getNumDataCodewords(version, ecl) * 8
+    const dataCapacityBits: int = QrCode.getNumDataCodewords(version) * 8
     assert(bb.length <= dataCapacityBits)
     appendBits(0, Math.min(4, dataCapacityBits - bb.length), bb)
     appendBits(0, (8 - (bb.length % 8)) % 8, bb)
@@ -65,7 +54,7 @@ export class QrCode {
     while (dataCodewords.length * 8 < bb.length) dataCodewords.push(0)
     bb.forEach((b: bit, i: int) => (dataCodewords[i >>> 3] |= b << (7 - (i & 7))))
 
-    return new QrCode(version, ecl, dataCodewords, mask)
+    return new QrCode(version, dataCodewords, mask)
   }
 
   public readonly size: int
@@ -74,13 +63,11 @@ export class QrCode {
   private readonly isFunction: Array<Array<boolean>> = []
 
   public readonly version: int
-  public readonly errorCorrectionLevel: Ecc
 
-  public constructor(version: int, errorCorrectionLevel: Ecc, dataCodewords: Readonly<Array<byte>>, msk: int) {
+  public constructor(version: int, dataCodewords: Readonly<Array<byte>>, msk: int) {
     if (version < QrCode.MIN_VERSION || version > QrCode.MAX_VERSION) throw new RangeError('Version value out of range')
     if (msk < -1 || msk > 7) throw new RangeError('Mask value out of range')
     this.version = version
-    this.errorCorrectionLevel = errorCorrectionLevel
     this.size = version * 4 + 17
 
     let row: Array<boolean> = []
@@ -143,7 +130,8 @@ export class QrCode {
   }
 
   private drawFormatBits(mask: int): void {
-    const data: int = (this.errorCorrectionLevel.formatBits << 3) | mask
+    // Math for Ecc.HIGH format bits which is 2
+    const data: int = (2 << 3) | mask
     let rem: int = data
     for (let i = 0; i < 10; i++) rem = (rem << 1) ^ ((rem >>> 9) * 0x537)
     const bits = ((data << 10) | rem) ^ 0x5412
@@ -202,11 +190,10 @@ export class QrCode {
 
   private addEccAndInterleave(data: Readonly<Array<byte>>): Array<byte> {
     const ver: int = this.version
-    const ecl: Ecc = this.errorCorrectionLevel
-    if (data.length != QrCode.getNumDataCodewords(ver, ecl)) throw new RangeError('Invalid argument')
+    if (data.length != QrCode.getNumDataCodewords(ver)) throw new RangeError('Invalid argument')
 
-    const numBlocks: int = QrCode.NUM_ERROR_CORRECTION_BLOCKS[ecl.ordinal][ver]
-    const blockEccLen: int = QrCode.ECC_CODEWORDS_PER_BLOCK[ecl.ordinal][ver]
+    const numBlocks: int = QrCode.NUM_ERROR_CORRECTION_BLOCKS[ver]
+    const blockEccLen: int = QrCode.ECC_CODEWORDS_PER_BLOCK[ver]
     const rawCodewords: int = Math.floor(QrCode.getNumRawDataModules(ver) / 8)
     const numShortBlocks: int = numBlocks - (rawCodewords % numBlocks)
     const shortBlockLen: int = Math.floor(rawCodewords / numBlocks)
@@ -372,10 +359,10 @@ export class QrCode {
     return result
   }
 
-  private static getNumDataCodewords(ver: int, ecl: Ecc): int {
+  private static getNumDataCodewords(ver: int): int {
     return (
       Math.floor(QrCode.getNumRawDataModules(ver) / 8) -
-      QrCode.ECC_CODEWORDS_PER_BLOCK[ecl.ordinal][ver] * QrCode.NUM_ERROR_CORRECTION_BLOCKS[ecl.ordinal][ver]
+      QrCode.ECC_CODEWORDS_PER_BLOCK[ver] * QrCode.NUM_ERROR_CORRECTION_BLOCKS[ver]
     )
   }
 
@@ -451,42 +438,14 @@ export class QrCode {
   private static readonly PENALTY_N3: int = 40
   private static readonly PENALTY_N4: int = 10
 
-  private static readonly ECC_CODEWORDS_PER_BLOCK: Array<Array<int>> = [
-    [
-      -1, 7, 10, 15, 20, 26, 18, 20, 24, 30, 18, 20, 24, 26, 30, 22, 24, 28, 30, 28, 28, 28, 28, 30, 30, 26, 28, 30, 30,
-      30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
-    ], // Low
-    [
-      -1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26, 26, 28, 28, 28, 28, 28, 28,
-      28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28,
-    ], // Medium
-    [
-      -1, 13, 22, 18, 26, 18, 24, 18, 22, 20, 24, 28, 26, 24, 20, 30, 24, 28, 28, 26, 30, 28, 30, 30, 30, 30, 28, 30,
-      30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
-    ], // Quartile
-    [
-      -1, 17, 28, 22, 16, 22, 28, 26, 26, 24, 28, 24, 28, 22, 24, 24, 30, 28, 28, 26, 28, 30, 24, 30, 30, 30, 30, 30,
-      30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
-    ], // High
+  private static readonly ECC_CODEWORDS_PER_BLOCK: Array<int> = [
+    -1, 17, 28, 22, 16, 22, 28, 26, 26, 24, 28, 24, 28, 22, 24, 24, 30, 28, 28, 26, 28, 30, 24, 30, 30, 30, 30, 30,
+    30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,
   ]
 
-  private static readonly NUM_ERROR_CORRECTION_BLOCKS: Array<Array<int>> = [
-    [
-      -1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 7, 8, 8, 9, 9, 10, 12, 12, 12, 13, 14, 15, 16, 17, 18,
-      19, 19, 20, 21, 22, 24, 25,
-    ], // Low
-    [
-      -1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5, 5, 8, 9, 9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31,
-      33, 35, 37, 38, 40, 43, 45, 47, 49,
-    ], // Medium
-    [
-      -1, 1, 1, 2, 2, 4, 4, 6, 6, 8, 8, 8, 10, 12, 16, 12, 17, 16, 18, 21, 20, 23, 23, 25, 27, 29, 34, 34, 35, 38, 40,
-      43, 45, 48, 51, 53, 56, 59, 62, 65, 68,
-    ], // Quartile
-    [
-      -1, 1, 1, 2, 4, 4, 4, 5, 6, 8, 8, 11, 11, 16, 16, 18, 16, 19, 21, 25, 25, 25, 34, 30, 32, 35, 37, 40, 42, 45, 48,
-      51, 54, 57, 60, 63, 66, 70, 74, 77, 81,
-    ], // High
+  private static readonly NUM_ERROR_CORRECTION_BLOCKS: Array<int> = [
+    -1, 1, 1, 2, 4, 4, 4, 5, 6, 8, 8, 11, 11, 16, 16, 18, 16, 19, 21, 25, 25, 25, 34, 30, 32, 35, 37, 40, 42, 45, 48,
+    51, 54, 57, 60, 63, 66, 70, 74, 77, 81,
   ]
 }
 
@@ -507,71 +466,19 @@ export class QrSegment {
   public static makeBytes(data: Readonly<Array<byte>>): QrSegment {
     let bb: Array<bit> = []
     for (const b of data) appendBits(b, 8, bb)
-    return new QrSegment(Mode.BYTE, data.length, bb)
-  }
-
-  public static makeNumeric(digits: string): QrSegment {
-    if (!QrSegment.isNumeric(digits)) throw new RangeError('String contains non-numeric characters')
-    let bb: Array<bit> = []
-    for (let i = 0; i < digits.length; ) {
-      const n: int = Math.min(digits.length - i, 3)
-      appendBits(parseInt(digits.substring(i, i + n), 10), n * 3 + 1, bb)
-      i += n
-    }
-    return new QrSegment(Mode.NUMERIC, digits.length, bb)
-  }
-
-  public static makeAlphanumeric(text: string): QrSegment {
-    if (!QrSegment.isAlphanumeric(text))
-      throw new RangeError('String contains unencodable characters in alphanumeric mode')
-    let bb: Array<bit> = []
-    let i: int
-    for (i = 0; i + 2 <= text.length; i += 2) {
-      // Process groups of 2
-      let temp: int = QrSegment.ALPHANUMERIC_CHARSET.indexOf(text.charAt(i)) * 45
-      temp += QrSegment.ALPHANUMERIC_CHARSET.indexOf(text.charAt(i + 1))
-      appendBits(temp, 11, bb)
-    }
-    if (i < text.length) appendBits(QrSegment.ALPHANUMERIC_CHARSET.indexOf(text.charAt(i)), 6, bb)
-    return new QrSegment(Mode.ALPHANUMERIC, text.length, bb)
+    return new QrSegment(data.length, bb)
   }
 
   public static makeSegments(text: string): Array<QrSegment> {
     if (text == '') return []
-    else if (QrSegment.isNumeric(text)) return [QrSegment.makeNumeric(text)]
-    else if (QrSegment.isAlphanumeric(text)) return [QrSegment.makeAlphanumeric(text)]
     else return [QrSegment.makeBytes(QrSegment.toUtf8ByteArray(text))]
   }
 
-  public static makeEci(assignVal: int): QrSegment {
-    let bb: Array<bit> = []
-    if (assignVal < 0) throw new RangeError('ECI assignment value out of range')
-    else if (assignVal < 1 << 7) appendBits(assignVal, 8, bb)
-    else if (assignVal < 1 << 14) {
-      appendBits(0b10, 2, bb)
-      appendBits(assignVal, 14, bb)
-    } else if (assignVal < 1000000) {
-      appendBits(0b110, 3, bb)
-      appendBits(assignVal, 21, bb)
-    } else throw new RangeError('ECI assignment value out of range')
-    return new QrSegment(Mode.ECI, 0, bb)
-  }
-
-  public static isNumeric(text: string): boolean {
-    return QrSegment.NUMERIC_REGEX.test(text)
-  }
-
-  public static isAlphanumeric(text: string): boolean {
-    return QrSegment.ALPHANUMERIC_REGEX.test(text)
-  }
-
-  public readonly mode: Mode
   public readonly numChars: int
   private readonly bitData: Array<bit>
 
-  public constructor(mode: Mode, numChars: int, bitData: Array<bit>) {
+  public constructor(numChars: int, bitData: Array<bit>) {
     if (numChars < 0) throw new RangeError('Invalid argument')
-    this.mode = mode
     this.numChars = numChars
     this.bitData = bitData.slice()
   }
@@ -583,7 +490,7 @@ export class QrSegment {
   public static getTotalBits(segs: Readonly<Array<QrSegment>>, version: int): number {
     let result: number = 0
     for (const seg of segs) {
-      const ccbits: int = seg.mode.numCharCountBits(version)
+      const ccbits: int = [8, 16, 16][Math.floor((version + 7) / 17)]
       if (seg.numChars >= 1 << ccbits) return Infinity
       result += 4 + ccbits + seg.bitData.length
     }
@@ -602,43 +509,5 @@ export class QrSegment {
     }
     return result
   }
-
-  private static readonly NUMERIC_REGEX: RegExp = /^[0-9]*$/
-  private static readonly ALPHANUMERIC_REGEX: RegExp = /^[A-Z0-9 $%*+.\/:-]*$/
-  private static readonly ALPHANUMERIC_CHARSET: string = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:'
 }
 
-export class Ecc {
-  public static readonly LOW = new Ecc(0, 1) // The QR Code can tolerate about  7% erroneous codewords
-  public static readonly MEDIUM = new Ecc(1, 0) // The QR Code can tolerate about 15% erroneous codewords
-  public static readonly QUARTILE = new Ecc(2, 3) // The QR Code can tolerate about 25% erroneous codewords
-  public static readonly HIGH = new Ecc(3, 2) // The QR Code can tolerate about 30% erroneous codewords
-
-  public readonly ordinal: int
-  public readonly formatBits: int
-
-  private constructor(ordinal: int, formatBits: int) {
-    this.ordinal = ordinal
-    this.formatBits = formatBits
-  }
-}
-
-export class Mode {
-  public static readonly NUMERIC = new Mode(0x1, [10, 12, 14])
-  public static readonly ALPHANUMERIC = new Mode(0x2, [9, 11, 13])
-  public static readonly BYTE = new Mode(0x4, [8, 16, 16])
-  public static readonly KANJI = new Mode(0x8, [8, 10, 12])
-  public static readonly ECI = new Mode(0x7, [0, 0, 0])
-
-  public readonly modeBits: int
-  private readonly numBitsCharCount: [int, int, int]
-
-  private constructor(modeBits: int, numBitsCharCount: [int, int, int]) {
-    this.modeBits = modeBits
-    this.numBitsCharCount = numBitsCharCount
-  }
-
-  public numCharCountBits(ver: int): int {
-    return this.numBitsCharCount[Math.floor((ver + 7) / 17)]
-  }
-}

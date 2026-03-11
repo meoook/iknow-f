@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { QrCode, Ecc } from './qr_new'
+import { QrCode } from './qr_new'
 
 interface QRCodeSvgProps {
   text: string
@@ -17,8 +17,8 @@ export default function QRCodeSvg({
   color = '#FFFFFF', // Default dots color
 }: QRCodeSvgProps) {
   const qr = useMemo(() => {
-    // Error correction level H (30%) allows covering the center with a logo
-    return QrCode.encodeText(text, Ecc.HIGH)
+    // Error correction level is now hardcoded to HIGH (30%) allows covering the center with a logo
+    return QrCode.encodeText(text)
   }, [text])
 
   const moduleCount = qr.size

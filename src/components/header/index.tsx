@@ -24,7 +24,7 @@ export default function Header() {
         <div className={style.head}>
           <Link className={style.logo} to='/'>
             <Logo />
-            <h2>Vanga</h2>
+            <h2>iVanga</h2>
           </Link>
           <div className='row center gap20 w100'>
             <PredictionSearch />

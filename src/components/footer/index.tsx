@@ -12,7 +12,7 @@ export default function Footer() {
         <div className='column start gap8'>
           <a href='/' className={style.logo}>
             <Logo />
-            <h1>Vanga</h1>
+            <h1>iVanga</h1>
           </a>
           <h3>Самый большой сервис предсказаний в России™</h3>
         </div>
@@ -22,19 +22,19 @@ export default function Footer() {
         <div className='column gap20'>
           <div className={style.bottom}>
             <div className={style.socials}>
-              <a href='mailto:hello@i-vanga.com' target='_blank' rel='noreferrer'>
+              <a href='mailto:hello@ivanga.me' target='_blank' rel='noreferrer'>
                 <Icon name='mail' size={20} />
               </a>
-              <a href='https://twitter.com/i-vanga' target='_blank' rel='noreferrer'>
+              <a href='https://twitter.com/ivanga' target='_blank' rel='noreferrer'>
                 <Icon name='twitter' size={20} />
               </a>
-              <a href='https://instagram.com/i-vanga' target='_blank' rel='noreferrer'>
+              <a href='https://instagram.com/ivanga' target='_blank' rel='noreferrer'>
                 <Icon name='instagram' size={20} />
               </a>
-              <a href='https://discord.gg/i-vanga' target='_blank' rel='noreferrer'>
+              <a href='https://discord.gg/ivanga' target='_blank' rel='noreferrer'>
                 <Icon name='discord' size={20} />
               </a>
-              <a href='https://tiktok.com/@i-vanga' target='_blank' rel='noreferrer'>
+              <a href='https://tiktok.com/@ivanga' target='_blank' rel='noreferrer'>
                 <Icon name='tiktok' size={20} />
               </a>
             </div>
@@ -55,8 +55,8 @@ export default function Footer() {
 
           <div className={style.about}>
             <p>
-              i-Vanga работает по всему миру через отдельные юридические лица. <a href='/us'>i-Vanga</a> управляется
-              Unknown Origin Ltd. i-Vanga, a CFTC-regulated Designated Contract Market. Эта международная платформа не
+              iVanga работает по всему миру через отдельные юридические лица. <a href='/us'>iVanga</a> управляется
+              Unknown Origin Ltd. iVanga, a CFTC-regulated Designated Contract Market. Эта международная платформа не
               регулируется CFTC и работает независимо. Торговля сопряжена со значительным риском убытков. Ознакомьтесь с
               нашими&nbsp;
               <a href='/terms'>Условиями&nbsp;использования</a> &{' '}
