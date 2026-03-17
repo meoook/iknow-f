@@ -55,12 +55,12 @@ export default function Footer() {
 
           <div className={style.about}>
             <p>
-              iVanga работает по всему миру через отдельные юридические лица. <a href='/us'>iVanga</a> управляется
+              iVanga работает по всему миру через отдельные юридические лица. <Link to='/us'>iVanga</Link> управляется
               Unknown Origin Ltd. iVanga, a CFTC-regulated Designated Contract Market. Эта международная платформа не
               регулируется CFTC и работает независимо. Торговля сопряжена со значительным риском убытков. Ознакомьтесь с
               нашими&nbsp;
-              <a href='/terms'>Условиями&nbsp;использования</a> &{' '}
-              <a href='/privacy'>Политикой&nbsp;конфиденциальности</a>.
+              <Link to='/tos'>Условиями&nbsp;использования</Link> &{' '}
+              <Link to='/privacy'>Политикой&nbsp;конфиденциальности</Link>.
             </p>
           </div>
         </div>

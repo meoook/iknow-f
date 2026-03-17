@@ -11,7 +11,7 @@ interface PredictionStatusProps {
 
 export default function PredictionStatus({ tags, state, date, closed, created }: PredictionStatusProps) {
   return (
-    <div className='row center gap12'>
+    <div className='row center gap12 lh-1'>
       <div className={style.date}>
         <IconSprite name='finish' size={16} />
         {closed ? (

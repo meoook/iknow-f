@@ -1,10 +1,9 @@
 import style from './deposit.module.scss'
 import QRCodeSvg from '../../components/QRCode2'
 import { useEffect, useState } from 'react'
-import { useAppSelector } from '../../hooks/useRedux'
 import { useDepositMutation } from '../../services/api'
-import IconSprite from '../../elements/icon/Icon'
 import { useModalContext } from '../../services/ModalContext'
+import IconSprite from '../../elements/icon/Icon'
 import solanaLogo from '../../assets/solana.svg'
 import etheriumLogo from '../../assets/etherium.svg'
 import bscLogo from '../../assets/bsc.svg'
@@ -39,7 +38,6 @@ export default function ModalDeposit() {
     setCloseOutside(true)
   }, [setCloseOutside])
 
-  const user = useAppSelector((state) => state.auth.user)
   const [deposit] = useDepositMutation()
   const [chain, setChain] = useState('TRX')
   const [address, setAddress] = useState(ADDRESSES['TRX'])
@@ -61,7 +59,7 @@ export default function ModalDeposit() {
 
   return (
     <div className={`${style.wrapper} noscroll`}>
-      <h1>Депозит {user?.username}</h1>
+      <h1>Депозит</h1>
       <hr />
       <div className='column center gap12'>
         <div>Отправьте USDT или USDC на указанный адрес в выбранном блокчейне</div>
