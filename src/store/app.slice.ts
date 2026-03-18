@@ -18,26 +18,7 @@ const initialState: IAppState = {
 
 // Применяем тему к CSS переменным
 const applyTheme = (theme: 'light' | 'dark') => {
-  const root = document.documentElement
-  if (theme === 'light') {
-    root.style.setProperty('--color-primary', '#222')
-    root.style.setProperty('--color-secondary', '#888')
-    root.style.setProperty('--color-body', '#fff')
-    root.style.setProperty('--color-head', '#fff')
-    root.style.setProperty('--color-dialog', '#fff')
-    root.style.setProperty('--color-input', '#fff')
-    root.style.setProperty('--color-active', '#f0f0f0')
-    root.style.setProperty('--color-hover', '#f4f5f6')
-  } else {
-    root.style.removeProperty('--color-primary')
-    root.style.removeProperty('--color-secondary')
-    root.style.removeProperty('--color-body')
-    root.style.removeProperty('--color-head')
-    root.style.removeProperty('--color-dialog')
-    root.style.removeProperty('--color-input')
-    root.style.removeProperty('--color-active')
-    root.style.removeProperty('--color-hover')
-  }
+  document.documentElement.style.colorScheme = theme
 }
 
 // Применяем начальную тему

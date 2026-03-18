@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light dark;
   // new colors
   // --colors-failure: #ed4b9e;
   // --colors-failure33: #ed4b9e33;
@@ -46,17 +47,17 @@
   // --shadows-inset: inset 0px 2px 2px -1px rgba(74, 74, 104, 0.1);
   // --shadows-tooltip: 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px -8px rgba(14, 14, 44, 0.1);
 
-  --color-primary: #fff;
+  --color-primary: light-dark(#222, #fff);
   // --color-fg-default: #fff;
-  --color-secondary: #94a3b8;
+  --color-secondary: light-dark(#888, #94a3b8);
   // --color-body: #1d1d23; // 1c1f24
-  --color-body: #131619; // 1c1f24
-  --color-head: #202029;
-  --color-dialog: #23232b;
+  --color-body: light-dark(#fff, #131619); // 1c1f24
+  --color-head: light-dark(#fff, #202029);
+  --color-dialog: light-dark(#fff, #23232b);
 
-  --color-input: #2a2a3a; // #282831
-  --color-active: #2c2c35;
-  --color-hover: #2f2f3f;
+  --color-input: light-dark(#fff, #2a2a3a); // #282831
+  --color-active: light-dark(#f0f0f0, #2c2c35);
+  --color-hover: light-dark(#f4f5f6, #2f2f3f);
 
   --color-shadow: #2222;
   --color-shimmer: #4443;
