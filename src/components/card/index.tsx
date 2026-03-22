@@ -1,8 +1,8 @@
 import React from 'react'
 import style from './card.module.scss'
-import { intlNumber } from '../../hooks/hooks'
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/useRedux'
+import { intlNumber } from '../../hooks/hooks'
 import type { IPrediction } from '../../types/app.types'
 import Badge from '../../elements/badge'
 
@@ -27,7 +27,7 @@ const PredictionCard = ({ prediction }: PredictionCardProps) => {
         </h3>
       </div>
       {/* <div className='grow'>{prediction.group}</div> */}
-      <div className='column grow'>
+      <div className='column'>
         <span className='label'>Разница</span>
         <div className={style.progress}>
           <div className={`${style.bar} ${color}`} style={{ width: percent + '%' }}>

@@ -88,8 +88,8 @@ export default function PagePrivacy() {
               it may be collected, and how it may be used. You may e-mail us at&nbsp;
             </span>
             <span className='c15'>
-              <a className='c2' href='mailto:legal@polymarket.com'>
-                legal@polymarket.com
+              <a className='c2' href='mailto:legal@ivanga.me'>
+                legal@ivanga.me
               </a>
             </span>
             <span className='c35'>&nbsp;</span>
@@ -559,8 +559,8 @@ export default function PagePrivacy() {
                 to exercise this right, please send an e-mail&nbsp;to{' '}
               </span>
               <span className='c15'>
-                <a className='c2' href='mailto:legal@polymarket.com'>
-                  legal@polymarket.com
+                <a className='c2' href='mailto:legal@ivanga.me'>
+                  legal@ivanga.me
                 </a>
               </span>
               <span className='c3'>&nbsp;with the subject line, “</span>
@@ -902,8 +902,8 @@ export default function PagePrivacy() {
               at&nbsp;
             </span>
             <span className='c15'>
-              <a className='c2' href='mailto:legal@polymarket.com'>
-                legal@polymarket.com
+              <a className='c2' href='mailto:legal@ivanga.me'>
+                legal@ivanga.me
               </a>
             </span>
             <span className='c3'>&nbsp;with the subject line, “</span>
@@ -926,8 +926,8 @@ export default function PagePrivacy() {
               ” link located on the bottom of any marketing e-mail, or by sending us an email at&nbsp;
             </span>
             <span className='c15'>
-              <a className='c2' href='mailto:legal@polymarket.com'>
-                legal@polymarket.com
+              <a className='c2' href='mailto:legal@ivanga.me'>
+                legal@ivanga.me
               </a>
             </span>
             <span className='c3'>&nbsp;with the subject line, “</span>
@@ -1004,8 +1004,8 @@ export default function PagePrivacy() {
                 you may e-mail us at{' '}
               </span>
               <span className='c15'>
-                <a className='c2' href='mailto:legal@polymarket.com'>
-                  legal@polymarket.com
+                <a className='c2' href='mailto:legal@ivanga.me'>
+                  legal@ivanga.me
                 </a>
               </span>
               <span className='c15'>&nbsp;</span>
@@ -1021,8 +1021,8 @@ export default function PagePrivacy() {
                 information is inaccurate or incomplete by emailing us at{' '}
               </span>
               <span className='c15'>
-                <a className='c2' href='mailto:legal@polymarket.com'>
-                  legal@polymarket.com
+                <a className='c2' href='mailto:legal@ivanga.me'>
+                  legal@ivanga.me
                 </a>
               </span>
               <span className='c3'>
@@ -1040,8 +1040,8 @@ export default function PagePrivacy() {
                 emailing us at{' '}
               </span>
               <span className='c15'>
-                <a className='c2' href='mailto:legal@polymarket.com'>
-                  legal@polymarket.com
+                <a className='c2' href='mailto:legal@ivanga.me'>
+                  legal@ivanga.me
                 </a>
               </span>
               <span className='c3'>
@@ -1061,8 +1061,8 @@ export default function PagePrivacy() {
                 information by emailing us at{' '}
               </span>
               <span className='c15'>
-                <a className='c2' href='mailto:legal@polymarket.com'>
-                  legal@polymarket.com
+                <a className='c2' href='mailto:legal@ivanga.me'>
+                  legal@ivanga.me
                 </a>
               </span>
               <span className='c3'>
@@ -1087,8 +1087,8 @@ export default function PagePrivacy() {
                 e-mail at{' '}
               </span>
               <span className='c15'>
-                <a className='c2' href='mailto:legal@polymarket.com'>
-                  legal@polymarket.com
+                <a className='c2' href='mailto:legal@ivanga.me'>
+                  legal@ivanga.me
                 </a>
               </span>
               <span className='c3'>
@@ -1111,8 +1111,8 @@ export default function PagePrivacy() {
                 we rely on your consent to process your personal information by emailing us at{' '}
               </span>
               <span className='c15'>
-                <a className='c2' href='mailto:legal@polymarket.com'>
-                  legal@polymarket.com
+                <a className='c2' href='mailto:legal@ivanga.me'>
+                  legal@ivanga.me
                 </a>
               </span>
               <span className='c3'>
@@ -1134,8 +1134,8 @@ export default function PagePrivacy() {
                 deleted from our Site, then you may submit a request by e-mailing us at{' '}
               </span>
               <span className='c15'>
-                <a className='c2' href='mailto:legal@polymarket.com'>
-                  legal@polymarket.com
+                <a className='c2' href='mailto:legal@ivanga.me'>
+                  legal@ivanga.me
                 </a>
               </span>
               <span className='c3'>
@@ -1214,8 +1214,8 @@ export default function PagePrivacy() {
               If you have any comments or questions about this Policy, please contact us by e-mail at&nbsp;
             </span>
             <span className='c15'>
-              <a className='c2' href='mailto:legal@polymarket.com'>
-                legal@polymarket.com
+              <a className='c2' href='mailto:legal@ivanga.me'>
+                legal@ivanga.me
               </a>
             </span>
             <span className='c3 c5'>.</span>

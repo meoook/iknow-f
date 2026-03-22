@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useEmailNonceMutation, useEmailAuthMutation, useW3authMutation, useW3nonceMutation } from '../../services/api'
 import { web3AuthService } from '../../services/web3Auth'
 import IconSprite from '../../elements/icon/Icon'
-import { EMAIL_REGEX } from '../../config/config'
+import { EMAIL_REGEX } from '../../utils/date'
 import Nonce from '../../elements/nonce'
 
 interface ModalLoginProps {

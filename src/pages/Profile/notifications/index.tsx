@@ -1,6 +1,6 @@
 import style from './notifications.module.scss'
 import { useEffect, useState } from 'react'
-import { config, EMAIL_REGEX } from '../../../config/config'
+import { EMAIL_REGEX } from '../../../utils/date'
 import type { IUser } from '../../../types/auth.types'
 import { useGetTelegramNonceMutation, useSetUserParamsMutation, useEmailNonceMutation } from '../../../services/api'
 import Toggle from '../../../elements/toggle'
@@ -79,8 +79,8 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
             <div>
               <span>Отправьте сообщение с этим кодом в телеграм канал</span>
               <br />
-              <a href={`https://t.me/${config.telegramBot}`} className='brand' target='blank'>
-                @{config.telegramBot}
+              <a href={`https://t.me/${import.meta.env.VITE_TG_BOT}`} className='brand' target='blank'>
+                @{import.meta.env.VITE_TG_BOT}
               </a>
               <span> для активации уведомления</span>
             </div>
