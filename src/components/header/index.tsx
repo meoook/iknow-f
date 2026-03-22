@@ -63,7 +63,7 @@ export default function Header() {
             </button>
           </div>
           <div className='hr' />
-          <div className='row center gap8 w100'>
+          <div className={`row center gap8 w100 ${style.navLinks}`}>
             <NavLink to='/' className={style.item}>
               Все
             </NavLink>

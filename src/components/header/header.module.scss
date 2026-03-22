@@ -35,8 +35,9 @@ nav {
   justify-content: space-between;
   color: var(--color-secondary);
 
-  overflow-x: scroll;
-  scrollbar-width: none;
+  > :not(.navLinks) {
+    flex-shrink: 0;
+  }
 
   .item {
     display: inline-flex;
@@ -55,6 +56,10 @@ nav {
       color: var(--color-primary);
     }
   }
+
+  @media (max-width: 1380px) {
+    max-width: unset;
+  }
 }
 
 .tultip {
@@ -67,5 +72,26 @@ nav {
 
   &:hover {
     color: var(--color-orange-light);
+  }
+}
+
+.navLinks {
+  @media (max-width: 1380px) {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    -webkit-mask-image: linear-gradient(to left, transparent 0, black 40px);
+    mask-image: linear-gradient(to left, transparent 0, black 40px);
+
+    &::after {
+      content: '';
+      min-width: 40px;
+    }
   }
 }

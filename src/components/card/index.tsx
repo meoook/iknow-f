@@ -4,13 +4,15 @@ import { intlNumber } from '../../hooks/hooks'
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/useRedux'
 import { usePrediction } from '../../store/prediction.adapter'
+import type { IPrediction } from '../../types/app.types'
+import Badge from '../../elements/badge'
 
 interface PredictionCardProps {
   predictionId: number
 }
 
 const PredictionCard = ({ predictionId }: PredictionCardProps) => {
-  const prediction = usePrediction(predictionId)
+  const prediction: IPrediction | undefined = usePrediction(predictionId)
   const { settings } = useAppSelector((state) => state.app)
   if (!prediction) return null
   const volume = intlNumber('ru-RU', prediction.volume)
@@ -41,10 +43,17 @@ const PredictionCard = ({ predictionId }: PredictionCardProps) => {
           <span className='label'>Объем</span>
           <span>${volume}</span>
         </div>
-        <div className='column'>
-          <span className='label'>Дата завершения</span>
-          <span className={style.right}>{new Date(prediction.end_date).toLocaleDateString()}</span>
-        </div>
+        {prediction.state === 'DISPUTE' ? (
+          <div className='column bottom'>
+            <span className='label'>Статус</span>
+            <Badge color='blue'>Обсуждение</Badge>
+          </div>
+        ) : (
+          <div className='column bottom'>
+            <span className='label'>{prediction.state === 'ENDED' ? 'Завершено' : 'Дата завершения'}</span>
+            <span className={style.right}>{new Date(prediction.end_date).toLocaleDateString()}</span>
+          </div>
+        )}
       </div>
     </Link>
   )
