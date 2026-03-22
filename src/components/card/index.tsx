@@ -3,16 +3,14 @@ import style from './card.module.scss'
 import { intlNumber } from '../../hooks/hooks'
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/useRedux'
-import { usePrediction } from '../../store/prediction.adapter'
 import type { IPrediction } from '../../types/app.types'
 import Badge from '../../elements/badge'
 
 interface PredictionCardProps {
-  predictionId: number
+  prediction: IPrediction
 }
 
-const PredictionCard = ({ predictionId }: PredictionCardProps) => {
-  const prediction: IPrediction | undefined = usePrediction(predictionId)
+const PredictionCard = ({ prediction }: PredictionCardProps) => {
   const { settings } = useAppSelector((state) => state.app)
   if (!prediction) return null
   const volume = intlNumber('ru-RU', prediction.volume)

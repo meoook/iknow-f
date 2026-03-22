@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { usePredictionIds } from '../store/prediction.adapter'
+import { predictionSelectors } from '../store/prediction.adapter'
+import { useGetPredictionsQuery } from '../services/api'
 
 import PredictionCard from '../components/card'
 import Empty from '../elements/empty'
@@ -18,21 +19,24 @@ export default function Home() {
     setOffset(0)
   }, [group])
 
-  const { predictionIds, isLoading, total, isFetching, isError } = usePredictionIds({
+  const { data, isLoading, isFetching, isError } = useGetPredictionsQuery({
     limit,
     offset,
     ...(group && { group }),
   })
 
+  const predictions = data ? predictionSelectors.selectAll(data) : []
+  const total = data?.total ?? 0
+
   const loadMore = () => {
-    if (predictionIds.length >= total || isFetching) return
+    if (predictions.length >= total || isFetching) return
     setOffset((prev) => prev + limit)
   }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && predictionIds.length < total && !isLoading && !isFetching) loadMore()
+        if (entries[0].isIntersecting && predictions.length < total && !isLoading && !isFetching) loadMore()
       },
       { threshold: 1.0 },
     )
@@ -40,16 +44,16 @@ export default function Home() {
     return () => {
       if (observerTarget.current) observer.unobserve(observerTarget.current)
     }
-  }, [predictionIds.length, total, isLoading, isFetching, loadMore])
+  }, [predictions.length, total, isLoading, isFetching, loadMore])
 
   if (isLoading) return <Empty title='Загрузка...' loading={true} size={24} />
   if (isError) return <Empty title='Ошибка загрузки' size={24} />
-  if (predictionIds.length === 0) return <Empty title='Предсказания отсутствуют' size={24} />
+  if (predictions.length === 0) return <Empty title='Предсказания отсутствуют' size={24} />
 
   return (
     <section>
-      {predictionIds.map((id: number) => (
-        <PredictionCard key={id} predictionId={id} />
+      {predictions.map((prediction) => (
+        <PredictionCard key={prediction.id} prediction={prediction} />
       ))}
       <div ref={observerTarget} className='more' />
     </section>
