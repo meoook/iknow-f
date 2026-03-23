@@ -17,6 +17,7 @@ export type IconName =
   | 'error'
   | 'exit'
   | 'favorite'
+  | 'filter'
   | 'finish'
   | 'flag'
   | 'info'

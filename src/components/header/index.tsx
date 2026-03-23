@@ -19,8 +19,8 @@ export default function Header() {
   }
 
   return (
-    <>
-      <header>
+    <header>
+      <div className={style.wrapper}>
         <div className={style.head}>
           <Link className={style.logo} to='/'>
             <Logo />
@@ -106,7 +106,7 @@ export default function Header() {
             </NavLink> */}
           </div>
         </nav>
-      </header>
-    </>
+      </div>
+    </header>
   )
 }
