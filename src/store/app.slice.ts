@@ -7,7 +7,8 @@ import { notificationAdapter } from './notification.adapter'
 const getInitialTheme = (): 'light' | 'dark' => {
   const savedTheme = localStorage.getItem('theme')
   if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  // return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return 'dark'
 }
 
 const initialState: IAppState = {
