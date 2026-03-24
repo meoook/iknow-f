@@ -8,13 +8,14 @@ import UserMenu from '../userMenu'
 import { useModalContext } from '../../services/ModalContext'
 import ModalHow from '../../modals/how'
 import PredictionSearch from '../search'
-import { useClickOutside } from '../../hooks/hooks'
+import { useClickOutside, useHorizontalScroll } from '../../hooks/hooks'
 
 export default function Header() {
   const { user, loading } = useAppSelector((state) => state.auth)
   const [filter, setFilter] = useState('top')
   const { openModal } = useModalContext()
   const [filterRef, isFilterOpen, toggleFilter] = useClickOutside()
+  const scrollRef = useHorizontalScroll(true)
 
   const handleF = (e: React.MouseEvent<HTMLButtonElement>) => {
     setFilter(e.currentTarget.name)
@@ -77,7 +78,7 @@ export default function Header() {
             </div>
           </div>
           <div className='hr' />
-          <div className={style.groups}>
+          <div className={style.groups} ref={scrollRef}>
             <NavLink to='/' className={style.item}>
               Все
             </NavLink>

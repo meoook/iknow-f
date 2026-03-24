@@ -39,15 +39,8 @@ export default function PredictionSearch() {
   }
 
   const handleFocus = () => {
-    if (!isSearchOpen) searchToggle({} as any)
+    if (!isSearchOpen) searchToggle()
   }
-
-  // const handleBlur = (e: React.FocusEvent) => {
-  //   // Если фокус переходит на элемент внутри нашего оберточного div, не закрываем
-  //   if (searchRef.current && !searchRef.current.contains(e.relatedTarget as Node)) {
-  //     if (isSearchOpen) searchToggle({} as any)
-  //   }
-  // }
 
   const opened = isSearchOpen && (isLoading || isSuccess || searchValue)
 

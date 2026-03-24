@@ -55,10 +55,6 @@ nav {
       color: var(--color-primary);
     }
   }
-
-  @media (max-width: $width) {
-    max-width: unset;
-  }
 }
 
 .filters {
@@ -92,18 +88,18 @@ nav {
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.2s ease;
 
   @media (max-width: $width) {
+    position: absolute;
     align-items: stretch;
     gap: 2px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     min-width: 140px;
+    transition: all 0.2s ease;
 
     box-shadow: var(--shadow);
-    position: absolute;
     top: 85%;
     left: 0;
     margin-top: 8px;
@@ -141,6 +137,10 @@ nav {
   &:hover {
     color: var(--color-orange-light);
   }
+
+  @media (max-width: $width) {
+    display: none;
+  }
 }
 
 .groups {
@@ -148,6 +148,7 @@ nav {
   align-items: center;
   gap: 8px;
   width: 100%;
+  justify-content: space-between;
 
   @media (max-width: $width) {
     flex: 1;
@@ -157,14 +158,6 @@ nav {
 
     &::-webkit-scrollbar {
       display: none;
-    }
-
-    -webkit-mask-image: linear-gradient(to left, transparent 0, black 40px);
-    mask-image: linear-gradient(to left, transparent 0, black 40px);
-
-    &::after {
-      content: '';
-      min-width: 40px;
     }
   }
 }

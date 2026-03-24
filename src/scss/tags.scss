@@ -233,7 +233,7 @@ section {
   padding-top: 24px;
   padding-bottom: 24px;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   align-items: center;
   width: 100%;
   gap: 20px;

@@ -2,6 +2,9 @@
   position: relative;
   width: 100%;
   max-width: 600px;
+  // @media (max-width: 1000px) {
+  //   display: none;
+  // }
 }
 
 .input {
@@ -14,7 +17,7 @@
   box-shadow: var(--shadow-border);
   overflow: hidden;
   transition: box-shadow 0.3s ease-in;
-  min-width: 400px;
+  min-width: 200px;
   width: 100%;
   color: var(--color-secondary);
   background: var(--color-bg-secondary);
