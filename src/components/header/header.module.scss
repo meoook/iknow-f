@@ -1,7 +1,8 @@
+$width: 1380px;
+
 header {
   position: sticky;
   top: 0;
-  box-sizing: border-box;
   background: var(--color-head);
   color: var(--color-primary);
   box-shadow: 0px 0px 5px 3px var(--color-shadow);
@@ -24,10 +25,7 @@ header {
 nav {
   display: flex;
   align-items: center;
-  // max-width: var(--size-surface);
-  width: 100%;
   padding: 0 20px;
-  // margin-inline: auto;
 }
 
 .head {
@@ -39,10 +37,6 @@ nav {
   height: var(--size-nav);
   justify-content: space-between;
   color: var(--color-secondary);
-
-  > :not(.navLinks) {
-    flex-shrink: 0;
-  }
 
   .item {
     display: inline-flex;
@@ -62,8 +56,77 @@ nav {
     }
   }
 
-  @media (max-width: 1380px) {
+  @media (max-width: $width) {
     max-width: unset;
+  }
+}
+
+.filters {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius);
+  color: inherit;
+  cursor: pointer;
+  background: transparent;
+
+  &:hover {
+    color: var(--color-primary);
+    background: var(--color-hover);
+  }
+
+  @media (max-width: $width) {
+    display: inline-flex;
+  }
+}
+
+.dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+
+  @media (max-width: $width) {
+    align-items: stretch;
+    gap: 2px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    min-width: 140px;
+
+    box-shadow: var(--shadow);
+    position: absolute;
+    top: 85%;
+    left: 0;
+    margin-top: 8px;
+    flex-direction: column;
+    background: var(--color-dialog);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 8px 0;
+
+    &.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .item {
+      padding: 8px 12px;
+      gap: 8px;
+
+      &:hover {
+        background: var(--color-hover);
+      }
+    }
   }
 }
 
@@ -80,8 +143,13 @@ nav {
   }
 }
 
-.navLinks {
-  @media (max-width: 1380px) {
+.groups {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+
+  @media (max-width: $width) {
     flex: 1;
     min-width: 0;
     overflow-x: auto;

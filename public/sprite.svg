@@ -50,12 +50,14 @@
       <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/>
     </symbol>
     <symbol id='filter' viewBox="0 0 18 18">
-        <line stroke-width="1.5" x1="13.25" y1="5.25" y2="5.25" x2="16.25"/>
-        <line stroke-width="1.5" x1="1.75" y1="5.25" y2="5.25" x2="8.75"/>
-        <line stroke-width="1.5" x1="4.75" x2="1.75" y1="12.75" y2="12.75"/>
-        <line stroke-width="1.5" x1="16.25" y1="12.75" y2="12.75" x2="9.25"/>
-        <circle cy="5.25" r="2.25" stroke-width="1.5" cx="11"/>
-        <circle cy="12.75" r="2.25" stroke-width="1.5" cx="7"/>
+      <g stroke='currentColor' stroke-width="1.5">
+        <line stroke-linecap="round"  x1="13.25" y1="5.25" y2="5.25" x2="16.25"/>
+        <line stroke-linecap="round" x1="1.75" y1="5.25" y2="5.25" x2="8.75"/>
+        <line stroke-linecap="round" x1="4.75" x2="1.75" y1="12.75" y2="12.75"/>
+        <line stroke-linecap="round" x1="16.25" y1="12.75" y2="12.75" x2="9.25"/>
+        <circle fill="none" cy="5.25" r="2.25" cx="11"/>
+        <circle fill="none" cy="12.75" r="2.25" cx="7"/>
+      </g>
     </symbol>
     <symbol id='finish' viewBox="0 -960 960 960">
       <path d="M360-720h80v-80h-80v80Zm160 0v-80h80v80h-80ZM360-400v-80h80v80h-80Zm320-160v-80h80v80h-80Zm0 160v-80h80v80h-80Zm-160 0v-80h80v80h-80Zm160-320v-80h80v80h-80Zm-240 80v-80h80v80h-80ZM200-160v-640h80v80h80v80h-80v80h80v80h-80v320h-80Zm400-320v-80h80v80h-80Zm-160 0v-80h80v80h-80Zm-80-80v-80h80v80h-80Zm160 0v-80h80v80h-80Zm80-80v-80h80v80h-80Z"/>

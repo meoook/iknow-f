@@ -8,14 +8,17 @@ import UserMenu from '../userMenu'
 import { useModalContext } from '../../services/ModalContext'
 import ModalHow from '../../modals/how'
 import PredictionSearch from '../search'
+import { useClickOutside } from '../../hooks/hooks'
 
 export default function Header() {
   const { user, loading } = useAppSelector((state) => state.auth)
   const [filter, setFilter] = useState('top')
   const { openModal } = useModalContext()
+  const [filterRef, isFilterOpen, toggleFilter] = useClickOutside()
 
   const handleF = (e: React.MouseEvent<HTMLButtonElement>) => {
     setFilter(e.currentTarget.name)
+    toggleFilter()
   }
 
   return (
@@ -40,30 +43,41 @@ export default function Header() {
           <UserMenu />
         </div>
         <nav>
-          <div className='row center gap8'>
-            <button className={`${style.item} ${filter === 'top' ? 'active' : ''}`} name='top' onClick={handleF}>
-              <IconSprite name='trend' size={16} />
-              <span>Топ</span>
+          <div className={style.filters} ref={filterRef}>
+            <button className={style.btn} onClick={toggleFilter}>
+              <IconSprite name='filter' size={24} />
             </button>
-            <button className={`${style.item} ${filter === 'volume' ? 'active' : ''}`} name='volume' onClick={handleF}>
-              <IconSprite name='volume' size={16} />
-              <span>Объем</span>
-            </button>
-            <button className={`${style.item} ${filter === 'diff' ? 'active' : ''}`} name='diff' onClick={handleF}>
-              <IconSprite name='diff' size={16} />
-              <span>Разница</span>
-            </button>
-            <button className={`${style.item} ${filter === 'star' ? 'active' : ''}`} name='star' onClick={handleF}>
-              <IconSprite name='star' size={16} />
-              <span>Новые</span>
-            </button>
-            <button className={`${style.item} ${filter === 'finish' ? 'active' : ''}`} name='finish' onClick={handleF}>
-              <IconSprite name='finish' size={16} />
-              <span>Финиш</span>
-            </button>
+            <div className={`${style.dropdown} ${isFilterOpen ? style.open : ''}`}>
+              <button className={`${style.item} ${filter === 'top' ? 'active' : ''}`} name='top' onClick={handleF}>
+                <IconSprite name='trend' size={16} />
+                <span>Топ</span>
+              </button>
+              <button
+                className={`${style.item} ${filter === 'volume' ? 'active' : ''}`}
+                name='volume'
+                onClick={handleF}>
+                <IconSprite name='volume' size={16} />
+                <span>Объем</span>
+              </button>
+              <button className={`${style.item} ${filter === 'diff' ? 'active' : ''}`} name='diff' onClick={handleF}>
+                <IconSprite name='diff' size={16} />
+                <span>Разница</span>
+              </button>
+              <button className={`${style.item} ${filter === 'star' ? 'active' : ''}`} name='star' onClick={handleF}>
+                <IconSprite name='star' size={16} />
+                <span>Новые</span>
+              </button>
+              <button
+                className={`${style.item} ${filter === 'finish' ? 'active' : ''}`}
+                name='finish'
+                onClick={handleF}>
+                <IconSprite name='finish' size={16} />
+                <span>Финиш</span>
+              </button>
+            </div>
           </div>
           <div className='hr' />
-          <div className={`row center gap8 w100 ${style.navLinks}`}>
+          <div className={style.groups}>
             <NavLink to='/' className={style.item}>
               Все
             </NavLink>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export const useClickOutside = (): [React.RefObject<HTMLDivElement | null>, boolean, React.MouseEventHandler] => {
+export const useClickOutside = (): [React.RefObject<HTMLDivElement | null>, boolean, () => void] => {
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState<boolean>(false)
 
