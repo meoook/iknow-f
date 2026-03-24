@@ -24,7 +24,7 @@ export default function NotificationBell() {
   }
 
   const openMenu = () => {
-    menuToogle(null as any)
+    menuToogle()
     if (unreadCount > 0) setTimeout(() => readAll(), 0)
   }
 

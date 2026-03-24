@@ -62,7 +62,7 @@ export default function DatePicker({
 
     onChange(formattedDate)
     // Закрываем календарь после выбора даты (вызываем toggle как обработчик события)
-    setTimeout(() => toggle({} as React.MouseEvent), 0)
+    setTimeout(() => toggle(), 0)
   }
 
   const handlePrevMonth = (e: React.MouseEvent) => {

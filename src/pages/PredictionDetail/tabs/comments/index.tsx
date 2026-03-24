@@ -97,7 +97,7 @@ const CommentBase = ({ authed, predictionId, commentId }: CommentProps) => {
   }
   const handleModalOpen = () => {
     if (!authed) return openModal(ModalLogin)
-    menuToogle(undefined as any)
+    menuToogle()
     openModal(ModalReport, { predictionId, commentId: comment.id })
   }
 
