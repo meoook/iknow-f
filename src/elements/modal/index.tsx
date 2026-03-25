@@ -28,10 +28,10 @@ export default function ModalRenderer() {
   return (
     <div className={style.bg} onClick={handleOutsideClick}>
       <div className={style.modal} onClick={handle}>
+        <Component {...props} close={closeModal} />
         <button className={style.close} onClick={closeModal}>
           <IconSprite name='close' />
         </button>
-        <Component {...props} close={closeModal} />
       </div>
     </div>
   )

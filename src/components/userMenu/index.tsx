@@ -136,11 +136,13 @@ function UserButtons({ user }: { user: IUser }) {
   const { openModal } = useModalContext()
   return (
     <>
-      <Balance name='Баллы' balance={user.balances.POINT} />
-      <Balance name='Кэш' balance={user.balances.CASH} currency='USD' />
-      <button className='btn blue' onClick={() => openModal(ModalDeposit)}>
-        Депозит
-      </button>
+      <div className={style.balance}>
+        <Balance name='Баллы' balance={user.balances.POINT} />
+        <Balance name='Кэш' balance={user.balances.CASH} currency='USD' />
+        <button className='btn blue' onClick={() => openModal(ModalDeposit)}>
+          Депозит
+        </button>
+      </div>
       <NotificationBell />
     </>
   )

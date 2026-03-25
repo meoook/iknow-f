@@ -75,6 +75,11 @@ export const apiBase = createApi({
         url: 'auth/email',
         params: payload,
       }),
+      transformErrorResponse: (response: any) => {
+        if (response.status === 'FETCH_ERROR') return 'Сервер не доступен'
+        if (response.status === 429) return 'Слишком много запросов, попробуйте позже'
+        return 'Ошибка входа'
+      },
     }),
     emailAuth: builder.mutation<IAuthResponse, { email: string; nonce: string }>({
       query: (payload) => ({

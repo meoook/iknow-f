@@ -149,6 +149,7 @@ nav {
   gap: 8px;
   width: 100%;
   justify-content: space-between;
+  transition: all 0.2s ease;
 
   @media (max-width: $width) {
     flex: 1;

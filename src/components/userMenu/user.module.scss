@@ -15,6 +15,15 @@
   }
 }
 
+.balance {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  @media (max-width: 800px) {
+    display: none;
+  }
+}
+
 .user {
   display: flex;
   align-items: center;
@@ -22,7 +31,7 @@
   padding: 4px 12px;
   color: var(--color-orange);
 
-  &>div {
+  & > div {
     line-height: 16px;
     overflow: hidden;
   }
@@ -33,6 +42,7 @@
 
     display: -webkit-box;
     overflow: hidden;
+    line-clamp: 1;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;

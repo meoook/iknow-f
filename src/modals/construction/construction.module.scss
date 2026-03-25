@@ -1,0 +1,18 @@
+.wrapper {
+  box-sizing: border-box;
+  width: 380px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+}
+
+.cunstruction {
+  height: 40px;
+  width: 100%;
+  background-size: 100px 100px;
+  background-image: linear-gradient(45deg, #ffff00 25%, #000 25%, #000 50%, #ffff00 50%, #ffff00 75%, #000 75%, #000);
+}

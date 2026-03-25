@@ -1,10 +1,12 @@
 import style from './login.module.scss'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useEmailNonceMutation, useEmailAuthMutation, useW3authMutation, useW3nonceMutation } from '../../services/api'
 import { web3AuthService } from '../../services/web3Auth'
-import IconSprite from '../../elements/icon/Icon'
 import { EMAIL_REGEX } from '../../utils/date'
+import IconSprite from '../../elements/icon/Icon'
 import Nonce from '../../elements/nonce'
+import { Link } from 'react-router-dom'
+import Loader from '../../elements/loader'
 
 interface ModalLoginProps {
   close: () => void
@@ -18,6 +20,27 @@ export default function ModalLogin({ close }: ModalLoginProps) {
   const [error, setError] = useState('')
   const [step, setStep] = useState<'email' | 'nonce'>('email')
   const [nonce, setNonce] = useState<string>('')
+  const [expireTime, setExpireTime] = useState<number | null>(null)
+  const [expired, setExpired] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (step === 'nonce' && expireTime) {
+      const delay = (expireTime - Math.floor(Date.now() / 1000)) * 1000
+
+      if (delay <= 0) {
+        setExpireTime(null)
+        setExpired(true)
+        return
+      }
+
+      const timer = setTimeout(() => {
+        setExpireTime(null)
+        setExpired(true)
+      }, delay)
+
+      return () => clearTimeout(timer)
+    }
+  }, [step, expireTime])
 
   const [emailNonce, { isLoading: isOauthLoading }] = useEmailNonceMutation()
   const [emailAuth, { isLoading: isEmailLoading }] = useEmailAuthMutation()
@@ -31,12 +54,14 @@ export default function ModalLogin({ close }: ModalLoginProps) {
 
   const handleEmailLogin = async () => {
     setError('')
+    setExpired(false)
     try {
-      await emailNonce({ email }).unwrap()
+      const { expire } = await emailNonce({ email }).unwrap()
+      if (expire) setExpireTime(expire)
       localStorage.setItem('email', email)
       setStep('nonce')
     } catch (err: any) {
-      setError(err.data?.message || 'Ошибка входа')
+      setError(err || 'Ошибка входа')
     }
   }
 
@@ -69,16 +94,18 @@ export default function ModalLogin({ close }: ModalLoginProps) {
 
   const stepBack = () => {
     setStep('email')
+    setError('')
     setNonce('')
+    setExpireTime(null)
+    setExpired(false)
   }
 
   return (
     <div className={style.wrapper}>
-      <h1 className='column center'>Добро пожаловать в Vanga</h1>
-      {error && <div className='login-error'>{error}</div>}
+      <h2 className='column center'>Добро пожаловать в iVanga</h2>
 
       <div className={style.steps} style={{ gridTemplateRows: step === 'email' ? '1fr 0fr' : '0fr 1fr' }}>
-        <div className={style.stepItem}>
+        <div className={style.step}>
           <div className='column gap20'>
             <button disabled={isOauthLoading} className='btn blue big'>
               <IconSprite name='vk' size={28} />
@@ -104,7 +131,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
                 className='btn blue'
                 disabled={!emailValid || isOauthLoading}
                 onClick={handleEmailLogin}>
-                Продолжить
+                {isOauthLoading ? <Loader /> : 'Продолжить'}
               </button>
             </div>
 
@@ -124,21 +151,34 @@ export default function ModalLogin({ close }: ModalLoginProps) {
           </div>
         </div>
 
-        <div className={style.stepItem}>
+        <div className={style.step}>
           <div className='column center gap12'>
             <div className='column center gap8'>
-              <h2>Введите код</h2>
-              <p className='color-gray'>{`Мы отправили ${NONCE_LENGTH}-значный код на ${email}`}</p>
+              {/* <h2>Подтвердите вход</h2> */}
+              <div className='color-gray'>Код подтверждения отправлен на почту</div>
+              <div>{email}</div>
             </div>
 
-            <Nonce length={NONCE_LENGTH} value={nonce} onChange={setNonce} />
+            {step === 'email' ? (
+              <div className={style.expired} />
+            ) : expired ? (
+              <h3 className={style.expired}>Срок действия кода истёк</h3>
+            ) : (
+              <Nonce length={NONCE_LENGTH} value={nonce} onChange={setNonce} />
+            )}
 
-            <button
-              className='btn blue big w100'
-              disabled={nonce.length !== NONCE_LENGTH || isEmailLoading}
-              onClick={handleNonceLogin}>
-              Подтвердить
-            </button>
+            {expired ? (
+              <button className='btn blue big w100' disabled={isOauthLoading} onClick={handleEmailLogin}>
+                {isOauthLoading ? <Loader /> : 'Отправить код повторно'}
+              </button>
+            ) : (
+              <button
+                className='btn blue big w100'
+                disabled={nonce.length !== NONCE_LENGTH || isEmailLoading}
+                onClick={handleNonceLogin}>
+                {isEmailLoading ? <Loader /> : 'Подтвердить'}
+              </button>
+            )}
 
             <button className='btn text' onClick={stepBack}>
               Изменить почту
@@ -147,7 +187,11 @@ export default function ModalLogin({ close }: ModalLoginProps) {
         </div>
       </div>
 
-      <small className='column center color-gray'>Условия использования</small>
+      <small className={style.error}>{error ? error : '\u00A0'}</small>
+
+      <Link to='/tos' onClick={() => close()}>
+        <small className='column center color-gray'>Условия использования</small>
+      </Link>
     </div>
   )
 }

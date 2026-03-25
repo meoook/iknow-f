@@ -20,6 +20,7 @@ export type IconName =
   | 'filter'
   | 'finish'
   | 'flag'
+  | 'home'
   | 'info'
   | 'instagram'
   | 'mail'

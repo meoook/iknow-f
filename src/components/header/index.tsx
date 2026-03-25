@@ -1,14 +1,14 @@
 import style from './header.module.scss'
+import { Link, NavLink } from 'react-router-dom'
 import { useState } from 'react'
 import { useAppSelector } from '../../hooks/useRedux'
-import { Link, NavLink } from 'react-router-dom'
+import { useModalContext } from '../../services/ModalContext'
+import { useClickOutside, useHorizontalScroll } from '../../hooks/hooks'
 import IconSprite from '../../elements/icon/Icon'
 import Logo from './logo'
 import UserMenu from '../userMenu'
-import { useModalContext } from '../../services/ModalContext'
 import ModalHow from '../../modals/how'
 import PredictionSearch from '../search'
-import { useClickOutside, useHorizontalScroll } from '../../hooks/hooks'
 
 export default function Header() {
   const { user, loading } = useAppSelector((state) => state.auth)
@@ -33,12 +33,10 @@ export default function Header() {
           <div className='row center gap20 w100'>
             <PredictionSearch />
             {!user && !loading && (
-              <>
-                <button className={style.tultip} onClick={() => openModal(ModalHow)}>
-                  <IconSprite name='tultip' size={14} />
-                  <span>Как это работает?</span>
-                </button>
-              </>
+              <button className={style.tultip} onClick={() => openModal(ModalHow)}>
+                <IconSprite name='tultip' size={14} />
+                <span>Как это работает?</span>
+              </button>
             )}
           </div>
           <UserMenu />
