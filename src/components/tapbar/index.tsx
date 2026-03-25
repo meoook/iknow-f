@@ -2,11 +2,7 @@ import style from './tapbar.module.scss'
 import IconSprite from '../../elements/icon/Icon'
 import { Link } from 'react-router-dom'
 
-interface TapBarProps {
-  tags?: string[]
-}
-
-export default function TapBar({ tags }: TapBarProps) {
+export default function TapBar() {
   return (
     <div className={style.bar}>
       <Link to='/' className={style.item}>
@@ -17,10 +13,10 @@ export default function TapBar({ tags }: TapBarProps) {
         <IconSprite name='search' />
         <span>Поиск</span>
       </button>
-      <Link to='/menu' className={style.item}>
-        <IconSprite name='menu' />
+      <button className={style.item}>
+        <IconSprite name='menu2' />
         <span>Меню</span>
-      </Link>
+      </button>
     </div>
   )
 }

@@ -25,6 +25,7 @@ export type IconName =
   | 'instagram'
   | 'mail'
   | 'menu'
+  | 'menu2'
   | 'metamask'
   | 'moon'
   | 'more'

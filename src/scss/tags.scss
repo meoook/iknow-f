@@ -26,6 +26,7 @@ html {
   tab-size: 4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -84,6 +85,10 @@ select {
   text-transform: none;
   white-space: nowrap;
   cursor: pointer;
+}
+a,
+button {
+  touch-action: manipulation;
 }
 
 button,

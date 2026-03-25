@@ -5,7 +5,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: var(--size-tapbar);
   background: var(--color-head);
   border-top: 1px solid var(--color-border);
   z-index: 5;
@@ -13,6 +13,7 @@
   @media (max-width: 800px) {
     display: flex;
     align-items: center;
+    justify-content: space-around;
   }
 }
 
@@ -21,13 +22,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 1;
-  color: var(--color-text);
+  color: var(--color-primary);
   text-decoration: none;
   font-size: var(--font-size-xs);
   font-weight: 500;
   cursor: pointer;
   transition: color 0.2s ease-in-out;
+  margin-inline: 24px;
 
   &:hover {
     color: var(--color-primary);

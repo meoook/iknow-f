@@ -32,8 +32,6 @@ export default function NavRouter() {
         <ModalRenderer />
         <Header />
         <main>
-          <ScrollToTop />
-          <BackToTop />
           <Suspense fallback={<Empty title='Загрузка...' loading={true} />}>
             <Routes>
               {/* Protected routes */}
@@ -71,8 +69,10 @@ export default function NavRouter() {
             </Routes>
           </Suspense>
         </main>
-        <TapBar />
         <Footer />
+        <TapBar />
+        <ScrollToTop />
+        <BackToTop />
       </BrowserRouter>
     </ModalProvider>
   )

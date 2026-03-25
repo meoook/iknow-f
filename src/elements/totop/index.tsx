@@ -24,11 +24,13 @@ export default function BackToTop() {
   }, [])
 
   return (
-    <div className={`${style.container} ${isVisible ? style.visible : ''}`} onClick={scrollToTop}>
-      <span>На верх</span>
-      <svg className={style.icon} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
-        <path d='M12 4l-8 8h6v8h4v-8h6z' />
-      </svg>
+    <div className={`${style.container} ${isVisible ? style.visible : ''}`}>
+      <button onClick={scrollToTop}>
+        <span>На верх</span>
+        <svg className={style.icon} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+          <path d='M12 4l-8 8h6v8h4v-8h6z' />
+        </svg>
+      </button>
     </div>
   )
 }
