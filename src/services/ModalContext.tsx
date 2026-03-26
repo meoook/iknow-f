@@ -1,14 +1,17 @@
 import { createContext, useCallback, useContext, useRef, useState } from 'react'
 
+export type ModalType = 'common' | 'bottom'
+
 interface ModalState {
   component: React.ComponentType<any>
   props?: Record<string, any>
   closeOutside?: boolean
+  type: ModalType
 }
 
 interface ModalContextValue {
   modal: ModalState | null
-  openModal: (component: React.ComponentType<any>, props?: Record<string, any>) => void
+  openModal: (component: React.ComponentType<any>, props?: Record<string, any>, type?: ModalType) => void
   closeModal: () => void
   setCloseOutside: (value: boolean) => void
 }
@@ -19,13 +22,18 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [modal, setModal] = useState<ModalState | null>(null)
   const scrollY = useRef(0)
 
-  const openModal = useCallback((component: React.ComponentType<any>, props?: Record<string, any>) => {
-    scrollY.current = window.scrollY
-    document.body.style.position = 'fixed'
-    document.body.style.top = `-${scrollY.current}px`
-    document.body.style.width = '100%'
-    setModal({ component, props, closeOutside: false })
-  }, [])
+  const openModal = useCallback(
+    (component: React.ComponentType<any>, props?: Record<string, any>, type: ModalType = 'common') => {
+      scrollY.current = window.scrollY
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY.current}px`
+      document.body.style.width = '100%'
+      // Модалки type=bottom по умолчанию закрываются по клику вне области (closeOutside: true),
+      // а type=common оставляем как было (false)
+      setModal({ component, props, closeOutside: type === 'bottom' ? true : false, type })
+    },
+    []
+  )
 
   const closeModal = useCallback(() => {
     document.body.style.position = ''
