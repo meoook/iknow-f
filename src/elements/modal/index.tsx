@@ -112,8 +112,28 @@ export default function ModalRenderer() {
 
   const { component: Component, props, closeOutside, type } = modal
 
+  const handleClose = () => {
+    if (type === 'bottom' && sheetRef.current) {
+      const el = sheetRef.current
+      // Отключаем стартовую CSS-анимацию
+      el.style.animation = 'none'
+      
+      // ВАЖНО: заставляем браузер перерисовать элемент (reflow),
+      // иначе он схлопнет animation: none и transform вместе без плавности
+      void el.offsetHeight
+
+      // Ставим время такое же, как у анимации появления (0.35s)
+      el.style.transition = 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
+      el.style.transform = 'translateY(100%)'
+      // Удаляем меню из дерева чуть раньше визуального конца (330ms), чтобы не было "прыжков"
+      setTimeout(closeModal, 330)
+    } else {
+      closeModal()
+    }
+  }
+
   const handleOutsideClick = () => {
-    if (closeOutside !== false) closeModal()
+    if (closeOutside !== false) handleClose()
   }
 
   if (type === 'bottom') {
@@ -123,7 +143,7 @@ export default function ModalRenderer() {
           <div className={style.handle}>
             <span className={style.handleBar} />
           </div>
-          <Component {...props} close={closeModal} />
+          <Component {...props} close={handleClose} />
         </div>
       </div>
     )
@@ -132,8 +152,8 @@ export default function ModalRenderer() {
   return (
     <div className={style.bg} onClick={handleOutsideClick}>
       <div className={style.modal} onClick={handle}>
-        <Component {...props} close={closeModal} />
-        <button className={style.close} onClick={closeModal}>
+        <Component {...props} close={handleClose} />
+        <button className={style.close} onClick={handleClose}>
           <IconSprite name='close' />
         </button>
       </div>
