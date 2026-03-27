@@ -38,29 +38,32 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
   return (
     <>
       {isOpen && <div className={style.overlay} onClick={onClose} />}
-      <div className={`${style.drawer}${isOpen ? ` ${style.open}` : ''}`}>
+      <div className={`${style.drawer} noscroll${isOpen ? ` ${style.open}` : ''}`}>
         {user ? (
           <>
             <Link className={style.user} to='/profile' onClick={handleLink}>
               <Avatar src={user.avatar} />
               <div>
                 <span>{user.address.slice(0, 6) + '...' + user.address.slice(-6)}</span>
-                {user.username !== user.address && (
-                  <span className={style.username}>{user.username}</span>
-                )}
+                {user.username !== user.address && <span className={style.username}>{user.username}</span>}
               </div>
             </Link>
             <hr className={style.divider} />
           </>
         ) : (
           <div className={style.authButtons}>
-            <button className='btn blue w100' onClick={() => { openModal(ModalLogin); onClose() }}>
+            <button
+              className='btn blue w100'
+              onClick={() => {
+                openModal(ModalLogin)
+                onClose()
+              }}>
               Войти
             </button>
           </div>
         )}
 
-        <nav className={style.nav}>
+        <div className={style.nav}>
           <button className={style.item}>
             <IconSprite name='crown' size={20} color='var(--color-brand)' />
             <span>Таблица лидеров</span>
@@ -82,24 +85,35 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
             </Link>
           )}
           {user && (
-            <button className={style.item} onClick={() => { openModal(ModalDeposit); onClose() }}>
+            <button
+              className={style.item}
+              onClick={() => {
+                openModal(ModalDeposit)
+                onClose()
+              }}>
               <IconSprite name='upload' size={20} color='var(--color-orange)' />
               <span>Депозит</span>
             </button>
           )}
-        </nav>
+        </div>
 
-        <hr className={style.divider} />
+        <hr />
 
         <div className={style.links}>
-          <Link className={style.link} to='/tos' onClick={handleLink}>Условия использования</Link>
-          <Link className={style.link} to='/about' onClick={handleLink}>О приложении</Link>
-          <Link className={style.link} to='/docs' onClick={handleLink}>Документация</Link>
+          <Link className={style.link} to='/tos' onClick={handleLink}>
+            Условия использования
+          </Link>
+          <Link className={style.link} to='/about' onClick={handleLink}>
+            О приложении
+          </Link>
+          <Link className={style.link} to='/docs' onClick={handleLink}>
+            Документация
+          </Link>
         </div>
 
         {user && (
           <>
-            <hr className={style.divider} />
+            <hr />
             <button className={`${style.item} ${style.logout}`} onClick={handleLogOut}>
               <IconSprite name='exit' size={20} color='var(--color-red)' />
               <span className='color-red'>Выйти</span>

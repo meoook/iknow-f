@@ -1,9 +1,11 @@
 .wrapper {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
   @media (max-width: 800px) {
-    display: none;
+    & {
+      max-width: 100%;
+    }
   }
 }
 
@@ -24,7 +26,6 @@
 
   &:focus-within {
     box-shadow: var(--shadow-active);
-    // border-color: var(--color-primary);
   }
 
   &:hover:not(:focus-within) {

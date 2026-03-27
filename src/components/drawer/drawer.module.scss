@@ -4,6 +4,12 @@
   background: rgba(0, 0, 0, 0.5);
   z-index: 10;
   animation: fadeOverlay 0.25s ease;
+
+  @media (min-width: 800px) {
+    & {
+      display: none;
+    }
+  }
 }
 
 .drawer {
@@ -13,7 +19,7 @@
   left: 0;
   width: 80vw;
   max-width: 320px;
-  z-index: 11;
+  z-index: 10;
   background: var(--color-head);
   border-right: 1px solid var(--color-border);
   padding: calc(env(safe-area-inset-top, 0px) + 24px) 0 calc(env(safe-area-inset-bottom, 0px) + 24px);
@@ -24,6 +30,12 @@
 
   &.open {
     transform: translateX(0);
+  }
+
+  @media (min-width: 800px) {
+    & {
+      display: none;
+    }
   }
 }
 
@@ -57,12 +69,6 @@
 
 .authButtons {
   padding: 12px 16px;
-}
-
-.divider {
-  margin: 4px 0;
-  border: none;
-  border-top: 1px solid var(--color-border);
 }
 
 .nav {

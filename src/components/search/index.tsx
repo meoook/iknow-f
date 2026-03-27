@@ -7,7 +7,7 @@ import Empty from '../../elements/empty'
 import type { IPredictionSearch } from '../../types/app.types'
 import { Link } from 'react-router-dom'
 
-export default function PredictionSearch() {
+export default function PredictionSearch({ isModal = false }: { isModal?: boolean }) {
   const [searchValue, setSearchValue] = useState('')
   const [search, { data: predictions, isLoading, isSuccess, reset }] = useSearchPredictionsMutation()
   const [searchRef, isSearchOpen, searchToggle] = useClickOutside()
@@ -44,8 +44,9 @@ export default function PredictionSearch() {
 
   const opened = isSearchOpen && (isLoading || isSuccess || searchValue)
 
+  const className = isModal ? style.wrapper : `${style.wrapper} mw800`
   return (
-    <div className={style.wrapper} ref={searchRef}>
+    <div className={className} ref={searchRef}>
       <form className={`${style.input}${opened ? ' open' : ''}`} onSubmit={(e) => e.preventDefault()}>
         <input
           name='search'

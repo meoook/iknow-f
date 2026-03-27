@@ -170,6 +170,23 @@
   width: 100%;
 }
 
+.mw {
+  &800 {
+    @media (max-width: 800px) {
+      & {
+        display: none !important;
+      }
+    }
+  }
+  &1000 {
+    @media (max-width: 1000px) {
+      & {
+        display: none !important;
+      }
+    }
+  }
+}
+
 .hr {
   box-sizing: border-box;
   height: 20px;

@@ -1,6 +1,8 @@
 .bar {
   box-sizing: border-box;
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -10,10 +12,8 @@
   border-top: 1px solid var(--color-border);
   z-index: 5;
 
-  @media (max-width: 800px) {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+  @media (min-width: 800px) {
+    display: none;
   }
 }
 

@@ -138,7 +138,7 @@ nav {
     color: var(--color-orange-light);
   }
 
-  @media (max-width: $width) {
+  @media (max-width: 1000px) {
     display: none;
   }
 }

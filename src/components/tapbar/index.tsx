@@ -4,7 +4,7 @@ import IconSprite from '../../elements/icon/Icon'
 import { Link } from 'react-router-dom'
 import Drawer from '../drawer'
 import { useModalContext } from '../../services/ModalContext'
-import ModalBottomSearch from '../bottom-search'
+import ModalBottomSearch from '../../modals/bottom/search'
 
 export default function TapBar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
@@ -17,7 +17,7 @@ export default function TapBar() {
           <IconSprite name='home' />
           <span>Главная</span>
         </Link>
-        <button className={style.item} onClick={() => openModal(ModalBottomSearch, {}, 'bottom')}>
+        <button className={style.item} onClick={() => openModal(ModalBottomSearch, 'bottom')}>
           <IconSprite name='search' />
           <span>Поиск</span>
         </button>

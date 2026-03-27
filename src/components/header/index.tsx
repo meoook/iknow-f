@@ -11,7 +11,7 @@ import ModalHow from '../../modals/how'
 import PredictionSearch from '../search'
 
 export default function Header() {
-  const { user, loading } = useAppSelector((state) => state.auth)
+  const { user } = useAppSelector((state) => state.auth)
   const [filter, setFilter] = useState('top')
   const { openModal } = useModalContext()
   const [filterRef, isFilterOpen, toggleFilter] = useClickOutside()
@@ -32,7 +32,7 @@ export default function Header() {
           </Link>
           <div className='row center gap20 w100'>
             <PredictionSearch />
-            {!user && !loading && (
+            {!user && (
               <button className={style.tultip} onClick={() => openModal(ModalHow)}>
                 <IconSprite name='tultip' size={14} />
                 <span>Как это работает?</span>
@@ -44,7 +44,7 @@ export default function Header() {
         <nav>
           <div className={style.filters} ref={filterRef}>
             <button className={style.btn} onClick={toggleFilter}>
-              <IconSprite name='filter' size={24} />
+              <IconSprite name='filter' />
             </button>
             <div className={`${style.dropdown} ${isFilterOpen ? style.open : ''}`}>
               <button className={`${style.item} ${filter === 'top' ? 'active' : ''}`} name='top' onClick={handleF}>

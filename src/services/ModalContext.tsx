@@ -11,7 +11,7 @@ interface ModalState {
 
 interface ModalContextValue {
   modal: ModalState | null
-  openModal: (component: React.ComponentType<any>, props?: Record<string, any>, type?: ModalType) => void
+  openModal: (component: React.ComponentType<any>, type?: ModalType, props?: Record<string, any>) => void
   closeModal: () => void
   setCloseOutside: (value: boolean) => void
 }
@@ -23,7 +23,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   const scrollY = useRef(0)
 
   const openModal = useCallback(
-    (component: React.ComponentType<any>, props?: Record<string, any>, type: ModalType = 'common') => {
+    (component: React.ComponentType<any>, type: ModalType = 'common', props?: Record<string, any>) => {
       scrollY.current = window.scrollY
       document.body.style.position = 'fixed'
       document.body.style.top = `-${scrollY.current}px`
@@ -32,7 +32,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
       // а type=common оставляем как было (false)
       setModal({ component, props, closeOutside: type === 'bottom' ? true : false, type })
     },
-    []
+    [],
   )
 
   const closeModal = useCallback(() => {

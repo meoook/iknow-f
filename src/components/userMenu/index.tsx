@@ -66,13 +66,13 @@ export default function UserMenu() {
         {user ? (
           <div className={style.btn}>
             <Avatar src={user.avatar} />
-            <div className={`arrow${isMenuOpen ? ' active' : ''}`}>
+            <div className={`arrow mw1000${isMenuOpen ? ' active' : ''}`}>
               <IconSprite name='arrow_down' />
             </div>
           </div>
         ) : (
           <button className='btn btn-icon'>
-            <IconSprite name='menu' />
+            <IconSprite name='menu2' size={32} />
           </button>
         )}
         {isMenuOpen && (
@@ -139,10 +139,10 @@ function UserButtons({ user }: { user: IUser }) {
       <div className={style.balance}>
         <Balance name='Баллы' balance={user.balances.POINT} />
         <Balance name='Кэш' balance={user.balances.CASH} currency='USD' />
-        <button className='btn blue' onClick={() => openModal(ModalDeposit)}>
-          Депозит
-        </button>
       </div>
+      <button className='btn blue mw1000' onClick={() => openModal(ModalDeposit)}>
+        Депозит
+      </button>
       <NotificationBell />
     </>
   )

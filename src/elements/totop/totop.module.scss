@@ -41,7 +41,7 @@
     }
   }
 }
-@media screen and (max-width: 1000px) {
+@media (max-width: 1000px) {
   .container {
     right: 12px;
     bottom: calc(var(--size-tapbar) + 8px);

@@ -60,8 +60,8 @@ export default function ModalRenderer() {
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
       const delta = clientY - startY
 
-      // Позволяем чуть-чуть утягивать вверх («резиновый» эффект), но не даем уйти за границы сильно
-      const dragY = delta < 0 ? delta * 0.15 : delta
+      // Запрещаем утягивать вверх выше 0, чтобы снизу не было видно "дырку"
+      const dragY = Math.max(0, delta)
       currentY = dragY
 
       // Если мы тянем лист вниз, предотвращаем скролл контента внутри и pull-to-refresh
@@ -117,7 +117,7 @@ export default function ModalRenderer() {
       const el = sheetRef.current
       // Отключаем стартовую CSS-анимацию
       el.style.animation = 'none'
-      
+
       // ВАЖНО: заставляем браузер перерисовать элемент (reflow),
       // иначе он схлопнет animation: none и transform вместе без плавности
       void el.offsetHeight
@@ -138,10 +138,10 @@ export default function ModalRenderer() {
 
   if (type === 'bottom') {
     return (
-      <div className={style.bg} onClick={handleOutsideClick}>
+      <div className={style.overlay} onClick={handleOutsideClick}>
         <div ref={sheetRef} className={style.sheet} onClick={handle}>
           <div className={style.handle}>
-            <span className={style.handleBar} />
+            <span className={style.bar} />
           </div>
           <Component {...props} close={handleClose} />
         </div>
