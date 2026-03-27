@@ -178,6 +178,7 @@
       }
     }
   }
+
   &1000 {
     @media (max-width: 1000px) {
       & {
@@ -221,9 +222,29 @@
   width: var(--size-container);
   margin-inline: auto;
   padding-top: 18px;
+
   @media (max-width: 800px) {
     width: 100%;
     // text-wrap: ;
+  }
+}
+
+.overlay {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  background-color: var(--color-shadow);
+  backdrop-filter: blur(2px);
+  animation: fadeOverlay 0.25s ease;
+}
+
+@keyframes fadeOverlay {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 
@@ -242,18 +263,23 @@
   0% {
     opacity: 0.4;
   }
+
   10% {
     opacity: 0.4;
   }
+
   35% {
     opacity: 1;
   }
+
   60% {
     opacity: 1;
   }
+
   80% {
     opacity: 0.4;
   }
+
   100% {
     opacity: 0.4;
   }
@@ -312,6 +338,7 @@
 .grow {
   flex-grow: 1;
 }
+
 .nowrap {
   white-space: nowrap;
 }

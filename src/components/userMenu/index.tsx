@@ -2,8 +2,7 @@ import style from './user.module.scss'
 import { Link } from 'react-router-dom'
 import { useState, useRef } from 'react'
 import { useSingOutMutation } from '../../services/api'
-import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
-import { toggleTheme } from '../../store/app.slice'
+import { useAppSelector } from '../../hooks/useRedux'
 import { useModalContext } from '../../services/ModalContext'
 import type { IUser } from '../../types/auth.types'
 import IconSprite from '../../elements/icon/Icon'
@@ -12,12 +11,10 @@ import ModalLogin from '../../modals/login'
 import NotificationBell from '../notification'
 import Balance from '../../elements/balance'
 import Avatar from '../../elements/avatar'
-import Toggle from '../../elements/toggle'
+import MenuLinks from '../../elements/menu/links'
 
 export default function UserMenu() {
   const { loading, user } = useAppSelector((state) => state.auth)
-  const { theme } = useAppSelector((state) => state.app)
-  const dispatch = useAppDispatch()
   const [signOut] = useSingOutMutation()
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -26,10 +23,6 @@ export default function UserMenu() {
   const logOut = () => {
     setIsMenuOpen(false)
     signOut()
-  }
-
-  const handleToggleTheme = () => {
-    dispatch(toggleTheme())
   }
 
   const handleMouseEnter = () => {
@@ -89,36 +82,7 @@ export default function UserMenu() {
                 <hr />
               </>
             )}
-            <button className={style.item}>
-              <IconSprite name='crown' size={20} color='var(--color-brand)' />
-              <span>Таблица лидеров</span>
-            </button>
-            <button className={style.item}>
-              <IconSprite name='activity' size={20} color='var(--color-red)' />
-              <span>Активность</span>
-            </button>
-            <button className={style.item} onClick={handleToggleTheme}>
-              <IconSprite name='moon' size={20} color='var(--color-blue)' />
-              <span>Темная тема</span>
-              <div className='w100'></div>
-              <Toggle checked={theme === 'dark'} />
-            </button>
-            {user && (
-              <Link to='/predictions' className={style.item}>
-                <IconSprite name='bank' size={20} color='var(--color-green)' />
-                <span>Мое участие</span>
-              </Link>
-            )}
-            <hr />
-            <Link className={style.link} to='/tos'>
-              Условия использования
-            </Link>
-            <Link className={style.link} to='/about'>
-              О приложении
-            </Link>
-            <Link className={style.link} to='/docs'>
-              Документация
-            </Link>
+            <MenuLinks authed={!!user} />
             {user && (
               <button className={style.item} onClick={logOut}>
                 <IconSprite name='exit' size={20} color='var(--color-red)' />

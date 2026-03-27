@@ -1,0 +1,27 @@
+.link,
+.item {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 10px 12px;
+  gap: 8px;
+
+  &:global(.big) {
+    padding: 12px 16px;
+  }
+
+  &:hover {
+    background-color: var(--color-hover);
+  }
+}
+
+.link {
+  color: var(--color-secondary);
+}
+
+.item {
+  color: var(--color-primary);
+}

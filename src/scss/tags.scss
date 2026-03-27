@@ -62,13 +62,14 @@ main {
 a,
 a:visited {
   text-decoration: none;
-  color: inherit;
   transition: all 0.3s;
+
   &.underline {
     text-decoration: underline;
     // text-decoration-thickness: 2px;
     text-underline-offset: 4px;
   }
+
   &.brand {
     color: var(--color-brand);
   }
@@ -80,6 +81,7 @@ select {
   white-space: nowrap;
   cursor: pointer;
 }
+
 a,
 button {
   touch-action: manipulation;
@@ -224,6 +226,7 @@ p {
     text-transform: uppercase;
   }
 }
+
 ol.start {
   margin: 14px 0 8px;
 }

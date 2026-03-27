@@ -6,9 +6,8 @@ import { useModalContext } from '../../services/ModalContext'
 import { useSingOutMutation } from '../../services/api'
 import IconSprite from '../../elements/icon/Icon'
 import Avatar from '../../elements/avatar'
-import Toggle from '../../elements/toggle'
 import ModalLogin from '../../modals/login'
-import ModalDeposit from '../../modals/deposit'
+import MenuLinks from '../../elements/menu/links'
 
 interface DrawerProps {
   isOpen: boolean
@@ -37,9 +36,9 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
 
   return (
     <>
-      {isOpen && <div className={style.overlay} onClick={onClose} />}
+      {isOpen && <div className='overlay mw800' onClick={onClose} />}
       <div className={`${style.drawer} noscroll${isOpen ? ` ${style.open}` : ''}`}>
-        {user ? (
+        {user && (
           <>
             <Link className={style.user} to='/profile' onClick={handleLink}>
               <Avatar src={user.avatar} />
@@ -49,6 +48,18 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
               </div>
             </Link>
             <hr className={style.divider} />
+          </>
+        )}
+
+        <MenuLinks mobile authed={!!user} onClick={handleLink} />
+
+        {user ? (
+          <>
+            <hr />
+            <button className={`${style.item} ${style.logout}`} onClick={handleLogOut}>
+              <IconSprite name='exit' size={20} color='var(--color-red)' />
+              <span className='color-red'>Выйти</span>
+            </button>
           </>
         ) : (
           <div className={style.authButtons}>
@@ -61,64 +72,6 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
               Войти
             </button>
           </div>
-        )}
-
-        <div className={style.nav}>
-          <button className={style.item}>
-            <IconSprite name='crown' size={20} color='var(--color-brand)' />
-            <span>Таблица лидеров</span>
-          </button>
-          <button className={style.item}>
-            <IconSprite name='activity' size={20} color='var(--color-red)' />
-            <span>Активность</span>
-          </button>
-          <button className={style.item} onClick={handleToggleTheme}>
-            <IconSprite name='moon' size={20} color='var(--color-blue)' />
-            <span>Темная тема</span>
-            <div className='w100' />
-            <Toggle checked={theme === 'dark'} />
-          </button>
-          {user && (
-            <Link to='/predictions' className={style.item} onClick={handleLink}>
-              <IconSprite name='bank' size={20} color='var(--color-green)' />
-              <span>Мое участие</span>
-            </Link>
-          )}
-          {user && (
-            <button
-              className={style.item}
-              onClick={() => {
-                openModal(ModalDeposit)
-                onClose()
-              }}>
-              <IconSprite name='upload' size={20} color='var(--color-orange)' />
-              <span>Депозит</span>
-            </button>
-          )}
-        </div>
-
-        <hr />
-
-        <div className={style.links}>
-          <Link className={style.link} to='/tos' onClick={handleLink}>
-            Условия использования
-          </Link>
-          <Link className={style.link} to='/about' onClick={handleLink}>
-            О приложении
-          </Link>
-          <Link className={style.link} to='/docs' onClick={handleLink}>
-            Документация
-          </Link>
-        </div>
-
-        {user && (
-          <>
-            <hr />
-            <button className={`${style.item} ${style.logout}`} onClick={handleLogOut}>
-              <IconSprite name='exit' size={20} color='var(--color-red)' />
-              <span className='color-red'>Выйти</span>
-            </button>
-          </>
         )}
       </div>
     </>

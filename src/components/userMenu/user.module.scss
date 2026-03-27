@@ -19,6 +19,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+
   @media (max-width: 800px) {
     display: none;
   }
@@ -31,7 +32,7 @@
   padding: 4px 12px;
   color: var(--color-orange);
 
-  & > div {
+  &>div {
     line-height: 16px;
     overflow: hidden;
   }
@@ -67,8 +68,7 @@
   animation: fadeIn 0.2s ease-in-out;
   max-height: calc(100vh - 100px);
 
-  .item,
-  .link {
+  .item {
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -87,10 +87,6 @@
 
   .item {
     color: var(--color-primary);
-  }
-
-  .link {
-    color: var(--color-secondary);
   }
 }
 
