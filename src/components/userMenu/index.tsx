@@ -65,7 +65,7 @@ export default function UserMenu() {
           </div>
         ) : (
           <button className='btn btn-icon'>
-            <IconSprite name='menu2' size={32} />
+            <IconSprite name='menu' size={32} />
           </button>
         )}
         {isMenuOpen && (

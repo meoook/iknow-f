@@ -117,7 +117,7 @@ textarea {
 
 input,
 select {
-  height: 38px;
+  height: var(--size-input);
 }
 
 input,

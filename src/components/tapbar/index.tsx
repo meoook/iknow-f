@@ -22,7 +22,7 @@ export default function TapBar() {
           <span>Поиск</span>
         </button>
         <button className={s.item} onClick={() => setIsDrawerOpen(true)}>
-          <IconSprite name='menu2' />
+          <IconSprite name='menu' />
           <span>Меню</span>
         </button>
       </div>
