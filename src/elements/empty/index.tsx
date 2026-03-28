@@ -1,7 +1,7 @@
 import style from './empty.module.scss'
-import IconSprite from '../icon/Icon'
+import IconSprite from '../icon'
 import Loader from '../loader'
-import type { IconName } from '../icon/Icon'
+import type { IconName } from '../icon'
 
 interface EmptyProps {
   title: string

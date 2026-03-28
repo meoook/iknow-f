@@ -1,7 +1,7 @@
 import style from './report.module.scss'
 import { useState } from 'react'
 import { useReportCommentMutation } from '../../services/comments/api'
-import IconSprite from '../../elements/icon/Icon'
+import IconSprite from '../../elements/icon'
 
 const REASONS = [
   { value: 'ABUSE', label: 'Унижение личности' },

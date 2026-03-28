@@ -6,7 +6,7 @@ import { useModalContext } from '../../../services/ModalContext'
 import ModalLogin from '../../../modals/login'
 import type { IChoice, IPredictionDetail } from '../../../types/app.types'
 import type { TCurrency } from '../../../types/auth.types'
-import IconSprite from '../../../elements/icon/Icon'
+import IconSprite from '../../../elements/icon'
 import { Link } from 'react-router-dom'
 
 interface TradePanelProps {
@@ -167,7 +167,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
           </div>
 
           <div className={`${style.payoutWrapper}${displayPayout ? ' show' : ''}${isTilt ? ` ${style.tilt}` : ''}`}>
-            <div className='row justify bottom'>
+            <div className='row justify end'>
               <div className='column'>
                 <div>Возможный</div>
                 <div className='row center gap4'>

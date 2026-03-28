@@ -2,7 +2,7 @@ import style from './account.module.scss'
 import { useEffect, useRef, useState } from 'react'
 import { useSetAvatarMutation, useSetUserParamsMutation } from '../../../services/api'
 import type { IUser } from '../../../types/auth.types'
-import IconSprite from '../../../elements/icon/Icon'
+import IconSprite from '../../../elements/icon'
 import Avatar from '../../../elements/avatar'
 
 export default function ProfileAccount({ user, loading }: { user: IUser | null; loading: boolean }) {

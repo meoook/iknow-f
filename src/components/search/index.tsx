@@ -2,12 +2,12 @@ import style from './search.module.scss'
 import { useState, useEffect, useRef } from 'react'
 import { useSearchPredictionsMutation } from '../../services/api'
 import { intlNumber, useClickOutside } from '../../hooks/hooks'
-import IconSprite from '../../elements/icon/Icon'
+import IconSprite from '../../elements/icon'
 import Empty from '../../elements/empty'
 import type { IPredictionSearch } from '../../types/app.types'
 import { Link } from 'react-router-dom'
 
-export default function PredictionSearch({ isModal = false }: { isModal?: boolean }) {
+export default function PredictionSearch({ mobile = false }: { mobile?: boolean }) {
   const [searchValue, setSearchValue] = useState('')
   const [search, { data: predictions, isLoading, isSuccess, reset }] = useSearchPredictionsMutation()
   const [searchRef, isSearchOpen, searchToggle] = useClickOutside()
@@ -44,7 +44,7 @@ export default function PredictionSearch({ isModal = false }: { isModal?: boolea
 
   const opened = isSearchOpen && (isLoading || isSuccess || searchValue)
 
-  const className = isModal ? style.wrapper : `${style.wrapper} mw800`
+  const className = mobile ? style.wrapper : `${style.wrapper} md-none`
   return (
     <div className={className} ref={searchRef}>
       <form className={`${style.input}${opened ? ' open' : ''}`} onSubmit={(e) => e.preventDefault()}>
@@ -87,11 +87,9 @@ const SearchItem = ({ prediction, clear }: { prediction: IPredictionSearch; clea
   const volume = intlNumber('en-US', prediction.volume)
   return (
     <Link to={`/prediction/${prediction.id}`} className={style.item} onClick={clear}>
-      <div className='row center gap8'>
-        <img src={src} alt={prediction.title} />
-        <span className='clamp-1'>{prediction.title}</span>
-      </div>
-      <div className='color-green'>${volume}</div>
+      <img src={src} alt={prediction.title} />
+      <span className='grow ellipsis'>{prediction.title}</span>
+      <span className='color-green'>${volume}</span>
     </Link>
   )
 }

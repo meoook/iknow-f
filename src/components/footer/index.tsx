@@ -1,7 +1,7 @@
 import style from './footer.module.scss'
-import Icon from '../../elements/icon/Icon'
 import Logo from '../header/logo'
 import { Link } from 'react-router-dom'
+import Socials from '../../elements/menu/socials'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -21,23 +21,7 @@ export default function Footer() {
 
         <div className='column gap20'>
           <div className={style.bottom}>
-            <div className={style.socials}>
-              <a href='mailto:hello@ivanga.me' target='_blank' rel='noreferrer'>
-                <Icon name='mail' size={20} />
-              </a>
-              <a href='https://twitter.com/ivanga' target='_blank' rel='noreferrer'>
-                <Icon name='twitter' size={20} />
-              </a>
-              <a href='https://instagram.com/ivanga' target='_blank' rel='noreferrer'>
-                <Icon name='instagram' size={20} />
-              </a>
-              <a href='https://discord.gg/ivanga' target='_blank' rel='noreferrer'>
-                <Icon name='discord' size={20} />
-              </a>
-              <a href='https://tiktok.com/@ivanga' target='_blank' rel='noreferrer'>
-                <Icon name='tiktok' size={20} />
-              </a>
-            </div>
+            <Socials />
 
             <div className={style.links}>
               <span>Unknown Origin Ltd. © {currentYear}</span>

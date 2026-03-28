@@ -2,8 +2,8 @@ import style from './login.module.scss'
 import { useState, useEffect } from 'react'
 import { useEmailNonceMutation, useEmailAuthMutation, useW3authMutation, useW3nonceMutation } from '../../services/api'
 import { web3AuthService } from '../../services/web3Auth'
-import { EMAIL_REGEX } from '../../utils/date'
-import IconSprite from '../../elements/icon/Icon'
+import { REGEX_EMAIL } from '../../utils/date'
+import IconSprite from '../../elements/icon'
 import Nonce from '../../elements/nonce'
 import { Link } from 'react-router-dom'
 import Loader from '../../elements/loader'
@@ -16,7 +16,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
   const NONCE_LENGTH: number = 6
   const initialEmail = localStorage.getItem('email') || ''
   const [email, setEmail] = useState(initialEmail)
-  const [emailValid, setEmailValid] = useState(EMAIL_REGEX.test(initialEmail))
+  const [emailValid, setEmailValid] = useState(REGEX_EMAIL.test(initialEmail))
   const [error, setError] = useState('')
   const [step, setStep] = useState<'email' | 'nonce'>('email')
   const [nonce, setNonce] = useState<string>('')
@@ -48,7 +48,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
   const [w3nonce] = useW3nonceMutation()
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmailValid(EMAIL_REGEX.test(e.target.value))
+    setEmailValid(REGEX_EMAIL.test(e.target.value))
     setEmail(e.target.value)
   }
 

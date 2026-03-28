@@ -100,72 +100,6 @@
   }
 }
 
-.row {
-  display: flex;
-  flex-direction: row;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-}
-
-.row,
-.column {
-  &.center {
-    align-items: center;
-  }
-
-  &.start {
-    align-items: start;
-  }
-
-  &.wrap {
-    flex-wrap: wrap;
-  }
-
-  // &.stretch {
-  //   align-items: stretch;
-  // }
-  &.justify {
-    justify-content: space-between;
-  }
-
-  &.bottom {
-    align-items: flex-end;
-  }
-
-  &.middle {
-    justify-content: center;
-  }
-
-  &.gap {
-    &2 {
-      gap: 2px;
-    }
-
-    &4 {
-      gap: 4px;
-    }
-
-    &8 {
-      gap: 8px;
-    }
-
-    &12 {
-      gap: 12px;
-    }
-
-    &16 {
-      gap: 16px;
-    }
-
-    &20 {
-      gap: 20px;
-    }
-  }
-}
-
 .w100 {
   width: 100%;
 }
@@ -229,25 +163,6 @@
   }
 }
 
-.overlay {
-  position: fixed;
-  z-index: 10;
-  inset: 0;
-  background-color: var(--color-shadow);
-  backdrop-filter: blur(2px);
-  animation: fadeOverlay 0.25s ease;
-}
-
-@keyframes fadeOverlay {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
 .shimmer {
   display: block;
   animation: shimmer 3.5s infinite;
@@ -308,41 +223,6 @@
   }
 }
 
-.clamp {
-  &-1 {
-    display: -webkit-box;
-    overflow: hidden;
-    line-clamp: 1;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-  }
-
-  &-2 {
-    display: -webkit-box;
-    overflow: hidden;
-    line-clamp: 2;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
-  &-3 {
-    display: -webkit-box;
-    overflow: hidden;
-    line-clamp: 3;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-  }
-}
-
-.grow {
-  flex-grow: 1;
-}
-
-.nowrap {
-  white-space: nowrap;
-}
-
 .chip {
   font-size: var(--font-size-sm);
   line-height: 1;
@@ -362,22 +242,6 @@
   color: var(--color-secondary);
   font-size: var(--font-size-xs);
   white-space: nowrap;
-}
-
-.noscroll {
-  overflow-y: auto;
-
-  // Скрываем скроллбар для Webkit браузеров (Chrome, Safari, Edge)
-  // &::-webkit-scrollbar {
-  //   width: 0;
-  //   display: none;
-  // }
-
-  // Скрываем скроллбар для Firefox
-  scrollbar-width: none;
-  scrollbar-gutter: stable;
-  // Скрываем скроллбар для IE/Edge (старые версии)
-  -ms-overflow-style: none;
 }
 
 .more {

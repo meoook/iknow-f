@@ -1,7 +1,7 @@
 import style from './datepicker.module.scss'
 import { useState } from 'react'
 import { useClickOutside } from '../../hooks/hooks'
-import IconSprite from '../../elements/icon/Icon'
+import IconSprite from '../icon'
 
 interface DatePickerProps {
   value: string

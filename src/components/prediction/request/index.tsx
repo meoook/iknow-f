@@ -1,7 +1,7 @@
 import React from 'react'
 import style from './request.module.scss'
 import { useRequest } from '../../../services/requests/adapter'
-import IconSprite from '../../../elements/icon/Icon'
+import IconSprite from '../../../elements/icon'
 import Loader from '../../../elements/loader'
 import VoteItem from '../vote'
 import PredictionHead from '../../head'

@@ -1,6 +1,6 @@
 .container {
   position: fixed;
-  bottom: 26px;
+  bottom: 24px;
   right: 50%;
   transform: translateX(50%);
   opacity: 0;
@@ -14,7 +14,7 @@
   }
 
   & > button {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     opacity: 0.85;
@@ -23,7 +23,6 @@
 
     background-color: var(--color-active);
     color: var(--color-primary);
-    cursor: pointer;
 
     border: 1px solid var(--color-shadow);
     border-radius: 40px;
@@ -41,6 +40,7 @@
     }
   }
 }
+
 @media (max-width: 1000px) {
   .container {
     right: 12px;

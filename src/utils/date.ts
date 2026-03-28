@@ -24,4 +24,5 @@ export const getCookie = (name: string) => {
   if (parts.length === 2) return parts.pop()?.split(';').shift()
 }
 
-export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+export const REGEX_ADDRESS = /^0x[a-fA-F0-9]{40}$/

@@ -1,7 +1,7 @@
 import style from './modal.module.scss'
 import { useModalContext } from '../../services/ModalContext'
 import { useEffect, useRef } from 'react'
-import IconSprite from '../icon/Icon'
+import IconSprite from '../icon'
 
 export default function ModalRenderer() {
   const { modal, closeModal } = useModalContext()
@@ -138,7 +138,7 @@ export default function ModalRenderer() {
 
   if (type === 'bottom') {
     return (
-      <div className={style.overlay} onClick={handleOutsideClick}>
+      <div className='overlay middle end hide md-flex' onClick={handleOutsideClick}>
         <div ref={sheetRef} className={style.sheet} onClick={handle}>
           <div className={style.handle}>
             <span className={style.bar} />
@@ -150,7 +150,7 @@ export default function ModalRenderer() {
   }
 
   return (
-    <div className={style.bg} onClick={handleOutsideClick}>
+    <div className='overlay middle center row' onClick={handleOutsideClick}>
       <div className={style.modal} onClick={handle}>
         <Component {...props} close={handleClose} />
         <button className={style.close} onClick={handleClose}>

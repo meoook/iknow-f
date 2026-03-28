@@ -1,10 +1,10 @@
 import style from './notifications.module.scss'
 import { useEffect, useState } from 'react'
-import { EMAIL_REGEX } from '../../../utils/date'
+import { REGEX_EMAIL } from '../../../utils/date'
 import type { IUser } from '../../../types/auth.types'
 import { useGetTelegramNonceMutation, useSetUserParamsMutation, useEmailNonceMutation } from '../../../services/api'
 import Toggle from '../../../elements/toggle'
-import IconSprite from '../../../elements/icon/Icon'
+import IconSprite from '../../../elements/icon'
 import { useModalContext } from '../../../services/ModalContext'
 import ModalApprove from '../../../modals/approve'
 
@@ -41,7 +41,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
   const handleEmailSave = async () => {
     await emailNonce({ email })
       .unwrap()
-      .then(() => openModal(ModalApprove, { email }))
+      .then(() => openModal(ModalApprove, 'common', { email }))
   }
 
   if (loading) {
@@ -109,7 +109,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
       <h2>Почта</h2>
       <div className={style.email}>
         <input type='email' value={email} onChange={handleEmailChange} disabled={!!user?.email} />
-        {!user?.email && EMAIL_REGEX.test(email) && (
+        {!user?.email && REGEX_EMAIL.test(email) && (
           <button className={`${style.btn} green`} onClick={handleEmailSave} title='сохранить'>
             <IconSprite name='check' />
           </button>

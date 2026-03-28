@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useModalContext } from '../../services/ModalContext'
 import { useClickOutside, useHorizontalScroll } from '../../hooks/hooks'
-import IconSprite from '../../elements/icon/Icon'
+import IconSprite from '../../elements/icon'
 import Logo from './logo'
 import UserMenu from '../userMenu'
 import ModalHow from '../../modals/how'
@@ -30,7 +30,7 @@ export default function Header() {
             <Logo />
             <h2>iVanga</h2>
           </Link>
-          <div className='row center gap20 w100'>
+          <div className='row center gap20 grow'>
             <PredictionSearch />
             {!user && (
               <button className={style.tultip} onClick={() => openModal(ModalHow)}>
@@ -78,7 +78,7 @@ export default function Header() {
           <div className='hr' />
           <div className={style.groups} ref={scrollRef}>
             <NavLink to='/' className={style.item}>
-              Все
+              Всё
             </NavLink>
             <NavLink to='/politics' className={style.item}>
               Политика

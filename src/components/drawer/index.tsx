@@ -1,13 +1,12 @@
 import style from './drawer.module.scss'
-import { Link } from 'react-router-dom'
-import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
-import { toggleTheme } from '../../store/app.slice'
+import { useAppSelector } from '../../hooks/useRedux'
 import { useModalContext } from '../../services/ModalContext'
 import { useSingOutMutation } from '../../services/api'
-import IconSprite from '../../elements/icon/Icon'
-import Avatar from '../../elements/avatar'
+import IconSprite from '../../elements/icon'
 import ModalLogin from '../../modals/login'
+import MenuUser from '../../elements/menu/user'
 import MenuLinks from '../../elements/menu/links'
+import Socials from '../../elements/menu/socials'
 
 interface DrawerProps {
   isOpen: boolean
@@ -16,46 +15,30 @@ interface DrawerProps {
 
 export default function Drawer({ isOpen, onClose }: DrawerProps) {
   const { user } = useAppSelector((state) => state.auth)
-  const { theme } = useAppSelector((state) => state.app)
-  const dispatch = useAppDispatch()
   const { openModal } = useModalContext()
   const [signOut] = useSingOutMutation()
-
-  const handleToggleTheme = () => {
-    dispatch(toggleTheme())
-  }
 
   const handleLogOut = () => {
     onClose()
     signOut()
   }
 
-  const handleLink = () => {
-    onClose()
-  }
-
   return (
     <>
-      {isOpen && <div className='overlay mw800' onClick={onClose} />}
-      <div className={`${style.drawer} noscroll${isOpen ? ` ${style.open}` : ''}`}>
-        {user && (
-          <>
-            <Link className={style.user} to='/profile' onClick={handleLink}>
-              <Avatar src={user.avatar} />
-              <div>
-                <span>{user.address.slice(0, 6) + '...' + user.address.slice(-6)}</span>
-                {user.username !== user.address && <span className={style.username}>{user.username}</span>}
-              </div>
-            </Link>
-            <hr className={style.divider} />
-          </>
-        )}
+      {isOpen && <div className='overlay hide md' onClick={onClose} />}
+      <div className={`${style.drawer} hide md noscroll${isOpen ? ' open' : ''}`}>
+        {user && <MenuUser mobile onClick={onClose} user={user} />}
 
-        <MenuLinks mobile authed={!!user} onClick={handleLink} />
+        <MenuLinks mobile authed={!!user} onClick={onClose} />
+
+        <hr />
+        <div className='p-4'>
+          <Socials />
+        </div>
+        <hr />
 
         {user ? (
           <>
-            <hr />
             <button className={`${style.item} ${style.logout}`} onClick={handleLogOut}>
               <IconSprite name='exit' size={20} color='var(--color-red)' />
               <span className='color-red'>Выйти</span>

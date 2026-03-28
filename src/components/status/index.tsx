@@ -1,5 +1,5 @@
 import style from './status.module.scss'
-import IconSprite from '../../elements/icon/Icon'
+import IconSprite from '../../elements/icon'
 
 interface PredictionStatusProps {
   tags?: string[]

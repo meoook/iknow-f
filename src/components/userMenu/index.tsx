@@ -1,16 +1,16 @@
 import style from './user.module.scss'
-import { Link } from 'react-router-dom'
 import { useState, useRef } from 'react'
 import { useSingOutMutation } from '../../services/api'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useModalContext } from '../../services/ModalContext'
 import type { IUser } from '../../types/auth.types'
-import IconSprite from '../../elements/icon/Icon'
+import IconSprite from '../../elements/icon'
 import ModalDeposit from '../../modals/deposit'
 import ModalLogin from '../../modals/login'
 import NotificationBell from '../notification'
 import Balance from '../../elements/balance'
 import Avatar from '../../elements/avatar'
+import MenuUser from '../../elements/menu/user'
 import MenuLinks from '../../elements/menu/links'
 
 export default function UserMenu() {
@@ -70,18 +70,7 @@ export default function UserMenu() {
         )}
         {isMenuOpen && (
           <div className={`${style.dropdown} noscroll`}>
-            {user && (
-              <>
-                <Link className={style.user} to='/profile'>
-                  <Avatar src={user.avatar} />
-                  <div>
-                    <span>{user.address.slice(0, 6) + '...' + user.address.slice(-6)}</span>
-                    {user.username !== user.address && <span className={style.username}>{user.username}</span>}
-                  </div>
-                </Link>
-                <hr />
-              </>
-            )}
+            {user && <MenuUser user={user} />}
             <MenuLinks authed={!!user} />
             {user && (
               <button className={style.item} onClick={logOut}>

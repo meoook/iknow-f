@@ -25,35 +25,6 @@
   }
 }
 
-.user {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  color: var(--color-orange);
-
-  &>div {
-    line-height: 16px;
-    overflow: hidden;
-  }
-
-  & .username {
-    font-size: var(--font-size-sm);
-    color: var(--color-secondary);
-
-    display: -webkit-box;
-    overflow: hidden;
-    line-clamp: 1;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-  }
-
-  &:hover {
-    color: var(--color-brand);
-  }
-}
-
 .dropdown {
   position: absolute;
   top: calc(100% + 4px);

@@ -9,7 +9,7 @@ import { useClickOutside } from '../../../../hooks/hooks'
 import { useModalContext } from '../../../../services/ModalContext'
 import ModalReport from '../../../../modals/report'
 import ModalLogin from '../../../../modals/login'
-import IconSprite from '../../../../elements/icon/Icon'
+import IconSprite from '../../../../elements/icon'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
 

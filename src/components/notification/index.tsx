@@ -8,7 +8,7 @@ import {
   useDeleteNotificationMutation,
   useDeleteAllNotificationsMutation,
 } from '../../services/api'
-import IconSprite from '../../elements/icon/Icon'
+import IconSprite from '../../elements/icon'
 
 import { useNotificationIds, useNotification, useUnreadCount } from '../../store/notification.adapter'
 

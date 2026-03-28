@@ -42,12 +42,12 @@ const PredictionCard = ({ prediction }: PredictionCardProps) => {
           <span>${volume}</span>
         </div>
         {prediction.state === 'DISPUTE' ? (
-          <div className='column bottom'>
+          <div className='column end'>
             <span className='label'>Статус</span>
             <Badge color='blue'>Обсуждение</Badge>
           </div>
         ) : (
-          <div className='column bottom'>
+          <div className='column end'>
             <span className='label'>{prediction.state === 'ENDED' ? 'Завершено' : 'Дата завершения'}</span>
             <span className={style.right}>{new Date(prediction.end_date).toLocaleDateString()}</span>
           </div>

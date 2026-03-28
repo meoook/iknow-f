@@ -1,9 +1,8 @@
-import s from './links.module.scss'
 import { Link } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '../../../hooks/useRedux'
-import { toggleTheme } from '../../../store/app.slice'
-import IconSprite from '../../icon/Icon'
-import Toggle from '../../toggle'
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
+import { toggleTheme } from '../../store/app.slice'
+import Toggle from '../toggle'
+import IconSprite from '../icon'
 
 interface MenuLinksInfoProps {
   mobile?: boolean
@@ -19,8 +18,9 @@ export default function MenuLinks({ mobile, authed, onClick }: MenuLinksInfoProp
     dispatch(toggleTheme())
   }
 
-  const classItem = mobile ? `${s.item} big` : s.item
-  const classLink = mobile ? `${s.link} big` : s.link
+  const classBase = 'flex-i center w-500 nowrap w-full gap-2 hover'
+  const classItem = mobile ? `primary ph-4 pv-3 ${classBase}` : `primary p-3 ${classBase}`
+  const classLink = mobile ? `secondary ph-4 pv-3 ${classBase}` : `secondary p-3 ${classBase}`
   return (
     <>
       <button className={classItem}>

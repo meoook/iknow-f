@@ -4,7 +4,7 @@ import PredictionSearch from '../../../components/search'
 export default function ModalBottomSearch() {
   return (
     <div className={style.container}>
-      <PredictionSearch isModal />
+      <PredictionSearch mobile />
     </div>
   )
 }

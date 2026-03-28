@@ -5,7 +5,7 @@ import { useCreateRequestMutation } from '../../services/api'
 import type { IRequestCreate } from '../../types/app.types'
 import type { TCurrency } from '../../types/auth.types'
 import DateSelect from '../../elements/dateselect'
-import IconSprite from '../../elements/icon/Icon'
+import IconSprite from '../../elements/icon'
 import Loader from '../../elements/loader'
 
 const VOTE_YES_NAME = 'Да / Сбудется'
@@ -221,7 +221,7 @@ export default function ModalPrediction({ close }: ModalPredictionProps) {
                 key={choice}
                 className={`${style.chip} ${formData.vote === choice ? style.active : ''}`}
                 onClick={() => handleChoiceClick(choice)}>
-                <span className='clamp-1' title={choice}>
+                <span className='ellipsis' title={choice}>
                   {choice}
                 </span>
                 <button
