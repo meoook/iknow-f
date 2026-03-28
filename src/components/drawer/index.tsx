@@ -8,14 +8,11 @@ import MenuUser from '../../elements/menu/user'
 import MenuLinks from '../../elements/menu/links'
 import Socials from '../../elements/menu/socials'
 
-interface DrawerProps {
-  isOpen: boolean
-  onClose: () => void
-}
-
-export default function Drawer({ isOpen, onClose }: DrawerProps) {
+export default function Drawer() {
   const { user } = useAppSelector((state) => state.auth)
-  const { openModal } = useModalContext()
+  const { openModal, isDrawerOpen, toggleDrawer } = useModalContext()
+
+  const onClose = () => toggleDrawer(false)
   const [signOut] = useSingOutMutation()
 
   const handleLogOut = () => {
@@ -25,8 +22,8 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
 
   return (
     <>
-      {isOpen && <div className='overlay hide md' onClick={onClose} />}
-      <div className={`${style.drawer} hide md noscroll${isOpen ? ' open' : ''}`}>
+      {isDrawerOpen && <div className='overlay hide md' onClick={onClose} />}
+      <div className={`${style.drawer} hide md noscroll${isDrawerOpen ? ' open' : ''}`}>
         {user && <MenuUser mobile onClick={onClose} user={user} />}
 
         <MenuLinks mobile authed={!!user} onClick={onClose} />

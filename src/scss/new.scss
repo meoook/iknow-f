@@ -4,6 +4,25 @@
   display: none;
 }
 
+.overlay {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  background-color: var(--color-shadow);
+  backdrop-filter: blur(2px);
+  animation: fadeOverlay 0.25s ease;
+}
+
+@keyframes fadeOverlay {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 $breakpoints: (
   xl: 1280px,
   lg: 1024px,
@@ -17,9 +36,11 @@ $breakpoints: (
       &-flex {
         display: flex;
       }
+
       &-hide {
         display: none;
       }
+
       & {
         display: block;
       }
@@ -38,22 +59,26 @@ $padding: 4px;
     &-#{$i} {
       padding: $padding * $i;
     }
+
     &t-#{$i} {
       padding-top: $padding * $i;
     }
+
     &b-#{$i} {
       padding-bottom: $padding * $i;
     }
+
     &h-#{$i} {
       padding-inline: $padding * $i;
     }
+
     &v-#{$i} {
       padding-block: $padding * $i;
     }
   }
 }
 
-// Containers
+// Containers and elements (btn, input, etc)
 
 .w-full {
   width: 100%;
@@ -91,19 +116,21 @@ $gaps: 2, 4, 8, 12, 16, 20;
     align-items: flex-end;
   }
 
-  &.wrap {
-    flex-wrap: wrap;
+  &.bottom {
+    // TODO: RM !!
+    align-items: flex-end;
   }
 
   // &.stretch {
   //   align-items: stretch;
   // }
-  &.justify {
-    justify-content: space-between;
+
+  &.wrap {
+    flex-wrap: wrap;
   }
 
-  &.bottom {
-    align-items: flex-end;
+  &.justify {
+    justify-content: space-between;
   }
 
   &.middle {
@@ -117,31 +144,13 @@ $gaps: 2, 4, 8, 12, 16, 20;
   }
 
   &.gap {
+
     // TODO: RM !!
     @each $g in $gaps {
       &#{$g} {
         gap: #{$g}px;
       }
     }
-  }
-}
-
-.overlay {
-  position: fixed;
-  z-index: 10;
-  inset: 0;
-  background-color: var(--color-shadow);
-  backdrop-filter: blur(2px);
-  animation: fadeOverlay 0.25s ease;
-}
-
-@keyframes fadeOverlay {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
   }
 }
 
@@ -233,6 +242,7 @@ $text-sizes: (
   &-500 {
     font-weight: 500;
   }
+
   &-600 {
     font-weight: 600;
   }

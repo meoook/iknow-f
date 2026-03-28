@@ -1,5 +1,5 @@
+import s from './notify.module.scss'
 import React from 'react'
-import style from './notify.module.scss'
 import { useClickOutside } from '../../hooks/hooks'
 import { formatRelativeTime } from '../../utils/date'
 import {
@@ -8,9 +8,9 @@ import {
   useDeleteNotificationMutation,
   useDeleteAllNotificationsMutation,
 } from '../../services/api'
+import { useNotificationIds, useNotification, useUnreadCount } from '../../store/notification.adapter'
 import IconSprite from '../../elements/icon'
 
-import { useNotificationIds, useNotification, useUnreadCount } from '../../store/notification.adapter'
 
 export default function NotificationBell() {
   const [readAll] = useReadAllNotificationsMutation()
@@ -29,15 +29,15 @@ export default function NotificationBell() {
   }
 
   return (
-    <div className={style.container} ref={menuRef}>
+    <div className={s.container} ref={menuRef}>
       <button className='btn btn-icon' onClick={openMenu}>
         <IconSprite name='bell' size={28} />
-        {unreadCount > 0 && <span className={style.badge}>{unreadCount > 9 ? '9+' : unreadCount}</span>}
+        {unreadCount > 0 && <span className={s.badge}>{unreadCount > 9 ? '9+' : unreadCount}</span>}
       </button>
 
       {isMenuOpen && (
-        <div className={style.dropdown}>
-          <div className={style.header}>
+        <div className={s.dropdown}>
+          <div className={s.header}>
             <h3>Уведомления</h3>
             {notificationIds.length > 0 && (
               <button onClick={handleDeleteAll} className='btn btn-icon' title='Удалить все'>
@@ -46,9 +46,9 @@ export default function NotificationBell() {
             )}
           </div>
 
-          <div className={`${style.list} noscroll`}>
+          <div className={`${s.list} noscroll`}>
             {notificationIds.length === 0 ? (
-              <div className={style.empty}>
+              <div className={s.empty}>
                 <IconSprite name='bell-z' />
                 <div>Нет уведомлений</div>
               </div>
@@ -75,19 +75,19 @@ const NotificationItem = ({ notificationId }: { notificationId: number }) => {
   }
 
   const alertType = notification.alert_type.toLowerCase() as any
-  let itemClass = style.item
-  if (!notification.read) itemClass += ` ${style.unread}`
+  let itemClass = s.item
+  if (!notification.read) itemClass += ` ${s.unread}`
   return (
     <div className={itemClass} onClick={() => !notification.read && readOne(notification.id)}>
-      <div className={`${style.icon} ${alertType}`}>
+      <div className={`${s.icon} ${alertType}`}>
         <IconSprite name={alertType} size={28} />
       </div>
       <div className='column gap4'>
         <div>{notification.title}</div>
-        <div className={style.message}>{notification.text}</div>
-        <div className={style.time}>{formatRelativeTime(notification.created)}</div>
+        <div className={s.message}>{notification.text}</div>
+        <div className={s.time}>{formatRelativeTime(notification.created)}</div>
       </div>
-      <div className={style.close} onClick={handleDelete}>
+      <div className={s.close} onClick={handleDelete}>
         <IconSprite name='close' size={16} />
       </div>
     </div>
