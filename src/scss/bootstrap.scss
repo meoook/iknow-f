@@ -4,7 +4,7 @@
   padding-right: 12px;
   font-weight: 500;
   color: var(--color-primary);
-  border-radius: 5px;
+  border-radius: 6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -18,13 +18,15 @@
   }
 
   &-icon {
-    width: 44px;
-    height: 44px;
+    min-width: var(--size-input);
+    // height: 44px;
     padding: 0;
-    border-radius: var(--radius);
+    gap: unset;
+
 
     &:hover {
-      background-color: var(--color-hover);
+      // background-color: var(--color-hover);
+      background-color: red;
     }
   }
 

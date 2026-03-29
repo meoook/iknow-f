@@ -1,82 +1,18 @@
-// Screen and paddings
-
-.hide {
-  display: none;
-}
-
-.overlay {
-  position: fixed;
-  z-index: 10;
-  inset: 0;
-  background-color: var(--color-shadow);
-  backdrop-filter: blur(2px);
-  animation: fadeOverlay 0.25s ease;
-}
-
-@keyframes fadeOverlay {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
+$padding: 4px;
+$gaps: 2, 4, 8, 12, 16, 20;
 $breakpoints: (
   xl: 1280px,
   lg: 1024px,
   md: 768px,
   sm: 640px,
 );
-
-@mixin generate-responsive($name, $size) {
-  .#{$name} {
-    @media (max-width: $size) {
-      &-flex {
-        display: flex;
-      }
-
-      &-hide {
-        display: none;
-      }
-
-      & {
-        display: block;
-      }
-    }
-  }
-}
-
-@each $name, $size in $breakpoints {
-  @include generate-responsive($name, $size);
-}
-
-$padding: 4px;
-
-.p {
-  @for $i from 1 through 4 {
-    &-#{$i} {
-      padding: $padding * $i;
-    }
-
-    &t-#{$i} {
-      padding-top: $padding * $i;
-    }
-
-    &b-#{$i} {
-      padding-bottom: $padding * $i;
-    }
-
-    &h-#{$i} {
-      padding-inline: $padding * $i;
-    }
-
-    &v-#{$i} {
-      padding-block: $padding * $i;
-    }
-  }
-}
+$text-sizes: (
+  // xl: var(--size-font-h1),
+  lg: var(--size-font-lg),
+  // md: var(--size-font-lg),
+  sm: var(--font-size-sm),
+  xs: var(--font-size-xs)
+);
 
 // Containers and elements (btn, input, etc)
 
@@ -97,8 +33,6 @@ $padding: 4px;
   display: flex;
   flex-direction: column;
 }
-
-$gaps: 2, 4, 8, 12, 16, 20;
 
 .row,
 .column,
@@ -154,6 +88,81 @@ $gaps: 2, 4, 8, 12, 16, 20;
   }
 }
 
+// Screen and paddings
+
+.relative {
+  position: relative;
+}
+
+.overlay {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  background-color: var(--color-shadow);
+  backdrop-filter: blur(2px);
+  animation: fadeOverlay 0.25s ease;
+}
+
+@keyframes fadeOverlay {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.hide {
+  display: none;
+}
+
+@mixin generate-responsive($name, $size) {
+  .#{$name} {
+    @media (max-width: $size) {
+      &-flex {
+        display: flex;
+      }
+
+      &-hide {
+        display: none;
+      }
+
+      & {
+        display: block;
+      }
+    }
+  }
+}
+
+@each $name, $size in $breakpoints {
+  @include generate-responsive($name, $size);
+}
+
+.p {
+  @for $i from 1 through 4 {
+    &-#{$i} {
+      padding: $padding * $i;
+    }
+
+    &t-#{$i} {
+      padding-top: $padding * $i;
+    }
+
+    &b-#{$i} {
+      padding-bottom: $padding * $i;
+    }
+
+    &h-#{$i} {
+      padding-inline: $padding * $i;
+    }
+
+    &v-#{$i} {
+      padding-block: $padding * $i;
+    }
+  }
+}
+
 // Utils
 
 .noscroll {
@@ -177,14 +186,6 @@ $gaps: 2, 4, 8, 12, 16, 20;
 }
 
 // Text
-
-$text-sizes: (
-  // xl: var(--size-font-h1),
-  lg: var(--size-font-lg),
-  // md: var(--size-font-lg),
-  sm: var(--font-size-sm),
-  xs: var(--font-size-xs)
-);
 
 @each $name, $size in $text-sizes {
   .text-#{$name} {

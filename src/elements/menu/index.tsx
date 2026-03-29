@@ -1,0 +1,122 @@
+import { Link } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
+import { toggleTheme } from '../../store/app.slice'
+import Toggle from '../toggle'
+import IconSprite from '../icon'
+import Socials from './socials'
+import LoginButton from './login'
+import Avatar from '../avatar'
+import { REGEX_ADDRESS } from '../../utils/date'
+import type { IUser } from '../../types/auth.types'
+import { useModalContext } from '../../services/ModalContext'
+import { useSingOutMutation } from '../../services/api'
+
+
+interface MenuProps {
+  mobile?: boolean
+  close?: () => void
+}
+
+export default function Menu({ mobile, close }: MenuProps) {
+  const dispatch = useAppDispatch()
+  const { theme } = useAppSelector((state) => state.app)
+  const { user } = useAppSelector((state) => state.auth)
+  const { toggleDrawer } = useModalContext()
+  const [signOut] = useSingOutMutation()
+
+  const handleToggleTheme = () => {
+    dispatch(toggleTheme())
+  }
+
+  const onClose = () => { if (mobile) toggleDrawer(false) }
+
+  const logOut = () => {
+    if (mobile) onClose()
+    else if (close) close()
+    signOut()
+  }
+
+  const classBase = 'flex-i center w-500 nowrap w-full gap-2 hover'
+  const classItem = mobile ? `primary ph-4 pv-3 ${classBase}` : `primary p-3 ${classBase}`
+  const classLink = mobile ? `secondary ph-4 pv-3 ${classBase}` : `secondary p-3 ${classBase}`
+  const classExit = mobile ? `color-red ph-4 pv-3 ${classBase}` : `color-red p-3 ${classBase}`
+  return (
+    <>
+      {user && <MenuUser mobile onClick={onClose} user={user} />}
+      <button className={classItem}>
+        <IconSprite name='crown' size={20} color='var(--color-brand)' />
+        <span>Таблица лидеров</span>
+      </button>
+      <button className={classItem}>
+        <IconSprite name='activity' size={20} color='var(--color-red)' />
+        <span>Активность</span>
+      </button>
+      <button className={classItem} onClick={handleToggleTheme}>
+        <IconSprite name='moon' size={20} color='var(--color-blue)' />
+        <span>Темная тема</span>
+        <div className='w100' />
+        <Toggle checked={theme === 'dark'} />
+      </button>
+      {user && (
+        <Link to='/predictions' className={classItem} onClick={onClose}>
+          <IconSprite name='bank' size={20} color='var(--color-green)' />
+          <span>Мое участие</span>
+        </Link>
+      )}
+      <hr />
+      <Link className={classLink} to='/tos' onClick={onClose}>
+        Условия использования
+      </Link>
+      <Link className={classLink} to='/about' onClick={onClose}>
+        О приложении
+      </Link>
+      <Link className={classLink} to='/docs' onClick={onClose}>
+        Документация
+      </Link>
+
+      {mobile && <SocialsBlock />}
+
+      {!user && mobile && <LoginButton mobile />}
+
+      {user && (
+        <button className={classExit} onClick={logOut}>
+          <IconSprite name='exit' size={20} />
+          <span>Выйти</span>
+        </button>
+      )}
+    </>
+  )
+}
+
+interface MenuUserProps {
+  user: IUser
+  mobile?: boolean
+  onClick?: () => void
+}
+
+function MenuUser({ user, mobile, onClick }: MenuUserProps) {
+  const username = REGEX_ADDRESS.test(user.username)
+    ? user.username.slice(0, 6) + '...' + user.username.slice(-6)
+    : user.username
+
+  const paddingX = mobile ? 'pv-1 ph-4' : 'pv-1 ph-3'
+  return (
+    <>
+      <Link className={`row center gap-3 ${paddingX} h-brand`} to='/profile' onClick={onClick}>
+        <Avatar src={user.avatar} size={mobile ? 'medium' : undefined} />
+        <h3 className='ellipsis'>{username}</h3>
+      </Link>
+      <hr />
+    </>
+  )
+}
+
+const SocialsBlock = () => (
+  <>
+    <hr />
+    <div className='p-4'>
+      <Socials />
+    </div>
+    <hr />
+  </>
+)

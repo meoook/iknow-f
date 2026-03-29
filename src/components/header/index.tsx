@@ -6,7 +6,7 @@ import { useModalContext } from '../../services/ModalContext'
 import { useClickOutside, useHorizontalScroll } from '../../hooks/hooks'
 import IconSprite from '../../elements/icon'
 import Logo from './logo'
-import UserMenu from '../userMenu'
+import UserMenu from '../user'
 import ModalHow from '../../modals/how'
 import PredictionSearch from '../search'
 
