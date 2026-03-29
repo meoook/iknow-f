@@ -78,7 +78,6 @@ $text-sizes: (
   }
 
   &.gap {
-
     // TODO: RM !!
     @each $g in $gaps {
       &#{$g} {
@@ -164,6 +163,10 @@ $text-sizes: (
 }
 
 // Utils
+
+.hidden {
+  overflow: hidden;
+}
 
 .noscroll {
   overflow-y: auto;

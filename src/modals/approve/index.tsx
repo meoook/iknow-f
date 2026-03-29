@@ -41,7 +41,7 @@ export default function ModalApprove({ email, close }: ModalApproveProps) {
         <div className='error'>{error ? error : <>&nbsp;</>}</div>
 
         <button
-          className='btn blue big w100'
+          className='btn blue big w-full'
           disabled={nonce.length !== NONCE_LENGTH || isEmailLoading}
           onClick={handleApprove}>
           Подтвердить

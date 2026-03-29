@@ -192,7 +192,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
           </div>
         </div>
 
-        <button className='btn blue w100 big' disabled={loading || isLoading} onClick={handleCreateBet}>
+        <button className='btn blue big w-full' disabled={loading || isLoading} onClick={handleCreateBet}>
           Сделать ставку
         </button>
       </div>

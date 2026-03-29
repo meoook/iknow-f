@@ -98,14 +98,14 @@ const CommentBase = ({ authed, predictionId, commentId }: CommentProps) => {
   const handleModalOpen = () => {
     if (!authed) return openModal(ModalLogin)
     menuToogle()
-    openModal(ModalReport, { predictionId, commentId: comment.id })
+    openModal(ModalReport, 'common', { predictionId, commentId: comment.id })
   }
 
   return (
     <div className='row gap12'>
       <Avatar src={comment.avatar} size='medium' />
       <div className='column start grow'>
-        <div className='row center justify w100'>
+        <div className='row center justify w-full'>
           <div className='row center gap12'>
             <b>{comment.username.length > 20 ? `${comment.username.slice(0, 17)}...` : comment.username}</b>
             <span className='label'>{formatRelativeTime(comment.created)}</span>

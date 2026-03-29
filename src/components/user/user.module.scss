@@ -24,6 +24,20 @@
   }
 }
 
+.mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  background-color: transparent;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
 .dropdown {
   position: absolute;
   top: calc(100% + 4px);
@@ -37,27 +51,6 @@
   z-index: 100;
   animation: fadeIn 0.2s ease-in-out;
   max-height: calc(100vh - 100px);
-
-  .item {
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 10px 12px;
-    cursor: pointer;
-    gap: 8px;
-    line-height: 20px;
-    font-weight: 500;
-    white-space: nowrap;
-
-    &:hover {
-      background-color: var(--color-hover);
-    }
-  }
-
-  .item {
-    color: var(--color-primary);
-  }
 }
 
 @keyframes fadeIn {

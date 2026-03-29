@@ -17,6 +17,9 @@ export default function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const closeTimeoutRef = useRef<number | null>(null)
 
+  const open = () => setIsMenuOpen(true)
+  const close = () => setIsMenuOpen(false)
+
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current)
@@ -34,10 +37,10 @@ export default function UserMenu() {
   if (loading) {
     return (
       <div className='row center gap8'>
-        <div className={style.shimmer}>
+        <div className='btn btn-icon hidden'>
           <div className='shimmer' />
         </div>
-        <div className={style.shimmer}>
+        <div className='btn btn-icon hidden'>
           <div className='shimmer' />
         </div>
       </div>
@@ -47,27 +50,35 @@ export default function UserMenu() {
   return (
     <div className='row center gap8'>
       {user ? <UserButtons user={user} /> : <LoginButton />}
-      <div className={style.container} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        {user ? (
-          <div className='btn btn-icon ph-1'>
-            <Avatar src={user.avatar} />
-            <div className={`arrow lg-hide${isMenuOpen ? ' active' : ''}`}>
-              <IconSprite name='arrow_down' />
+      <div className='relative'>
+        <div className={style.container} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={open}>
+          {user ? (
+            <button className='btn btn-icon ph-1'>
+              <Avatar src={user.avatar} />
+              <div className={`arrow md-hide${isMenuOpen ? ' active' : ''}`}>
+                <IconSprite name='arrow_down' />
+              </div>
+            </button>
+          ) : (
+            <button className='btn btn-icon md-hide'>
+              <IconSprite name='menu' size={32} />
+            </button>
+          )}
+          {isMenuOpen && (
+            <div className={`${style.dropdown} noscroll md-hide`}>
+              <Menu close={close} />
             </div>
-          </div>
-        ) : (
-          <button className='btn btn-icon md-hide'>
-            <IconSprite name='menu' size={32} />
-          </button>
-        )}
-        {isMenuOpen && (
-          <div className={`${style.dropdown} noscroll`}>
-            <Menu close={() => setIsMenuOpen(false)} />
-          </div>
-        )}
+          )}
+        </div>
+        <IconMask />
       </div>
     </div>
   )
+}
+
+const IconMask = () => {
+  const { toggleDrawer } = useModalContext()
+  return <button className={style.mask} onClick={() => toggleDrawer(true)} />
 }
 
 function UserButtons({ user }: { user: IUser }) {
@@ -85,4 +96,3 @@ function UserButtons({ user }: { user: IUser }) {
     </>
   )
 }
-

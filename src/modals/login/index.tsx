@@ -168,12 +168,12 @@ export default function ModalLogin({ close }: ModalLoginProps) {
             )}
 
             {expired ? (
-              <button className='btn blue big w100' disabled={isOauthLoading} onClick={handleEmailLogin}>
+              <button className='btn blue big w-full' disabled={isOauthLoading} onClick={handleEmailLogin}>
                 {isOauthLoading ? <Loader /> : 'Отправить код повторно'}
               </button>
             ) : (
               <button
-                className='btn blue big w100'
+                className='btn blue big w-full'
                 disabled={nonce.length !== NONCE_LENGTH || isEmailLoading}
                 onClick={handleNonceLogin}>
                 {isEmailLoading ? <Loader /> : 'Подтвердить'}

@@ -239,13 +239,13 @@ export default function ModalPrediction({ close }: ModalPredictionProps) {
       ) : (
         <div className='form-row row center gap12'>
           <button
-            className={`btn w100 big ${formData.vote === VOTE_YES_NAME ? 'green' : 'gray'}`}
+            className={`btn big w-full ${formData.vote === VOTE_YES_NAME ? 'green' : 'gray'}`}
             value='yes'
             onClick={handleVoteChange}>
             Сбудется
           </button>
           <button
-            className={`btn w100 big ${formData.vote === VOTE_NO_NAME ? 'red' : 'gray'}`}
+            className={`btn big w-full ${formData.vote === VOTE_NO_NAME ? 'red' : 'gray'}`}
             value='no'
             onClick={handleVoteChange}>
             Не сбудется
@@ -266,7 +266,7 @@ export default function ModalPrediction({ close }: ModalPredictionProps) {
       </div>
       <div className='form-row'>
         <div className='row center gap16'>
-          <div className='w100'>
+          <div className='w-full'>
             <label htmlFor='currency'>Валюта</label>
             <select id='currency' name='currency' className='outline' defaultValue='' onChange={handleCurrencyChange}>
               <option value='' disabled>
@@ -276,7 +276,7 @@ export default function ModalPrediction({ close }: ModalPredictionProps) {
               <option value='CASH'>Кэш</option>
             </select>
           </div>
-          <div className='w100'>
+          <div className='w-full'>
             <label htmlFor='amount'>Количество</label>
             <input
               id='amount'

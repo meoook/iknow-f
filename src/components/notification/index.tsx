@@ -11,7 +11,6 @@ import {
 import { useNotificationIds, useNotification, useUnreadCount } from '../../store/notification.adapter'
 import IconSprite from '../../elements/icon'
 
-
 export default function NotificationBell() {
   const [readAll] = useReadAllNotificationsMutation()
   const [deleteAll] = useDeleteAllNotificationsMutation()
@@ -29,7 +28,7 @@ export default function NotificationBell() {
   }
 
   return (
-    <div className={s.container} ref={menuRef}>
+    <div className='relative' ref={menuRef}>
       <button className='btn btn-icon' onClick={openMenu}>
         <IconSprite name='bell' size={28} />
         {unreadCount > 0 && <span className={s.badge}>{unreadCount > 9 ? '9+' : unreadCount}</span>}
@@ -87,9 +86,9 @@ const NotificationItem = ({ notificationId }: { notificationId: number }) => {
         <div className={s.message}>{notification.text}</div>
         <div className={s.time}>{formatRelativeTime(notification.created)}</div>
       </div>
-      <div className={s.close} onClick={handleDelete}>
+      <button className={s.close} onClick={handleDelete}>
         <IconSprite name='close' size={16} />
-      </div>
+      </button>
     </div>
   )
 }

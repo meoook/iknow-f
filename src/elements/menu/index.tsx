@@ -11,7 +11,6 @@ import type { IUser } from '../../types/auth.types'
 import { useModalContext } from '../../services/ModalContext'
 import { useSingOutMutation } from '../../services/api'
 
-
 interface MenuProps {
   mobile?: boolean
   close?: () => void
@@ -28,12 +27,15 @@ export default function Menu({ mobile, close }: MenuProps) {
     dispatch(toggleTheme())
   }
 
-  const onClose = () => { if (mobile) toggleDrawer(false) }
-
-  const logOut = () => {
-    if (mobile) onClose()
+  const onClose = () => {
+    if (mobile) toggleDrawer(false)
     else if (close) close()
+  }
+
+  const logOut = (e: React.MouseEvent) => {
+    e.stopPropagation()
     signOut()
+    onClose()
   }
 
   const classBase = 'flex-i center w-500 nowrap w-full gap-2 hover'
@@ -54,7 +56,7 @@ export default function Menu({ mobile, close }: MenuProps) {
       <button className={classItem} onClick={handleToggleTheme}>
         <IconSprite name='moon' size={20} color='var(--color-blue)' />
         <span>Темная тема</span>
-        <div className='w100' />
+        <div className='w-full' />
         <Toggle checked={theme === 'dark'} />
       </button>
       {user && (
@@ -99,10 +101,10 @@ function MenuUser({ user, mobile, onClick }: MenuUserProps) {
     ? user.username.slice(0, 6) + '...' + user.username.slice(-6)
     : user.username
 
-  const paddingX = mobile ? 'pv-1 ph-4' : 'pv-1 ph-3'
+  const paddingX = mobile ? 'ph-3' : 'pv-1 ph-3'
   return (
     <>
-      <Link className={`row center gap-3 ${paddingX} h-brand`} to='/profile' onClick={onClick}>
+      <Link className={`row center gap-2 ${paddingX} h-brand`} to='/profile' onClick={onClick}>
         <Avatar src={user.avatar} size={mobile ? 'medium' : undefined} />
         <h3 className='ellipsis'>{username}</h3>
       </Link>
