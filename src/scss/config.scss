@@ -1,6 +1,9 @@
 :root {
   color-scheme: light dark;
 
+  --scrollbar-track: #1111;
+  --scrollbar-thumb: #5555;
+
   --color-primary: light-dark(#222, #fff);
   // --color-fg-default: #fff;
   --color-secondary: light-dark(#888, #94a3b8);
@@ -59,6 +62,7 @@
   --size-nav: 44px;
   --size-input: 38px; // input select btn height
   --radius: 8px;
+  --font-size-xl: 32px;
   --font-size-h1: 24px;
   --font-size-h2: 20px;
   --font-size-lg: 18px;

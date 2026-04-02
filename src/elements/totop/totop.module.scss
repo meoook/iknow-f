@@ -44,6 +44,14 @@
 @media (max-width: 1000px) {
   .container {
     right: 12px;
+    bottom: 16px;
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    right: 12px;
     bottom: calc(var(--size-tapbar) + 8px);
     transform: none;
   }

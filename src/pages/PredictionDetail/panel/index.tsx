@@ -1,5 +1,5 @@
-import style from './panel.module.scss'
-import { useRef, useState } from 'react'
+import s from './panel.module.scss'
+import { useState } from 'react'
 import { useAppSelector } from '../../../hooks/useRedux'
 import { useCreateMyBetMutation } from '../../../services/api'
 import { useModalContext } from '../../../services/ModalContext'
@@ -8,6 +8,7 @@ import type { IChoice, IPredictionDetail } from '../../../types/app.types'
 import type { TCurrency } from '../../../types/auth.types'
 import IconSprite from '../../../elements/icon'
 import { Link } from 'react-router-dom'
+import TradeInput from '../../../elements/trade-input/TradeInput'
 
 interface TradePanelProps {
   prediction: IPredictionDetail
@@ -24,7 +25,11 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   const [currency, setCurrency] = useState<TCurrency>('CASH')
   const [amount, setAmount] = useState<string>('0')
   const [isTilt, setIsTilt] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+
+  const tilt = () => {
+    setIsTilt(true)
+    setTimeout(() => setIsTilt(false), 500)
+  }
 
   const handleCreateBet = async () => {
     if (!user) {
@@ -34,8 +39,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
     if (!selectedChoice) return
     const balance = currency === 'CASH' ? user.balances.CASH : user.balances.POINT
     if (Number(amount) > (balance || 0)) {
-      setIsTilt(true)
-      setTimeout(() => setIsTilt(false), 1000)
+      tilt()
       return
     }
 
@@ -43,9 +47,20 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
       await createBet({ choice_id: selectedChoice.id, currency, amount: Number(amount) }).unwrap()
       setAmount('0')
     } catch (e) {
-      setIsTilt(true)
-      setTimeout(() => setIsTilt(false), 1000)
+      tilt()
     }
+  }
+
+  const addAmount = (value: number) => {
+    setAmount((prev) => {
+      // return Math.min(Number(prev) + 20, MAX_VALUE).toString()
+      const num = Number(prev) + value
+      if (num > MAX_VALUE) {
+        tilt()
+        return prev
+      }
+      return num.toString()
+    })
   }
 
   const setMaxAmount = () => {
@@ -69,6 +84,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
     const num = parseInt(raw, 10)
     if (raw === '') setAmount('0')
     else if (num <= MAX_VALUE) setAmount(num.toString())
+    else tilt()
   }
 
   const displayValue = formatWithCommas(amount)
@@ -78,9 +94,9 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
     const winChoice = prediction.choices.find((choice) => choice.win)
 
     return (
-      <aside className={`${style.panel} md-hide`}>
-        <div className={style.bet}>
-          <div className={style.win}>
+      <aside className={`${s.panel} md-hide`}>
+        <div className={s.bet}>
+          <div className={s.win}>
             <IconSprite name='crown' size={48} color='var(--color-brand)' />
             <h3 className='clamp-3'>{winChoice?.title || 'Победитель не определен'}</h3>
             <h3 className='color-blue'>${new Intl.NumberFormat('en-US').format(prediction.volume)}</h3>
@@ -94,20 +110,18 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   const imgUrl = import.meta.env.VITE_IMG_URL
   const src = prediction.icon ? `${imgUrl}${prediction.icon}` : `${imgUrl}/icon/no_icon.png`
   return (
-    <aside className={`${style.panel} md-hide`}>
-      <div className={style.bet}>
-        <div className='row center gap12'>
-          <img className={style.icon} src={src} alt='' />
+    <aside className={`${s.panel} md-hide`}>
+      <div className={s.bet}>
+        <div className='row center gap-3'>
+          <img className={s.icon} src={src} alt='' />
           <h3 className='clamp-2'>{selectedChoice?.title || 'Выберите вариант'}</h3>
         </div>
 
-        <div className={style.tabs}>
-          <button className={`${style.tab}${currency === 'CASH' ? ' active' : ''}`} onClick={() => setCurrency('CASH')}>
+        <div className={s.tabs}>
+          <button className={`${s.tab}${currency === 'CASH' ? ' active' : ''}`} onClick={() => setCurrency('CASH')}>
             Кэш
           </button>
-          <button
-            className={`${style.tab}${currency === 'POINT' ? ' active' : ''}`}
-            onClick={() => setCurrency('POINT')}>
+          <button className={`${s.tab}${currency === 'POINT' ? ' active' : ''}`} onClick={() => setCurrency('POINT')}>
             Баллы
           </button>
         </div>
@@ -115,78 +129,47 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
         <div className='column gap12'>
           <div className='row justify center'>
             <div>Количество</div>
-            <div
-              className={`${style.inputWrapper}${isTilt ? ` ${style.tilt}` : ''}`}
-              onClick={() => inputRef.current?.focus()}>
-              <div className={style.inputContainer}>
-                <span>{currency === 'POINT' ? '¢' : '$'}</span>
-                <div className={style.inputContent}>
-                  <input
-                    ref={inputRef}
-                    name='amount'
-                    type='text'
-                    value={displayValue}
-                    onChange={handleInputChange}
-                    // spellCheck={false}
-                    inputMode='decimal'
-                    autoComplete='off'
-                    autoFocus={true}
-                    placeholder={`${currency === 'POINT' ? '¢' : '$'}0`}
-                  />
-                  <span className={style.mirror}>{displayValue || '0'}</span>
-                </div>
-              </div>
-            </div>
+            <TradeInput currency={currency} value={displayValue} onChange={handleInputChange} tilt={isTilt} />
           </div>
 
-          <div className='row justify center'>
-            <div className='row center gap4'>
+          <div className='row justify center gap-2'>
+            <div className='row center gap-1'>
               <span className='label'>Мин.</span>
               <span className='label'>{currency === 'POINT' ? `¢${settings.min_point}` : `$${settings.min_cash}`}</span>
             </div>
-            <div className='row gap8'>
-              <button
-                className='btn gray chip'
-                onClick={() => setAmount((prev) => Math.min(Number(prev) + 1, MAX_VALUE).toString())}>
+            <div className='row gap-1'>
+              <button className='chip hover' onClick={() => addAmount(1)}>
                 {currency === 'POINT' ? '+¢1' : '+$1'}
               </button>
-              <button
-                className='btn gray chip'
-                onClick={() => setAmount((prev) => Math.min(Number(prev) + 20, MAX_VALUE).toString())}>
+              <button className='chip hover' onClick={() => addAmount(20)}>
                 {currency === 'POINT' ? '+¢20' : '+$20'}
               </button>
-              <button
-                className='btn gray chip'
-                onClick={() => setAmount((prev) => Math.min(Number(prev) + 100, MAX_VALUE).toString())}>
+              <button className='chip hover' onClick={() => addAmount(100)}>
                 {currency === 'POINT' ? '+¢100' : '+$100'}
               </button>
-              <button className='btn gray chip' onClick={setMaxAmount}>
+              <button className='chip hover' onClick={setMaxAmount}>
                 Max
               </button>
             </div>
           </div>
 
-          <div className={`${style.payoutWrapper}${displayPayout ? ' show' : ''}${isTilt ? ` ${style.tilt}` : ''}`}>
+          <div className={`${s.payout}${displayPayout ? ' show' : ''}`}>
             <div className='row justify end'>
               <div className='column'>
                 <div>Возможный</div>
-                <div className='row center gap4'>
+                <div className='row center gap-1'>
                   <span>выигрыш</span>
-                  <span className={style.info}>
+                  <span className={s.info}>
                     <IconSprite name='info' size={18} />
-                    <div className={style.tooltip}>
+                    <div className={s.tooltip}>
                       Размер выигрыша формируется по итогам предсказания с учётом всех ставок
                     </div>
                   </span>
                 </div>
               </div>
-              <div className={style.inputWrapper} onClick={() => inputRef.current?.focus()}>
-                <div className={`${style.inputContainer} green`}>
-                  <span>{currency === 'POINT' ? '¢' : '$'}</span>
-                  <div className={style.inputContent}>
-                    {formatWithCommas((Number(amount) * (selectedChoice?.multiplier || 1)).toFixed(0))}
-                  </div>
-                </div>
+              <div className='row center gap-1 text-bet color-green'>
+                <span>{currency === 'POINT' ? '¢' : '$'}</span>
+                <div>{formatWithCommas((Number(amount) * (selectedChoice?.multiplier || 1)).toFixed(0))}</div>
               </div>
             </div>
           </div>
@@ -203,8 +186,11 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
 
 const TOS = () => {
   return (
-    <div className={style.terms}>
-      Сделав ставку, вы соглашаетесь с <Link to='/tos'>условиями</Link>
+    <div className='column center pv-3 secondary text-sm'>
+      <div>Делая ставку, вы соглашаетесь с</div>
+      <Link className='underline h-brand' to='/tos'>
+        Условиями использования
+      </Link>
     </div>
   )
 }

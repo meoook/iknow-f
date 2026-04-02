@@ -83,7 +83,7 @@ export default function Header() {
           <div className='hr' />
           <div className='row center justify gap-2 w-full noscroll-x transition' ref={scrollRef}>
             {Object.entries(TAGS_MAP).map(([path, title]) => (
-              <NavLink to={path} className={style.item}>
+              <NavLink key={path} to={path} className={style.item}>
                 {title}
               </NavLink>
             ))}

@@ -5,12 +5,14 @@ import ProfileAccount from '../account'
 import ProfileNotifications from '../notifications'
 import ProfileTxs from '../transactions'
 import ProfileWithdraw from '../withdraw'
+import { useHorizontalScroll } from '../../../hooks/hooks'
 
 type TabType = 'account' | 'notifications' | 'transactions' | 'withdraw'
 
 export default function Profile() {
   const { user, loading } = useAppSelector((state) => state.auth)
   const [searchParams, setSearchParams] = useSearchParams()
+  const scrollRef = useHorizontalScroll()
 
   const tabParam = searchParams.get('tab') as TabType | null
   const validTabs: TabType[] = ['account', 'notifications', 'transactions', 'withdraw']
@@ -25,7 +27,7 @@ export default function Profile() {
   return (
     <div className='container'>
       <div className={style.profile}>
-        <div className={style.sidebar}>
+        <div ref={scrollRef} className={`${style.sidebar} noscroll`}>
           <button
             className={`${style.item} ${activeTab === 'account' ? 'active' : ''}`}
             onClick={() => setActiveTab('account')}>

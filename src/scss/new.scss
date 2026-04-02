@@ -7,9 +7,11 @@ $breakpoints: (
   sm: 640px,
 );
 $text-sizes: (
-  // xl: var(--size-font-h1),
-  lg: var(--size-font-lg),
-  // md: var(--size-font-lg),
+  // xl: var(--font-size-xl),
+  // h1: var(--font-size-h1),
+  // h2: var(--font-size-h2),
+  // lg: var(--font-size-lg),
+  // md: var(--size-font),
   sm: var(--font-size-sm),
   xs: var(--font-size-xs)
 );
@@ -230,18 +232,18 @@ $text-sizes: (
   }
   &::-webkit-scrollbar-track {
     background-color: #0000;
-    box-shadow: 0 0 0 #0000;
   }
   &::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background: #0000;
+    border-radius: 3px;
+    background-color: #0000;
+    transition: background-color 2.3s ease;
   }
 
   &:hover::-webkit-scrollbar {
-    background-color: #1111;
+    background-color: var(--scrollbar-track);
   }
   &:hover::-webkit-scrollbar-thumb {
-    background: #8888;
+    background: var(--scrollbar-thumb);
   }
 }
 
@@ -261,6 +263,14 @@ $text-sizes: (
 @each $name, $size in $text-sizes {
   .text-#{$name} {
     font-size: $size;
+  }
+}
+
+.text-bet {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  @media (max-width: 940px) {
+    font-size: var(--font-size-h2);
   }
 }
 

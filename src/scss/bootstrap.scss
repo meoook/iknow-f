@@ -189,10 +189,10 @@
 }
 
 .chip {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   line-height: 1;
   padding: 4px 6px;
-  background: var(--color-dialog);
+  background-color: var(--color-active);
   border: 1px solid var(--color-border);
   border-radius: 4px;
   color: var(--color-secondary);
