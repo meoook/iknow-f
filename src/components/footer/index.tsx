@@ -10,10 +10,10 @@ export default function Footer() {
     <footer className={style.footer}>
       <div className={style.container}>
         <div className='column start gap8'>
-          <a href='/' className={style.logo}>
+          <Link to='/' className={style.logo}>
             <Logo />
             <h1>iVanga</h1>
-          </a>
+          </Link>
           <h3>Самый большой сервис предсказаний в России™</h3>
         </div>
 

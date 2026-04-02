@@ -1,11 +1,11 @@
-import React from 'react'
 import style from './bet.module.scss'
-import VoteItem from '../vote'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import PredictionHead from '../../head'
-import PredictionStatus from '../../status'
-import Progress from '../../../elements/progress'
 import { useMybet } from '../../../store/mybet.adapter'
+import VoteItem from '../vote'
+import PredictionHead from '../../head'
+import Progress from '../../../elements/progress'
+import PredictionStatus from '../../../elements/status'
 
 interface ToggleProps {
   betId: number
@@ -22,13 +22,8 @@ const BetItem = ({ betId }: ToggleProps) => {
     <Link to={`/prediction/${bet.prediction.id}`} className={style.bet}>
       {['WIN', 'LOSE', 'CANCEL'].includes(bet.state) && <div className={badgeStyle}>{bet.state}</div>}
       <div className={style.main}>
-        <PredictionHead icon={bet.prediction.icon} title={bet.prediction.title} />
-        <PredictionStatus
-          tags={bet.prediction.tags}
-          state={bet.state}
-          date={bet.prediction.end_date}
-          created={bet.created}
-        />
+        <PredictionHead icon={bet.prediction.icon} title={bet.prediction.title} tags={bet.prediction.tags} />
+        <PredictionStatus state={bet.state} date={bet.prediction.end_date} created={bet.created} />
         <Progress total={bet.prediction.volume} volume={bet.choice.volume} />
       </div>
       <VoteItem vote={bet.choice.title} currency={bet.currency} amount={bet.amount} bet={bet} />

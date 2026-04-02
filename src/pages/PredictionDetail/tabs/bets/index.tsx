@@ -60,17 +60,17 @@ const BetBase = ({ predictionId, betId }: BetProps) => {
   if (!bet) return null
 
   return (
-    <div className='row gap8 center'>
+    <div className='row gap-1 center text-sm'>
       <Avatar src={bet.avatar} />
-      <div className='row grow gap4 lh-1'>
-        <b>{bet.username.length > 20 ? `${bet.username.slice(0, 17)}...` : bet.username}</b>
+      <div className='row grow gap4 lh-1 wrap'>
+        <span className='w-500'>{bet.username.length > 20 ? `${bet.username.slice(0, 17)}...` : bet.username}</span>
         <span className='color-gray'>ставка</span>
-        <b className='color-green'>
+        <span className='w-500 color-green'>
           {bet.currency === 'POINT' ? '¢' : '$'}
           {bet.amount.toFixed(2)}
-        </b>
+        </span>
         <span className='color-gray'>на</span>
-        <b>{bet.title}</b>
+        <span className='w500 clamp-1'>{bet.title}</span>
       </div>
       <div className='color-gray nowrap'>{formatRelativeTime(bet.created)}</div>
     </div>

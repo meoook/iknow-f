@@ -39,7 +39,7 @@ export default function ModalHow() {
     if (step < stepsData.length - 1) {
       setStep((prev) => prev + 1)
     } else {
-      openModal(ModalLogin, { close: closeModal })
+      openModal(ModalLogin, 'common', { close: closeModal })
     }
   }
 

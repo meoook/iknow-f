@@ -10,6 +10,7 @@ import IconSprite from '../../../../elements/icon'
 import PredictionTabComments from '../comments'
 import PredictionTabBets from '../bets'
 import PredictionTabTop from '../top'
+import { useHorizontalScroll } from '../../../../hooks/hooks'
 
 interface PredictionTabsProps {
   prediction: IPredictionDetail
@@ -21,7 +22,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
   const [createComment, { isLoading: isPosting }] = useCreateCommentMutation()
   const [activeTab, setActiveTab] = useState<'comments' | 'holders' | 'activity'>('comments')
   const { total } = useCommentIds(prediction.id)
-
+  const scrollRef = useHorizontalScroll(true)
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!user) return openModal(ModalLogin)
@@ -38,8 +39,8 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
   }
 
   return (
-    <div className='column gap20'>
-      <div className={style.tabs}>
+    <div className='column gap-3'>
+      <div className='row gap-4 noscroll-x w-full' ref={scrollRef}>
         <button
           className={`${style.tab}${activeTab === 'comments' ? ' active' : ''}`}
           onClick={() => setActiveTab('comments')}>
@@ -57,7 +58,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
         </button>
       </div>
 
-      <div className='column gap16'>
+      <div className='column gap-4'>
         {activeTab === 'comments' && (
           <>
             <form className={style.input} onSubmit={handleSubmit}>
@@ -68,14 +69,15 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
             </form>
 
             <div className={style.filters}>
-              <div className='row center gap12'>
+              <div className='row center gap-3'>
                 <div className={style.sort}>
-                  Новые <IconSprite name='arrow_down' size={14} />
+                  <span>Новые</span>
+                  <IconSprite name='arrow_down' size={14} />
                 </div>
-                <label className={style.holders}>
+                {/* <label className={style.holders}>
                   <input type='checkbox' />
                   Предсказатели
-                </label>
+                </label> */}
               </div>
               <div className={style.warning}>
                 <IconSprite name='draft' size={14} />

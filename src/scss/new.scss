@@ -20,6 +20,10 @@ $text-sizes: (
   width: 100%;
 }
 
+.w-0 {
+  min-width: 0;
+}
+
 .flex-i {
   display: inline-flex;
 }
@@ -87,7 +91,7 @@ $text-sizes: (
   }
 }
 
-// Screen and paddings
+// Screen, borders and paddings
 
 .relative {
   position: relative;
@@ -161,16 +165,36 @@ $text-sizes: (
     }
   }
 }
+.pb-1 {
+  padding-bottom: $padding * 0.5;
+}
+
+.mh {
+  &-fit {
+    max-height: fit-content;
+  }
+  &-0 {
+    max-height: 0;
+  }
+}
 
 // Utils
+
+.opacity {
+  &-0 {
+    opacity: 0;
+  }
+  &-1 {
+    opacity: 1;
+  }
+}
 
 .hidden {
   overflow: hidden;
 }
 
-.noscroll {
-  overflow-y: auto;
-
+.noscroll,
+.noscroll-x {
   // Скрываем скроллбар для Webkit браузеров (Chrome, Safari, Edge)
   // &::-webkit-scrollbar {
   //   width: 0;
@@ -182,10 +206,54 @@ $text-sizes: (
   scrollbar-gutter: stable;
   // Скрываем скроллбар для IE/Edge (старые версии)
   -ms-overflow-style: none;
+
+  // min-width: 0;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.noscroll {
+  overflow-y: auto;
+}
+
+.noscroll-x {
+  overflow-x: auto;
+}
+
+.scroll-hide {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #0000;
+    box-shadow: 0 0 0 #0000;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: #0000;
+  }
+
+  &:hover::-webkit-scrollbar {
+    background-color: #1111;
+  }
+  &:hover::-webkit-scrollbar-thumb {
+    background: #8888;
+  }
 }
 
 .grow {
   flex-grow: 1;
+}
+
+.transition {
+  transition: all 0.3s;
+  &.easy {
+    transition-timing-function: ease;
+  }
 }
 
 // Text
@@ -206,6 +274,10 @@ $text-sizes: (
 
 .nowrap {
   white-space: nowrap;
+}
+
+.capitalize {
+  text-transform: capitalize;
 }
 
 .ellipsis {

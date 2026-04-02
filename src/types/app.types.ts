@@ -122,7 +122,6 @@ export interface IPredictionDetail {
   id: number
   state: TPredictionState
   title: string
-  group: string
   tags: string[]
   icon: string
   volume: number

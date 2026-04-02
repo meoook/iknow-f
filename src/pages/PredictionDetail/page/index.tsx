@@ -8,8 +8,8 @@ import type { IChoice } from '../../../types/app.types'
 import TradePanel from '../panel'
 import PredictionTabs from '../tabs/main'
 import PredictionHead from '../../../components/head'
-import PredictionStatus from '../../../components/status'
 import Empty from '../../../elements/empty'
+import PredictionStatus from '../../../elements/status'
 
 export default function PredictionDetail() {
   const { id } = useParams<{ id: string }>()
@@ -70,37 +70,36 @@ export default function PredictionDetail() {
 
   return (
     <div className={style.main}>
-      <div className='column grow'>
+      <div className='column grow w-0'>
         <div className={style.sticky}>
-          <PredictionHead icon={prediction.icon} title={prediction.title} big progress={scrollProgress} />
+          <PredictionHead
+            icon={prediction.icon}
+            title={prediction.title}
+            tags={prediction.tags}
+            big
+            progress={scrollProgress}
+          />
         </div>
         <div className='column gap12'>
           <PredictionStatus
-            tags={prediction.tags}
             state={prediction.state}
             date={prediction.end_date}
             closed={prediction.closed}
             created={prediction.created}
           />
-          <div>
+          <div className='pv-3'>
             <h2>Правила</h2>
             <div>{prediction.rules}</div>
           </div>
           <div>
             {prediction.choices?.map((choice) => (
-              <div
+              <ChoiceItem
                 key={choice.id}
-                className={`${style.item}${selectedChoice?.id === choice.id ? ` ${style.active}` : ''}`}
-                onClick={() => setSelectedChoice(choice)}>
-                <div className='grow column'>
-                  <span className='clamp-1'>{choice.title}</span>
-                  <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
-                </div>
-                <div className='row center gap8'>
-                  <h1 className={style.value}>{((choice.volume / prediction.volume) * 100).toFixed(2)}%</h1>
-                  <h1 className={style.change}>{choice.multiplier}X</h1>
-                </div>
-              </div>
+                choice={choice}
+                volume={prediction.volume}
+                selected={selectedChoice?.id}
+                select={setSelectedChoice}
+              />
             ))}
           </div>
           <PredictionTabs prediction={prediction} />
@@ -108,5 +107,29 @@ export default function PredictionDetail() {
       </div>
       <TradePanel prediction={prediction} selectedChoice={selectedChoice} />
     </div>
+  )
+}
+
+interface ChoiceItemProps {
+  choice: IChoice
+  volume: number
+  selected?: number
+  select: (choice: IChoice) => void
+}
+
+const ChoiceItem = ({ choice, volume, selected, select }: ChoiceItemProps) => {
+  const onClick = () => select(choice)
+  const className = `${style.item}${selected === choice.id ? ' active' : ''}`
+  return (
+    <button className={className} onClick={onClick}>
+      <div className='grow column'>
+        <span className='clamp-1'>{choice.title}</span>
+        <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
+      </div>
+      <div className={style.metrics}>
+        <span>{((choice.volume / volume) * 100).toFixed(2)}%</span>
+        <span className={style.change}>{choice.multiplier.toFixed(2)}X</span>
+      </div>
+    </button>
   )
 }

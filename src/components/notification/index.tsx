@@ -45,7 +45,7 @@ export default function NotificationBell() {
             )}
           </div>
 
-          <div className={`${s.list} noscroll`}>
+          <div className={`${s.list} scroll-hide`}>
             {notificationIds.length === 0 ? (
               <div className={s.empty}>
                 <IconSprite name='bell-z' />

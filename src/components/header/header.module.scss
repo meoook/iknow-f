@@ -18,6 +18,10 @@ header {
     align-items: center;
     gap: 8px;
     color: var(--color-brand);
+    & > img {
+      width: 150px;
+      height: auto;
+    }
   }
 }
 
@@ -142,25 +146,5 @@ nav {
 
   @media (max-width: 1000px) {
     display: none;
-  }
-}
-
-.groups {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  justify-content: space-between;
-  transition: all 0.2s ease;
-
-  @media (max-width: $width) {
-    flex: 1;
-    min-width: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
   }
 }

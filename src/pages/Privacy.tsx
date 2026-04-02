@@ -1,119 +1,110 @@
 export default function PagePrivacy() {
   return (
     <div className='container'>
-      <div className='column center middle gap12'>
+      <div className='column center middle gap12 text-sm'>
         <hr className='hide' />
-        <div className='c22 doc-content'>
-          <div>
-            <p className='c6 c20'>
-              <span className='c17 c5'></span>
-            </p>
-          </div>
-          <p className='c27'>
-            <span className='c21 c5'>PRIVACY POLICY</span>
+        <div>
+          <p>
+            <span>PRIVACY POLICY</span>
           </p>
-          <p className='c6'>
-            <span className='c3 c5'>&nbsp;</span>
+          <p>
+            <span>&nbsp;</span>
           </p>
-          <p className='c6'>
-            <span className='c3 c5'>Last Updated: January 11, 2022</span>
+          <p>
+            <span>Last Updated: January 11, 2022</span>
           </p>
-          <p className='c6'>
-            <span className='c3 c5'>&nbsp;</span>
+          <p>
+            <span>&nbsp;</span>
           </p>
-          <ol className='c10 lst-kix_list_4-0 start' start={1}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Introduction</span>
+          <ol start={1}>
+            <li>
+              <span>Introduction</span>
             </li>
           </ol>
-          <p className='c1'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c7 c16'>
-            <span className='c3'>This website-hosted user interface (this “</span>
-            <span className='c21'>Interface</span>
-            <span className='c3'>
-              ”) is made available by Adventure One QSS Inc., a corporation organized and existing under the laws of
-              Panama (the “
+          <p>
+            <span>This website-hosted user interface (this “</span>
+            <span>Interface</span>
+            <span>
+              ”) is made available by Unknown Origin LTD, a corporation organized and existing under the laws of Panama
+              (the “
             </span>
-            <span className='c21'>Company</span>
-            <span className='c3'>” “</span>
-            <span className='c21'>us</span>
-            <span className='c3'>” “</span>
-            <span className='c21'>we</span>
-            <span className='c3'>” or “</span>
-            <span className='c21'>our</span>
-            <span className='c3 c5'>”)).</span>
+            <span>Company</span>
+            <span>” “</span>
+            <span>us</span>
+            <span>” “</span>
+            <span>we</span>
+            <span>” or “</span>
+            <span>our</span>
+            <span>”)).</span>
           </p>
-          <p className='c1 c16'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c7 c16'>
-            <span className='c3'>This Privacy Policy (the “</span>
-            <span className='c8'>Policy</span>
-            <span className='c3'>
+          <p>
+            <span>This Privacy Policy (the “</span>
+            <span>Policy</span>
+            <span>
               ”) governs the manner in which&nbsp;we make the Interface available &nbsp;and how we collect, use,
               maintain and disclose information collected from our users (each, a "
             </span>
-            <span className='c8'>user</span>
-            <span className='c3'>", “</span>
-            <span className='c8'>you</span>
-            <span className='c3'>”, or “</span>
-            <span className='c8'>your</span>
-            <span className='c3'>
+            <span>user</span>
+            <span>", “</span>
+            <span>you</span>
+            <span>”, or “</span>
+            <span>your</span>
+            <span>
               ”) through the Company’s websites, including the Interface, web applications mobile applications and all
               associated sites linked thereto by the Interface, or by us or our affiliates (the “
             </span>
-            <span className='c8'>Site</span>
-            <span className='c3'>
+            <span>Site</span>
+            <span>
               ”).This Policy further applies to all information we collect through our Site and otherwise obtain in
               connection with products and Services, content, features, technologies, functions and all related websites
               we may provide to you or to which we may provide access (collectively with the Site, the “
             </span>
-            <span className='c8'>Services</span>
-            <span className='c3 c5'>”).</span>
+            <span>Services</span>
+            <span>”).</span>
           </p>
-          <p className='c7 c16 c41'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Please read this Policy carefully. We are committed to protecting your privacy through our compliance with
               the terms of this Policy.
             </span>
           </p>
-          <p className='c1 c41 c16'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c0'>
-            <span className='c3'>
+          <p>
+            <span>
               We understand that you may have questions regarding this Policy, including your personal information, how
               it may be collected, and how it may be used. You may e-mail us at&nbsp;
             </span>
-            <span className='c15'>
-              <a className='c2' href='mailto:legal@ivanga.me'>
-                legal@ivanga.me
-              </a>
+            <span>
+              <a>legal@ivanga.me</a>
             </span>
-            <span className='c35'>&nbsp;</span>
-            <span className='c3 c5'>with any concerns or privacy-related questions that you may have.</span>
+            <span>&nbsp;</span>
+            <span>with any concerns or privacy-related questions that you may have.</span>
           </p>
-          <p className='c0'>
-            <span className='c3'>Our Terms of Services (“</span>
-            <span className='c8'>Terms</span>
-            <span className='c3'>
+          <p>
+            <span>Our Terms of Services (“</span>
+            <span>Terms</span>
+            <span>
               ”) govern all use of our Services and, together with the Privacy Policy, constitute your agreement with us
               (the “
             </span>
-            <span className='c8'>Agreement</span>
-            <span className='c3'>”).&nbsp;</span>
-            <span className='c21'>
-              If you do not agree with the terms of this Policy, please do not access our Site
-            </span>
-            <span className='c3 c5'>.</span>
+            <span>Agreement</span>
+            <span>”).&nbsp;</span>
+            <span>If you do not agree with the terms of this Policy, please do not access our Site</span>
+            <span>.</span>
           </p>
-          <p className='c1 c12'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               By accessing or using our Services, you agree to the terms of this Policy. Specifically, by (i) using,
               visiting, or accessing the Services, (ii) using, accessing, establishing an account through or purchasing
               any of the Services, and/or (iii) clicking “accept”, “agree”, or “OK” (or a similar term) with respect to
@@ -121,27 +112,27 @@ export default function PagePrivacy() {
               conditions contained in this Policy.
             </span>
           </p>
-          <p className='c1 c12'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c0'>
-            <span className='c3'>
+          <p>
+            <span>
               In operating the Site and provide the Services we may collect (and/or receive) certain information about
               you and your activities.&nbsp;
             </span>
-            <span className='c21'>
+            <span>
               You hereby authorize us to collect and/or receive such information to operate the Site and provide the
               Services
             </span>
-            <span className='c3 c5'>.</span>
+            <span>.</span>
           </p>
-          <ol className='c10 lst-kix_list_5-0 start' start={2}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Applicability</span>
+          <ol start={2}>
+            <li>
+              <span>Applicability</span>
             </li>
           </ol>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               This Policy applies to all information we collect from you in connection with the Site and offering the
               Services. &nbsp;This Policy does not apply to information collected by us offline or through any other
               means, including on any other website made available by us or by any third party (including our affiliates
@@ -152,69 +143,69 @@ export default function PagePrivacy() {
               that may be contained in information you provide to us through your use of the Site.{' '}
             </span>
           </p>
-          <p className='c0'>
-            <span className='c8'>Information Collection and Use</span>
+          <p>
+            <span>Information Collection and Use</span>
           </p>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               When you visit the Site and use the Services, we collect your IP address and standard web log information,
               such as your browser type and pages you accessed on our Site. We may also collect certain geolocation
               Information (as defined below). If you do not agree to our collection of this information, you may not be
               able to use the Services.
             </span>
           </p>
-          <p className='c1 c12'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c0'>
-            <span className='c3 c5'>We collect information:</span>
+          <p>
+            <span>We collect information:</span>
           </p>
-          <ul className='c10 lst-kix_list_7-0 start'>
-            <li className='c30 li-bullet-0'>
-              <span className='c3 c5'>Directly from you when you provide it to us;</span>
+          <ul>
+            <li>
+              <span>Directly from you when you provide it to us;</span>
             </li>
           </ul>
-          <ul className='c10 lst-kix_list_8-0 start'>
-            <li className='c19 c36 li-bullet-0'>
-              <span className='c3 c5'>
+          <ul>
+            <li>
+              <span>
                 Automatically as you navigate through the site. Information collected automatically may include usage
                 details, IP addresses, and information collected through Cookies and other tracking technologies; and
               </span>
             </li>
           </ul>
-          <ul className='c10 lst-kix_list_9-0 start'>
-            <li className='c19 c36 li-bullet-0'>
-              <span className='c3 c5'>
+          <ul>
+            <li>
+              <span>
                 In certain instances, from third parties, such as our business partners, third-party providers (e.g.,
                 Metamask) or other networks where you have connected your account and authorized the Site to access this
                 information.
               </span>
             </li>
           </ul>
-          <p className='c7 c42'>
-            <span className='c3'>If you create an account with us,&nbsp;</span>
-            <span className='c35 c43'>we may collect the following information from you:</span>
+          <p>
+            <span>If you create an account with us,&nbsp;</span>
+            <span>we may collect the following information from you:</span>
           </p>
-          <ul className='c10 lst-kix_list_10-0 start'>
-            <li className='c9 li-bullet-0'>
-              <span className='c3 c25'>Personal Information</span>
-              <span className='c3'>
+          <ul>
+            <li>
+              <span>Personal Information</span>
+              <span>
                 . Information by which you may be personally identified, such as your name, postal address, registration
                 at place of residence, e-mail address, telephone number, date of birth, and other demographic
                 information, such as your age, gender, hometown, and interests that you voluntarily provide to us as
                 part of your registration with the Site to use &nbsp;our Service (collectively, “
               </span>
-              <span className='c3 c25'>Personal Information</span>
-              <span className='c3 c5'>
+              <span>Personal Information</span>
+              <span>
                 ”). There is no obligation for you to provide us with personal information of any kind, but your refusal
                 to do so may prevent you from using the Services.
               </span>
             </li>
           </ul>
-          <ul className='c10 lst-kix_list_11-0 start'>
-            <li className='c9 li-bullet-0'>
-              <span className='c3 c25'>Derivative Information</span>
-              <span className='c3 c5'>
+          <ul>
+            <li>
+              <span>Derivative Information</span>
+              <span>
                 . Information our servers may collect automatically when you access the Site, such as your IP address,
                 browser type, operating system, access times, and pages you viewed directly before and after accessing
                 the Site. This may also include other information about your internet connection and the equipment you
@@ -222,13 +213,13 @@ export default function PagePrivacy() {
               </span>
             </li>
           </ul>
-          <p className='c19 c39 c20'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <ul className='c10 lst-kix_list_13-0 start'>
-            <li className='c9 li-bullet-0'>
-              <span className='c3 c25'>Financial Information</span>
-              <span className='c3'>
+          <ul>
+            <li>
+              <span>Financial Information</span>
+              <span>
                 . If applicable to your use of the Site and the Services, in order for us to process payments of any
                 fees owed to us in connection with your use of the Services and the Site, you will be required to
                 provide certain bank account online login information, bank account and routing numbers, credit card
@@ -237,13 +228,13 @@ export default function PagePrivacy() {
                 collect, process, and store your Financial Information in accordance with their respective privacy
                 policies
               </span>
-              <span className='c3 c5'>. &nbsp;</span>
+              <span>. &nbsp;</span>
             </li>
           </ul>
-          <ul className='c10 lst-kix_list_14-0 start'>
-            <li className='c9 li-bullet-0'>
-              <span className='c3 c25'>Mobile Device Information</span>
-              <span className='c3 c5'>
+          <ul>
+            <li>
+              <span>Mobile Device Information</span>
+              <span>
                 . If you access the Site from a mobile device we may obtain information automatically about you from
                 your mobile device such as your device type, mobile device identification number, geolocation
                 Information, time zone, language setting, browser type. If you provide it directly to us, we may also
@@ -251,10 +242,10 @@ export default function PagePrivacy() {
               </span>
             </li>
           </ul>
-          <ul className='c10 lst-kix_list_15-0 start'>
-            <li className='c9 li-bullet-0'>
-              <span className='c3 c25'>Geolocation Information</span>
-              <span className='c3 c5'>
+          <ul>
+            <li>
+              <span>Geolocation Information</span>
+              <span>
                 . We collect information that identifies, with reasonable specificity, your location by using certain
                 longitude and latitude coordinated obtained through GPS, Wi-Fi, cell-site triangulation, or other
                 locational data. We may collect this data for fraud prevention and risk management purposes, among other
@@ -262,60 +253,60 @@ export default function PagePrivacy() {
               </span>
             </li>
           </ul>
-          <ul className='c10 lst-kix_list_16-0 start'>
-            <li className='c9 li-bullet-0'>
-              <span className='c3 c25'>Correspondence and Recordkeeping</span>
-              <span className='c3 c5'>
+          <ul>
+            <li>
+              <span>Correspondence and Recordkeeping</span>
+              <span>
                 . We will retain records and copies of your correspondence (including e-mail addresses), if you contact
                 us. We will retain all records for such time period as may be required by applicable law.
               </span>
             </li>
           </ul>
-          <p className='c19 c20 c39'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <ul className='c10 lst-kix_list_16-0'>
-            <li className='c9 li-bullet-0'>
-              <span className='c3 c25'>Surveys</span>
-              <span className='c3'>:</span>
+          <ul>
+            <li>
+              <span>Surveys</span>
+              <span>:</span>
               <span>&nbsp;</span>
-              <span className='c35'>
+              <span>
                 If you decide to participate in surveys available via the Services, you may be asked to provide certain
                 information which may include personal information.
               </span>
-              <span className='c3 c5'>&nbsp;We may store such responses. </span>
+              <span>&nbsp;We may store such responses. </span>
             </li>
           </ul>
-          <p className='c7 c16'>
-            <span className='c3'>
+          <p>
+            <span>
               We are committed to providing a safe and secure customer experience. As a result, before permitting you to
               use the Services, we may require additional information from you (including for instance{' '}
             </span>
-            <span className='c29'>
+            <span>
               government-issued identity documents such as passport number, driver's license details or national
               identity card details)
             </span>
-            <span className='c3 c5'>
+            <span>
               &nbsp;that we can use to verify your identity, address or other information, prevent fraud or to manage
               risk and compliance throughout our relationship.{' '}
             </span>
           </p>
-          <p className='c1 c16'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c7 c16'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Finally, we may collect additional information from or about you in other ways not specifically described
               here. For example, we may collect information related to your contact with our customer support team.
             </span>
           </p>
-          <ol className='c10 lst-kix_list_17-0 start' start={4}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Children Under the Age of 18</span>
+          <ol start={4}>
+            <li>
+              <span>Children Under the Age of 18</span>
             </li>
           </ol>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Our Site is not intended for children under 18 years of age. No one under age 18 may provide any personal
               information to or on the Site. If we obtain actual knowledge that we have collected personal information
               from a person under the age of 18, we will promptly delete it, unless we are legally obligated to retain
@@ -323,39 +314,39 @@ export default function PagePrivacy() {
               about a person under 18, please contact us using the contact information provided below.
             </span>
           </p>
-          <ol className='c10 lst-kix_list_18-0 start' start={5}>
-            <li className='c28 li-bullet-0'>
-              <span className='c8'>Use of Cookies and Other Tracking Technologies</span>
+          <ol start={5}>
+            <li>
+              <span>Use of Cookies and Other Tracking Technologies</span>
             </li>
           </ol>
-          <p className='c0'>
-            <span className='c3'>
+          <p>
+            <span>
               A cookie is a small file placed on the hard drive of your computer. When you visit our Site, use our
               Services, &nbsp;we and certain business partners and vendors may use cookies and other tracking
               technologies (collectively, "
             </span>
-            <span className='c8'>Cookies</span>
-            <span className='c3 c5'>
+            <span>Cookies</span>
+            <span>
               "). We use Cookies to recognize you as a customer, to customize the Services, other content and
               advertising, to measure the effectiveness of our promotions, to perform a wide range of analytics, to
               mitigate risk and prevent potential fraud, and to promote trust and safety across our Services.
             </span>
           </p>
-          <p className='c1 c12'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Most browsers are set to accept cookies by default. You can remove or reject cookies. However, certain
               Services in the Services are only available through the use of Cookies. Therefore, if you choose to
               disable or decline Cookies, your use of the Services and other Services may be limited or not possible.
             </span>
           </p>
-          <p className='c1 c12'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Pages of our Site may contain small electronic files known as web beacons (also referred to as clear gifs,
               pixel tags, and single-pixel gifs) that permit us, for example, to count users who have visited those
               pages and for other related website statistics (for example, recording the popularity of certain website
@@ -364,177 +355,167 @@ export default function PagePrivacy() {
               each time a cookie is tendered, permitting you to accept or decline cookies on an individual basis.
             </span>
           </p>
-          <p className='c1 c12'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c0'>
-            <span className='c3'>Do Not Track: Do Not Track (“</span>
-            <span className='c8'>DNT</span>
-            <span className='c3 c5'>
+          <p>
+            <span>Do Not Track: Do Not Track (“</span>
+            <span>DNT</span>
+            <span>
               ”) is an optional browser setting that allows you to express your preferences regarding tracking by
               advertisers and other third-parties. You can enable or disable DNT by visiting the preferences or settings
               page of your web browser. We do not respond to DNT signals.
             </span>
           </p>
-          <ol className='c10 lst-kix_list_19-0 start' start={6}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Use of Your Information</span>
+          <ol start={6}>
+            <li>
+              <span>Use of Your Information</span>
             </li>
           </ol>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Having accurate information about you permits us to provide you with a smooth, efficient, and customized
               experience. Specifically, we may use information collected about you via the Site to:
             </span>
           </p>
-          <ul className='c10 lst-kix_list_20-0 start'>
-            <li className='c24 li-bullet-0'>
-              <span className='c3 c5'>Administer sweepstakes, promotions, and contests;</span>
+          <ul>
+            <li>
+              <span>Administer sweepstakes, promotions, and contests;</span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>Compare information for accuracy and verify it with third parties;</span>
+            <li>
+              <span>Compare information for accuracy and verify it with third parties;</span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
-                Compile anonymous statistical data and analysis for our use internally or with third parties;
-              </span>
+            <li>
+              <span>Compile anonymous statistical data and analysis for our use internally or with third parties;</span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Contact you regarding your account with us, use of the Site and Services, and questions regarding the
                 Services;
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Create and manage your account, including a personal profile about you to make future visits to our Site
                 and your use more personalized;
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Customize, personalize, measure, and improve our Services and the content and layout of our Services;
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>Deliver the Services and provide customer support to you;</span>
+            <li>
+              <span>Deliver the Services and provide customer support to you;</span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>Enable user-to-user communications;</span>
+            <li>
+              <span>Enable user-to-user communications;</span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Enhance the efficiency and operation of the Site and the Services we deliver to you for our legitimate
                 interests including for the following purposes:{' '}
               </span>
             </li>
           </ul>
-          <ul className='c10 lst-kix_list_20-1 start'>
-            <li className='c7 c11'>
-              <span className='c3 c5'>
+          <ul>
+            <li>
+              <span>
                 Detecting security incidents, protecting against malicious, deceptive, fraudulent or illegal activity,
                 and prosecuting those responsible for that activity;
               </span>
             </li>
-            <li className='c7 c11'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Measuring interest and engagement in our Services and short-term, transient use, such as contextual
                 customization of ads;
               </span>
             </li>
-            <li className='c7 c11'>
-              <span className='c3 c5'>Undertaking research for technological development and demonstration;</span>
+            <li>
+              <span>Undertaking research for technological development and demonstration;</span>
             </li>
-            <li className='c7 c11'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Researching and developing products, Services, marketing or security procedures to improve their
                 performance, resilience, reliability or efficiency;
               </span>
             </li>
-            <li className='c7 c11'>
-              <span className='c3 c5'>Improving, upgrading or enhancing our Services;</span>
+            <li>
+              <span>Improving, upgrading or enhancing our Services;</span>
             </li>
-            <li className='c7 c11'>
-              <span className='c3 c5'>Developing new products and Services;</span>
+            <li>
+              <span>Developing new products and Services;</span>
             </li>
-            <li className='c7 c11'>
-              <span className='c3 c5'>Ensuring internal quality control;</span>
+            <li>
+              <span>Ensuring internal quality control;</span>
             </li>
-            <li className='c7 c11'>
-              <span className='c3 c5'>Verifying your identity and preventing fraud;</span>
+            <li>
+              <span>Verifying your identity and preventing fraud;</span>
             </li>
-            <li className='c7 c11'>
-              <span className='c3 c5'>
-                Debugging to identify and repair errors that impair existing intended functionality;
-              </span>
+            <li>
+              <span>Debugging to identify and repair errors that impair existing intended functionality;</span>
             </li>
-            <li className='c7 c11'>
-              <span className='c3 c5'>Enforcing our terms and policies; and</span>
+            <li>
+              <span>Enforcing our terms and policies; and</span>
             </li>
-            <li className='c7 c11'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Complying with our legal obligations, protecting your vital interest, or as may be required for the
                 public good.
               </span>
             </li>
           </ul>
-          <ul className='c10 lst-kix_list_20-0'>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
-                Fulfill any other purpose for which you may provide us with your information;
-              </span>
+          <ul>
+            <li>
+              <span>Fulfill any other purpose for which you may provide us with your information;</span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Improve the security of the Site and, if you share geolocation Information, provide you with
                 location-specific options, functionality, offers, advertising, search results, or other
                 location-specific content;
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
-                Monitor and analyze usage and trends to improve your experience with the Services;
-              </span>
+            <li>
+              <span>Monitor and analyze usage and trends to improve your experience with the Services;</span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>Notify you of updates to the Services;</span>
+            <li>
+              <span>Notify you of updates to the Services;</span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>Perform such other duties as may be required by law;</span>
+            <li>
+              <span>Perform such other duties as may be required by law;</span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Prevent potentially fraudulent, prohibited or illegal activities, and enforce our Terms of Services
                 through the use of our risk and fraud tools;
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Process transactions (including payments and refunds) and send notices about your transactions or your
                 network activity;
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>Provide and improve the Services ;</span>
+            <li>
+              <span>Provide and improve the Services ;</span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Provide targeted advertising, coupons, newsletters, and other promotional information regarding the
                 Services;
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3'>Request feedback, resolve&nbsp;</span>
-              <span className='c35 c43'>disputes, collect fees, and troubleshoot problems; and</span>
+            <li>
+              <span>Request feedback, resolve&nbsp;</span>
+              <span>disputes, collect fees, and troubleshoot problems; and</span>
             </li>
-            <li className='c23 li-bullet-0'>
-              <span className='c3 c5'>
-                Respond to your inquiries or fulfill requests and provide customer Services.
-              </span>
+            <li>
+              <span>Respond to your inquiries or fulfill requests and provide customer Services.</span>
             </li>
           </ul>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               As noted above, we may use information we collect about you to fulfill any other purpose for which you may
               provide us with your information. We may also use the information we have collected from you to enable us
               to display advertisements to our advertisers’ target audiences. Even though we do not disclose your
@@ -542,49 +523,47 @@ export default function PagePrivacy() {
               an advertisement, the advertiser may assume that you meet its target criteria.
             </span>
           </p>
-          <p className='c1 c12'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Without limiting the foregoing, you also authorize us to use and/or share information as described below:
             </span>
           </p>
-          <ul className='c10 lst-kix_list_21-0 start'>
-            <li className='c24 li-bullet-0'>
-              <span className='c3'>
+          <ul>
+            <li>
+              <span>
                 We may, from time to time, share your information with other companies, who may provide you information
                 about the products and Services they or their partners offer. You may be entitled to prevent us from
                 sharing and/or licensing your personal information to other companies under applicable law. If you wish
                 to exercise this right, please send an e-mail&nbsp;to{' '}
               </span>
-              <span className='c15'>
-                <a className='c2' href='mailto:legal@ivanga.me'>
-                  legal@ivanga.me
-                </a>
+              <span>
+                <a>legal@ivanga.me</a>
               </span>
-              <span className='c3'>&nbsp;with the subject line, “</span>
-              <span className='c3 c14'>Privacy Policy</span>
-              <span className='c3 c5'>
+              <span>&nbsp;with the subject line, “</span>
+              <span>Privacy Policy</span>
+              <span>
                 .” We reserve the right to ask for information verifying your identity before we begin complying with
                 your request.
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 We will access, use, and share your information as required to fulfill our contractual obligations to
                 you, provide you with support, and to address your questions or requests regarding our Services;
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 We may employ other companies and individuals to perform functions on our behalf. Examples may include
                 providing technical, customer Services and marketing assistance. In particular, our uses a third-party
                 cloud hosting provider to store user information and configurations;
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 In an ongoing effort to better understand our customers and our Services, we may analyze your
                 information in anonymized and/or aggregate form in order to operate, maintain, manage, and improve the
                 Services. This anonymous information does not identify you personally. We may use this anonymous
@@ -593,21 +572,21 @@ export default function PagePrivacy() {
                 to current and prospective business partners and to other third parties for other lawful purposes.
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 We may share some or all of your information with any of our parent companies, affiliates, subsidiaries,
                 joint ventures, or other companies under common control with us;
               </span>
             </li>
-            <li className='c4 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 As we develop our businesses, we might sell or buy businesses or assets. In the event of a corporate
                 sale, merger, reorganization, sale of assets, dissolution, liquidation, or bankruptcy or similar event,
                 your information may be part of the transferred assets; and
               </span>
             </li>
-            <li className='c23 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 To the extent permitted by law, we may also disclose your information: (i) in response to lawful
                 requests by public authorities, including for the purpose of meeting national security or law
                 enforcement requirements, (ii) when required by law, court order, or other government or law enforcement
@@ -616,23 +595,23 @@ export default function PagePrivacy() {
               </span>
             </li>
           </ul>
-          <p className='c0'>
-            <span className='c3'>
+          <p>
+            <span>
               If we intend to use your information in any manner that is not consistent with this Policy, you will be
               informed of such anticipated use prior to or at the time at which information is collected.{' '}
             </span>
-            <span className='c8'>How We Protect and Store Your Information</span>
+            <span>How We Protect and Store Your Information</span>
           </p>
-          <p className='c0'>
-            <span className='c3'>
+          <p>
+            <span>
               The security of your data is important to us but remember that no method of transmission over the Internet
               or method of electronic storage is 100% secure. We strive to ensure security on our systems and use
               administrative, technical, and other physical security measures to help protect your personal information.
               We also use computer safeguards such as firewalls and data encryption, we enforce access controls to our
               office and files, and we authorize access to personal information{' '}
             </span>
-            <span className='c3'>only for those employees who require it to fulfill their job responsibilities.</span>
-            <span className='c3 c5'>
+            <span>only for those employees who require it to fulfill their job responsibilities.</span>
+            <span>
               &nbsp;Despite our efforts, we cannot guarantee that personal information may not be accessed, disclosed,
               altered or destroyed by breach of our administrative, managerial and technical safeguards. Therefore, we
               urge you to take adequate precautions to protect your personal information as well, including never
@@ -640,34 +619,34 @@ export default function PagePrivacy() {
               not responsible for circumvention of any privacy settings or security measures contained on the Services.
             </span>
           </p>
-          <ol className='c10 lst-kix_list_23-0 start' start={8}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>How We Share Personal Information with Other Parties</span>
+          <ol start={8}>
+            <li>
+              <span>How We Share Personal Information with Other Parties</span>
             </li>
           </ol>
-          <p className='c7'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               We may share your information with our business partners to offer you certain products, Services, and
               promotions. We may also use third-party advertising companies to serve ads when you visit the Site. These
               companies may use information about your visits to the Site and other websites that are contained in web
               cookies in order to provide advertisements about goods and Services of interest to you.
             </span>
           </p>
-          <p className='c1'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c7'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               We do not control third parties’ collection or use of your information to serve interest-based
               advertising. However, these third parties may provide you with ways to choose not to have your information
               collected or used in this way.
             </span>
           </p>
-          <p className='c1'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c7'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Some personal information is public information (this may include your web3-enabled wallet’s public
               address, username, profile photo, profile first and last name, month, and year of account creation, and
               public transactions in which you've been involved), and may be seen by anyone on the Internet due to the
@@ -676,15 +655,15 @@ export default function PagePrivacy() {
               products.
             </span>
           </p>
-          <p className='c1'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c7'>
-            <span className='c3 c5'>We may share your personal information with:</span>
+          <p>
+            <span>We may share your personal information with:</span>
           </p>
-          <ul className='c10 lst-kix_list_24-0 start'>
-            <li className='c18 c34 li-bullet-0'>
-              <span className='c3 c5'>
+          <ul>
+            <li>
+              <span>
                 Law enforcement, government officials, or other third parties if we are compelled to do so by a
                 subpoena, court order or similar legal procedure, when it is necessary to do so to comply with law, or
                 where the disclosure of personal information is reasonably necessary to prevent physical harm or
@@ -692,36 +671,36 @@ export default function PagePrivacy() {
                 Services, or as otherwise required by law.
               </span>
             </li>
-            <li className='c7 c18 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Third-party Services providers who assist us in providing the Services to you or who provide fraud
                 detection or similar Services on our or any vendor’s behalf.
               </span>
             </li>
-            <li className='c7 c18 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Other third parties with your consent or at your direction to do so, including if you authorize an
                 account connection with a third-party account or platform:{' '}
               </span>
             </li>
           </ul>
-          <ul className='c10 lst-kix_list_25-0 start'>
-            <li className='c7 c26 li-bullet-0'>
-              <span className='c3'>
+          <ul>
+            <li>
+              <span>
                 For the purposes of this Policy, an "account connection" with such a third party is a connection you
                 authorize or enable between your account and a payment instrument, or platform that you lawfully control
                 or own. When you authorize such a connection, we may exchange your personal information and other
                 information directly with such third-party.{' '}
               </span>
-              <span className='c3 c5'>
+              <span>
                 Examples of account connections include, without limitation: linking your account to a social media
                 account or social messaging Services; connecting your account to a third-party data aggregation or
                 financial Services company, if you provide such company with your account log-in credentials; or using
                 your account to make payments to a merchant or allowing a merchant to charge your account.
               </span>
             </li>
-            <li className='c7 c26 li-bullet-0'>
-              <span className='c3'>
+            <li>
+              <span>
                 If you connect your account to other financial accounts, directly or through a third-party Services
                 provider, we may have access to your account balance and account and transactional information, such as
                 purchases and funds transfers. If you choose to create an account connection, we may receive information
@@ -730,10 +709,10 @@ export default function PagePrivacy() {
                 provider via the account connection. We will use all such information that we receive from a third-party
                 via an account connection in a manner consistent with this Policy
               </span>
-              <span className='c3 c5'>.</span>
+              <span>.</span>
             </li>
-            <li className='c7 c26 li-bullet-0'>
-              <span className='c3 c5'>
+            <li>
+              <span>
                 Information that we share with a third-party based on an account connection will be used and disclosed
                 in accordance with the third-party’s privacy practices. Before authorizing an account connection, you
                 should review the privacy notice of any third party that will gain access to your personal information
@@ -741,27 +720,27 @@ export default function PagePrivacy() {
               </span>
             </li>
           </ul>
-          <p className='c7'>
-            <span className='c3'>
+          <p>
+            <span>
               We will not disclose your credit card number or bank account number to anyone except with your express,
               written permission or if we are required to do so to comply with a subpoena or other legal process.
             </span>
           </p>
-          <p className='c7'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               We do not send your personal information to third-party social networks unless you have specifically
               requested or authorized us to do so. When you broadcast information to such third-party social networks,
               such information is no longer under our control and is subject to the terms of use and privacy policies
               maintained by such third parties.
             </span>
           </p>
-          <ol className='c10 lst-kix_list_26-0 start' start={9}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Third-Party Links</span>
+          <ol start={9}>
+            <li>
+              <span>Third-Party Links</span>
             </li>
           </ol>
-          <p className='c7'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               The Services may contain links to (or allow you to link to) unaffiliated third-party Services,
               applications, or websites. We do not control information collection of any third-party Services,
               applications, or websites that can be reached through such links. We encourage our users to be aware when
@@ -771,11 +750,11 @@ export default function PagePrivacy() {
               information.
             </span>
           </p>
-          <p className='c1'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c7'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Note also that third parties may use Cookies (either alone or in conjunction with web beacons or other
               tracking technologies) to collect information about you when you use our Services. Information third
               parties collect may be associated with your personal information or they may collect information,
@@ -787,13 +766,13 @@ export default function PagePrivacy() {
               other communications from third parties, you are responsible for contacting the third party directly.
             </span>
           </p>
-          <ol className='c10 lst-kix_list_27-0 start' start={10}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Third-Party Analytics and Retargeters</span>
+          <ol start={10}>
+            <li>
+              <span>Third-Party Analytics and Retargeters</span>
             </li>
           </ol>
-          <p className='c7'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               We may use third-party analytics (such as Google Analytics) to evaluate your use of the Services, compile
               reports on activity and events, collect demographic data, analyze performance metrics, and collect and
               evaluate other information relating to the Services, and mobile and Internet usage. These third parties
@@ -803,64 +782,56 @@ export default function PagePrivacy() {
               compile statistics about use of the Site and response rates.
             </span>
           </p>
-          <p className='c1'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c7'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               By visiting and using the Services, you consent, to the extent permitted under applicable law, to the
               processing of data about you by these analytics in the manner and for the purposes set out in this Privacy
               Policy.
             </span>
           </p>
-          <p className='c1'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c7'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               For more information on these third parties, including how to opt out from certain data collection (if
               available by such third parties), please visit the sites below.&nbsp;Please be advised that if you opt out
               of any Services, you may not be able to use the full functionality of the Services.
             </span>
           </p>
-          <ul className='c10 lst-kix_list_28-0 start'>
-            <li className='c19 c18 li-bullet-0'>
-              <span className='c3'>For Google Analytics, visit:&nbsp;</span>
-              <span className='c15'>
-                <a
-                  className='c2'
-                  href='https://www.google.com/url?q=https://www.google.com/url?q%3Dhttps://www.google.com/analytics%26sa%3DD%26source%3Deditors%26ust%3D1641603456748000%26usg%3DAOvVaw07rs3ZiSQs5LYJFjypcoE-&amp;sa=D&amp;source=editors&amp;ust=1772677097154623&amp;usg=AOvVaw3DFe-BykpXRq5-RnL9vf_T'>
+          <ul>
+            <li>
+              <span>For Google Analytics, visit:&nbsp;</span>
+              <span>
+                <a href='https://www.google.com/url?q=https://www.google.com/url?q%3Dhttps://www.google.com/analytics%26sa%3DD%26source%3Deditors%26ust%3D1641603456748000%26usg%3DAOvVaw07rs3ZiSQs5LYJFjypcoE-&amp;sa=D&amp;source=editors&amp;ust=1772677097154623&amp;usg=AOvVaw3DFe-BykpXRq5-RnL9vf_T'>
                   https://www.google.com/analytics
                 </a>
               </span>
-              <span className='c3'>
+              <span>
                 . Google Analytics is a web analytics Services offered by Google that tracks and reports website
                 traffic. Google uses the data collected to track and monitor the use of our Services. This data is
                 shared with other Google Services. Google may use the collected data to contextualize and personalize
                 the ads of its own advertising network. For more information on the privacy practices of Google, please
                 visit the Google Privacy Terms web page:&nbsp;
               </span>
-              <span className='c15'>
-                <a
-                  className='c2'
-                  href='https://www.google.com/url?q=https://www.google.com/url?q%3Dhttps://policies.google.com/privacy?hl%253Den%26sa%3DD%26source%3Deditors%26ust%3D1641603456748000%26usg%3DAOvVaw3m1V2oRG2EK_zUBjoNwMlw&amp;sa=D&amp;source=editors&amp;ust=1772677097155163&amp;usg=AOvVaw0ybpJ1vD9KJBqUrG-uJH7b'>
-                  https://policies.google.com/privacy?hl=en
+              <span>
+                <a href='https://www.google.com/url?q=https://www.google.com/url?q%3Dhttps://policies.google.com/privacy?hl%253Den%26sa%3DD%26source%3Deditors%26ust%3D1641603456748000%26usg%3DAOvVaw3m1V2oRG2EK_zUBjoNwMlw&amp;sa=D&amp;source=editors&amp;ust=1772677097155163&amp;usg=AOvVaw0ybpJ1vD9KJBqUrG-uJH7b'>
+                  https://policies.google.com/privacy
                 </a>
               </span>
-              <span className='c3'>
-                . We also encourage you to review Google's policy for safeguarding your data:&nbsp;
-              </span>
-              <span className='c15'>
-                <a
-                  className='c2'
-                  href='https://www.google.com/url?q=https://www.google.com/url?q%3Dhttps://support.google.com/analytics/answer/6004245%26sa%3DD%26source%3Deditors%26ust%3D1641603456749000%26usg%3DAOvVaw3UF3Km8I40O7kIl21oQ696&amp;sa=D&amp;source=editors&amp;ust=1772677097155383&amp;usg=AOvVaw07Yt2Stn9HsiVoIlh9HGNd'>
-                  https://support.google.com/analytics/answer/6004245
+              <span>. We also encourage you to review Google's policy for safeguarding your data:&nbsp;</span>
+              <span>
+                <a href='https://www.google.com/url?q=https://www.google.com/url?q%3Dhttps://support.google.com/analytics/answer/6004245%26sa%3DD%26source%3Deditors%26ust%3D1641603456749000%26usg%3DAOvVaw3UF3Km8I40O7kIl21oQ696&amp;sa=D&amp;source=editors&amp;ust=1772677097155383&amp;usg=AOvVaw07Yt2Stn9HsiVoIlh9HGNd'>
+                  https://support.google.com/analytics
                 </a>
               </span>
             </li>
           </ul>
-          <p className='c7'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               We may also use one or more third-party retargeting Services to advertise on third-party websites to
               previous visitors to our Services. These third-party retargeting Services providers use cookies to serve
               ads based on a past visit to the Site and may utilize cookies, pixel tags, and other related technologies.
@@ -871,84 +842,76 @@ export default function PagePrivacy() {
               following links:
             </span>
           </p>
-          <ul className='c10 lst-kix_list_29-0 start'>
-            <li className='c18 c31 li-bullet-0'>
-              <span className='c3'>
+          <ul>
+            <li>
+              <span>
                 For Google AdWords, you can set preferences for how Google advertises to you using the Google Ad
                 Preferences page at:&nbsp;
               </span>
-              <span className='c15'>
-                <a
-                  className='c2'
-                  href='https://www.google.com/url?q=https://www.google.com/url?q%3Dhttps://adssettings.google.com/authenticated%26sa%3DD%26source%3Deditors%26ust%3D1641603456749000%26usg%3DAOvVaw1S4Boc-4WGFHEGJ8WI7NUp&amp;sa=D&amp;source=editors&amp;ust=1772677097156302&amp;usg=AOvVaw014Ft7q4RHi03cGcIfe0Ux'>
+              <span>
+                <a href='https://www.google.com/url?q=https://www.google.com/url?q%3Dhttps://adssettings.google.com/authenticated%26sa%3DD%26source%3Deditors%26ust%3D1641603456749000%26usg%3DAOvVaw1S4Boc-4WGFHEGJ8WI7NUp&amp;sa=D&amp;source=editors&amp;ust=1772677097156302&amp;usg=AOvVaw014Ft7q4RHi03cGcIfe0Ux'>
                   https://adssettings.google.com/authenticated
                 </a>
               </span>
-              <span className='c3 c5'>
+              <span>
                 , and if desired, you can opt out of interest-based advertising by cookie settings or permanently using
                 a browser plugin.
               </span>
             </li>
           </ul>
-          <ol className='c10 lst-kix_list_30-0 start' start={11}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Personal Communication Preferences</span>
+          <ol start={11}>
+            <li>
+              <span>Personal Communication Preferences</span>
             </li>
           </ol>
-          <p className='c7 c16'>
-            <span className='c3'>
+          <p>
+            <span>
               To the extent you have registered for the Services, you may access, review, make changes to, and delete
               your personal information by following the instructions found on the Site or by sending an e-mail to us
               at&nbsp;
             </span>
-            <span className='c15'>
-              <a className='c2' href='mailto:legal@ivanga.me'>
-                legal@ivanga.me
-              </a>
+            <span>
+              <a>legal@ivanga.me</a>
             </span>
-            <span className='c3'>&nbsp;with the subject line, “</span>
-            <span className='c3 c14'>Privacy Policy</span>
-            <span className='c3 c5'>
+            <span>&nbsp;with the subject line, “</span>
+            <span>Privacy Policy</span>
+            <span>
               .” We reserve the right to ask for information verifying your identity before we begin complying with a
               request to review, make changes to, and delete your personal information.
             </span>
           </p>
-          <p className='c1 c16'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c7 c16'>
-            <span className='c3'>
+          <p>
+            <span>
               In addition, you may manage your receipt of marketing and non-transactional communications by clicking on
               the “
             </span>
-            <span className='c3 c14'>Unsubscribe</span>
-            <span className='c3'>
-              ” link located on the bottom of any marketing e-mail, or by sending us an email at&nbsp;
+            <span>Unsubscribe</span>
+            <span>” link located on the bottom of any marketing e-mail, or by sending us an email at&nbsp;</span>
+            <span>
+              <a>legal@ivanga.me</a>
             </span>
-            <span className='c15'>
-              <a className='c2' href='mailto:legal@ivanga.me'>
-                legal@ivanga.me
-              </a>
-            </span>
-            <span className='c3'>&nbsp;with the subject line, “</span>
-            <span className='c3 c14'>Unbsubscribe from Marketing</span>
-            <span className='c3 c5'>
+            <span>&nbsp;with the subject line, “</span>
+            <span>Unbsubscribe from Marketing</span>
+            <span>
               .” Registered users cannot opt out of receiving transactional or administrative e-mails related to their
               account. We will use commercially reasonable efforts to process such requests in a timely manner in
               compliance with applicable laws. You should be aware, however, that it is not always possible to
               completely remove or modify information in our databases.
             </span>
           </p>
-          <ol className='c10 lst-kix_list_31-0 start' start={12}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Transfer of Data</span>
+          <ol start={12}>
+            <li>
+              <span>Transfer of Data</span>
             </li>
           </ol>
-          <p className='c1 c12 c32'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Your personal information may be transferred to – and maintained on – computers located outside of your
               state, province, country or other governmental jurisdiction where the data protection laws may differ from
               those of your jurisdiction. By using the Services, you consent to the transfer of your information outside
@@ -957,217 +920,201 @@ export default function PagePrivacy() {
               authorities in those other countries may be entitled to access your personal information.
             </span>
           </p>
-          <p className='c0 c32'>
-            <span className='c3 c5'>&nbsp;</span>
+          <p>
+            <span>&nbsp;</span>
           </p>
-          <p className='c0 c40'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               We&nbsp;will take all the steps reasonably necessary to ensure that your data is treated securely and in
               accordance with this Policy and no transfer of your personal information will take place to an
               organization or a country unless there are adequate controls in place including the security of your data
               and other personal information.
             </span>
           </p>
-          <p className='c1 c12 c40'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <ol className='c10 lst-kix_list_32-0 start' start={13}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Your Data Protection Rights </span>
+          <ol start={13}>
+            <li>
+              <span>Your Data Protection Rights </span>
             </li>
           </ol>
-          <p className='c0'>
-            <span className='c29'>
+          <p>
+            <span>
               Depending on applicable law where you reside, you may be able to assert certain rights related to your
               personal information identified below. If any of the rights listed below are not provided under law for
               your operating entity or jurisdiction, we have absolute discretion in providing you with those rights.
             </span>
           </p>
-          <p className='c0 c32'>
-            <span className='c3 c5'>&nbsp;</span>
+          <p>
+            <span>&nbsp;</span>
           </p>
-          <p className='c0'>
-            <span className='c29'>
+          <p>
+            <span>
               Your rights to personal information are not absolute. Depending upon the applicable law, access to your
               rights under the applicable law may be denied: (a) when denial of access is required or authorized by law;
               (b) when granting access would have a negative impact on another's privacy; (c) to protect our rights and
               properties; (d) where the request is frivolous or vexatious, or for other reasons.{' '}
             </span>
-            <span className='c3 c5'>
+            <span>
               Please also note that we may ask you to verify your identity before responding to such requests.{' '}
             </span>
           </p>
-          <ol className='c10 lst-kix_list_33-0 start' start={1}>
-            <li className='c19 c18 li-bullet-0'>
-              <span className='c3'>
+          <ol start={1}>
+            <li>
+              <span>
                 Right to Access. You have the right to access, update or to delete the information we have on you, and
                 you may e-mail us at{' '}
               </span>
-              <span className='c15'>
-                <a className='c2' href='mailto:legal@ivanga.me'>
-                  legal@ivanga.me
-                </a>
+              <span>
+                <a>legal@ivanga.me</a>
               </span>
-              <span className='c15'>&nbsp;</span>
-              <span className='c3 c5'>
-                to request a copy of the personal information the Site’s databases currently contain.
-              </span>
+              <span>&nbsp;</span>
+              <span>to request a copy of the personal information the Site’s databases currently contain.</span>
             </li>
           </ol>
-          <ol className='c10 lst-kix_list_34-0 start' start={2}>
-            <li className='c19 c18 li-bullet-0'>
-              <span className='c3'>
+          <ol start={2}>
+            <li>
+              <span>
                 The right of correction or rectification. You have the right to have your information rectified if that
                 information is inaccurate or incomplete by emailing us at{' '}
               </span>
-              <span className='c15'>
-                <a className='c2' href='mailto:legal@ivanga.me'>
-                  legal@ivanga.me
-                </a>
+              <span>
+                <a>legal@ivanga.me</a>
               </span>
-              <span className='c3'>
+              <span>
                 . Using the same email address associated with your use of the Site or your Site account, simply type
                 the words “
               </span>
-              <span className='c3 c14'>Correction or Rectification</span>
-              <span className='c3 c5'>” in the subject line of your e-mail to us.</span>
+              <span>Correction or Rectification</span>
+              <span>” in the subject line of your e-mail to us.</span>
             </li>
           </ol>
-          <ol className='c10 lst-kix_list_35-0 start' start={3}>
-            <li className='c19 c18 li-bullet-0'>
-              <span className='c3'>
+          <ol start={3}>
+            <li>
+              <span>
                 The right to object. You have the right to object to our processing of your personal information by
                 emailing us at{' '}
               </span>
-              <span className='c15'>
-                <a className='c2' href='mailto:legal@ivanga.me'>
-                  legal@ivanga.me
-                </a>
+              <span>
+                <a>legal@ivanga.me</a>
               </span>
-              <span className='c3'>
+              <span>
                 . When such objections are not possible, we will advise you accordingly. &nbsp;You can then choose to
                 exercise any other rights under this Policy, to include withdrawing your consent to the processing of
                 your personal information. Using the same email address associated with your use of the Site or your
                 Site account, simply type the words “
               </span>
-              <span className='c3 c14'>Object to Processing</span>
-              <span className='c3 c5'>” in the subject line of your e-mail to us;</span>
+              <span>Object to Processing</span>
+              <span>” in the subject line of your e-mail to us;</span>
             </li>
           </ol>
-          <ol className='c10 lst-kix_list_36-0 start' start={4}>
-            <li className='c19 c18 li-bullet-0'>
-              <span className='c3'>
+          <ol start={4}>
+            <li>
+              <span>
                 The right of restriction. You have the right to request that we restrict the processing of your personal
                 information by emailing us at{' '}
               </span>
-              <span className='c15'>
-                <a className='c2' href='mailto:legal@ivanga.me'>
-                  legal@ivanga.me
-                </a>
+              <span>
+                <a>legal@ivanga.me</a>
               </span>
-              <span className='c3'>
+              <span>
                 . In your e-mail, please explain how you wish us to restrict processing of your personal information.
                 When such restrictions are not possible, we will advise you accordingly. You can then choose to exercise
                 any other rights under this Policy, to include withdrawing your consent to the processing of your
                 personal information. Using the same email address associated with your use of the Site or your Site
                 account, simply type the words “
               </span>
-              <span className='c3 c14'>Restrict Processing</span>
-              <span className='c3 c5'>” in the subject line of your e-mail to us.</span>
+              <span>Restrict Processing</span>
+              <span>” in the subject line of your e-mail to us.</span>
             </li>
           </ol>
-          <p className='c7 c32 c37'>
-            <span className='c3 c5'>&nbsp;</span>
+          <p>
+            <span>&nbsp;</span>
           </p>
-          <ol className='c10 lst-kix_list_37-0 start' start={5}>
-            <li className='c19 c18 li-bullet-0'>
-              <span className='c3'>
+          <ol start={5}>
+            <li>
+              <span>
                 The right to data portability. You have the right to be provided with a copy of your personal
                 information in a structured, machine-readable and commonly used format. You may submit a request via
                 e-mail at{' '}
               </span>
-              <span className='c15'>
-                <a className='c2' href='mailto:legal@ivanga.me'>
-                  legal@ivanga.me
-                </a>
+              <span>
+                <a>legal@ivanga.me</a>
               </span>
-              <span className='c3'>
+              <span>
                 . When such a request cannot be honored, we will advise you accordingly. You can then choose to exercise
                 any other rights under this Policy, to include withdrawing your consent.&nbsp; Where applicable, we will
                 ensure such changes are shared with any trusted third parties. Using the same email address associated
                 with your use of the Site or with your Site account, simply type the words “
               </span>
-              <span className='c3 c14'>Portability / Personal Information</span>
-              <span className='c3 c5'>” in the subject line of your email to us.</span>
+              <span>Portability / Personal Information</span>
+              <span>” in the subject line of your email to us.</span>
             </li>
           </ol>
-          <p className='c7'>
-            <span className='c3 c5'>&nbsp;</span>
+          <p>
+            <span>&nbsp;</span>
           </p>
-          <ol className='c10 lst-kix_list_38-0 start' start={6}>
-            <li className='c18 c19 li-bullet-0'>
-              <span className='c3'>
+          <ol start={6}>
+            <li>
+              <span>
                 The right to withdraw consent.&nbsp;You also have the right to withdraw your consent at any time where
                 we rely on your consent to process your personal information by emailing us at{' '}
               </span>
-              <span className='c15'>
-                <a className='c2' href='mailto:legal@ivanga.me'>
-                  legal@ivanga.me
-                </a>
+              <span>
+                <a>legal@ivanga.me</a>
               </span>
-              <span className='c3'>
+              <span>
                 . Using the same e-mail address associated with your use of the or your Site account, simply type the
                 words “
               </span>
-              <span className='c3 c14'>WITHDRAW CONSENT</span>
-              <span className='c3 c5'>
+              <span>WITHDRAW CONSENT</span>
+              <span>
                 ” in the subject line of your e-mail. Upon receipt of such a withdrawal of consent, we will confirm
                 receipt and proceed to stop processing your personal information. &nbsp;Where applicable, we will ensure
                 such changes are shared with trusted third parties.
               </span>
             </li>
           </ol>
-          <ol className='c10 lst-kix_list_39-0 start' start={7}>
-            <li className='c19 c18 li-bullet-0'>
-              <span className='c3'>
+          <ol start={7}>
+            <li>
+              <span>
                 The right to erasure. If you should wish to cease use of our Site and have your personal information
                 deleted from our Site, then you may submit a request by e-mailing us at{' '}
               </span>
-              <span className='c15'>
-                <a className='c2' href='mailto:legal@ivanga.me'>
-                  legal@ivanga.me
-                </a>
+              <span>
+                <a>legal@ivanga.me</a>
               </span>
-              <span className='c3'>
+              <span>
                 . Upon receipt of such a request for erasure, we will confirm receipt and will confirm once your
                 personal information has been deleted. Where applicable, we will ensure such changes are shared with
                 trusted third parties. Using the same e-mail address associated with your use of the Site or your Site
                 account, simply type the words “
               </span>
-              <span className='c3 c14'>Erasure / Personal Data Deletion</span>
-              <span className='c3 c5'>” in the subject line of your e-mail to us.</span>
+              <span>Erasure / Personal Data Deletion</span>
+              <span>” in the subject line of your e-mail to us.</span>
             </li>
           </ol>
-          <p className='c7'>
-            <span className='c3 c5'>&nbsp;</span>
+          <p>
+            <span>&nbsp;</span>
           </p>
-          <p className='c7'>
-            <span className='c3 c5'>&nbsp;</span>
+          <p>
+            <span>&nbsp;</span>
           </p>
-          <p className='c6'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               If you are located in the European Economic Area or the UK, Switzerland or Brazil you have the right to
               lodge a complaint with a supervisory authority if you believe our processing of your personal information
               violates applicable law.
             </span>
           </p>
-          <ol className='c10 lst-kix_list_40-0 start' start={14}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Return/Deletion of Personal Data</span>
+          <ol start={14}>
+            <li>
+              <span>Return/Deletion of Personal Data</span>
             </li>
           </ol>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               Upon your request we will endeavor to: (i) return all personal information processed in connection with
               the Services to you in a structured, commonly used, and machine-readable format, and will &nbsp;delete
               existing copies and backups; or, (ii) destroy and &nbsp;delete all personal information processed in
@@ -1175,16 +1122,16 @@ export default function PagePrivacy() {
               including all copies and backups.{' '}
             </span>
           </p>
-          <p className='c6 c20'>
-            <span className='c3 c5'></span>
+          <p>
+            <span></span>
           </p>
-          <ol className='c10 lst-kix_list_48-0 start' start={18}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Changes to Our Policy</span>
+          <ol start={18}>
+            <li>
+              <span>Changes to Our Policy</span>
             </li>
           </ol>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               We may update this Policy at any time. When we do, we will revise the updated date at the top of this
               page. We encourage users to frequently check this page for any changes to stay informed about our
               information practices. You acknowledge and agree that it is your responsibility to review this Privacy
@@ -1193,43 +1140,29 @@ export default function PagePrivacy() {
               agree to this Privacy Policy, please do not use our Site.
             </span>
           </p>
-          <ol className='c10 lst-kix_list_49-0 start' start={19}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Jurisdiction </span>
+          <ol start={19}>
+            <li>
+              <span>Jurisdiction </span>
             </li>
           </ol>
-          <p className='c0'>
-            <span className='c3 c5'>
+          <p>
+            <span>
               The Services, including the Site, &nbsp;is made available by us from Panama and is not intended to subject
               us to the laws or jurisdiction of any state, country or territory other than that of Panama.{' '}
             </span>
           </p>
-          <ol className='c10 lst-kix_list_50-0 start' start={20}>
-            <li className='c13 li-bullet-0'>
-              <span className='c8'>Contact Us</span>
+          <ol start={20}>
+            <li>
+              <span>Contact Us</span>
             </li>
           </ol>
-          <p className='c0'>
-            <span className='c3'>
-              If you have any comments or questions about this Policy, please contact us by e-mail at&nbsp;
+          <p>
+            <span>If you have any comments or questions about this Policy, please contact us by e-mail at&nbsp;</span>
+            <span>
+              <a>legal@ivanga.me</a>
             </span>
-            <span className='c15'>
-              <a className='c2' href='mailto:legal@ivanga.me'>
-                legal@ivanga.me
-              </a>
-            </span>
-            <span className='c3 c5'>.</span>
+            <span>.</span>
           </p>
-          <p className='c20 c38'>
-            <span className='c3 c5'></span>
-          </p>
-          <div>
-            <p className='c6'>
-              <span className='c17 c5'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <span className='c5 c17'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <span className='c5 c33'>38714/00100/FW/15456704.2</span>
-            </p>
-          </div>
         </div>
       </div>
       <div className='more' />

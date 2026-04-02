@@ -4,14 +4,18 @@ import { useState } from 'react'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useModalContext } from '../../services/ModalContext'
 import { useClickOutside, useHorizontalScroll } from '../../hooks/hooks'
+import { TAGS_MAP } from '../../utils/date'
 import IconSprite from '../../elements/icon'
-import Logo from './logo'
+// import Logo from './logo'
+import ivanga from '../../assets/ivanga.png'
+import ivangaW from '../../assets/ivanga_w.png'
 import UserMenu from '../user'
 import ModalHow from '../../modals/how'
 import PredictionSearch from '../search'
 
 export default function Header() {
   const { user } = useAppSelector((state) => state.auth)
+  const { theme } = useAppSelector((state) => state.app)
   const [filter, setFilter] = useState('top')
   const { openModal } = useModalContext()
   const [filterRef, isFilterOpen, toggleFilter] = useClickOutside()
@@ -27,8 +31,9 @@ export default function Header() {
       <div className={style.wrapper}>
         <div className={style.head}>
           <Link className={style.logo} to='/'>
-            <Logo />
-            <h2>iVanga</h2>
+            {/* <Logo /> */}
+            {/* <h2>iVanga</h2> */}
+            <img src={theme === 'dark' ? ivanga : ivangaW} alt='iVanga' />
           </Link>
           <div className='row center gap20 grow'>
             <PredictionSearch />
@@ -76,47 +81,12 @@ export default function Header() {
             </div>
           </div>
           <div className='hr' />
-          <div className={style.groups} ref={scrollRef}>
-            <NavLink to='/' className={style.item}>
-              Всё
-            </NavLink>
-            <NavLink to='/politics' className={style.item}>
-              Политика
-            </NavLink>
-            <NavLink to='/sport' className={style.item}>
-              Спорт
-            </NavLink>
-            <NavLink to='/finance' className={style.item}>
-              Финансы
-            </NavLink>
-            <NavLink to='/crypto' className={style.item}>
-              Крипта
-            </NavLink>
-            <NavLink to='/geopolitics' className={style.item}>
-              Геополитика
-            </NavLink>
-            <NavLink to='/technology' className={style.item}>
-              Технологии
-            </NavLink>
-            <NavLink to='/culture' className={style.item}>
-              Культура
-            </NavLink>
-            <NavLink to='/world' className={style.item}>
-              Мир
-            </NavLink>
-            <NavLink to='/economy' className={style.item}>
-              Экономика
-            </NavLink>
-            <NavLink to='/elections' className={style.item}>
-              Выборы
-            </NavLink>
-            <NavLink to='/mentions' className={style.item}>
-              {/* Высказывания */}
-              Упоминания
-            </NavLink>
-            {/* <NavLink to='/other' className={style.item}>
-              Другие
-            </NavLink> */}
+          <div className='row center justify gap-2 w-full noscroll-x transition' ref={scrollRef}>
+            {Object.entries(TAGS_MAP).map(([path, title]) => (
+              <NavLink to={path} className={style.item}>
+                {title}
+              </NavLink>
+            ))}
           </div>
         </nav>
       </div>

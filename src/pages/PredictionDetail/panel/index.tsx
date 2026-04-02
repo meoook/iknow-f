@@ -78,7 +78,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
     const winChoice = prediction.choices.find((choice) => choice.win)
 
     return (
-      <aside className={style.panel}>
+      <aside className={`${style.panel} md-hide`}>
         <div className={style.bet}>
           <div className={style.win}>
             <IconSprite name='crown' size={48} color='var(--color-brand)' />
@@ -94,7 +94,7 @@ export default function TradePanel({ prediction, selectedChoice }: TradePanelPro
   const imgUrl = import.meta.env.VITE_IMG_URL
   const src = prediction.icon ? `${imgUrl}${prediction.icon}` : `${imgUrl}/icon/no_icon.png`
   return (
-    <aside className={style.panel}>
+    <aside className={`${style.panel} md-hide`}>
       <div className={style.bet}>
         <div className='row center gap12'>
           <img className={style.icon} src={src} alt='' />

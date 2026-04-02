@@ -5,7 +5,7 @@ import IconSprite from '../../../elements/icon'
 import Loader from '../../../elements/loader'
 import VoteItem from '../vote'
 import PredictionHead from '../../head'
-import PredictionStatus from '../../status'
+import PredictionStatus from '../../../elements/status'
 
 const RequestItem = ({ requestId, isLast }: { requestId: number; isLast?: boolean }) => {
   const request = useRequest(requestId)
@@ -19,8 +19,8 @@ const RequestItem = ({ requestId, isLast }: { requestId: number; isLast?: boolea
 
         <div className={style.main}>
           <div className='column gap12 grow'>
-            <PredictionHead title={request.title} icon={request.icon} />
-            <PredictionStatus tags={request.tags} state={request.state} date={request.end_date} />
+            <PredictionHead title={request.title} icon={request.icon} tags={request.tags} />
+            <PredictionStatus state={request.state} date={request.end_date} />
             <p className={style.rules}>{request.rules}</p>
 
             <div className={style.chips}>
