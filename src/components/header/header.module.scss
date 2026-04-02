@@ -100,11 +100,8 @@ nav {
     position: absolute;
     align-items: stretch;
     gap: 2px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
+    display: none;
     min-width: 140px;
-    transition: all 0.2s ease;
 
     box-shadow: var(--shadow);
     top: 85%;
@@ -117,9 +114,8 @@ nav {
     padding: 8px 0;
 
     &.open {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
+      display: flex;
+      animation: openDropdown 0.2s ease forwards;
     }
 
     .item {
@@ -130,6 +126,17 @@ nav {
         background: var(--color-hover);
       }
     }
+  }
+}
+
+@keyframes openDropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
