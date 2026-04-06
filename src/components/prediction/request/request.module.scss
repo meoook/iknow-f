@@ -1,60 +1,25 @@
-.item {
-  display: flex;
-  // border-bottom: 1px dashed var(--color-border);
-  overflow: hidden;
-  gap: 16px;
-  padding: 4px 0;
-}
-
 .indicator {
   min-width: 4px;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
 
-  &.blue {
-    background: var(--color-blue-dark);
+  &:global(.blue) {
+    background-color: var(--color-blue-dark);
   }
 
-  &.green {
-    background: var(--color-green);
+  &:global(.green) {
+    background-color: var(--color-green);
   }
 
-  &.red {
-    background: var(--color-red);
+  &:global(.red) {
+    background-color: var(--color-red);
   }
-}
-
-.main {
-  flex: 1;
-  display: flex;
-  gap: 20px;
-}
-
-.rules {
-  font-size: var(--font-size-sm);
-  color: var(--color-secondary);
-  line-height: 1.5;
-}
-
-.chips {
-  flex-grow: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: start;
-  gap: 8px;
-}
-
-.chip {
-  font-size: var(--font-size-sm);
-  padding: 4px 8px;
-  background: var(--color-dialog);
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  color: var(--color-secondary);
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
 .state {
-  // margin-top: 8px;
   padding: 8px 12px;
   font-size: var(--font-size-sm);
   border-radius: 4px;
@@ -66,15 +31,15 @@
   min-height: 34px;
 
   &.error {
-    background: rgba(238, 153, 0, 0.1);
+    background-color: var(--color-orange-bg);
     color: var(--color-orange);
   }
   &.pending {
-    background: rgba(44, 116, 194, 0.1);
+    background-color: var(--color-blue-bg);
     color: var(--color-blue);
   }
   &.ok {
-    background: rgba(74, 139, 62, 0.15);
+    background-color: var(--color-green-bg);
     color: var(--color-green);
   }
   & .reason {

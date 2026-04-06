@@ -3,14 +3,15 @@ import IconSprite from './icon'
 interface PredictionStatusProps {
   state: string
   date: string
+  volume?: number
   closed?: string
   created?: number
 }
 
-export default function PredictionStatus({ state, date, closed, created }: PredictionStatusProps) {
+export default function PredictionStatus({ state, date, closed, created, volume }: PredictionStatusProps) {
   return (
     <>
-      <div className='row center gap12 lh-1'>
+      <div className='row center gap-3 lh-1'>
         <div className='flex-i center gap-1 text-sm color-brand nowrap'>
           <IconSprite name='finish' size={16} />
           {closed ? (
@@ -30,8 +31,14 @@ export default function PredictionStatus({ state, date, closed, created }: Predi
           </div>
         )}
       </div>
-      <div className='center gap12 lh-1 hide lg-flex'>
-        <div className='flex-i center gap4'>
+      <div className='row center gap-3 lh-1'>
+        {volume && (
+          <div className='flex-i center gap4'>
+            <div className='label'>Объем</div>
+            <span>${new Intl.NumberFormat('en-US').format(volume)}</span>
+          </div>
+        )}
+        <div className='hide lg-flex center gap4'>
           <div className='label'>Статус</div>
           <span>{state}</span>
         </div>

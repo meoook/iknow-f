@@ -20,7 +20,7 @@ export default function PredictionHead({ icon, title, tags, big, progress }: Pre
   if (!big)
     return (
       <div className={s.head}>
-        <div className='row center gap-1'>
+        <div className='row center gap-2'>
           <img src={src} alt={title} />
           <div className='column'>
             {tags && <Tags tags={tags} hide={!!progress} />}
@@ -32,7 +32,7 @@ export default function PredictionHead({ icon, title, tags, big, progress }: Pre
 
   return (
     <div className={s.head}>
-      <div className='row center gap-1' style={{ transform: `scale(${scale})` }}>
+      <div className='row center gap-2' style={{ transform: `scale(${scale})` }}>
         <img src={src} alt={title} />
         <div className='column'>
           {tags && <Tags tags={tags} hide={!!progress} />}

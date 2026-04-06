@@ -24,7 +24,7 @@
   gap: 12px;
   padding: 16px;
   margin-top: 1px;
-  transition: background 0.3s;
+  transition: background-color 0.3s;
   border-radius: 6px;
   text-align: left;
 
@@ -34,16 +34,41 @@
     top: -1px;
     left: 6px;
     right: 6px;
-    background: var(--color-border);
+    background-color: var(--color-border);
     height: 1px;
   }
 
-  &:hover {
-    background: var(--color-hover);
+  &:global(.active) {
+    background-color: var(--color-active);
   }
 
-  &:global(.active) {
-    background: var(--color-active);
+  &:hover {
+    background-color: var(--color-hover);
+  }
+
+  @media (max-width: 768px) {
+    &:hover {
+      background-color: unset;
+    }
+
+    &:global(.active) {
+      background-color: unset;
+    }
+  }
+
+  &:disabled {
+    background-color: unset;
+    opacity: 1;
+    cursor: default;
+  }
+
+  & .win {
+    font-size: var(--font-size-xs);
+    color: var(--color-green-text);
+    background-color: var(--color-green-bg);
+    padding: 1px 4px;
+    border: 1px solid var(--color-green-text);
+    border-radius: 4px;
   }
 
   & .metrics {

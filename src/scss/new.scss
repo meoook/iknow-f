@@ -26,6 +26,10 @@ $text-sizes: (
   min-width: 0;
 }
 
+// .grid {
+//   display: grid;
+// }
+
 .flex-i {
   display: inline-flex;
 }
@@ -77,7 +81,7 @@ $text-sizes: (
     justify-content: center;
   }
 
-  @for $i from 1 through 4 {
+  @for $i from 1 through 5 {
     &.gap-#{$i} {
       gap: $padding * $i;
     }
@@ -177,6 +181,21 @@ $text-sizes: (
   }
   &-0 {
     max-height: 0;
+  }
+}
+
+.bd {
+  border: 1px solid var(--color-border);
+}
+.bdr {
+  & {
+    border-radius: var(--radius);
+  }
+  &-4 {
+    border-radius: 4px;
+  }
+  &-6 {
+    border-radius: 6px;
   }
 }
 
@@ -339,5 +358,11 @@ $text-sizes: (
 .hover {
   &:hover {
     background-color: var(--color-hover);
+  }
+}
+
+.bg {
+  &-dialog {
+    background-color: var(--color-dialog);
   }
 }

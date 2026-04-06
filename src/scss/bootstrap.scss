@@ -10,6 +10,7 @@
   justify-content: center;
   gap: 4px;
   letter-spacing: 1px;
+  line-height: 1;
 
   &.big {
     height: 54px;
@@ -65,6 +66,18 @@
 
     &:hover {
       background-color: var(--color-blue-light);
+    }
+  }
+
+  &.blue-l {
+    color: var(--color-secondary);
+
+    &:hover {
+      color: var(--color-blue);
+    }
+    &.active {
+      color: var(--color-blue);
+      background-color: var(--color-blue-bg);
     }
   }
 
@@ -225,8 +238,8 @@
   &-1 {
     line-height: 1;
   }
-  &-2 {
-    line-height: 1.4;
+  &-5 {
+    line-height: 1.5;
   }
 }
 

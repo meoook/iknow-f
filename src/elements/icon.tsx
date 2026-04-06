@@ -2,6 +2,7 @@
 
 export type IconName =
   | 'activity'
+  | 'add'
   | 'arrow_down'
   | 'bank'
   | 'bell'

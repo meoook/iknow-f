@@ -2,6 +2,7 @@ import style from './page.module.scss'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetPredictionQuery } from '../../../services/api'
+import { useModalContext } from '../../../services/ModalContext'
 import { intlNumber } from '../../../hooks/hooks'
 import { wsManager } from '../../../services/websocket'
 import type { IChoice } from '../../../types/app.types'
@@ -10,10 +11,12 @@ import PredictionTabs from '../tabs/main'
 import PredictionHead from '../../../components/head'
 import Empty from '../../../elements/empty'
 import PredictionStatus from '../../../elements/status'
+import TradeModal from '../panel/TradeModal'
 
 export default function PredictionDetail() {
   const { id } = useParams<{ id: string }>()
   const { data: prediction, isLoading, error } = useGetPredictionQuery(Number(id), { skip: !id })
+  const { openModal } = useModalContext()
 
   const [selectedChoice, setSelectedChoice] = useState<IChoice | null>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -45,6 +48,11 @@ export default function PredictionDetail() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const select = (choice: IChoice) => {
+    setSelectedChoice(choice)
+    if (window.innerWidth <= 768) openModal(TradeModal, 'bottom', { prediction, choice })
+  }
 
   if (isLoading) {
     return (
@@ -84,6 +92,7 @@ export default function PredictionDetail() {
           <PredictionStatus
             state={prediction.state}
             date={prediction.end_date}
+            volume={prediction.volume}
             closed={prediction.closed}
             created={prediction.created}
           />
@@ -98,7 +107,8 @@ export default function PredictionDetail() {
                 choice={choice}
                 volume={prediction.volume}
                 selected={selectedChoice?.id}
-                select={setSelectedChoice}
+                select={select}
+                disabled={prediction.state === 'ENDED'}
               />
             ))}
           </div>
@@ -115,15 +125,23 @@ interface ChoiceItemProps {
   volume: number
   selected?: number
   select: (choice: IChoice) => void
+  disabled?: boolean
 }
 
-const ChoiceItem = ({ choice, volume, selected, select }: ChoiceItemProps) => {
+const ChoiceItem = ({ choice, volume, selected, select, disabled }: ChoiceItemProps) => {
   const onClick = () => select(choice)
   const className = `${style.item}${selected === choice.id ? ' active' : ''}`
   return (
-    <button className={className} onClick={onClick}>
+    <button className={className} onClick={onClick} disabled={disabled}>
       <div className='grow column'>
-        <span className='clamp-1'>{choice.title}</span>
+        {choice.win ? (
+          <div className='row center gap-1'>
+            <div className={style.win}>WIN</div>
+            <span className='clamp-1'>{choice.title}</span>
+          </div>
+        ) : (
+          <span className='clamp-1'>{choice.title}</span>
+        )}
         <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
       </div>
       <div className={style.metrics}>

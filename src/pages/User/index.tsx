@@ -66,7 +66,7 @@ export default function PageUser() {
               {(['1D', '1W', '1M', 'ALL'] as const).map((range) => (
                 <button
                   key={range}
-                  className={`${style.rangeBtn} ${pnlRange === range ? style.activeRange : ''}`}
+                  className={`btn blue-l${pnlRange === range ? ' active' : ''}`}
                   onClick={() => setPnlRange(range)}>
                   {range}
                 </button>

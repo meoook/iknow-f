@@ -60,10 +60,16 @@ export default function Menu({ mobile, close }: MenuProps) {
         <Toggle checked={theme === 'dark'} />
       </button>
       {user && (
-        <Link to='/predictions' className={classItem} onClick={onClose}>
-          <IconSprite name='bank' size={20} color='var(--color-green)' />
-          <span>Мое участие</span>
-        </Link>
+        <>
+          <Link to='/predictions' className={classItem} onClick={onClose}>
+            <IconSprite name='bank' size={20} color='var(--color-green)' />
+            <span>Мое участие</span>
+          </Link>
+          <Link to='/create' className={classItem} onClick={onClose}>
+            <IconSprite name='add' size={20} color='var(--color-blue-dark)' />
+            <span>Создать прогноз</span>
+          </Link>
+        </>
       )}
       <hr />
       <Link className={classLink} to='/tos' onClick={onClose}>

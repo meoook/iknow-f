@@ -3,11 +3,11 @@
   position: sticky;
   top: calc(var(--size-head) + var(--size-nav) + 20px);
   height: fit-content;
-  min-width: 360px;
+  max-width: 360px;
 
   @media (max-width: 940px) {
     & {
-      min-width: 270px;
+      max-width: 270px;
     }
 
     :global(.big) {
@@ -17,6 +17,7 @@
     .bet {
       gap: 12px;
       padding: 16px 12px;
+      border-color: transparent;
     }
   }
 }
@@ -33,6 +34,14 @@
   & .icon {
     width: 48px;
     height: 48px;
+  }
+
+  @media (max-width: 768px) {
+    & {
+      gap: 12px;
+      padding: 0 16px 12px;
+      border-color: transparent;
+    }
   }
 }
 
@@ -114,7 +123,7 @@
   padding: 8px;
   border-radius: var(--radius);
   font-size: var(--font-size-xs);
-  width: 240px;
+  width: 200px;
   text-align: center;
   z-index: 10;
   border: 1px solid var(--color-border);
