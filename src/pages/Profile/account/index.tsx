@@ -113,7 +113,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
 
       <div className={style.head}>
         <div className={style.avatarWrap}>
-          <Avatar src={user?.avatar} size='big' />
+          <Avatar src={user?.avatar} size='xl' />
           {uploadProgress !== null && (
             <div className={style.progressOverlay}>
               <svg className={style.progressRing} viewBox='0 0 80 80'>

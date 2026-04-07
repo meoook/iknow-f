@@ -197,6 +197,9 @@ $text-sizes: (
   &-6 {
     border-radius: 6px;
   }
+  // &-12 {
+  //   border-radius: 12px;
+  // }
 }
 
 // Utils
@@ -364,5 +367,8 @@ $text-sizes: (
 .bg {
   &-dialog {
     background-color: var(--color-dialog);
+  }
+  &-card {
+    background-color: var(--color-card);
   }
 }

@@ -16,6 +16,7 @@ export interface IBalanceUpdate {
 }
 
 export interface IUser {
+  id: number
   address: string
   username: string
   email?: string
@@ -24,6 +25,22 @@ export interface IUser {
   telegram_notify: boolean
   avatar?: string
   balances: IBalances
+}
+
+export interface IUserCard {
+  id: number
+  username: string
+  avatar?: string
+  amount: number
+  payout: number
+  count: number
+  predictions: number
+  max_win: number
+  profit_all: number
+  profit_d: number
+  profit_w: number
+  profit_m: number
+  created: number
 }
 
 export interface IAuthState {

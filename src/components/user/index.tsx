@@ -54,7 +54,7 @@ export default function UserMenu() {
         <div className={style.container} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={open}>
           {user ? (
             <button className='btn btn-icon ph-1'>
-              <Avatar src={user.avatar} />
+              <Avatar src={user.avatar} size='sm' />
               <div className={`arrow md-hide${isMenuOpen ? ' active' : ''}`}>
                 <IconSprite name='arrow_down' />
               </div>

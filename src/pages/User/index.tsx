@@ -1,59 +1,121 @@
 import style from './page.module.scss'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import IconSprite from '../../elements/icon'
 import { useModalContext } from '../../services/ModalContext'
 import ModalDeposit from '../../modals/deposit'
+import { useGetUserByIdQuery } from '../../services/api'
+import Avatar from '../../elements/avatar'
+import { useAppSelector } from '../../hooks/useRedux'
+import Empty from '../../elements/empty'
 
 export default function PageUser() {
   const { id } = useParams<{ id: string }>()
   const { openModal } = useModalContext()
 
   const [activeTab, setActiveTab] = useState<'positions' | 'orders' | 'history'>('positions')
-  const [showBalance, setShowBalance] = useState(true)
   const [pnlRange, setPnlRange] = useState<'1D' | '1W' | '1M' | 'ALL'>('1W')
 
-  const mockData = {
-    portfolio: 0.0,
-    availableUnits: 0.0,
-    pnl: 0.0,
-    pnlPercent: 0,
-    pnlTime: 'за последнюю неделю',
+  const { data: userO, isLoading, isError } = useGetUserByIdQuery(id ?? '')
+  const { user } = useAppSelector((state) => state.auth)
+
+  if (isLoading) return <Empty title='Загрузка...' loading />
+  if (isError) return <Empty title='Ошибка...' />
+  if (!userO) return <Empty title='Пользователь не найден' />
+
+  const isOwner = user?.id === userO?.id
+
+  const formatDate = (timestamp: number) => {
+    if (!timestamp) return '...'
+    const date = new Date(timestamp)
+    const formatter = new Intl.DateTimeFormat('ru-RU', { month: 'short', year: 'numeric' })
+    return formatter.format(date).replace(' г.', '')
   }
 
   return (
-    <div className={style.wrapper}>
-      <div className={style.topGrid}>
-        {/* Portfolio Card */}
-        <div className={style.card}>
-          <div className={style.cardHeader}>
-            <div className={style.title}>
-              Портфель <IconSprite name='info' size={16} color='var(--color-secondary)' />
-            </div>
-            <div className={style.available}>
-              Доступно для торговли
-              <span>${mockData.availableUnits.toFixed(2)}</span>
+    <div className='container'>
+      <div className={style.grid}>
+        {/* User Card */}
+        <div className={style.user}>
+          <div className='row gap-4'>
+            <Avatar src={userO.avatar} size='lg' />
+            <div className='column grow gap-1 w-0'>
+              <div className='row center gap-1'>
+                <h1 className='grow ellipsis'>{userO.username}</h1>
+                <div className='row gap-1'>
+                  <button className='btn btn-icon'>
+                    <IconSprite name='more' size={16} />
+                  </button>
+                  {isOwner && (
+                    <Link to='/profile' className='btn btn-icon'>
+                      <IconSprite name='pencil' size={16} />
+                    </Link>
+                  )}
+                  <button className='btn btn-icon'>
+                    <IconSprite name='upload' size={16} />
+                  </button>
+                </div>
+              </div>
+              <div className='text-sm secondary'>Дата присоединения {formatDate(userO.created)}</div>
             </div>
           </div>
 
-          <div className={style.balanceRow}>
-            <h1 className={style.balance}>${showBalance ? mockData.portfolio.toFixed(2) : '****'}</h1>
-            <button className={style.iconBtn} onClick={() => setShowBalance(!showBalance)}>
-              <IconSprite name='info' size={20} color='var(--color-secondary)' />
-            </button>
-          </div>
-          <div className={style.subText}>$0.00 (0%) за день</div>
+          {!isOwner && (
+            <div className='flex-i grow w-0'>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas, doloremque. Lorem ipsum dolor sit amet
+              consectetur adipisicing elit. Quas, doloremque.
+            </div>
+          )}
 
-          <div className={style.actions}>
-            <button className={style.btnDeposit} onClick={() => openModal(ModalDeposit)}>
-              <IconSprite name='upload' size={18} />
-              Депозит
-            </button>
-            <button className={style.btnWithdraw}>
-              <IconSprite name='exit' size={18} />
-              Вывод
-            </button>
+          <div className='row center'>
+            <div className='grow column center gap-1'>
+              <h1>{userO.predictions.toLocaleString()}</h1>
+              <div className='label'>Прогнозы</div>
+            </div>
+            <div className={style.divider} />
+            <div className='grow column center gap-1'>
+              <h1>
+                {Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(userO.count)}
+              </h1>
+              <div className='label'>Ставок</div>
+            </div>
+            <div className={style.divider} />
+            <div className='grow column center gap-1'>
+              {/* <h1>
+                {userO.amount === 0
+                  ? '$0.00'
+                  : `$${Intl.NumberFormat('en-US', { notation: 'compact', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(userO.amount)}`}
+              </h1> */}
+              <h1>
+                $
+                {Intl.NumberFormat('en-US', {
+                  notation: 'compact',
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(userO.amount)}
+              </h1>
+              {/* <div className='label'>Стоимость позиций</div> */}
+              <div className='label'>Позиций</div>
+            </div>
+            <div className={style.divider} />
+            <div className='grow column center gap-1'>
+              <h1>{userO.max_win > 0 ? `$${userO.max_win.toLocaleString()}` : '—'}</h1>
+              <div className='label'>Наибольший выигрыш</div>
+            </div>
           </div>
+
+          {isOwner && (
+            <div className={style.ownerActions}>
+              <button className={style.btnDeposit} onClick={() => openModal(ModalDeposit)}>
+                <IconSprite name='arrow_down' size={18} />
+                Депозит
+              </button>
+              <button className={style.btnWithdraw}>
+                <IconSprite name='upload' size={18} />
+                Вывод
+              </button>
+            </div>
+          )}
         </div>
 
         {/* PnL Card */}
@@ -75,7 +137,7 @@ export default function PageUser() {
           </div>
 
           <div className={style.balanceRow}>
-            <h1 className={style.balance}>${mockData.pnl.toFixed(2).replace('.', ',')}</h1>
+            <h1 className={style.balance}>${(123.45).toFixed(2).replace('.', ',')}</h1>
             <button className={style.iconBtn}>
               <IconSprite name='upload' size={20} color='var(--color-secondary)' />
             </button>
@@ -137,8 +199,7 @@ export default function PageUser() {
           </div>
         </div>
 
-        <div className={style.emptyState}>Позиции не обнаружены.</div>
-        <div className={style.emptyState}>{id}</div>
+        <div className={style.emptyState}>Позиции не обнаружены</div>
       </div>
     </div>
   )

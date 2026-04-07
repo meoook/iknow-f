@@ -1,11 +1,10 @@
-import style from './avatar.module.scss'
+import s from './avatar.module.scss'
 interface AvatarProps {
   src?: string
-  size?: 'big' | 'small' | 'medium'
+  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }
 
 export default function Avatar({ src, size }: AvatarProps) {
-  let className = `${style.avatar}`
-  if (size) className += ` ${size}`
-  return <img className={className} src={`${import.meta.env.VITE_IMG_URL}${src || '/avatar/no_person.jpg'}`} alt='' />
+  const url = `${import.meta.env.VITE_IMG_URL}${src || '/avatar/no_person.jpg'}`
+  return <img className={`${s.avatar} ${size}`} src={url} alt='' />
 }

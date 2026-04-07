@@ -103,7 +103,7 @@ const CommentBase = ({ authed, predictionId, commentId }: CommentProps) => {
 
   return (
     <div className='row gap12'>
-      <Avatar src={comment.avatar} size='medium' />
+      <Avatar src={comment.avatar} size='md' />
       <div className='column start grow'>
         <div className='row center justify w-full'>
           <div className='row center gap12'>

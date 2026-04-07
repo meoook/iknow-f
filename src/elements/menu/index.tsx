@@ -111,7 +111,7 @@ function MenuUser({ user, mobile, onClick }: MenuUserProps) {
   return (
     <>
       <Link className={`row center gap-2 ${paddingX} h-brand`} to='/profile' onClick={onClick}>
-        <Avatar src={user.avatar} size={mobile ? 'medium' : undefined} />
+        <Avatar src={user.avatar} size={mobile ? 'md' : 'sm'} />
         <h3 className='ellipsis'>{username}</h3>
       </Link>
       <hr />
