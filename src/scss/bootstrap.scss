@@ -12,6 +12,12 @@
   letter-spacing: 1px;
   line-height: 1;
 
+  &.mid {
+    height: 44px;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+  }
+
   &.big {
     height: 54px;
     font-size: var(--font-size-lg);

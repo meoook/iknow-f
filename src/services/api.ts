@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { IUser, IAuthResponse, IUserCard } from '../types/auth.types'
+import type { IUser, IAuthResponse, IUserPublic } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
 import type {
   IMyBet,
@@ -146,7 +146,7 @@ export const apiBase = createApi({
     getTelegramNonce: builder.mutation<{ nonce: string }, void>({
       query: () => 'auth/user/telegram',
     }),
-    getUserById: builder.query<IUserCard, string>({
+    getUserById: builder.query<IUserPublic, string>({
       query: (id) => `user/${id}`,
     }),
     // Notifications endpoints

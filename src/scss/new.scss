@@ -7,13 +7,13 @@ $breakpoints: (
   sm: 640px,
 );
 $text-sizes: (
-  // xl: var(--font-size-xl),
+  xl: var(--font-size-xl),
   // h1: var(--font-size-h1),
   // h2: var(--font-size-h2),
   // lg: var(--font-size-lg),
   // md: var(--size-font),
   sm: var(--font-size-sm),
-  xs: var(--font-size-xs)
+  xs: var(--font-size-xs),
 );
 
 // Containers and elements (btn, input, etc)

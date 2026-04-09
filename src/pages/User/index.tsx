@@ -13,8 +13,8 @@ export default function PageUser() {
   const { id } = useParams<{ id: string }>()
   const { openModal } = useModalContext()
 
-  const [activeTab, setActiveTab] = useState<'positions' | 'orders' | 'history'>('positions')
-  const [pnlRange, setPnlRange] = useState<'1D' | '1W' | '1M' | 'ALL'>('1W')
+  const [activeTab, setActiveTab] = useState<'predictions' | 'activity'>('predictions')
+  const [pnlRange, setPnlRange] = useState<'1Д' | '1Н' | '1М' | 'ВСЕ'>('ВСЕ')
 
   const { data: userO, isLoading, isError } = useGetUserByIdQuery(id ?? '')
   const { user } = useAppSelector((state) => state.auth)
@@ -81,11 +81,6 @@ export default function PageUser() {
             </div>
             <div className={style.divider} />
             <div className='grow column center gap-1'>
-              {/* <h1>
-                {userO.amount === 0
-                  ? '$0.00'
-                  : `$${Intl.NumberFormat('en-US', { notation: 'compact', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(userO.amount)}`}
-              </h1> */}
               <h1>
                 $
                 {Intl.NumberFormat('en-US', {
@@ -100,17 +95,18 @@ export default function PageUser() {
             <div className={style.divider} />
             <div className='grow column center gap-1'>
               <h1>{userO.max_win > 0 ? `$${userO.max_win.toLocaleString()}` : '—'}</h1>
-              <div className='label'>Наибольший выигрыш</div>
+              {/* <div className='label'>Наибольший выигрыш</div> */}
+              <div className='label'>Макс. выигрыш</div>
             </div>
           </div>
 
           {isOwner && (
-            <div className={style.ownerActions}>
-              <button className={style.btnDeposit} onClick={() => openModal(ModalDeposit)}>
+            <div className='row gap-4'>
+              <button className='btn blue mid w-full' onClick={() => openModal(ModalDeposit)}>
                 <IconSprite name='arrow_down' size={18} />
                 Депозит
               </button>
-              <button className={style.btnWithdraw}>
+              <button className='btn gray mid w-full'>
                 <IconSprite name='upload' size={18} />
                 Вывод
               </button>
@@ -120,12 +116,13 @@ export default function PageUser() {
 
         {/* PnL Card */}
         <div className={style.card}>
-          <div className={style.cardHeader}>
-            <div className={style.title}>
-              <IconSprite name='trend' size={16} color='var(--color-secondary)' /> Прибыль/убыток
+          <div className='row center justify text-sm secondary'>
+            <div className='row center gap-1 w-500'>
+              <IconSprite name='trend' size={16} />
+              <span>Прибыль/убыток</span>
             </div>
-            <div className={style.ranges}>
-              {(['1D', '1W', '1M', 'ALL'] as const).map((range) => (
+            <div className='row ph-1 gap-1'>
+              {(['1Д', '1Н', '1М', 'ВСЕ'] as const).map((range) => (
                 <button
                   key={range}
                   className={`btn blue-l${pnlRange === range ? ' active' : ''}`}
@@ -136,70 +133,63 @@ export default function PageUser() {
             </div>
           </div>
 
-          <div className={style.balanceRow}>
-            <h1 className={style.balance}>${(123.45).toFixed(2).replace('.', ',')}</h1>
-            <button className={style.iconBtn}>
+          <div className='row center gap-3 pv-1'>
+            <h1 className='w-600 text-xl'>
+              $
+              {(
+                {
+                  '1Д': userO.profit_d,
+                  '1Н': userO.profit_w,
+                  '1М': userO.profit_m,
+                  ВСЕ: userO.profit_all,
+                }[pnlRange] ?? 0
+              )
+                .toFixed(2)
+                .replace('.', ',')}
+            </h1>
+            <button className='btn btn-icon'>
               <IconSprite name='upload' size={20} color='var(--color-secondary)' />
             </button>
           </div>
-          <div className={style.subText}>За последнюю неделю</div>
+          <div className='text-xs secondary pv-1'>
+            {
+              {
+                '1Д': 'За последний день',
+                '1Н': 'За последнюю неделю',
+                '1М': 'За последний месяц',
+                ВСЕ: 'За все время',
+              }[pnlRange]
+            }
+          </div>
 
-          <div className={style.chartPlaceholder}>
-            <div className={style.chartLine}></div>
+          <div className={style.chart}>
+            <div className={style.line}></div>
           </div>
         </div>
       </div>
 
       {/* Tabs section */}
-      <div className={style.contentSection}>
-        <div className={style.tabs}>
-          <button
-            className={`${style.tab} ${activeTab === 'positions' ? style.activeTab : ''}`}
-            onClick={() => setActiveTab('positions')}>
-            Позиции
-          </button>
-          <button
-            className={`${style.tab} ${activeTab === 'orders' ? style.activeTab : ''}`}
-            onClick={() => setActiveTab('orders')}>
-            Открытые заявки
-          </button>
-          <button
-            className={`${style.tab} ${activeTab === 'history' ? style.activeTab : ''}`}
-            onClick={() => setActiveTab('history')}>
-            История
-          </button>
+      <div className='row gap-4'>
+        <button
+          className={`${style.tab} ${activeTab === 'predictions' ? 'active' : ''}`}
+          onClick={() => setActiveTab('predictions')}>
+          Предсказания
+        </button>
+        <button
+          className={`${style.tab} ${activeTab === 'activity' ? 'active' : ''}`}
+          onClick={() => setActiveTab('activity')}>
+          Активность
+        </button>
+      </div>
+
+      <div className={style.table}>
+        <div className={style.head}>
+          <div className='grow'>Предсказание</div>
+          <div className={style.cell}>Ставка</div>
+          <div className={style.cell}>Выигрыш</div>
         </div>
 
-        <div className={style.tableControls}>
-          <div className={style.searchWrapper}>
-            <IconSprite name='search' size={18} color='var(--color-secondary)' />
-            <input type='text' placeholder='Поиск' />
-          </div>
-          <button className={style.sortBtn}>
-            <IconSprite name='filter' size={18} />
-            Текущая стоимость
-          </button>
-        </div>
-
-        <div className={style.tableHeader}>
-          <div className={style.col}>
-            РЫНОК <IconSprite name='diff' size={12} />
-          </div>
-          <div className={style.col}>
-            СРЕДН. → СЕЙЧАС <IconSprite name='info' size={12} /> <IconSprite name='diff' size={12} />
-          </div>
-          <div className={style.col}>
-            СТАВКА <IconSprite name='diff' size={12} />
-          </div>
-          <div className={style.col}>
-            ВЫИГРЫШ <IconSprite name='diff' size={12} />
-          </div>
-          <div className={style.col}>
-            СТОИМОСТЬ <IconSprite name='diff' size={12} />
-          </div>
-        </div>
-
-        <div className={style.emptyState}>Позиции не обнаружены</div>
+        <Empty title='Предсказания не найдены' size={16} />
       </div>
     </div>
   )

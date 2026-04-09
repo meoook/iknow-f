@@ -27,7 +27,7 @@ export interface IUser {
   balances: IBalances
 }
 
-export interface IUserCard {
+export interface IUserPublic {
   id: number
   username: string
   avatar?: string
