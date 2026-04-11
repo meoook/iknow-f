@@ -68,10 +68,10 @@ main {
 }
 
 a {
+  text-underline-offset: 2px;
   &.underline {
     text-decoration: underline;
     // text-decoration-thickness: 2px;
-    text-underline-offset: 2px;
   }
   &.brand {
     color: var(--color-brand);
@@ -82,6 +82,9 @@ a {
   }
   &.h-brand:hover {
     color: var(--color-brand);
+  }
+  &.h-underline:hover {
+    text-decoration: underline;
   }
 }
 

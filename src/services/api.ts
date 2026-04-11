@@ -17,6 +17,8 @@ import type {
   ITopHolder,
   ITx,
   IPredictionSearch,
+  IUserPrediction,
+  IUserBet,
 } from '../types/app.types'
 import { setLoading } from '../store/auth.slice'
 
@@ -385,6 +387,42 @@ export const apiBase = createApi({
         topAdapter.addMany(currentCache, topSelectors.selectAll(newItems))
       },
     }),
+    getUserPredictions: builder.query<PaginatedResponse<IUserPrediction>, PaginatedArg<true>>({
+      query: ({ id, ...params }) => ({
+        url: `user/${id}/predictions`,
+        params,
+      }),
+      serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg?.offset === 0) {
+          currentCache.data = newItems.data
+          currentCache.total = newItems.total
+        } else {
+          currentCache.data.push(...newItems.data)
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.offset !== previousArg?.offset
+      },
+    }),
+    getUserBets: builder.query<PaginatedResponse<IUserBet>, PaginatedArg<true>>({
+      query: ({ id, ...params }) => ({
+        url: `user/${id}/bets`,
+        params,
+      }),
+      serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
+      merge: (currentCache, newItems, { arg }) => {
+        if (arg?.offset === 0) {
+          currentCache.data = newItems.data
+          currentCache.total = newItems.total
+        } else {
+          currentCache.data.push(...newItems.data)
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg?.offset !== previousArg?.offset
+      },
+    }),
   }),
 })
 
@@ -422,4 +460,6 @@ export const {
   useGetPredictionsQuery,
   useSearchPredictionsMutation,
   useGetPredictionQuery,
+  useGetUserPredictionsQuery,
+  useGetUserBetsQuery,
 } = apiBase

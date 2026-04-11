@@ -1,19 +1,22 @@
 import style from './page.module.scss'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import IconSprite from '../../elements/icon'
+import { useAppSelector } from '../../hooks/useRedux'
+import { useGetUserByIdQuery } from '../../services/api'
 import { useModalContext } from '../../services/ModalContext'
 import ModalDeposit from '../../modals/deposit'
-import { useGetUserByIdQuery } from '../../services/api'
-import Avatar from '../../elements/avatar'
-import { useAppSelector } from '../../hooks/useRedux'
+import IconSprite from '../../elements/icon'
 import Empty from '../../elements/empty'
+import Avatar from '../../elements/avatar'
+import PredictionsTable from './table/predictions'
+import BetsTable from './table/bets'
+import RequestsTable from './table/requests'
 
 export default function PageUser() {
   const { id } = useParams<{ id: string }>()
   const { openModal } = useModalContext()
 
-  const [activeTab, setActiveTab] = useState<'predictions' | 'activity'>('predictions')
+  const [activeTab, setActiveTab] = useState<'predictions' | 'activity' | 'created'>('predictions')
   const [pnlRange, setPnlRange] = useState<'1Д' | '1Н' | '1М' | 'ВСЕ'>('ВСЕ')
 
   const { data: userO, isLoading, isError } = useGetUserByIdQuery(id ?? '')
@@ -31,6 +34,21 @@ export default function PageUser() {
     const formatter = new Intl.DateTimeFormat('ru-RU', { month: 'short', year: 'numeric' })
     return formatter.format(date).replace(' г.', '')
   }
+
+  const currentProfit =
+    {
+      '1Д': userO.profit_d,
+      '1Н': userO.profit_w,
+      '1М': userO.profit_m,
+      ВСЕ: userO.profit_all,
+    }[pnlRange] ?? 0
+
+  const periodTitle = {
+    '1Д': 'За последний день',
+    '1Н': 'За последнюю неделю',
+    '1М': 'За последний месяц',
+    ВСЕ: 'За все время',
+  }[pnlRange]
 
   return (
     <div className='container'>
@@ -87,14 +105,24 @@ export default function PageUser() {
                   notation: 'compact',
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                }).format(userO.amount)}
+                })
+                  .format(userO.amount)
+                  .replace('.', ',')}
               </h1>
               {/* <div className='label'>Стоимость позиций</div> */}
               <div className='label'>Позиций</div>
             </div>
             <div className={style.divider} />
             <div className='grow column center gap-1'>
-              <h1>{userO.max_win > 0 ? `$${userO.max_win.toLocaleString()}` : '—'}</h1>
+              <h1>
+                {userO.max_win > 0
+                  ? `$${userO.max_win.toLocaleString(undefined, {
+                      notation: 'compact',
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}`
+                  : '—'}
+              </h1>
               {/* <div className='label'>Наибольший выигрыш</div> */}
               <div className='label'>Макс. выигрыш</div>
             </div>
@@ -135,32 +163,14 @@ export default function PageUser() {
 
           <div className='row center gap-3 pv-1'>
             <h1 className='w-600 text-xl'>
-              $
-              {(
-                {
-                  '1Д': userO.profit_d,
-                  '1Н': userO.profit_w,
-                  '1М': userO.profit_m,
-                  ВСЕ: userO.profit_all,
-                }[pnlRange] ?? 0
-              )
-                .toFixed(2)
-                .replace('.', ',')}
+              {currentProfit < 0 ? '-' : ''}${Math.abs(currentProfit).toFixed(2).replace('.', ',')}
             </h1>
+
             <button className='btn btn-icon'>
               <IconSprite name='upload' size={20} color='var(--color-secondary)' />
             </button>
           </div>
-          <div className='text-xs secondary pv-1'>
-            {
-              {
-                '1Д': 'За последний день',
-                '1Н': 'За последнюю неделю',
-                '1М': 'За последний месяц',
-                ВСЕ: 'За все время',
-              }[pnlRange]
-            }
-          </div>
+          <div className='text-xs secondary pv-1'>{periodTitle}</div>
 
           <div className={style.chart}>
             <div className={style.line}></div>
@@ -169,7 +179,7 @@ export default function PageUser() {
       </div>
 
       {/* Tabs section */}
-      <div className='row gap-4'>
+      <div className='row gap-4 noscroll-x'>
         <button
           className={`${style.tab} ${activeTab === 'predictions' ? 'active' : ''}`}
           onClick={() => setActiveTab('predictions')}>
@@ -180,17 +190,18 @@ export default function PageUser() {
           onClick={() => setActiveTab('activity')}>
           Активность
         </button>
+        {isOwner && (
+          <button
+            className={`${style.tab} ${activeTab === 'created' ? 'active' : ''}`}
+            onClick={() => setActiveTab('created')}>
+            Созданные мной
+          </button>
+        )}
       </div>
 
-      <div className={style.table}>
-        <div className={style.head}>
-          <div className='grow'>Предсказание</div>
-          <div className={style.cell}>Ставка</div>
-          <div className={style.cell}>Выигрыш</div>
-        </div>
-
-        <Empty title='Предсказания не найдены' size={16} />
-      </div>
+      {activeTab === 'predictions' && <PredictionsTable userId={id ?? ''} />}
+      {activeTab === 'activity' && <BetsTable userId={id ?? ''} />}
+      {activeTab === 'created' && <RequestsTable />}
     </div>
   )
 }

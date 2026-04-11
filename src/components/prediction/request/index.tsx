@@ -1,9 +1,8 @@
-import React from 'react'
 import s from './request.module.scss'
+import React from 'react'
 import { useRequest } from '../../../services/requests/adapter'
 import IconSprite from '../../../elements/icon'
 import Loader from '../../../elements/loader'
-import VoteItem from '../vote'
 import PredictionHead from '../../head'
 import PredictionStatus from '../../../elements/status'
 
@@ -18,15 +17,15 @@ const RequestItem = ({ requestId, isLast }: { requestId: number; isLast?: boolea
         <div className={`${s.indicator} ${color}`} />
 
         <div className='grow row gap-5'>
-          <div className='column gap-3 grow'>
+          <div className='grow column gap-3'>
             <PredictionHead title={request.title} icon={request.icon} tags={request.tags} />
-            <PredictionStatus state={request.state} date={request.end_date} />
+            <PredictionStatus state={request.state} date={request.end_date} volume={request.amount} />
             <p className='text-sm secondary lh-5'>{request.rules}</p>
 
             <div className='grow row gap-2 start wrap'>
-              {request.choices.map((choice) => (
-                <span key={choice} className='text-sm bg-dialog bd bdr-4 pv-1 ph-2 secondary'>
-                  {choice}
+              {request.choices.map((c) => (
+                <span key={c} className={`${s.choice} ellipsis${c === request.vote ? ' green' : ''}`}>
+                  {c}
                 </span>
               ))}
             </div>
@@ -59,8 +58,6 @@ const RequestItem = ({ requestId, isLast }: { requestId: number; isLast?: boolea
               </div>
             )}
           </div>
-
-          <VoteItem vote={request.vote} currency={request.currency} amount={request.amount} />
         </div>
       </div>
       {!isLast && <hr />}

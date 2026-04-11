@@ -33,7 +33,7 @@ export interface PaginatedResponse<T> {
 
 type IPaginatedRequest<RequireId extends boolean = false> = RequireId extends true
   ? {
-      id: number
+      id: number | string
       limit?: number
       offset?: number
       group?: string
@@ -143,7 +143,6 @@ export interface IPredictionSearch {
 interface IBetPrediction {
   id: number
   title: string
-  group: string
   tags: string[]
   icon: string
   volume: number
@@ -166,6 +165,31 @@ export interface IMyBet {
   created: number
   choice: IBetChoice
   prediction: IBetPrediction
+}
+
+export interface IUserPrediction {
+  id: number
+  title: string
+  icon: string
+  volume: number
+  created: number
+  amount: number
+  payout: number
+}
+
+interface IUserBetPrediction {
+  id: number
+  title: string
+  icon: string
+}
+
+export interface IUserBet {
+  id: number
+  currency: TCurrency
+  amount: number
+  created: number
+  choice: string
+  prediction: IUserBetPrediction
 }
 
 export interface IBetCreate {

@@ -40,4 +40,5 @@ export const TAGS_MAP: Record<string, string> = {
   economy: 'Экономика',
   elections: 'Выборы',
   mentions: 'Упоминания',
+  other: 'Другое',
 }

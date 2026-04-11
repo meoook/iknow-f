@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useAppDispatch } from '../../../../hooks/useRedux'
 import { useTop, useTopIds } from '../../../../store/top.adapter'
+import { apiBase } from '../../../../services/api'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
-import { apiBase } from '../../../../services/api'
 
 export interface PredictionTabTopProps {
   predictionId: number
