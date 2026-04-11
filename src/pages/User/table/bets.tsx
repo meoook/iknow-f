@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { useGetUserBetsQuery } from '../../../services/api'
 import type { IUserBet } from '../../../types/app.types'
-import Empty from '../../../elements/empty'
 import { formatRelativeTime } from '../../../utils/date'
+import Empty from '../../../elements/empty'
 
 interface BetsTableProps {
   userId: number | string
@@ -37,7 +37,7 @@ export default function BetsTable({ userId }: BetsTableProps) {
 
   if (isLoading && offset === 0) return <Empty title='Загрузка...' loading size={16} />
   if (isError) return <Empty title='Ошибка загрузки' size={16} />
-  if (bets.length === 0) return <Empty title='Прогнозы не найдены' size={16} />
+  if (!bets.length) return <Empty title='Прогнозы не найдены' size={16} />
 
   return (
     <div className={style.table}>

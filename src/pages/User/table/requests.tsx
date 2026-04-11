@@ -3,19 +3,28 @@ import { useEffect, useRef, useState } from 'react'
 import Empty from '../../../elements/empty'
 import { useRequestIds } from '../../../services/requests/adapter'
 import RequestItem from '../../../components/prediction/request'
+import { useAppDispatch } from '../../../hooks/useRedux'
+import { apiBase } from '../../../services/api'
 
 export default function RequestsTable() {
-  const { requestIds, total, isLoading, isError, isFetching } = useRequestIds()
-  const [offset, setOffset] = useState(0)
-  const limit = 20
+  const limit = 10
+  const dispatch = useAppDispatch()
+
   const observerTarget = useRef<HTMLDivElement>(null)
+  const [offset, setOffset] = useState(0)
+  const { requestIds, total, isLoading, isError, isFetching } = useRequestIds()
+
+  const loadMore = () => {
+    if (requestIds.length >= total || isFetching) return
+    const newOffset = offset + limit
+    setOffset(newOffset)
+    dispatch(apiBase.endpoints.getRequests.initiate({ limit, offset: newOffset }, { forceRefetch: true }))
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && requestIds.length < total && !isLoading && !isFetching) {
-          setOffset((prev) => prev + limit)
-        }
+        if (entries[0].isIntersecting && requestIds.length < total && !isLoading && !isFetching) loadMore()
       },
       { threshold: 1.0 },
     )
@@ -23,11 +32,11 @@ export default function RequestsTable() {
     return () => {
       if (observerTarget.current) observer.unobserve(observerTarget.current)
     }
-  }, [requestIds.length, total, isLoading, isFetching])
+  }, [requestIds.length, total, isLoading, isFetching, loadMore])
 
   if (isLoading && offset === 0) return <Empty title='Загрузка...' loading size={16} />
   if (isError) return <Empty title='Ошибка загрузки' size={16} />
-  if (requestIds.length === 0) return <Empty title='Прогнозы не найдены' size={16} />
+  if (!requestIds.length) return <Empty title='Прогнозы не найдены' size={16} />
 
   return (
     <div className={style.table}>

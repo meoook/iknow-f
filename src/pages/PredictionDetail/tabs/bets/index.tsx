@@ -15,7 +15,7 @@ export default function PredictionTabBets({ predictionId }: PredictionTabBetsPro
   const dispatch = useAppDispatch()
   const observerTarget = useRef<HTMLDivElement>(null)
   const [offset, setOffset] = useState(0)
-  const { betIds, isLoading, total, isFetching } = useBetIds(predictionId)
+  const { betIds, isLoading, total, isError, isFetching } = useBetIds(predictionId)
 
   const loadMore = () => {
     if (betIds.length >= total || isFetching) return
@@ -37,7 +37,8 @@ export default function PredictionTabBets({ predictionId }: PredictionTabBetsPro
     }
   }, [betIds.length, total, isLoading, isFetching, loadMore])
 
-  if (isLoading) return <Empty title='Загрузка...' loading={true} />
+  if (isLoading) return <Empty title='Загрузка...' loading />
+  if (isError) return <Empty title='Ошибка загрузки' size={16} />
   if (!betIds.length) return <Empty title='Нет предсказаний' size={24} />
 
   return (
