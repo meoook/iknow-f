@@ -1,10 +1,10 @@
 import style from './table.module.scss'
 import { useEffect, useRef, useState } from 'react'
-import Empty from '../../../elements/empty'
-import { useRequestIds } from '../../../services/requests/adapter'
-import RequestItem from '../../../components/prediction/request'
+import { useRequestIds } from '../../../store/requests.adapter'
 import { useAppDispatch } from '../../../hooks/useRedux'
 import { apiBase } from '../../../services/api'
+import Empty from '../../../elements/empty'
+import RequestItem from '../../../components/prediction/request'
 
 export default function RequestsTable() {
   const limit = 10

@@ -1,4 +1,4 @@
-import { useRequestIds } from '../services/requests/adapter'
+import { useRequestIds } from '../store/requests.adapter'
 import { useMybetIds } from '../store/mybet.adapter'
 import { useModalContext } from '../services/ModalContext'
 import ModalPrediction from '../modals/prediction'

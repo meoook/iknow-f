@@ -16,6 +16,7 @@
   background: var(--color-bg-light);
   color: var(--color-text);
   transition: all 0.2s ease;
+  padding: 0;
 
   &:focus {
     border-color: var(--color-blue);

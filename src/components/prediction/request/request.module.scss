@@ -36,31 +36,10 @@
   }
 }
 
-.error {
-  background-color: var(--color-orange-bg);
-  color: var(--color-orange);
-}
-.pending {
-  background-color: var(--color-blue-bg);
-  color: var(--color-blue);
-}
-.ok {
-  background-color: var(--color-green-bg);
-  color: var(--color-green);
-}
-
 .choice {
   max-width: 160px;
   border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 4px 8px;
   font-size: var(--font-size-sm);
-
-  background-color: var(--color-dialog);
-  color: var(--color-secondary);
-
-  &:global(.green) {
-    background-color: var(--color-green-bg);
-    color: var(--color-green);
-  }
 }

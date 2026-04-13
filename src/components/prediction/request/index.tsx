@@ -1,6 +1,6 @@
 import s from './request.module.scss'
 import React from 'react'
-import { useRequest } from '../../../services/requests/adapter'
+import { useRequest } from '../../../store/requests.adapter'
 import IconSprite from '../../../elements/icon'
 import Loader from '../../../elements/loader'
 import PredictionHead from '../../head'
@@ -24,15 +24,15 @@ const RequestItem = ({ requestId, isLast }: { requestId: number; isLast?: boolea
 
             <div className='grow row gap-2 start wrap'>
               {request.choices.map((c) => (
-                <span key={c} className={`${s.choice} ellipsis${c === request.vote ? ' green' : ''}`}>
+                <span key={c} className={`${s.choice} ellipsis ${c === request.vote ? 'alert-green' : 'alert-gray'}`}>
                   {c}
                 </span>
               ))}
             </div>
 
             {request.state === 'REJECTED' && (
-              <div className={`${s.state} ${s.error}`}>
-                <div className='row center gap4'>
+              <div className={`${s.state} alert-red`}>
+                <div className='row center gap-1'>
                   <IconSprite name='warning' size={18} />
                   <span>Отклонено</span>
                 </div>
@@ -41,8 +41,8 @@ const RequestItem = ({ requestId, isLast }: { requestId: number; isLast?: boolea
             )}
 
             {request.state === 'VALIDATE' && (
-              <div className={`${s.state} ${s.pending}`}>
-                <div className='row center gap8'>
+              <div className={`${s.state} alert-blue`}>
+                <div className='row center gap-2'>
                   <Loader />
                   <span>Ожидает подтверждения...</span>
                 </div>
@@ -50,8 +50,8 @@ const RequestItem = ({ requestId, isLast }: { requestId: number; isLast?: boolea
             )}
 
             {request.state === 'APPROVED' && (
-              <div className={`${s.state} ${s.ok}`}>
-                <div className='row center gap4'>
+              <div className={`${s.state} alert-green`}>
+                <div className='row center gap-1'>
                   <IconSprite name='check' size={18} />
                   <span>Одобрено</span>
                 </div>

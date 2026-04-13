@@ -23,13 +23,15 @@ import type {
 import { setLoading } from '../store/auth.slice'
 
 import { wsManager } from './websocket'
-import { requestsAdapter } from './requests/adapter'
+import { requestsAdapter } from '../store/requests.adapter'
 import { mybetAdapter } from '../store/mybet.adapter'
 import { betAdapter } from '../store/bet.adapter'
 import { predictionAdapter, predictionSelectors } from '../store/prediction.adapter'
 import { topAdapter, topSelectors } from '../store/top.adapter'
 import { txAdapter } from '../store/tx.adapter'
 import { getCookie } from '../utils/date'
+import { userBetAdapter, userBetSelectors } from '../store/user_bet.adapter'
+import { userPredictionAdapter, userPredictionSelectors } from '../store/user_prediction.adapter'
 
 export const apiBase = createApi({
   reducerPath: 'api',
@@ -387,40 +389,45 @@ export const apiBase = createApi({
         topAdapter.addMany(currentCache, topSelectors.selectAll(newItems))
       },
     }),
-    getUserPredictions: builder.query<PaginatedResponse<IUserPrediction>, PaginatedArg<true>>({
+    getUserPredictions: builder.query<EntityStateWithTotal<IUserPrediction>, PaginatedArg<true>>({
       query: ({ id, ...params }) => ({
         url: `user/${id}/predictions`,
         params,
       }),
-      serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
-      merge: (currentCache, newItems, { arg }) => {
-        if (arg?.offset === 0) {
-          currentCache.data = newItems.data
-          currentCache.total = newItems.total
-        } else {
-          currentCache.data.push(...newItems.data)
+      transformResponse: (response: PaginatedResponse<IUserPrediction>) => {
+        return {
+          ...userPredictionAdapter.setAll(userPredictionAdapter.getInitialState(), response.data ?? []),
+          total: response.total ?? 0,
         }
       },
+      serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
+      merge: (currentCache, newItems) => {
+        if (currentCache.total !== newItems.total) currentCache.total = newItems.total
+        userPredictionAdapter.addMany(currentCache, userPredictionSelectors.selectAll(newItems))
+      },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg?.offset !== previousArg?.offset
+        return !!currentArg?.offset && currentArg?.offset !== previousArg?.offset
       },
     }),
-    getUserBets: builder.query<PaginatedResponse<IUserBet>, PaginatedArg<true>>({
+    getUserBets: builder.query<EntityStateWithTotal<IUserBet>, PaginatedArg<true>>({
       query: ({ id, ...params }) => ({
         url: `user/${id}/bets`,
         params,
       }),
-      serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
-      merge: (currentCache, newItems, { arg }) => {
-        if (arg?.offset === 0) {
-          currentCache.data = newItems.data
-          currentCache.total = newItems.total
-        } else {
-          currentCache.data.push(...newItems.data)
+
+      transformResponse: (response: PaginatedResponse<IUserBet>) => {
+        return {
+          ...userBetAdapter.setAll(userBetAdapter.getInitialState(), response.data ?? []),
+          total: response.total ?? 0,
         }
       },
+      serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
+      merge: (currentCache, newItems) => {
+        if (currentCache.total !== newItems.total) currentCache.total = newItems.total
+        userBetAdapter.addMany(currentCache, userBetSelectors.selectAll(newItems))
+      },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg?.offset !== previousArg?.offset
+        return !!currentArg?.offset && currentArg?.offset !== previousArg?.offset
       },
     }),
   }),

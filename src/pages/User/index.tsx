@@ -78,12 +78,7 @@ export default function PageUser() {
             </div>
           </div>
 
-          {!isOwner && (
-            <div className='flex-i grow w-0'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas, doloremque. Lorem ipsum dolor sit amet
-              consectetur adipisicing elit. Quas, doloremque.
-            </div>
-          )}
+          {!isOwner && <div className='flex-i grow w-0'>Супер предсказатель</div>}
 
           <div className='row center'>
             <div className='grow column center gap-1'>
@@ -198,10 +193,13 @@ export default function PageUser() {
           </button>
         )}
       </div>
-
-      {activeTab === 'predictions' && <PredictionsTable userId={id ?? ''} />}
-      {activeTab === 'activity' && <BetsTable userId={id ?? ''} />}
-      {activeTab === 'created' && <RequestsTable />}
+      {id && (
+        <>
+          {activeTab === 'predictions' && <PredictionsTable userId={id} />}
+          {activeTab === 'activity' && <BetsTable userId={id} />}
+        </>
+      )}
+      {user && activeTab === 'created' && <RequestsTable />}
     </div>
   )
 }

@@ -172,7 +172,7 @@ export interface IUserPrediction {
   title: string
   icon: string
   volume: number
-  created: number
+  // created: number
   amount: number
   payout: number
 }

@@ -127,12 +127,43 @@
     color: var(--color-blue);
   }
 
+  &-orange {
+    color: var(--color-orange);
+  }
+
   &-gray {
     color: var(--color-secondary);
   }
 
   &-brand {
     color: var(--color-brand);
+  }
+}
+
+.alert {
+  &-green {
+    background-color: var(--color-green-bg);
+    color: var(--color-green-light);
+  }
+
+  &-red {
+    background-color: var(--color-red-bg);
+    color: var(--color-red-light);
+  }
+
+  &-blue {
+    background-color: var(--color-blue-bg);
+    color: var(--color-blue-light);
+  }
+
+  &-orange {
+    background-color: var(--color-orange-bg);
+    color: var(--color-orange-light);
+  }
+
+  &-gray {
+    background-color: var(--color-dialog);
+    color: var(--color-secondary);
   }
 }
 

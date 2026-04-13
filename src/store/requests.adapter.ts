@@ -1,6 +1,6 @@
 import { createEntityAdapter } from '@reduxjs/toolkit'
-import { useGetRequestsQuery } from '../api'
-import type { IRequest } from '../../types/app.types'
+import { useGetRequestsQuery } from '../services/api'
+import type { IRequest } from '../types/app.types'
 
 export const requestsAdapter = createEntityAdapter<IRequest>({
   sortComparer: (a, b) => b.created - a.created,

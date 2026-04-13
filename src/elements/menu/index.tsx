@@ -44,7 +44,7 @@ export default function Menu({ mobile, close }: MenuProps) {
   const classExit = mobile ? `color-red ph-4 pv-3 ${classBase}` : `color-red p-3 ${classBase}`
   return (
     <>
-      {user && <MenuUser mobile onClick={onClose} user={user} />}
+      {user && <MenuUser mobile={mobile} onClick={onClose} user={user} />}
       <button className={classItem}>
         <IconSprite name='crown' size={20} color='var(--color-brand)' />
         <span>Таблица лидеров</span>
@@ -61,10 +61,10 @@ export default function Menu({ mobile, close }: MenuProps) {
       </button>
       {user && (
         <>
-          <Link to='/predictions' className={classItem} onClick={onClose}>
+          {/* <Link to='/predictions' className={classItem} onClick={onClose}>
             <IconSprite name='bank' size={20} color='var(--color-green)' />
             <span>Мое участие</span>
-          </Link>
+          </Link> */}
           <Link to='/create' className={classItem} onClick={onClose}>
             <IconSprite name='add' size={20} color='var(--color-blue-dark)' />
             <span>Создать прогноз</span>
@@ -112,7 +112,22 @@ function MenuUser({ user, mobile, onClick }: MenuUserProps) {
     <>
       <Link className={`row center gap-2 ${paddingX} h-brand`} to={`/user/${user.id}`} onClick={onClick}>
         <Avatar src={user.avatar} size={mobile ? 'md' : 'sm'} />
-        <h3 className='ellipsis'>{username}</h3>
+        {mobile ? (
+          <div className='column'>
+            <h3 className='ellipsis'>{username}</h3>
+            <div className='text-xs color-green w-500'>${user.balances.CASH.toFixed(2)}</div>
+            {/* <div className='text-xs color-green'>
+              $
+              {user.balances.CASH.toLocaleString(undefined, {
+                notation: 'compact',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </div> */}
+          </div>
+        ) : (
+          <h3 className='ellipsis'>{username}</h3>
+        )}
       </Link>
       <hr />
     </>
