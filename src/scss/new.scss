@@ -186,6 +186,9 @@ $text-sizes: (
 
 .bd {
   border: 1px solid var(--color-border);
+  &-b {
+    border-bottom: 1px solid var(--color-border);
+  }
 }
 .bdr {
   & {

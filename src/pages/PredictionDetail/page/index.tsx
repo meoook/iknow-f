@@ -77,7 +77,7 @@ export default function PredictionDetail() {
   }
 
   return (
-    <div className={style.main}>
+    <div className='main'>
       <div className='column grow w-0'>
         <div className={style.sticky}>
           <PredictionHead

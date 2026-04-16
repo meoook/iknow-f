@@ -15,6 +15,7 @@ const Home = lazy(() => import('./pages/Home'))
 const Profile = lazy(() => import('./pages/Profile/page'))
 const PageUser = lazy(() => import('./pages/User'))
 const PredictionDetail = lazy(() => import('./pages/PredictionDetail/page'))
+const PageLeaderboard = lazy(() => import('./pages/Leaderboard'))
 const Page404 = lazy(() => import('./pages/404'))
 const PageTos = lazy(() => import('./pages/Tos'))
 const PagePrivacy = lazy(() => import('./pages/Privacy'))
@@ -58,6 +59,7 @@ export default function NavRouter() {
               <Route path='/mentions' element={<Home />} />
               <Route path='/other' element={<Home />} />
               <Route path='/user/:id' element={<PageUser />} />
+              <Route path='/leaderboard' element={<PageLeaderboard />} />
               <Route path='/prediction/:id' element={<PredictionDetail />} />
               <Route path='/tos' element={<PageTos />} />
               <Route path='/privacy' element={<PagePrivacy />} />

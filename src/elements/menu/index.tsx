@@ -45,10 +45,10 @@ export default function Menu({ mobile, close }: MenuProps) {
   return (
     <>
       {user && <MenuUser mobile={mobile} onClick={onClose} user={user} />}
-      <button className={classItem}>
+      <Link to='/leaderboard' className={classItem}>
         <IconSprite name='crown' size={20} color='var(--color-brand)' />
         <span>Таблица лидеров</span>
-      </button>
+      </Link>
       <button className={classItem}>
         <IconSprite name='activity' size={20} color='var(--color-red)' />
         <span>Активность</span>

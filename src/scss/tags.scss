@@ -61,6 +61,12 @@ main {
   }
 }
 
+aside {
+  position: sticky;
+  top: calc(var(--size-head) + var(--size-nav) + 20px);
+  height: fit-content;
+}
+
 :where(a, a:visited) {
   text-decoration: none;
   transition: all 0.3s ease-in-out;

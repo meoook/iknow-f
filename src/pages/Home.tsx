@@ -12,17 +12,17 @@ export default function Home() {
   const observerTarget = useRef<HTMLDivElement>(null)
   const { pathname } = useLocation()
 
-  const group = pathname === '/' ? undefined : pathname.slice(1)
+  const tag = pathname === '/' ? undefined : pathname.slice(1)
   const [offset, setOffset] = useState(0)
 
   useEffect(() => {
     setOffset(0)
-  }, [group])
+  }, [tag])
 
   const { data, isLoading, isFetching, isError } = useGetPredictionsQuery({
     limit,
     offset,
-    ...(group && { group }),
+    ...(tag && { tag }),
   })
 
   const predictions = data ? predictionSelectors.selectAll(data) : []

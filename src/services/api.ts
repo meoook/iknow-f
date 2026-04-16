@@ -2,6 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import type { IUser, IAuthResponse, IUserPublic } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
 import type {
+  PaginatedArg,
+  PaginatedArg2,
+  EntityStateWithTotal,
   IMyBet,
   IBetCreate,
   INotification,
@@ -12,13 +15,13 @@ import type {
   PaginatedResponse,
   IBet,
   ISettings,
-  PaginatedArg,
-  EntityStateWithTotal,
   ITopHolder,
   ITx,
   IPredictionSearch,
   IUserPrediction,
   IUserBet,
+  ILeaderboardUser,
+  ITopWin,
 } from '../types/app.types'
 import { setLoading } from '../store/auth.slice'
 
@@ -32,6 +35,7 @@ import { txAdapter } from '../store/tx.adapter'
 import { getCookie } from '../utils/date'
 import { userBetAdapter, userBetSelectors } from '../store/user_bet.adapter'
 import { userPredictionAdapter, userPredictionSelectors } from '../store/user_prediction.adapter'
+import { leaderboardAdapter, leaderboardSelectors } from '../store/leaderboard.adapter'
 
 export const apiBase = createApi({
   reducerPath: 'api',
@@ -326,7 +330,7 @@ export const apiBase = createApi({
           total: response.total ?? 0,
         }
       },
-      serializeQueryArgs: ({ queryArgs }) => ({ group: queryArgs?.group }),
+      serializeQueryArgs: ({ queryArgs }) => ({ tag: queryArgs?.tag }),
       merge: (currentCache, newItems, { arg }) => {
         if (arg?.offset === 0) {
           currentCache.entities = newItems.entities
@@ -337,7 +341,7 @@ export const apiBase = createApi({
         if (currentCache.total !== newItems.total) currentCache.total = newItems.total
       },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg?.offset !== previousArg?.offset || currentArg?.group !== previousArg?.group
+        return currentArg?.offset !== previousArg?.offset || currentArg?.tag !== previousArg?.tag
       },
     }),
     getPrediction: builder.query<IPredictionDetail, number>({
@@ -430,6 +434,32 @@ export const apiBase = createApi({
         return !!currentArg?.offset && currentArg?.offset !== previousArg?.offset
       },
     }),
+    getLeaderboard: builder.query<EntityStateWithTotal<ILeaderboardUser>, PaginatedArg2>({
+      query: (params) => ({
+        url: 'user/leaderboard',
+        params,
+      }),
+      transformResponse: (response: PaginatedResponse<ILeaderboardUser>) => {
+        return {
+          ...leaderboardAdapter.setAll(leaderboardAdapter.getInitialState(), response.data ?? []),
+          total: response.total ?? 0,
+        }
+      },
+      serializeQueryArgs: ({ queryArgs }) => ({ tag: queryArgs.tag, period: queryArgs.period }),
+      merge: (currentCache, newItems) => {
+        if (currentCache.total !== newItems.total) currentCache.total = newItems.total
+        leaderboardAdapter.addMany(currentCache, leaderboardSelectors.selectAll(newItems))
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return !!currentArg?.offset && currentArg?.offset !== previousArg?.offset
+      },
+    }),
+    getTopWins: builder.query<ITopWin[], PaginatedArg2>({
+      query: (params) => ({
+        url: 'user/top',
+        params,
+      }),
+    }),
   }),
 })
 
@@ -469,4 +499,6 @@ export const {
   useGetPredictionQuery,
   useGetUserPredictionsQuery,
   useGetUserBetsQuery,
+  useGetLeaderboardQuery,
+  useGetTopWinsQuery,
 } = apiBase

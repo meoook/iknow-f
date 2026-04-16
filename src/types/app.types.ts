@@ -36,17 +36,25 @@ type IPaginatedRequest<RequireId extends boolean = false> = RequireId extends tr
       id: number | string
       limit?: number
       offset?: number
-      group?: string
+      tag?: string
     }
   : {
       limit?: number
       offset?: number
-      group?: string
+      tag?: string
     }
 
 export type PaginatedArg<RequireId extends boolean = false> = RequireId extends true
   ? IPaginatedRequest<true>
   : IPaginatedRequest | undefined
+
+export type PaginatedArg2 = {
+  id?: number | string
+  limit?: number
+  offset?: number
+  tag?: string
+  period?: string
+}
 
 export type EntityStateWithTotal<T, Id extends EntityId = number> = EntityState<T, Id> & { total: number }
 // interface PaginatedBase {
@@ -76,7 +84,6 @@ export interface IRequest {
   id: number
   state: string
   reject_reason: string
-  group: string
   tags: string[]
   icon?: string
   title: string
@@ -102,7 +109,7 @@ export interface IPrediction {
   id: number
   state: TPredictionState
   title: string
-  group: string
+  tags: string[]
   icon: string
   volume: number
   multiplier: number
@@ -244,4 +251,27 @@ export interface ITx {
   direction: 'IN' | 'OUT'
   amount: number
   created: number
+}
+
+export interface ILeaderboardUser {
+  id: number
+  username: string
+  avatar: string
+  amount: number
+  payout: number
+  profit: number
+}
+
+interface ITopWinPrediction {
+  id: number
+  title: string
+}
+
+export interface ITopWin {
+  id: number
+  username: string
+  avatar: string
+  prediction: ITopWinPrediction
+  amount: number
+  payout: number
 }

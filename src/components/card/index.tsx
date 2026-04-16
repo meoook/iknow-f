@@ -26,7 +26,6 @@ const PredictionCard = ({ prediction }: PredictionCardProps) => {
           {prediction.title}
         </h3>
       </div>
-      {/* <div className='grow'>{prediction.group}</div> */}
       <div className='column'>
         <span className='label'>Разница</span>
         <div className={style.progress}>

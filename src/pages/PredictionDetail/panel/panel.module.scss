@@ -1,8 +1,4 @@
 .panel {
-  box-sizing: border-box;
-  position: sticky;
-  top: calc(var(--size-head) + var(--size-nav) + 20px);
-  height: fit-content;
   max-width: 360px;
 
   @media (max-width: 940px) {

@@ -283,3 +283,10 @@
 .right {
   text-align: right;
 }
+
+.main {
+  display: flex;
+  justify-content: center;
+  padding-top: 18px;
+  gap: 24px;
+}
