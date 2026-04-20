@@ -8,6 +8,8 @@ const WsOutEvent = {
   logout: 'logout',
   prediction_join: 'prediction.join',
   prediction_left: 'prediction.left',
+  user_join: 'user.join',
+  user_left: 'user.left',
 } as const
 
 type WsOutEvent = (typeof WsOutEvent)[keyof typeof WsOutEvent]
@@ -23,13 +25,10 @@ const WsInEvent = {
   comment_deleted: 'comment.deleted',
   comment_like: 'comment.like',
   comment_dislike: 'comment.dislike',
-  request_created: 'request.created',
   request_updated: 'request.updated',
-  request_deleted: 'request.deleted',
-  mybet_created: 'my.bet.created',
-  mybet_updated: 'my.bet.updated',
   bet_created: 'bet.created',
   bet_updated: 'bet.updated',
+  user_bet_created: 'user.bet.created',
 } as const
 
 type WsInEvent = (typeof WsInEvent)[keyof typeof WsInEvent]
@@ -44,6 +43,7 @@ type Handler = (data: any) => void
 class WebSocketManager {
   private ws: WebSocket | null = null
   private rooms = new Map<number, number>()
+  private users = new Map<number, number>()
   private messageQueue: { type: WsOutEvent; value: any }[] = []
   private handlers = new Map<WsInEvent, Set<Handler>>()
   // reconnect
@@ -65,6 +65,9 @@ class WebSocketManager {
         // Re-join rooms if we have any
         this.rooms.forEach((room) => {
           this.send(WsOutEvent.prediction_join, room)
+        })
+        this.users.forEach((user) => {
+          this.send(WsOutEvent.user_join, user)
         })
         this.flushQueue()
       }
@@ -187,7 +190,6 @@ class WebSocketManager {
     const count = this.rooms.get(predictionId) || 0
     this.rooms.set(predictionId, count + 1)
     if (count === 0) this.send(WsOutEvent.prediction_join, predictionId)
-    console.log('predictionJoin', predictionId, this.rooms)
   }
 
   predictionLeave(predictionId: number) {
@@ -200,7 +202,24 @@ class WebSocketManager {
     } else {
       this.rooms.set(predictionId, count - 1)
     }
-    console.log('predictionLeave', predictionId, this.rooms)
+  }
+
+  userJoin(userId: number) {
+    const count = this.users.get(userId) || 0
+    this.users.set(userId, count + 1)
+    if (count === 0) this.send(WsOutEvent.user_join, userId)
+  }
+
+  userLeave(userId: number) {
+    const count = this.users.get(userId)
+    if (!count) return
+
+    if (count === 1) {
+      this.users.delete(userId)
+      this.send(WsOutEvent.user_left, userId)
+    } else {
+      this.users.set(userId, count - 1)
+    }
   }
 }
 

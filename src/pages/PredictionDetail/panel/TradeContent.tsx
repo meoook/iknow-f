@@ -3,9 +3,10 @@ import { useState } from 'react'
 import { useAppSelector } from '../../../hooks/useRedux'
 import { useCreateMyBetMutation } from '../../../services/api'
 import { useModalContext } from '../../../services/ModalContext'
-import ModalLogin from '../../../modals/login'
+import { formatWithCommas } from '../../../utils/date'
 import type { IChoice, IPredictionDetail } from '../../../types/app.types'
 import type { TCurrency } from '../../../types/auth.types'
+import ModalLogin from '../../../modals/login'
 import IconSprite from '../../../elements/icon'
 import TradeInput from '../../../elements/trade-input/TradeInput'
 
@@ -16,7 +17,6 @@ interface TradeContentProps {
 }
 
 export default function TradeContent({ prediction, selectedChoice, onSuccess }: TradeContentProps) {
-  const MAX_VALUE: number = 9999999
   const { user, loading } = useAppSelector((state) => state.auth)
   const { settings } = useAppSelector((state) => state.app)
   const { openModal } = useModalContext()
@@ -52,42 +52,6 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
     }
   }
 
-  const addAmount = (value: number) => {
-    setAmount((prev) => {
-      const num = Number(prev) + value
-      if (num > MAX_VALUE) {
-        tilt()
-        return prev
-      }
-      return num.toString()
-    })
-  }
-
-  const setMaxAmount = () => {
-    if (currency === 'CASH') {
-      const value = user?.balances.CASH ? Math.floor(user.balances.CASH) : 0
-      setAmount(`${Math.min(value, MAX_VALUE)}`)
-    } else {
-      const value = user?.balances.POINT ? Math.floor(user.balances.POINT) : 0
-      setAmount(`${Math.min(value, MAX_VALUE)}`)
-    }
-  }
-
-  const formatWithCommas = (val: string) => {
-    const num = parseInt(val.replace(/\D/g, ''), 10)
-    if (isNaN(num)) return ''
-    return new Intl.NumberFormat('en-US').format(num)
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/\D/g, '')
-    const num = parseInt(raw, 10)
-    if (raw === '') setAmount('0')
-    else if (num <= MAX_VALUE) setAmount(num.toString())
-    else tilt()
-  }
-
-  const displayValue = formatWithCommas(amount)
   const displayPayout = currency !== 'POINT' && Number(amount) > 0 && selectedChoice && selectedChoice.multiplier > 1
 
   const imgUrl = import.meta.env.VITE_IMG_URL
@@ -110,31 +74,15 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
       </div>
 
       <div className='column gap-3'>
-        <div className='row justify center'>
-          <div>Количество</div>
-          <TradeInput currency={currency} value={displayValue} onChange={handleInputChange} tilt={isTilt} />
-        </div>
-
-        <div className='row justify center gap-2'>
-          <div className='row center gap-1'>
-            <span className='label'>Мин.</span>
-            <span className='label'>{currency === 'POINT' ? `¢${settings.min_point}` : `$${settings.min_cash}`}</span>
-          </div>
-          <div className='row gap-2'>
-            <button className='chip hover' onClick={() => addAmount(1)}>
-              {currency === 'POINT' ? '+¢1' : '+$1'}
-            </button>
-            <button className='chip hover' onClick={() => addAmount(20)}>
-              {currency === 'POINT' ? '+¢20' : '+$20'}
-            </button>
-            <button className='chip hover' onClick={() => addAmount(100)}>
-              {currency === 'POINT' ? '+¢100' : '+$100'}
-            </button>
-            <button className='chip hover' onClick={setMaxAmount}>
-              Max
-            </button>
-          </div>
-        </div>
+        <TradeInput
+          currency={currency}
+          value={amount}
+          setValue={setAmount}
+          minimum={currency === 'CASH' ? settings.min_cash : settings.min_point}
+          maximum={user?.balances.CASH ? Math.floor(user.balances.CASH) : 0}
+          isTilt={isTilt}
+          tilt={tilt}
+        />
 
         <div className={`${s.payout}${displayPayout ? ' show' : ''}`}>
           <div className='row justify end'>

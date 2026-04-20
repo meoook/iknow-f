@@ -27,7 +27,6 @@ import { setLoading } from '../store/auth.slice'
 
 import { wsManager } from './websocket'
 import { requestsAdapter } from '../store/requests.adapter'
-import { mybetAdapter } from '../store/mybet.adapter'
 import { betAdapter } from '../store/bet.adapter'
 import { predictionAdapter, predictionSelectors } from '../store/prediction.adapter'
 import { topAdapter, topSelectors } from '../store/top.adapter'
@@ -211,26 +210,26 @@ export const apiBase = createApi({
           })
         }
 
-        const handleCreated = (request: IRequest) => {
-          updateCachedData((draft) => {
-            requestsAdapter.addOne(draft, request)
-          })
-        }
-        const handleDeleted = (id: number) => {
-          updateCachedData((draft) => {
-            requestsAdapter.removeOne(draft, id)
-          })
-        }
+        // const handleCreated = (request: IRequest) => {
+        //   updateCachedData((draft) => {
+        //     requestsAdapter.addOne(draft, request)
+        //   })
+        // }
+        // const handleDeleted = (id: number) => {
+        //   updateCachedData((draft) => {
+        //     requestsAdapter.removeOne(draft, id)
+        //   })
+        // }
 
         wsManager.subscribe('request.updated', handleUpdated)
-        wsManager.subscribe('request.created', handleCreated)
-        wsManager.subscribe('request.deleted', handleDeleted)
+        // wsManager.subscribe('request.created', handleCreated)
+        // wsManager.subscribe('request.deleted', handleDeleted)
 
         await cacheEntryRemoved
 
         wsManager.unsubscribe('request.updated', handleUpdated)
-        wsManager.unsubscribe('request.created', handleCreated)
-        wsManager.unsubscribe('request.deleted', handleDeleted)
+        // wsManager.unsubscribe('request.created', handleCreated)
+        // wsManager.unsubscribe('request.deleted', handleDeleted)
       },
     }),
     createRequest: builder.mutation<IRequest, IRequestCreate>({
@@ -248,59 +247,12 @@ export const apiBase = createApi({
         )
       },
     }),
-    getMyBets: builder.query<EntityStateWithTotal<IMyBet>, PaginatedArg>({
-      query: (params) => ({
-        url: 'bets',
-        params,
-      }),
-      transformResponse: (response: PaginatedResponse<IMyBet>) => {
-        return {
-          ...mybetAdapter.setAll(mybetAdapter.getInitialState(), response?.data ?? []),
-          total: response?.total ?? 0,
-        }
-      },
-      async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
-        try {
-          await cacheDataLoaded
-        } catch {
-          return
-        }
-
-        const handleUpdated = (bet: Partial<IMyBet>) => {
-          updateCachedData((draft) => {
-            if (bet.id) mybetAdapter.updateOne(draft, { id: bet.id, changes: bet })
-          })
-        }
-
-        const handleCreated = (bet: IMyBet) => {
-          updateCachedData((draft) => {
-            mybetAdapter.addOne(draft, bet)
-          })
-        }
-
-        wsManager.subscribe('my.bet.updated', handleUpdated)
-        wsManager.subscribe('my.bet.created', handleCreated)
-
-        await cacheEntryRemoved
-
-        wsManager.unsubscribe('my.bet.updated', handleUpdated)
-        wsManager.unsubscribe('my.bet.created', handleCreated)
-      },
-    }),
     createMyBet: builder.mutation<IMyBet, IBetCreate>({
       query: (payload) => ({
         url: 'bets',
         method: 'POST',
         body: payload,
       }),
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        const { data } = await queryFulfilled
-        dispatch(
-          apiBase.util.updateQueryData('getMyBets', undefined, (draft) => {
-            mybetAdapter.addOne(draft, data)
-          }),
-        )
-      },
     }),
     getTx: builder.query<EntityStateWithTotal<ITx>, PaginatedArg>({
       query: (params) => ({
@@ -418,7 +370,6 @@ export const apiBase = createApi({
         url: `user/${id}/bets`,
         params,
       }),
-
       transformResponse: (response: PaginatedResponse<IUserBet>) => {
         return {
           ...userBetAdapter.setAll(userBetAdapter.getInitialState(), response.data ?? []),
@@ -432,6 +383,23 @@ export const apiBase = createApi({
       },
       forceRefetch({ currentArg, previousArg }) {
         return !!currentArg?.offset && currentArg?.offset !== previousArg?.offset
+      },
+      async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
+        try {
+          await cacheDataLoaded
+        } catch {
+          return
+        }
+
+        const handleCreated = (bet: IUserBet) => {
+          updateCachedData((draft) => {
+            userBetAdapter.addOne(draft, bet)
+          })
+        }
+
+        wsManager.subscribe('user.bet.created', handleCreated)
+        await cacheEntryRemoved
+        wsManager.unsubscribe('user.bet.created', handleCreated)
       },
     }),
     getLeaderboard: builder.query<EntityStateWithTotal<ILeaderboardUser>, PaginatedArg2>({
@@ -487,7 +455,6 @@ export const {
   useDeleteAllNotificationsMutation,
   // ------
   useCreateRequestMutation,
-  useGetMyBetsQuery,
   useCreateMyBetMutation,
   useGetBetsQuery,
   useGetTopQuery,

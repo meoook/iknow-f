@@ -152,8 +152,8 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
             className={errors.username ? 'outline error' : 'outline'}
             placeholder='Никнейм'
           />
-          {errors.username && <span className='error-msg'>{errors.username}</span>}
-          {setUserParamsError && <span className='error-msg'>Такой никнейм уже существует</span>}
+          {errors.username && <span className='error'>{errors.username}</span>}
+          {setUserParamsError && <span className='error'>Такой никнейм уже существует</span>}
         </div>
 
         <div className='form-row'>

@@ -1,13 +1,6 @@
 import style from './dateselect.module.scss'
 import { useState, useEffect } from 'react'
 
-interface DateSelectProps {
-  value: string
-  onChange: (date: string) => void
-  minDate?: string
-  error?: boolean
-}
-
 const MONTHS = [
   { value: '01', label: 'Январь' },
   { value: '02', label: 'Февраль' },
@@ -23,7 +16,17 @@ const MONTHS = [
   { value: '12', label: 'Декабрь' },
 ]
 
-export default function DateSelect({ value, onChange, minDate, error }: DateSelectProps) {
+interface DateSelectProps {
+  title?: string
+  info?: string
+  value: string
+  onChange: (date: string) => void
+  minDate?: string
+  maxDate?: string
+  error?: boolean
+}
+
+export default function DateSelect({ title, info, value, onChange, minDate, maxDate, error }: DateSelectProps) {
   const [month, setMonth] = useState('')
   const [day, setDay] = useState('')
   const [year, setYear] = useState('')
@@ -95,6 +98,7 @@ export default function DateSelect({ value, onChange, minDate, error }: DateSele
 
   return (
     <div className='form-row'>
+      {title && <div>{title}</div>}
       <div className={`${style.container} ${error || validationError ? style.error : ''}`}>
         <input
           type='text'
@@ -123,7 +127,8 @@ export default function DateSelect({ value, onChange, minDate, error }: DateSele
           inputMode='numeric'
         />
       </div>
-      {validationError && <div className='error-msg'>{validationError}</div>}
+      {validationError && <div className='error'>{validationError}</div>}
+      {!validationError && info && <div className='info'>{info}</div>}
     </div>
   )
 }

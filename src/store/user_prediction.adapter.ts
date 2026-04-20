@@ -9,6 +9,7 @@ export const useUserPredictions = (userId: number | string, limit?: number, offs
   return useGetUserPredictionsQuery(
     { id: userId, limit, offset },
     {
+      skip: !userId,
       selectFromResult: ({ data, isLoading, isFetching, isError }) => ({
         predictionIds: data ? userPredictionSelectors.selectIds(data) : [],
         predictions: data ? userPredictionSelectors.selectAll(data) : [],

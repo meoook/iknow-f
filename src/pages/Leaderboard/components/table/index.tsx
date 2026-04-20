@@ -39,9 +39,9 @@ export default function LeaderboardTable({ tag, period }: TableProps) {
     }
   }, [users.length, total, isLoading, isFetching, loadMore])
 
-  if (isLoading && users.length === 0) return <Empty title='Загрузка...' loading size={16} />
-  if (isError) return <Empty title='Ошибка загрузки' size={16} />
-  if (!users.length) return <Empty title='Лидеры не найдены' size={16} />
+  if (isLoading && users.length === 0) return <Empty title='Загрузка...' loading size={20} />
+  if (isError) return <Empty title='Ошибка загрузки' size={20} />
+  if (!users.length) return <Empty title='Лидеры не найдены' size={20} />
 
   return (
     <>

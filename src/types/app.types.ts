@@ -73,11 +73,13 @@ export interface IRequestCreate {
   icon?: File
   title: string
   rules: string
+  link: string
   choices: string[]
   vote: string
   currency: TCurrency
   amount: number
   end_date: string
+  bet_date: string
 }
 
 export interface IRequest {

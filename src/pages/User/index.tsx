@@ -1,9 +1,10 @@
 import style from './page.module.scss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useGetUserByIdQuery } from '../../services/api'
 import { useModalContext } from '../../services/ModalContext'
+import { wsManager } from '../../services/websocket'
 import ModalDeposit from '../../modals/deposit'
 import IconSprite from '../../elements/icon'
 import Empty from '../../elements/empty'
@@ -19,8 +20,17 @@ export default function PageUser() {
   const [activeTab, setActiveTab] = useState<'predictions' | 'activity' | 'created'>('predictions')
   const [pnlRange, setPnlRange] = useState<'1Д' | '1Н' | '1М' | 'ВСЕ'>('ВСЕ')
 
-  const { data: userO, isLoading, isError } = useGetUserByIdQuery(id ?? '')
+  const { data: userO, isLoading, isError } = useGetUserByIdQuery(id as string, { skip: !id })
   const { user } = useAppSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (!userO?.id) return
+    wsManager.userJoin(userO.id)
+
+    return () => {
+      wsManager.userLeave(userO.id)
+    }
+  }, [userO?.id])
 
   if (isLoading) return <Empty title='Загрузка...' loading />
   if (isError) return <Empty title='Ошибка...' />

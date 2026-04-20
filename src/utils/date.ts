@@ -18,6 +18,12 @@ export const formatRelativeTime = (date: string | number | Date): string => {
   return 'только что'
 }
 
+export const formatWithCommas = (val: string) => {
+  const num = parseInt(val.replace(/\D/g, ''), 10)
+  if (isNaN(num)) return ''
+  return new Intl.NumberFormat('en-US').format(num)
+}
+
 export const getCookie = (name: string) => {
   const value = `; ${document.cookie}`
   const parts = value.split(`; ${name}=`)

@@ -12,6 +12,7 @@ export const useCommentIds = (predictionId: number) => {
   return useGetCommentsQuery(
     { id: predictionId },
     {
+      skip: !predictionId,
       selectFromResult: ({ data, isLoading, isFetching, isError }) => ({
         commentIds: data ? commentsSelectors.selectIds(data) : [],
         total: data?.total ?? 0,
@@ -24,6 +25,6 @@ export const useCommentIds = (predictionId: number) => {
 }
 
 export const useComment = (predictionId: number, id: number): IComment | undefined => {
-  const { data } = useGetCommentsQuery({ id: predictionId })
+  const { data } = useGetCommentsQuery({ id: predictionId }, { skip: !predictionId })
   return data ? commentsSelectors.selectById(data, id) : undefined
 }

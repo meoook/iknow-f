@@ -183,7 +183,7 @@ export default function ModalPrediction({ close }: ModalPredictionProps) {
           className={errors.title ? 'outline error' : 'outline'}
           placeholder='Название'
         />
-        {errors.title && <span className='error-msg'>{errors.title}</span>}
+        {errors.title && <span className='error'>{errors.title}</span>}
       </div>
 
       <div className={style.tabs}>
@@ -262,7 +262,7 @@ export default function ModalPrediction({ close }: ModalPredictionProps) {
           className={errors.rules ? 'outline error' : 'outline'}
           placeholder='Условия для соблюдения прогноза. Общедоступные источники для проверки.'
         />
-        {errors.rules && <span className='error-msg'>{errors.rules}</span>}
+        {errors.rules && <span className='error'>{errors.rules}</span>}
       </div>
       <div className='form-row'>
         <div className='row center gap16'>
@@ -289,7 +289,7 @@ export default function ModalPrediction({ close }: ModalPredictionProps) {
             />
           </div>
         </div>
-        {errors.amount && <div className='error-msg'>{errors.amount}</div>}
+        {errors.amount && <div className='error'>{errors.amount}</div>}
       </div>
       <label>Дата события / Дата окончания прогноза</label>
       <DateSelect

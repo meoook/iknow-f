@@ -1,12 +1,12 @@
 import s from './request.module.scss'
 import React from 'react'
-import { useRequest } from '../../../store/requests.adapter'
-import IconSprite from '../../../elements/icon'
-import Loader from '../../../elements/loader'
-import PredictionHead from '../../head'
-import PredictionStatus from '../../../elements/status'
+import { useRequest } from '../../../../store/requests.adapter'
+import IconSprite from '../../../../elements/icon'
+import Loader from '../../../../elements/loader'
+import PredictionHead from '../../../../components/head'
+import PredictionStatus from '../../../../elements/status'
 
-const RequestItem = ({ requestId, isLast }: { requestId: number; isLast?: boolean }) => {
+const RequestItem = ({ requestId }: { requestId: number }) => {
   const request = useRequest(requestId)
   if (!request) return null
 
@@ -60,7 +60,6 @@ const RequestItem = ({ requestId, isLast }: { requestId: number; isLast?: boolea
           </div>
         </div>
       </div>
-      {!isLast && <hr />}
     </>
   )
 }

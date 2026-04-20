@@ -12,6 +12,7 @@ export const useBetIds = (predictionId: number) => {
   return useGetBetsQuery(
     { id: predictionId },
     {
+      skip: !predictionId,
       selectFromResult: ({ data, isLoading, isFetching, isError }) => ({
         betIds: data ? betSelectors.selectIds(data) : [],
         total: data?.total ?? 0,
@@ -24,6 +25,6 @@ export const useBetIds = (predictionId: number) => {
 }
 
 export const useBet = (predictionId: number, id: number): IBet | undefined => {
-  const { data } = useGetBetsQuery({ id: predictionId })
+  const { data } = useGetBetsQuery({ id: predictionId }, { skip: !predictionId })
   return data ? betSelectors.selectById(data, id) : undefined
 }

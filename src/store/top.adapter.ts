@@ -13,6 +13,7 @@ export const useTopIds = (predictionId: number) => {
   return useGetTopQuery(
     { id: predictionId },
     {
+      skip: !predictionId,
       selectFromResult: ({ data, isLoading, isFetching, isError }) => ({
         topIds: data ? topSelectors.selectIds(data) : [],
         total: data?.total ?? 0,
@@ -25,6 +26,6 @@ export const useTopIds = (predictionId: number) => {
 }
 
 export const useTop = (predictionId: number, username: string): ITopHolder | undefined => {
-  const { data } = useGetTopQuery({ id: predictionId })
+  const { data } = useGetTopQuery({ id: predictionId }, { skip: !predictionId })
   return data ? topSelectors.selectById(data, username) : undefined
 }

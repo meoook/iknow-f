@@ -1,10 +1,9 @@
-import style from './table.module.scss'
 import { useEffect, useRef, useState } from 'react'
 import { useRequestIds } from '../../../store/requests.adapter'
 import { useAppDispatch } from '../../../hooks/useRedux'
 import { apiBase } from '../../../services/api'
 import Empty from '../../../elements/empty'
-import RequestItem from '../../../components/prediction/request'
+import RequestItem from './request'
 
 export default function RequestsTable() {
   const limit = 10
@@ -39,9 +38,9 @@ export default function RequestsTable() {
   if (!requestIds.length) return <Empty title='Прогнозы не найдены' size={16} />
 
   return (
-    <div className={style.table}>
-      {requestIds.map((requestId: number, idx: number) => (
-        <RequestItem key={requestId} requestId={requestId} isLast={idx === requestIds.length - 1} />
+    <div className='column'>
+      {requestIds.map((requestId: number) => (
+        <RequestItem key={requestId} requestId={requestId} />
       ))}
 
       <div ref={observerTarget} className='more' />

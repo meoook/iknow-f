@@ -13,6 +13,7 @@ import Empty from './elements/empty'
 
 const Home = lazy(() => import('./pages/Home'))
 const Profile = lazy(() => import('./pages/Profile/page'))
+const PageCreateRequest = lazy(() => import('./pages/Create'))
 const PageUser = lazy(() => import('./pages/User'))
 const PredictionDetail = lazy(() => import('./pages/PredictionDetail/page'))
 const PageLeaderboard = lazy(() => import('./pages/Leaderboard'))
@@ -38,6 +39,7 @@ export default function NavRouter() {
               {/* Protected routes */}
               <Route element={<LayoutProtected />}>
                 <Route path='/profile' element={<Profile />} />
+                <Route path='/create' element={<PageCreateRequest />} />
               </Route>
 
               {/* Auth-only routes (redirect if already authenticated) */}
