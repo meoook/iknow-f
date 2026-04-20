@@ -22,7 +22,7 @@ interface DateSelectProps {
   value: string
   onChange: (date: string) => void
   minDate?: string
-  maxDate?: string
+  maxDate?: number
   error?: boolean
 }
 
@@ -37,29 +37,15 @@ export default function DateSelect({ title, info, value, onChange, minDate, maxD
     if (value) {
       const [y, m, d] = value.split('-')
       setYear(y || '')
-      setMonth(m || '')
-      setDay(d || '')
+      setMonth(m ? m.padStart(2, '0') : '')
+      setDay(d ? d.padStart(2, '0') : '')
     }
   }, [value])
 
   // Валидация и обновление родительского компонента
   useEffect(() => {
-    if (month && day && year && year.length === 4) {
-      const paddedDay = day.padStart(2, '0')
-      const formattedDate = `${year}-${month}-${paddedDay}`
-
-      // Проверяем корректность даты
-      const dateObj = new Date(formattedDate)
-      const isValidDate =
-        dateObj.getFullYear() === parseInt(year) &&
-        dateObj.getMonth() === parseInt(month) - 1 &&
-        dateObj.getDate() === parseInt(day)
-
-      if (!isValidDate) {
-        setValidationError('Не верный формат даты')
-        onChange('')
-        return
-      }
+    if (month && day && year) {
+      const formattedDate = `${year}-${month}-${day}`
 
       // Проверяем минимальную дату
       if (minDate && formattedDate < minDate) {
@@ -69,7 +55,7 @@ export default function DateSelect({ title, info, value, onChange, minDate, maxD
           month: 'long',
           year: 'numeric',
         })
-        setValidationError(`Дата не может быть раньше ${minDateFormatted}`)
+        setValidationError(`Не может быть раньше ${minDateFormatted}`)
         onChange('')
         return
       }
@@ -82,50 +68,82 @@ export default function DateSelect({ title, info, value, onChange, minDate, maxD
     }
   }, [month, day, year, minDate])
 
+  const getDaysInMonth = (m: string, y: string) => {
+    if (!m) return 31
+    const monthNum = parseInt(m)
+    const yearNum = y ? parseInt(y) : new Date().getFullYear()
+    return new Date(yearNum, monthNum, 0).getDate()
+  }
+
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setMonth(e.target.value)
+    const newMonth = e.target.value
+    setMonth(newMonth)
+
+    const nextMaxDays = getDaysInMonth(newMonth, year)
+    if (day && parseInt(day) > nextMaxDays) {
+      setDay(nextMaxDays.toString().padStart(2, '0'))
+    }
   }
 
-  const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value.replace(/\D/g, '') // Только цифры
-    if (val.length <= 2) setDay(val)
+  const handleDayChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setDay(e.target.value)
   }
 
-  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value.replace(/\D/g, '') // Только цифры
-    if (val.length <= 4) setYear(val)
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newYear = e.target.value
+    setYear(newYear)
+
+    const nextMaxDays = getDaysInMonth(month, newYear)
+    if (day && parseInt(day) > nextMaxDays) {
+      setDay(nextMaxDays.toString().padStart(2, '0'))
+    }
   }
+
+  const currentYear = new Date().getFullYear()
+  const startYear = minDate ? new Date(minDate).getFullYear() : currentYear
+  const endYear = maxDate || Math.max(startYear, currentYear + 1)
+  const years = []
+  for (let i = startYear; i <= endYear; i++) {
+    years.push(i.toString())
+  }
+
+  const maxDays = getDaysInMonth(month, year)
+  const daysList = Array.from({ length: maxDays }, (_, i) => (i + 1).toString().padStart(2, '0'))
 
   return (
     <div className='form-row'>
       {title && <div>{title}</div>}
       <div className={`${style.container} ${error || validationError ? style.error : ''}`}>
-        <input
-          type='text'
-          className={`${style.day} outline`}
-          placeholder='День'
-          value={day}
-          onChange={handleDayChange}
-          maxLength={2}
-          inputMode='numeric'
-        />
+        <select className={`${style.day} outline`} name='day' value={day} onChange={handleDayChange}>
+          <option value='' disabled hidden>
+            День
+          </option>
+          {daysList.map((d) => (
+            <option key={d} value={d}>
+              {parseInt(d)}
+            </option>
+          ))}
+        </select>
         <select className={`${style.month} outline`} name='month' value={month} onChange={handleMonthChange}>
-          <option value=''>Месяц</option>
+          <option value='' disabled hidden>
+            Месяц
+          </option>
           {MONTHS.map((m) => (
             <option key={m.value} value={m.value}>
               {m.label}
             </option>
           ))}
         </select>
-        <input
-          type='text'
-          className={`${style.year} outline`}
-          placeholder='Год'
-          value={year}
-          onChange={handleYearChange}
-          maxLength={4}
-          inputMode='numeric'
-        />
+        <select className={`${style.year} outline`} name='year' value={year} onChange={handleYearChange}>
+          <option value='' disabled hidden>
+            Год
+          </option>
+          {years.map((y) => (
+            <option key={y} value={y}>
+              {y}
+            </option>
+          ))}
+        </select>
       </div>
       {validationError && <div className='error'>{validationError}</div>}
       {!validationError && info && <div className='info'>{info}</div>}

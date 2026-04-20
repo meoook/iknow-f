@@ -1,23 +1,27 @@
 .container {
   display: flex;
   gap: 12px;
-  width: 100%;
+  // width: 100%;
 
-  &.error {
-    & > input,
-    & > select {
-      box-shadow: 0 0 0 2px var(--color-red);
-    }
+  &.error > select {
+    // box-shadow: 0 0 0 2px var(--color-red);
+    // border-color: transparent;
+    border-color: var(--color-red);
   }
 }
 
-.month {
-  flex: 1;
-  // max-width: 200px;
-}
 .day {
-  width: 75px;
+  width: 80px;
+}
+.month {
+  width: 120px;
 }
 .year {
-  width: 90px;
+  width: 80px;
+}
+
+.day,
+.month,
+.year {
+  padding-inline: 6px;
 }

@@ -7,9 +7,9 @@ interface TradeInputProps {
   currency: TCurrency
   maximum: number
   minimum: number
-  value: string
+  value: number
   isTilt: boolean
-  setValue: (value: React.SetStateAction<string>) => void
+  setValue: (value: number) => void
   tilt: () => void
 }
 
@@ -21,27 +21,22 @@ export default function TradeInput({ currency, maximum, minimum, value, isTilt, 
     if (inputRef.current) inputRef.current.focus()
   }
 
-  const addAmount = (value: number) => {
-    setValue((prev) => {
-      const num = Number(prev) + value
-      if (num > MAX_VALUE) {
-        tilt()
-        return prev
-      }
-      return num.toString()
-    })
+  const addAmount = (val: number) => {
+    const num = val + value
+    if (num <= MAX_VALUE) setValue(num)
+    else tilt()
   }
 
   const setMaxAmount = () => {
     const val = Math.floor(maximum)
-    setValue(`${Math.min(val, MAX_VALUE)}`)
+    setValue(Math.min(val, MAX_VALUE))
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '')
     const num = parseInt(raw, 10)
-    if (raw === '') setValue('0')
-    else if (num <= MAX_VALUE) setValue(num.toString())
+    if (raw === '') setValue(0)
+    else if (num <= MAX_VALUE) setValue(num)
     else tilt()
   }
 

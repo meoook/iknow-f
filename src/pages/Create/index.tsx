@@ -1,6 +1,6 @@
 import s from './create.module.scss'
 import { useEffect, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useCreateRequestMutation } from '../../services/api'
 import type { IRequestCreate } from '../../types/app.types'
@@ -15,6 +15,7 @@ const VOTE_NO_NAME = 'Нет / Не сбудется'
 export default function PageCreateRequest() {
   const user = useAppSelector((state) => state.auth.user)
   const { settings } = useAppSelector((state) => state.app)
+  const navigate = useNavigate()
   const [createRequest, { isLoading, isError }] = useCreateRequestMutation()
   const [formData, setFormData] = useState<IRequestCreate>({
     title: '',
@@ -39,7 +40,6 @@ export default function PageCreateRequest() {
   })
   const [error, setError] = useState<string>('')
   const [choiceInput, setChoiceInput] = useState('')
-  const [amountInput, setAmountInput] = useState(formData.amount.toString())
   const [activeTab, setActiveTab] = useState<'yesno' | 'choices'>('yesno')
   const [isTilt, setIsTilt] = useState(false)
 
@@ -52,17 +52,21 @@ export default function PageCreateRequest() {
     setTimeout(() => setIsTilt(false), 500)
   }
 
+  const setAmount = (v: number) => {
+    setFormData((prev) => ({ ...prev, amount: v }))
+  }
+
   const validForm = (): boolean => {
     const currentBalance = user?.balances[formData.currency] || 0
-    // if (formData.title.trim() === '') console.log('title')
-    // if (formData.rules.trim() === '') console.log('rules')
-    // if (formData.vote.trim() === '') console.log('vote')
-    // if (formData.choices.length === 0) console.log('choices')
-    // if (formData.choices.includes(formData.vote) === false) console.log('vote_choice')
-    // if (!['CASH', 'POINT'].includes(formData.currency)) console.log('currency')
-    // if (formData.amount <= 0) console.log('amount')
-    // if (formData.amount > currentBalance) console.log('amount')
-    // if (formData.end_date === '') console.log('end_date')
+    if (formData.title.trim() === '') console.log('title')
+    if (formData.rules.trim() === '') console.log('rules')
+    if (formData.vote.trim() === '') console.log('vote')
+    if (formData.choices.length === 0) console.log('choices')
+    if (formData.choices.includes(formData.vote) === false) console.log('vote_choice')
+    if (!['CASH', 'POINT'].includes(formData.currency)) console.log('currency')
+    if (formData.amount <= 0) console.log(`amount negative ${formData.amount}`)
+    if (formData.amount > currentBalance) console.log('amount too much')
+    if (formData.end_date === '') console.log('end_date')
 
     return (
       formData.title.trim() !== '' &&
@@ -152,7 +156,7 @@ export default function PageCreateRequest() {
 
     createRequest(formData)
       .unwrap()
-      .then(() => <Navigate to='/requests' />)
+      .then(() => navigate(`/user/${user?.id}?tab=requests`))
   }
 
   return (
@@ -221,7 +225,7 @@ export default function PageCreateRequest() {
             <DateSelect
               title='Дата закрытия ставок (опционально)'
               value={formData.bet_date}
-              onChange={(date) => setFormData((prev) => ({ ...prev, end_date: date }))}
+              onChange={(date) => setFormData((prev) => ({ ...prev, bet_date: date }))}
               minDate={(() => {
                 const tomorrow = new Date()
                 tomorrow.setDate(tomorrow.getDate() + 1)
@@ -317,33 +321,19 @@ export default function PageCreateRequest() {
             <h2 className='pv-2 bd-b'>Ставка</h2>
             <TradeInput
               currency='CASH'
-              value={amountInput}
-              setValue={setAmountInput}
+              value={formData.amount}
+              setValue={setAmount}
               minimum={settings.min_cash_create}
               maximum={user?.balances.CASH ? Math.floor(user.balances.CASH) : 0}
               isTilt={isTilt}
               tilt={tilt}
             />
             {errors.amount && <div className='error'>{errors.amount}</div>}
-
-            {/* <DateSelect
-              title='Дата события'
-              value={formData.end_date}
-              onChange={(date) => setFormData((prev) => ({ ...prev, end_date: date }))}
-              minDate={(() => {
-                const tomorrow = new Date()
-                tomorrow.setDate(tomorrow.getDate() + 1)
-                return tomorrow.toISOString().split('T')[0]
-              })()}
-              error={!!errors.end_date}
-            /> */}
           </div>
 
-          <div className='row center gap16'>
-            <button className='btn blue mid w-full' onClick={handleCreate} disabled={isLoading}>
-              Создать прогноз
-            </button>
-          </div>
+          <button className='btn blue mid w-full' onClick={handleCreate} disabled={isLoading}>
+            Создать прогноз
+          </button>
 
           {error && (
             <div className='row center alert-orange gap-1 ph-3 pv-2 bdr text-sm'>

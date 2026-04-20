@@ -18,8 +18,8 @@ export const formatRelativeTime = (date: string | number | Date): string => {
   return 'только что'
 }
 
-export const formatWithCommas = (val: string) => {
-  const num = parseInt(val.replace(/\D/g, ''), 10)
+export const formatWithCommas = (val: string | number) => {
+  const num = typeof val === 'string' ? parseInt(val.replace(/\D/g, ''), 10) : val
   if (isNaN(num)) return ''
   return new Intl.NumberFormat('en-US').format(num)
 }
