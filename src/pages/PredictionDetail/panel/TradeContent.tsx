@@ -23,7 +23,7 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
   const [createBet, { isLoading }] = useCreateMyBetMutation()
 
   const [currency, setCurrency] = useState<TCurrency>('CASH')
-  const [amount, setAmount] = useState<string>('0')
+  const [amount, setAmount] = useState<number>(0)
   const [isTilt, setIsTilt] = useState(false)
 
   const tilt = () => {
@@ -38,21 +38,21 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
     }
     if (!selectedChoice) return
     const balance = currency === 'CASH' ? user.balances.CASH : user.balances.POINT
-    if (Number(amount) > (balance || 0)) {
+    if (amount > (balance || 0)) {
       tilt()
       return
     }
 
     try {
-      await createBet({ choice_id: selectedChoice.id, currency, amount: Number(amount) }).unwrap()
-      setAmount('0')
+      await createBet({ choice_id: selectedChoice.id, currency, amount }).unwrap()
+      setAmount(0)
       onSuccess?.()
     } catch (e) {
       tilt()
     }
   }
 
-  const displayPayout = currency !== 'POINT' && Number(amount) > 0 && selectedChoice && selectedChoice.multiplier > 1
+  const displayPayout = currency !== 'POINT' && amount > 0 && selectedChoice && selectedChoice.multiplier > 1
 
   const imgUrl = import.meta.env.VITE_IMG_URL
   const src = prediction.icon ? `${imgUrl}${prediction.icon}` : `${imgUrl}/icon/no_icon.png`
