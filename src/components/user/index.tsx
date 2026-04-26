@@ -85,10 +85,7 @@ function UserButtons({ user }: { user: IUser }) {
   const { openModal } = useModalContext()
   return (
     <>
-      <div className='flex-i sm-hide center gap-2'>
-        <Balance name='Баллы' balance={user.balances.POINT} />
-        <Balance name='Кэш' balance={user.balances.CASH} currency='USD' />
-      </div>
+      <Balance name='Баланс' balance={user.balance} />
       <button className='btn blue lg-hide' onClick={() => openModal(ModalDeposit)}>
         Депозит
       </button>

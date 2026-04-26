@@ -36,13 +36,15 @@ const WinList = ({ tag, period }: SidebarProps) => {
     <div className='column gap-1 pv-1 text-sm noscroll hidden'>
       {data.map((win, idx) => (
         <>
-          <div key={win.id} className='row center gap-2 pv-3 bd-b'>
+          <div key={win.user.id} className='row center gap-2 pv-3 bd-b'>
             <div className={s.rank}>{idx + 1}</div>
-            <Avatar src={win.avatar} size='md' />
+            <Link to={`/user/${win.user.id}`}>
+              <Avatar src={win.user.avatar} size='md' />
+            </Link>
             <div className='grow w-0'>
               <div className={s.top}>
-                <Link to={`/user/${win.id}`} className='ellipsis w-500 h-brand'>
-                  {win.username}
+                <Link to={`/user/${win.user.id}`} className='ellipsis w-500 h-brand'>
+                  {win.user.username}
                 </Link>
                 <Link to={`/prediction/${win.prediction.id}`} className='ellipsis secondary h-brand w-full'>
                   {win.prediction.title}

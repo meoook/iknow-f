@@ -1,6 +1,6 @@
 import style from './page.module.scss'
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useGetUserByIdQuery } from '../../services/api'
 import { useModalContext } from '../../services/ModalContext'
@@ -13,11 +13,15 @@ import PredictionsTable from './table/predictions'
 import BetsTable from './table/bets'
 import RequestsTable from './table/requests'
 
+type TabType = 'predictions' | 'activity' | 'created'
+const VALID_TABS: TabType[] = ['predictions', 'activity', 'created']
+
+
 export default function PageUser() {
   const { id } = useParams<{ id: string }>()
   const { openModal } = useModalContext()
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  const [activeTab, setActiveTab] = useState<'predictions' | 'activity' | 'created'>('predictions')
   const [pnlRange, setPnlRange] = useState<'1Д' | '1Н' | '1М' | 'ВСЕ'>('ВСЕ')
 
   const { data: userO, isLoading, isError } = useGetUserByIdQuery(id as string, { skip: !id })
@@ -37,6 +41,15 @@ export default function PageUser() {
   if (!userO) return <Empty title='Пользователь не найден' />
 
   const isOwner = user?.id === userO?.id
+
+  const tab = searchParams.get('tab') as TabType | null
+  const activeTab: TabType = tab && VALID_TABS.includes(tab) && (tab !== 'created' || isOwner) ? tab : 'predictions'
+
+  const setActiveTab = (newTab: TabType) => {
+    const newParams = new URLSearchParams(searchParams)
+    newParams.set('tab', newTab)
+    setSearchParams(newParams, { replace: true })
+  }
 
   const formatDate = (timestamp: number) => {
     if (!timestamp) return '...'
@@ -209,7 +222,7 @@ export default function PageUser() {
           {activeTab === 'activity' && <BetsTable userId={id} />}
         </>
       )}
-      {user && activeTab === 'created' && <RequestsTable />}
+      {isOwner && activeTab === 'created' && <RequestsTable />}
     </div>
   )
 }

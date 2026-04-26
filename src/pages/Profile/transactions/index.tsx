@@ -65,9 +65,7 @@ const TxBase = ({ txId }: { txId: number }) => {
       </div>
       <h2 className='row gap8'>
         <b className={positive ? 'color-green' : 'color-red'}>
-          {positive ? '+' : '-'}
-          {tx.currency === 'POINT' ? '¢' : '$'}
-          {tx.amount.toFixed(2)}
+          {positive ? '+' : '-'}${tx.amount.toFixed(2)}
         </b>
       </h2>
     </div>

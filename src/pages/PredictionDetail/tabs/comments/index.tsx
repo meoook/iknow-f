@@ -12,6 +12,7 @@ import ModalLogin from '../../../../modals/login'
 import IconSprite from '../../../../elements/icon'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
+import { Link } from 'react-router-dom'
 
 export interface PredictionTabCommentsProps {
   predictionId: number
@@ -101,13 +102,19 @@ const CommentBase = ({ authed, predictionId, commentId }: CommentProps) => {
     openModal(ModalReport, 'common', { predictionId, commentId: comment.id })
   }
 
+  const name = comment.user.username.length > 20 ? `${comment.user.username.slice(0, 17)}...` : comment.user.username
+
   return (
-    <div className='row gap12'>
-      <Avatar src={comment.avatar} size='md' />
+    <div className='row gap-3'>
+      <Link to={`/user/${comment.user.id}`}>
+        <Avatar src={comment.user.avatar} size='md' />
+      </Link>
       <div className='column start grow'>
         <div className='row center justify w-full'>
-          <div className='row center gap12'>
-            <b>{comment.username.length > 20 ? `${comment.username.slice(0, 17)}...` : comment.username}</b>
+          <div className='row center gap-3'>
+            <Link to={`/user/${comment.user.id}`} className='w-500 h-underline'>
+              {name}
+            </Link>
             <span className='label'>{formatRelativeTime(comment.created)}</span>
           </div>
           <div className={style.wrapper} ref={menuRef}>
@@ -134,8 +141,10 @@ const CommentBase = ({ authed, predictionId, commentId }: CommentProps) => {
             )}
           </div>
         </div>
-        <div className={style.text}>{comment.text}</div>
-        <button className={`${style.like}${comment.is_liked ? ' active' : ''}`} onClick={toggleLike}>
+        <div className='lh-5 pb-3'>{comment.text}</div>
+        <button
+          className={`row center gap-1 text-xs hover-o ${comment.is_liked ? 'color-brand' : 'secondary'}`}
+          onClick={toggleLike}>
           <IconSprite name='favorite' size={16} />
           <span>{comment.reactions}</span>
         </button>

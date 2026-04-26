@@ -1,11 +1,10 @@
 import s from './panel.module.scss'
 import { useState } from 'react'
 import { useAppSelector } from '../../../hooks/useRedux'
-import { useCreateMyBetMutation } from '../../../services/api'
+import { useCreateBetMutation } from '../../../services/api'
 import { useModalContext } from '../../../services/ModalContext'
 import { formatWithCommas } from '../../../utils/date'
 import type { IChoice, IPredictionDetail } from '../../../types/app.types'
-import type { TCurrency } from '../../../types/auth.types'
 import ModalLogin from '../../../modals/login'
 import IconSprite from '../../../elements/icon'
 import TradeInput from '../../../elements/trade-input/TradeInput'
@@ -20,9 +19,8 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
   const { user, loading } = useAppSelector((state) => state.auth)
   const { settings } = useAppSelector((state) => state.app)
   const { openModal } = useModalContext()
-  const [createBet, { isLoading }] = useCreateMyBetMutation()
+  const [createBet, { isLoading }] = useCreateBetMutation()
 
-  const [currency, setCurrency] = useState<TCurrency>('CASH')
   const [amount, setAmount] = useState<number>(0)
   const [isTilt, setIsTilt] = useState(false)
 
@@ -37,14 +35,13 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
       return
     }
     if (!selectedChoice) return
-    const balance = currency === 'CASH' ? user.balances.CASH : user.balances.POINT
-    if (amount > (balance || 0)) {
+    if (amount > (user.balance || 0)) {
       tilt()
       return
     }
 
     try {
-      await createBet({ choice_id: selectedChoice.id, currency, amount }).unwrap()
+      await createBet({ prediction_id: prediction.id, choice_id: selectedChoice.id, amount }).unwrap()
       setAmount(0)
       onSuccess?.()
     } catch (e) {
@@ -52,34 +49,24 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
     }
   }
 
-  const displayPayout = currency !== 'POINT' && amount > 0 && selectedChoice && selectedChoice.multiplier > 1
+  const displayPayout = amount > 0 && selectedChoice && selectedChoice.multiplier > 1
 
   const imgUrl = import.meta.env.VITE_IMG_URL
   const src = prediction.icon ? `${imgUrl}${prediction.icon}` : `${imgUrl}/icon/no_icon.png`
 
   return (
     <div className={s.bet}>
-      <div className='row center gap-3'>
+      <div className='row center gap-3 pv-2 bd-b'>
         <img className={s.icon} src={src} alt='' />
         <h3 className='clamp-2'>{selectedChoice?.title || 'Выберите вариант'}</h3>
       </div>
 
-      <div className={s.tabs}>
-        <button className={`${s.tab}${currency === 'CASH' ? ' active' : ''}`} onClick={() => setCurrency('CASH')}>
-          Кэш
-        </button>
-        <button className={`${s.tab}${currency === 'POINT' ? ' active' : ''}`} onClick={() => setCurrency('POINT')}>
-          Баллы
-        </button>
-      </div>
-
       <div className='column gap-3'>
         <TradeInput
-          currency={currency}
           value={amount}
           setValue={setAmount}
-          minimum={currency === 'CASH' ? settings.min_cash : settings.min_point}
-          maximum={user?.balances.CASH ? Math.floor(user.balances.CASH) : 0}
+          minimum={settings.min_bet}
+          maximum={user?.balance ? Math.floor(user.balance) : 0}
           isTilt={isTilt}
           tilt={tilt}
         />
@@ -99,7 +86,7 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
               </div>
             </div>
             <div className='row center gap-1 text-bet color-green'>
-              <span>{currency === 'POINT' ? '¢' : '$'}</span>
+              <span>$</span>
               <div>{formatWithCommas((Number(amount) * (selectedChoice?.multiplier || 1)).toFixed(0))}</div>
             </div>
           </div>

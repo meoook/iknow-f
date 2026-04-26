@@ -40,7 +40,7 @@ const TOS = () => {
     <div className='column center pv-3 secondary text-sm'>
       <div>Делая ставку, вы соглашаетесь с</div>
       <Link className='underline h-brand' to='/tos'>
-        Условиями использования
+        условиями использования
       </Link>
     </div>
   )

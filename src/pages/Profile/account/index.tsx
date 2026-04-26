@@ -107,7 +107,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
   }
 
   return (
-    <div className='column gap12'>
+    <div className='column gap-3'>
       <h1>Настройки профиля</h1>
       <hr />
 
@@ -132,7 +132,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
           )}
         </div>
 
-        <div className='column gap8'>
+        <div className='column gap-2'>
           <button className='btn gray' onClick={() => fileInputRef.current?.click()} disabled={uploadProgress !== null}>
             <IconSprite name='upload' size={20} />
             <span>{uploadProgress !== null ? 'Загрузка...' : 'Загрузить'}</span>

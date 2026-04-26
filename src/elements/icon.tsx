@@ -31,6 +31,7 @@ export type IconName =
   | 'more'
   | 'pencil'
   | 'phantom'
+  | 'plus'
   | 'report'
   | 'search'
   | 'star'

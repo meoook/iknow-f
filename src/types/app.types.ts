@@ -1,13 +1,20 @@
 import type { EntityId, EntityState } from '@reduxjs/toolkit'
-import type { TCurrency } from './auth.types'
+
+export type EntityStateWithTotal<T, Id extends EntityId = number> = EntityState<T, Id> & { total: number }
+
+export type PaginatedArg = {
+  id?: number | string
+  limit?: number
+  offset?: number
+  tag?: string
+  period?: string
+}
 
 export interface ISettings {
   multiplier: number
   fee: number
-  min_cash: number
-  min_point: number
-  min_cash_create: number
-  min_point_create: number
+  min_bet: number
+  min_create: number
   delete: number
 }
 
@@ -31,44 +38,6 @@ export interface PaginatedResponse<T> {
   data: T[]
 }
 
-type IPaginatedRequest<RequireId extends boolean = false> = RequireId extends true
-  ? {
-      id: number | string
-      limit?: number
-      offset?: number
-      tag?: string
-    }
-  : {
-      limit?: number
-      offset?: number
-      tag?: string
-    }
-
-export type PaginatedArg<RequireId extends boolean = false> = RequireId extends true
-  ? IPaginatedRequest<true>
-  : IPaginatedRequest | undefined
-
-export type PaginatedArg2 = {
-  id?: number | string
-  limit?: number
-  offset?: number
-  tag?: string
-  period?: string
-}
-
-export type EntityStateWithTotal<T, Id extends EntityId = number> = EntityState<T, Id> & { total: number }
-// interface PaginatedBase {
-//   limit?: number
-//   offset?: number
-// }
-
-// type PaginatedWithId = PaginatedBase & {
-//   id: number
-// }
-
-// type OptionalQueryArg<T> = T | undefined
-// type RequiredQueryArg<T> = T
-
 export interface IRequestCreate {
   icon?: File
   title: string
@@ -76,7 +45,6 @@ export interface IRequestCreate {
   link: string
   choices: string[]
   vote: string
-  currency: TCurrency
   amount: number
   end_date: string
   bet_date: string
@@ -92,7 +60,6 @@ export interface IRequest {
   rules: string
   choices: string[]
   vote: string
-  currency: TCurrency
   amount: number
   end_date: string
   created: number
@@ -149,33 +116,6 @@ export interface IPredictionSearch {
   volume: number
 }
 
-interface IBetPrediction {
-  id: number
-  title: string
-  tags: string[]
-  icon: string
-  volume: number
-  end_date: string
-}
-
-interface IBetChoice {
-  volume: number
-  multiplier: number
-  title: string
-  win: boolean | null
-}
-
-export interface IMyBet {
-  id: number
-  state: 'ACTIVE' | 'WIN' | 'LOSE' | 'CANCEL'
-  currency: TCurrency
-  amount: number
-  payout: number
-  created: number
-  choice: IBetChoice
-  prediction: IBetPrediction
-}
-
 export interface IUserPrediction {
   id: number
   title: string
@@ -194,7 +134,6 @@ interface IUserBetPrediction {
 
 export interface IUserBet {
   id: number
-  currency: TCurrency
   amount: number
   created: number
   choice: string
@@ -202,37 +141,40 @@ export interface IUserBet {
 }
 
 export interface IBetCreate {
+  prediction_id: number
   choice_id: number
-  currency: TCurrency
   amount: number
 }
 
-export interface IBet {
+interface IObjectUser {
   id: number
   username: string
   avatar: string
-  currency: TCurrency
+}
+
+export interface IPredictionBet {
+  id: number
   amount: number
-  title: string
   created: number
+  choice: string
+  user: IObjectUser
 }
 
 export interface ITopHolder {
-  total: number
+  id: number
   username: string
   avatar: string
-  currency: TCurrency
+  total: number
 }
 
 export interface IComment {
   id: number
   text: string
-  username: string
-  avatar: string
   reactions: number
   is_liked: boolean
   owner: boolean
   created: number
+  user: IObjectUser
 }
 
 export interface ICommentCreate {
@@ -249,7 +191,6 @@ export interface ICommentReport {
 
 export interface ITx {
   id: number
-  currency: TCurrency
   direction: 'IN' | 'OUT'
   amount: number
   created: number
@@ -270,9 +211,7 @@ interface ITopWinPrediction {
 }
 
 export interface ITopWin {
-  id: number
-  username: string
-  avatar: string
+  user: IObjectUser
   prediction: ITopWinPrediction
   amount: number
   payout: number

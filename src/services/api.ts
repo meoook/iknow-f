@@ -3,9 +3,7 @@ import type { IUser, IAuthResponse, IUserPublic } from '../types/auth.types'
 import type { IWeb3NonceResponse, IWeb3NonceRequest, IWeb3AuthRequest } from '../types/web3.types'
 import type {
   PaginatedArg,
-  PaginatedArg2,
   EntityStateWithTotal,
-  IMyBet,
   IBetCreate,
   INotification,
   IPrediction,
@@ -13,7 +11,7 @@ import type {
   IRequest,
   IRequestCreate,
   PaginatedResponse,
-  IBet,
+  IPredictionBet,
   ISettings,
   ITopHolder,
   ITx,
@@ -186,10 +184,10 @@ export const apiBase = createApi({
     }),
 
     // Protected endpoints
-    getRequests: builder.query<EntityStateWithTotal<IRequest>, PaginatedArg>({
+    getRequests: builder.query<EntityStateWithTotal<IRequest>, PaginatedArg | void>({
       query: (params) => ({
         url: 'request',
-        params,
+        params: params ?? {},
       }),
       transformResponse: (response: PaginatedResponse<IRequest>) => {
         return {
@@ -247,17 +245,17 @@ export const apiBase = createApi({
         )
       },
     }),
-    createMyBet: builder.mutation<IMyBet, IBetCreate>({
-      query: (payload) => ({
-        url: 'bets',
+    createBet: builder.mutation<void, IBetCreate>({
+      query: ({ prediction_id, ...rest }) => ({
+        url: `prediction/${prediction_id}/bets`,
         method: 'POST',
-        body: payload,
+        body: rest,
       }),
     }),
-    getTx: builder.query<EntityStateWithTotal<ITx>, PaginatedArg>({
+    getTx: builder.query<EntityStateWithTotal<ITx>, PaginatedArg | void>({
       query: (params) => ({
         url: 'tx',
-        params,
+        params: params ?? {},
       }),
       transformResponse: (response: PaginatedResponse<ITx>) => {
         return { ...txAdapter.setAll(txAdapter.getInitialState(), response.data ?? []), total: response.total ?? 0 }
@@ -299,12 +297,12 @@ export const apiBase = createApi({
     getPrediction: builder.query<IPredictionDetail, number>({
       query: (id) => `prediction/${id}`,
     }),
-    getBets: builder.query<EntityStateWithTotal<IBet>, PaginatedArg<true>>({
+    getBets: builder.query<EntityStateWithTotal<IPredictionBet>, PaginatedArg>({
       query: ({ id, ...rest }) => ({
         url: `prediction/${id}/bets`,
         params: rest,
       }),
-      transformResponse: (response: PaginatedResponse<IBet>) => {
+      transformResponse: (response: PaginatedResponse<IPredictionBet>) => {
         return { ...betAdapter.setAll(betAdapter.getInitialState(), response.data ?? []), total: response.total ?? 0 }
       },
       serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
@@ -320,7 +318,7 @@ export const apiBase = createApi({
           return
         }
 
-        const handleCreated = (bet: IBet) => {
+        const handleCreated = (bet: IPredictionBet) => {
           updateCachedData((draft) => {
             betAdapter.addOne(draft, bet)
           })
@@ -331,7 +329,7 @@ export const apiBase = createApi({
         wsManager.unsubscribe('bet.created', handleCreated)
       },
     }),
-    getTop: builder.query<EntityStateWithTotal<ITopHolder, string>, PaginatedArg<true>>({
+    getTop: builder.query<EntityStateWithTotal<ITopHolder, string>, PaginatedArg>({
       query: ({ id, ...rest }) => ({
         url: `prediction/${id}/top`,
         params: rest,
@@ -345,7 +343,7 @@ export const apiBase = createApi({
         topAdapter.addMany(currentCache, topSelectors.selectAll(newItems))
       },
     }),
-    getUserPredictions: builder.query<EntityStateWithTotal<IUserPrediction>, PaginatedArg<true>>({
+    getUserPredictions: builder.query<EntityStateWithTotal<IUserPrediction>, PaginatedArg>({
       query: ({ id, ...params }) => ({
         url: `user/${id}/predictions`,
         params,
@@ -365,7 +363,7 @@ export const apiBase = createApi({
         return !!currentArg?.offset && currentArg?.offset !== previousArg?.offset
       },
     }),
-    getUserBets: builder.query<EntityStateWithTotal<IUserBet>, PaginatedArg<true>>({
+    getUserBets: builder.query<EntityStateWithTotal<IUserBet>, PaginatedArg>({
       query: ({ id, ...params }) => ({
         url: `user/${id}/bets`,
         params,
@@ -402,7 +400,7 @@ export const apiBase = createApi({
         wsManager.unsubscribe('user.bet.created', handleCreated)
       },
     }),
-    getLeaderboard: builder.query<EntityStateWithTotal<ILeaderboardUser>, PaginatedArg2>({
+    getLeaderboard: builder.query<EntityStateWithTotal<ILeaderboardUser>, PaginatedArg>({
       query: (params) => ({
         url: 'user/leaderboard',
         params,
@@ -422,7 +420,7 @@ export const apiBase = createApi({
         return !!currentArg?.offset && currentArg?.offset !== previousArg?.offset
       },
     }),
-    getTopWins: builder.query<ITopWin[], PaginatedArg2>({
+    getTopWins: builder.query<ITopWin[], PaginatedArg>({
       query: (params) => ({
         url: 'user/top',
         params,
@@ -455,7 +453,7 @@ export const {
   useDeleteAllNotificationsMutation,
   // ------
   useCreateRequestMutation,
-  useCreateMyBetMutation,
+  useCreateBetMutation,
   useGetBetsQuery,
   useGetTopQuery,
   useGetTxQuery,

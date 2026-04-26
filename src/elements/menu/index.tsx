@@ -115,7 +115,7 @@ function MenuUser({ user, mobile, onClick }: MenuUserProps) {
         {mobile ? (
           <div className='column'>
             <h3 className='ellipsis'>{username}</h3>
-            <div className='text-xs color-green w-500'>${user.balances.CASH.toFixed(2)}</div>
+            <div className='text-xs color-green w-500'>${user.balance.toFixed(2)}</div>
             {/* <div className='text-xs color-green'>
               $
               {user.balances.CASH.toLocaleString(undefined, {

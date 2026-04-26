@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { IAuthState, IBalanceUpdate, IUser } from '../types/auth.types'
+import type { IAuthState, IUser } from '../types/auth.types'
 import { apiBase } from '../services/api'
 import { getCookie } from '../utils/date'
 
@@ -15,8 +15,8 @@ const authSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload
     },
-    setBalance: (state, action: PayloadAction<IBalanceUpdate>) => {
-      if (state.user) state.user.balances[action.payload.currency] = action.payload.amount
+    setBalance: (state, action: PayloadAction<number>) => {
+      if (state.user) state.user.balance = action.payload
     },
     updateUser: (state, action: PayloadAction<Partial<IUser>>) => {
       if (state.user) Object.assign(state.user, action.payload)

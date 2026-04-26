@@ -21,6 +21,6 @@ export const useRequestIds = () => {
 }
 
 export const useRequest = (id: number): IRequest | undefined => {
-  const { data } = useGetRequestsQuery(undefined)
+  const { data } = useGetRequestsQuery()
   return data ? requestsSelectors.selectById(data, id) : undefined
 }

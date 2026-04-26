@@ -1,10 +1,8 @@
 import s from './input.module.scss'
 import { useRef } from 'react'
-import type { TCurrency } from '../../types/auth.types'
 import { formatWithCommas } from '../../utils/date'
 
 interface TradeInputProps {
-  currency: TCurrency
   maximum: number
   minimum: number
   value: number
@@ -13,7 +11,7 @@ interface TradeInputProps {
   tilt: () => void
 }
 
-export default function TradeInput({ currency, maximum, minimum, value, isTilt, setValue, tilt }: TradeInputProps) {
+export default function TradeInput({ maximum, minimum, value, isTilt, setValue, tilt }: TradeInputProps) {
   const MAX_VALUE: number = 9999999
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -48,7 +46,7 @@ export default function TradeInput({ currency, maximum, minimum, value, isTilt, 
       <div className='row justify center'>
         <div>Количество</div>
         <div className={className} onClick={handlClick}>
-          <span>{currency === 'POINT' ? '¢' : '$'}</span>
+          <span>$</span>
           <div className={s.input}>
             <input
               ref={inputRef}
@@ -59,7 +57,7 @@ export default function TradeInput({ currency, maximum, minimum, value, isTilt, 
               inputMode='decimal'
               autoComplete='off'
               autoFocus={true}
-              placeholder={`${currency === 'POINT' ? '¢' : '$'}0`}
+              placeholder='$0'
             />
             <span className={s.mirror}>{displayValue || '0'}</span>
           </div>
@@ -73,13 +71,13 @@ export default function TradeInput({ currency, maximum, minimum, value, isTilt, 
         </div>
         <div className='row gap-2'>
           <button className='chip hover' onClick={() => addAmount(1)}>
-            {currency === 'POINT' ? '+¢1' : '+$1'}
+            +$1
           </button>
-          <button className='chip hover' onClick={() => addAmount(20)}>
-            {currency === 'POINT' ? '+¢20' : '+$20'}
+          <button className='chip hover' onClick={() => addAmount(10)}>
+            +$10
           </button>
-          <button className='chip hover' onClick={() => addAmount(100)}>
-            {currency === 'POINT' ? '+¢100' : '+$100'}
+          <button className='chip hover' onClick={() => addAmount(50)}>
+            +$50
           </button>
           <button className='chip hover' onClick={setMaxAmount}>
             Max

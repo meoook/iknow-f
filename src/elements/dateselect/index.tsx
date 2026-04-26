@@ -1,5 +1,5 @@
 import style from './dateselect.module.scss'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 const MONTHS = [
   { value: '01', label: 'Январь' },
@@ -18,55 +18,48 @@ const MONTHS = [
 
 interface DateSelectProps {
   title?: string
-  info?: string
   value: string
   onChange: (date: string) => void
-  minDate?: string
-  maxDate?: number
-  error?: boolean
+  error?: string
 }
 
-export default function DateSelect({ title, info, value, onChange, minDate, maxDate, error }: DateSelectProps) {
-  const [month, setMonth] = useState('')
-  const [day, setDay] = useState('')
-  const [year, setYear] = useState('')
-  const [validationError, setValidationError] = useState('')
+export default function DateSelect({ title, value, onChange, error }: DateSelectProps) {
+  const getInitial = (val: string) => {
+    const [y, m, d] = (val || '').split('-')
+    return {
+      y: y || '',
+      m: m ? m.padStart(2, '0') : '',
+      d: d ? d.padStart(2, '0') : '',
+    }
+  }
 
-  // Парсим value при изменении
+  const [month, setMonth] = useState(() => getInitial(value).m)
+  const [day, setDay] = useState(() => getInitial(value).d)
+  const [year, setYear] = useState(() => getInitial(value).y)
+
+  // Парсим value при изменении (синхронизация сверху)
   useEffect(() => {
-    if (value) {
-      const [y, m, d] = value.split('-')
-      setYear(y || '')
-      setMonth(m ? m.padStart(2, '0') : '')
-      setDay(d ? d.padStart(2, '0') : '')
+    const { y, m, d } = getInitial(value)
+    if (y !== year || m !== month || d !== day) {
+      setYear(y)
+      setMonth(m)
+      setDay(d)
     }
   }, [value])
 
-  // Валидация и обновление родительского компонента
+  // Обновление родительского компонента при изменении полей
   useEffect(() => {
     if (month && day && year) {
       const formattedDate = `${year}-${month}-${day}`
-
-      // Проверяем минимальную дату
-      if (minDate && formattedDate < minDate) {
-        const minDateObj = new Date(minDate)
-        const minDateFormatted = minDateObj.toLocaleDateString('ru-RU', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        })
-        setValidationError(`Не может быть раньше ${minDateFormatted}`)
-        onChange('')
-        return
+      // Вызываем onChange только если дата реально изменилась по сравнению с value
+      if (formattedDate !== value) {
+        onChange(formattedDate)
       }
-
-      setValidationError('')
-      onChange(formattedDate)
-    } else {
-      setValidationError('')
+    } else if (value) {
+      // Если поля очищены, но value еще есть
       onChange('')
     }
-  }, [month, day, year, minDate])
+  }, [month, day, year, value, onChange])
 
   const getDaysInMonth = (m: string, y: string) => {
     if (!m) return 31
@@ -99,21 +92,24 @@ export default function DateSelect({ title, info, value, onChange, minDate, maxD
     }
   }
 
-  const currentYear = new Date().getFullYear()
-  const startYear = minDate ? new Date(minDate).getFullYear() : currentYear
-  const endYear = maxDate || Math.max(startYear, currentYear + 1)
-  const years = []
-  for (let i = startYear; i <= endYear; i++) {
-    years.push(i.toString())
-  }
+  const years = useMemo(() => {
+    const curYear = new Date().getFullYear()
+    const list = []
+    for (let i = curYear; i <= curYear + 2; i++) {
+      list.push(i.toString())
+    }
+    return list
+  }, [])
 
-  const maxDays = getDaysInMonth(month, year)
-  const daysList = Array.from({ length: maxDays }, (_, i) => (i + 1).toString().padStart(2, '0'))
+  const daysList = useMemo(() => {
+    const maxDays = getDaysInMonth(month, year)
+    return Array.from({ length: maxDays }, (_, i) => (i + 1).toString().padStart(2, '0'))
+  }, [month, year])
 
   return (
     <div className='form-row'>
       {title && <div>{title}</div>}
-      <div className={`${style.container} ${error || validationError ? style.error : ''}`}>
+      <div className={`${style.container} ${error ? style.error : ''}`}>
         <select className={`${style.day} outline`} name='day' value={day} onChange={handleDayChange}>
           <option value='' disabled hidden>
             День
@@ -145,8 +141,7 @@ export default function DateSelect({ title, info, value, onChange, minDate, maxD
           ))}
         </select>
       </div>
-      {validationError && <div className='error'>{validationError}</div>}
-      {!validationError && info && <div className='info'>{info}</div>}
+      {error && <div className='error'>{error}</div>}
     </div>
   )
 }

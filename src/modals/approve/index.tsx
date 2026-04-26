@@ -38,7 +38,7 @@ export default function ModalApprove({ email, close }: ModalApproveProps) {
         <p className='color-gray'>{`Мы отправили ${NONCE_LENGTH}-значный код на ${email}`}</p>
         <div>&nbsp;</div>
         <Nonce length={NONCE_LENGTH} value={nonce} onChange={setNonce} />
-        <div className='error'>{error ? error : <>&nbsp;</>}</div>
+        <div className='flex-i center middle text-red'>{error ? error : <>&nbsp;</>}</div>
 
         <button
           className='btn blue big w-full'

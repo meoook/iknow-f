@@ -5,6 +5,7 @@ import { formatRelativeTime } from '../../../../utils/date'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
 import { apiBase } from '../../../../services/api'
+import { Link } from 'react-router-dom'
 
 export interface PredictionTabBetsProps {
   predictionId: number
@@ -62,16 +63,17 @@ const BetBase = ({ predictionId, betId }: BetProps) => {
 
   return (
     <div className='row gap-1 center text-sm'>
-      <Avatar src={bet.avatar} size='sm' />
+      <Link to={`/user/${bet.user.id}`}>
+        <Avatar src={bet.user.avatar} size='sm' />
+      </Link>
       <div className='row grow gap4 lh-1 wrap'>
-        <span className='w-500'>{bet.username.length > 20 ? `${bet.username.slice(0, 17)}...` : bet.username}</span>
+        <Link to={`/user/${bet.user.id}`} className='w-500 h-underline'>
+          {bet.user.username.length > 20 ? `${bet.user.username.slice(0, 17)}...` : bet.user.username}
+        </Link>
         <span className='color-gray'>ставка</span>
-        <span className='w-500 color-green'>
-          {bet.currency === 'POINT' ? '¢' : '$'}
-          {bet.amount.toFixed(2)}
-        </span>
+        <span className='w-500 color-green'>${bet.amount.toFixed(2)}</span>
         <span className='color-gray'>на</span>
-        <span className='w500 clamp-1'>{bet.title}</span>
+        <span className='w500 clamp-1'>{bet.choice}</span>
       </div>
       <div className='color-gray nowrap'>{formatRelativeTime(bet.created)}</div>
     </div>

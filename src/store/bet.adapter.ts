@@ -1,8 +1,8 @@
 import { createEntityAdapter } from '@reduxjs/toolkit'
 import { useGetBetsQuery } from '../services/api'
-import type { IBet } from '../types/app.types'
+import type { IPredictionBet } from '../types/app.types'
 
-export const betAdapter = createEntityAdapter<IBet>({
+export const betAdapter = createEntityAdapter<IPredictionBet>({
   sortComparer: (a, b) => b.created - a.created,
 })
 
@@ -24,7 +24,7 @@ export const useBetIds = (predictionId: number) => {
   )
 }
 
-export const useBet = (predictionId: number, id: number): IBet | undefined => {
+export const useBet = (predictionId: number, id: number): IPredictionBet | undefined => {
   const { data } = useGetBetsQuery({ id: predictionId }, { skip: !predictionId })
   return data ? betSelectors.selectById(data, id) : undefined
 }

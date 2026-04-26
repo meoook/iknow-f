@@ -171,9 +171,6 @@ $text-sizes: (
     }
   }
 }
-.pb-1 {
-  padding-bottom: $padding * 0.5;
-}
 
 .mh {
   &-fit {
@@ -261,7 +258,6 @@ $text-sizes: (
   &::-webkit-scrollbar-thumb {
     border-radius: 3px;
     background-color: #0000;
-    transition: background-color 2.3s ease;
   }
 
   &:hover::-webkit-scrollbar {
@@ -289,6 +285,10 @@ $text-sizes: (
   .text-#{$name} {
     font-size: $size;
   }
+}
+
+.text-center {
+  text-align: center;
 }
 
 .text-bet {
@@ -364,6 +364,9 @@ $text-sizes: (
 .hover {
   &:hover {
     background-color: var(--color-hover);
+  }
+  &-o:hover {
+    opacity: 0.8;
   }
 }
 

@@ -1,20 +1,3 @@
-const TCurrency = {
-  POINT: 'POINT',
-  CASH: 'CASH',
-} as const
-
-export type TCurrency = (typeof TCurrency)[keyof typeof TCurrency]
-
-interface IBalances {
-  [TCurrency.POINT]: number
-  [TCurrency.CASH]: number
-}
-
-export interface IBalanceUpdate {
-  currency: TCurrency
-  amount: number
-}
-
 export interface IUser {
   id: number
   address: string
@@ -24,7 +7,7 @@ export interface IUser {
   telegram_id: string
   telegram_notify: boolean
   avatar?: string
-  balances: IBalances
+  balance: number
 }
 
 export interface IUserPublic {

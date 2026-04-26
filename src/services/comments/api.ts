@@ -12,7 +12,7 @@ import { wsManager } from '../websocket'
 
 export const commentsApi = apiBase.injectEndpoints({
   endpoints: (builder) => ({
-    getComments: builder.query<EntityStateWithTotal<IComment>, PaginatedArg<true>>({
+    getComments: builder.query<EntityStateWithTotal<IComment>, PaginatedArg>({
       query: ({ id, ...rest }) => ({
         url: `prediction/${id}/comments`,
         params: rest,
@@ -45,11 +45,11 @@ export const commentsApi = apiBase.injectEndpoints({
             }
           })
         }
-        const handleUpdated = (comment: IComment) => {
-          updateCachedData((draft) => {
-            commentsAdapter.upsertOne(draft, comment)
-          })
-        }
+        // const handleUpdated = (comment: IComment) => {
+        //   updateCachedData((draft) => {
+        //     commentsAdapter.upsertOne(draft, comment)
+        //   })
+        // }
         const handleDeleted = (id: number) => {
           updateCachedData((draft) => {
             commentsAdapter.removeOne(draft, id)
@@ -70,7 +70,7 @@ export const commentsApi = apiBase.injectEndpoints({
         }
 
         wsManager.subscribe('comment.created', handleCreated)
-        wsManager.subscribe('comment.updated', handleUpdated)
+        // wsManager.subscribe('comment.updated', handleUpdated)
         wsManager.subscribe('comment.deleted', handleDeleted)
         wsManager.subscribe('comment.like', handleLike)
         wsManager.subscribe('comment.dislike', handleDislike)
@@ -80,7 +80,7 @@ export const commentsApi = apiBase.injectEndpoints({
         // wsManager.predictionLeave(arg.id)
 
         wsManager.unsubscribe('comment.created', handleCreated)
-        wsManager.unsubscribe('comment.updated', handleUpdated)
+        // wsManager.unsubscribe('comment.updated', handleUpdated)
         wsManager.unsubscribe('comment.deleted', handleDeleted)
         wsManager.unsubscribe('comment.like', handleLike)
         wsManager.unsubscribe('comment.dislike', handleDislike)
@@ -90,7 +90,7 @@ export const commentsApi = apiBase.injectEndpoints({
       query: (payload) => ({
         url: `prediction/${payload.prediction}/comments`,
         method: 'POST',
-        body: payload,
+        body: { text: payload.text },
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled

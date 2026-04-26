@@ -21,7 +21,7 @@ const WsInEvent = {
   email_verified: 'email.verified',
   prediction_updated: 'prediction.updated',
   comment_created: 'comment.created',
-  comment_updated: 'comment.updated',
+  // comment_updated: 'comment.updated',
   comment_deleted: 'comment.deleted',
   comment_like: 'comment.like',
   comment_dislike: 'comment.dislike',

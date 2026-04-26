@@ -4,6 +4,7 @@ import { useTop, useTopIds } from '../../../../store/top.adapter'
 import { apiBase } from '../../../../services/api'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
+import { Link } from 'react-router-dom'
 
 export interface PredictionTabTopProps {
   predictionId: number
@@ -61,14 +62,15 @@ const TopUserBase = ({ predictionId, topId }: BetProps) => {
   return (
     <div className='row justify center'>
       <div className='row center gap8 lh-1'>
-        <Avatar src={topUser.avatar} size='sm' />
-        <b>{topUser.username.length > 20 ? `${topUser.username.slice(0, 17)}...` : topUser.username}</b>
+        <Link to={`/user/${topUser.id}`}>
+          <Avatar src={topUser.avatar} size='sm' />
+        </Link>
+        <Link to={`/user/${topUser.id}`} className='w-500 h-underline'>
+          {topUser.username.length > 20 ? `${topUser.username.slice(0, 17)}...` : topUser.username}
+        </Link>
       </div>
       <div className='row gap4'>
-        <b className='color-green'>
-          {topUser.currency === 'POINT' ? '¢' : '$'}
-          {topUser.total.toFixed(2)}
-        </b>
+        <b className='color-green'>${topUser.total.toFixed(2)}</b>
       </div>
     </div>
   )

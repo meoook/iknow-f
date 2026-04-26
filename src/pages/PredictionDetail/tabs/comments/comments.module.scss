@@ -17,30 +17,6 @@
       background-color: var(--color-hover);
     }
   }
-
-  & .text {
-    line-height: 1.5;
-    margin-top: 4px;
-    margin-bottom: 12px;
-  }
-}
-
-.like {
-  display: flex;
-  align-items: center;
-  flex-shrink: 1;
-  gap: 4px;
-  font-size: 12px;
-  color: var(--color-secondary);
-  cursor: pointer;
-
-  &:global(.active) {
-    color: var(--color-brand);
-  }
-
-  &:hover {
-    opacity: 0.8;
-  }
 }
 
 .wrapper {

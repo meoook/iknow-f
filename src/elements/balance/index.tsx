@@ -1,13 +1,12 @@
-import style from './balance.module.scss'
+import s from './balance.module.scss'
 import { useEffect, useState, useRef } from 'react'
 
 interface BalanceProps {
   name: string
   balance: number | string
-  currency?: string
 }
 
-export default function Balance({ name, balance, currency }: BalanceProps) {
+export default function Balance({ name, balance }: BalanceProps) {
   const targetValue = typeof balance === 'string' ? Number(balance) || 0 : balance
   const [displayValue, setDisplayValue] = useState(0)
   const prevValueRef = useRef(0)
@@ -48,27 +47,10 @@ export default function Balance({ name, balance, currency }: BalanceProps) {
     }
   }, [targetValue])
 
-  const getCurrencySymbol = (curr?: string): string => {
-    if (!curr) return ''
-    const symbols: Record<string, string> = {
-      USD: '$',
-      EUR: '€',
-      RUB: '₽',
-      GBP: '£',
-      JPY: '¥',
-      CNY: '¥',
-      STR: '⭐',
-    }
-    return symbols[curr] || curr
-  }
-
   return (
-    <div className={style.balance}>
-      <div className={style.name}>{name}</div>
-      <div className={style.amount}>
-        {getCurrencySymbol(currency)}
-        {displayValue.toFixed(2)}
-      </div>
+    <div className={s.balance}>
+      <div className={s.name}>{name}</div>
+      <div className={s.amount}>${displayValue.toFixed(2)}</div>
     </div>
   )
 }

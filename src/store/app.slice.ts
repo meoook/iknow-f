@@ -13,7 +13,7 @@ const getInitialTheme = (): 'light' | 'dark' => {
 
 const initialState: IAppState = {
   theme: getInitialTheme(),
-  settings: { multiplier: 0, fee: 0, min_cash: 0, min_point: 0, min_cash_create: 0, min_point_create: 0, delete: 0 },
+  settings: { multiplier: 0, fee: 0, min_bet: 0, min_create: 0, delete: 0 },
   notifications: notificationAdapter.getInitialState(),
 }
 
