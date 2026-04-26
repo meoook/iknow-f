@@ -38,7 +38,7 @@ export default function RequestsTable() {
   if (!requestIds.length) return <Empty title='Прогнозы не найдены' size={16} />
 
   return (
-    <div className='column'>
+    <div className='column gap-5'>
       {requestIds.map((requestId: number) => (
         <RequestItem key={requestId} requestId={requestId} />
       ))}

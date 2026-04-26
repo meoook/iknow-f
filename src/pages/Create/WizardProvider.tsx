@@ -187,7 +187,7 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (validateStep()) {
       createRequest(formData)
         .unwrap()
-        .then(() => navigate(`/user/${user?.id}?tab=requests`))
+        .then(() => navigate(`/user/${user?.id}?tab=created`))
         .catch(() => setError('Ошибка при создании'))
     }
   }

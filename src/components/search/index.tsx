@@ -6,9 +6,11 @@ import IconSprite from '../../elements/icon'
 import Empty from '../../elements/empty'
 import type { IPredictionSearch } from '../../types/app.types'
 import { Link } from 'react-router-dom'
+import { useModalContext } from '../../services/ModalContext'
 
 export default function PredictionSearch({ mobile = false }: { mobile?: boolean }) {
   const [searchValue, setSearchValue] = useState('')
+  const { closeModal } = useModalContext()
   const [search, { data: predictions, isLoading, isSuccess, reset }] = useSearchPredictionsMutation()
   const [searchRef, isSearchOpen, searchToggle] = useClickOutside()
   const lastSearchValue = useRef('')
@@ -36,6 +38,7 @@ export default function PredictionSearch({ mobile = false }: { mobile?: boolean 
     setSearchValue('')
     reset()
     lastSearchValue.current = ''
+    if (mobile) closeModal()
   }
 
   const handleFocus = () => {
