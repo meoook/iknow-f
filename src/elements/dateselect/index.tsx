@@ -1,3 +1,4 @@
+import { useAppSelector } from '../../hooks/useRedux'
 import style from './dateselect.module.scss'
 import { useState, useEffect, useMemo } from 'react'
 
@@ -36,6 +37,7 @@ export default function DateSelect({ title, value, onChange, error }: DateSelect
   const [month, setMonth] = useState(() => getInitial(value).m)
   const [day, setDay] = useState(() => getInitial(value).d)
   const [year, setYear] = useState(() => getInitial(value).y)
+  const { limit } = useAppSelector((state) => state.app.settings)
 
   // Парсим value при изменении (синхронизация сверху)
   useEffect(() => {
@@ -95,7 +97,7 @@ export default function DateSelect({ title, value, onChange, error }: DateSelect
   const years = useMemo(() => {
     const curYear = new Date().getFullYear()
     const list = []
-    for (let i = curYear; i <= curYear + 2; i++) {
+    for (let i = curYear; i <= curYear + limit; i++) {
       list.push(i.toString())
     }
     return list

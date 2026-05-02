@@ -84,20 +84,22 @@ export default function PredictionDetail() {
             icon={prediction.icon}
             title={prediction.title}
             tags={prediction.tags}
-            big
             progress={scrollProgress}
+            big
           />
         </div>
-        <div className='column gap12'>
+        <div className='column gap-3'>
           <PredictionStatus
             state={prediction.state}
             date={prediction.end_date}
             volume={prediction.volume}
             closed={prediction.closed}
             created={prediction.created}
+            bet_end={prediction.bet_date}
+            link={prediction.link}
           />
           <div className='pv-3'>
-            <h2>Правила</h2>
+            <div className='label'>Правила</div>
             <div>{prediction.rules}</div>
           </div>
           <div>

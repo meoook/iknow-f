@@ -16,6 +16,7 @@ export interface ISettings {
   min_bet: number
   min_create: number
   delete: number
+  limit: number
 }
 
 export interface INotification {
@@ -58,15 +59,18 @@ export interface IRequest {
   icon?: string
   title: string
   rules: string
+  link: string
   choices: string[]
   vote: string
   amount: number
   end_date: string
+  bet_date: string
   created: number
 }
 
 const TPredictionState = {
   ACTIVE: 'ACTIVE',
+  END_BET: 'END_BET',
   DISPUTE: 'DISPUTE',
   ENDED: 'ENDED',
   REJECTED: 'REJECTED',
@@ -103,7 +107,9 @@ export interface IPredictionDetail {
   volume: number
   multiplier: number
   end_date: string
+  bet_date: string
   rules: string
+  link: string
   closed: string
   created: number
   choices: IChoice[]

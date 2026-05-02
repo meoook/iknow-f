@@ -16,10 +16,16 @@ const RequestItem = ({ requestId }: { requestId: number }) => {
       <div className='row gap-4 pv-1 hidden'>
         <div className={`${s.indicator} ${color}`} />
 
-        <div className='grow row gap-5'>
-          <div className='grow column gap-3'>
+        <div className='grow row gap-5 w-0'>
+          <div className='grow column gap-3 w-full'>
             <PredictionHead title={request.title} icon={request.icon} tags={request.tags} />
-            <PredictionStatus state={request.state} date={request.end_date} volume={request.amount} />
+            <PredictionStatus
+              state={request.state}
+              date={request.end_date}
+              volume={request.amount}
+              bet_end={request.bet_date}
+              link={request.link}
+            />
             <p className='text-sm secondary lh-5'>{request.rules}</p>
 
             <div className='grow row gap-2 start wrap'>

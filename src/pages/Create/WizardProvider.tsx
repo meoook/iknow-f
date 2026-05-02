@@ -78,29 +78,25 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       if (bet_date) {
         if (bet_date < minDate) newErrors.bet_date = 'Не может быть раньше завтрашнего дня'
-        else if (value && bet_date > value) newErrors.bet_date = 'Не может быть позже даты события'
+        else if (value && bet_date >= value) newErrors.bet_date = 'Не может быть позже даты события'
       }
     }
 
     if (name === 'bet_date' && value) {
       if (value < minDate) newErrors.bet_date = 'Не может быть раньше завтрашнего дня'
-      else if (end_date && value > end_date) newErrors.bet_date = 'Не может быть позже даты события'
+      else if (end_date && value >= end_date) newErrors.bet_date = 'Не может быть позже даты события'
     }
-
     return newErrors
   }
 
   const handleDateChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
     const dateErrors = validateDate(name, value)
-    if (errors[name] || dateErrors.end_date || dateErrors.bet_date) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        newErrors.end_date = dateErrors.end_date
-        newErrors.bet_date = dateErrors.bet_date
-        return newErrors
-      })
-    }
+    setErrors((prev) => ({
+      ...prev,
+      end_date: dateErrors.end_date ?? '',
+      bet_date: dateErrors.bet_date ?? '',
+    }))
   }
 
   const validateStep = () => {
@@ -116,7 +112,7 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       if (formData.bet_date) {
         if (formData.bet_date < minDate) newErrors.bet_date = 'Не может быть раньше завтрашнего дня'
-        else if (formData.bet_date > formData.end_date) newErrors.bet_date = 'Не может быть позже даты события'
+        else if (formData.bet_date >= formData.end_date) newErrors.bet_date = 'Не может быть позже даты события'
       }
     } else if (step === 3) {
       const currentBalance = user?.balance || 0
