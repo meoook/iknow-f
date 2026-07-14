@@ -55,8 +55,8 @@ export interface IRequest {
   id: number
   state: string
   reject_reason: string
-  tags: string[]
-  icon?: string
+  groups: string[]
+  icon?: string | null
   title: string
   rules: string
   link: string
@@ -82,8 +82,8 @@ export interface IPrediction {
   id: number
   state: TPredictionState
   title: string
-  tags: string[]
-  icon: string
+  groups: string[]
+  icon: string | null
   volume: number
   multiplier: number
   end_date: string
@@ -102,15 +102,15 @@ export interface IPredictionDetail {
   id: number
   state: TPredictionState
   title: string
-  tags: string[]
-  icon: string
+  groups: string[]
+  icon: string | null
   volume: number
   multiplier: number
   end_date: string
   bet_date: string
   rules: string
   link: string
-  closed: string
+  closed: string | null
   created: number
   choices: IChoice[]
 }
@@ -118,14 +118,14 @@ export interface IPredictionDetail {
 export interface IPredictionSearch {
   id: number
   title: string
-  icon: string
+  icon: string | null
   volume: number
 }
 
 export interface IUserPrediction {
   id: number
   title: string
-  icon: string
+  icon: string | null
   volume: number
   // created: number
   amount: number
@@ -135,7 +135,7 @@ export interface IUserPrediction {
 interface IUserBetPrediction {
   id: number
   title: string
-  icon: string
+  icon: string | null
 }
 
 export interface IUserBet {
@@ -155,7 +155,7 @@ export interface IBetCreate {
 interface IObjectUser {
   id: number
   username: string
-  avatar: string
+  avatar: string | null
 }
 
 export interface IPredictionBet {
@@ -169,7 +169,7 @@ export interface IPredictionBet {
 export interface ITopHolder {
   id: number
   username: string
-  avatar: string
+  avatar: string | null
   total: number
 }
 
@@ -205,7 +205,7 @@ export interface ITx {
 export interface ILeaderboardUser {
   id: number
   username: string
-  avatar: string
+  avatar: string | null
   amount: number
   payout: number
   profit: number

@@ -32,5 +32,5 @@ export interface IAuthState {
 }
 
 export interface IAuthResponse {
-  user: IUser
+  ok: boolean
 }
