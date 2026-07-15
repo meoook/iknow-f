@@ -29,16 +29,14 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     // Handle login mutations from RTK Query
     builder
-      .addMatcher(apiBase.endpoints.w3auth.matchFulfilled, (state, action) => {
-        state.user = action.payload.user
+      .addMatcher(apiBase.endpoints.w3auth.matchFulfilled, (state) => {
         state.loading = false
       })
       .addMatcher(apiBase.endpoints.w3auth.matchRejected, (state) => {
         state.loading = false
         state.user = null
       })
-      .addMatcher(apiBase.endpoints.emailAuth.matchFulfilled, (state, action) => {
-        state.user = action.payload.user
+      .addMatcher(apiBase.endpoints.emailAuth.matchFulfilled, (state) => {
         state.loading = false
       })
       .addMatcher(apiBase.endpoints.emailAuth.matchRejected, (state) => {

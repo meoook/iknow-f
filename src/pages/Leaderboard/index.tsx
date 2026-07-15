@@ -1,6 +1,6 @@
 import s from './leaderboard.module.scss'
 import { useState } from 'react'
-import { TAGS_MAP } from '../../utils/date'
+import { GROUPS_MAP } from '../../utils/date'
 import LeaderboardTable from './components/table'
 import SidebarWins from './components/Sidebar'
 import { useClickOutside } from '../../hooks/hooks'
@@ -19,7 +19,7 @@ export default function PageLeaderboard() {
   const [period, setPeriod] = useState<TPeriod>('month')
   const [tag, setTag] = useState('')
   const [periodRef, isPeriodOpen, togglePeriod] = useClickOutside()
-  const tags = Object.entries(TAGS_MAP).map(([key, value]) => ({ id: key, label: value }))
+  const tags = Object.entries(GROUPS_MAP).map(([key, value]) => ({ id: key, label: value }))
 
   const handleSetPeriod = (periodId: TPeriod) => {
     setPeriod(periodId)

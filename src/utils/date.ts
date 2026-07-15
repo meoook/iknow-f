@@ -33,7 +33,7 @@ export const getCookie = (name: string) => {
 export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 export const REGEX_ADDRESS = /^0x[a-fA-F0-9]{40}$/
 
-export const TAGS_MAP: Record<string, string> = {
+export const GROUPS_MAP: Record<string, string> = {
   '': 'Все',
   politics: 'Политика',
   sport: 'Спорт',

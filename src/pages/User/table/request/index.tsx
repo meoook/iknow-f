@@ -18,7 +18,7 @@ const RequestItem = ({ requestId }: { requestId: number }) => {
 
         <div className='grow row gap-5 w-0'>
           <div className='grow column gap-3 w-full'>
-            <PredictionHead title={request.title} icon={request.icon} tags={request.tags} />
+            <PredictionHead title={request.title} icon={request.icon} groups={request.groups} />
             <PredictionStatus
               state={request.state}
               date={request.end_date}

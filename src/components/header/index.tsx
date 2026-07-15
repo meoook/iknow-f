@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useModalContext } from '../../services/ModalContext'
 import { useClickOutside, useHorizontalScroll } from '../../hooks/hooks'
-import { TAGS_MAP } from '../../utils/date'
+import { GROUPS_MAP } from '../../utils/date'
 import IconSprite from '../../elements/icon'
 // import Logo from './logo'
 import ivanga from '../../assets/ivanga.png'
@@ -82,7 +82,7 @@ export default function Header() {
           </div>
           <div className='hr' />
           <div className='row center justify gap-2 w-full noscroll-x transition' ref={scrollRef}>
-            {Object.entries(TAGS_MAP).map(([path, title]) => (
+            {Object.entries(GROUPS_MAP).map(([path, title]) => (
               <NavLink key={path} to={path} className={style.item}>
                 {title}
               </NavLink>

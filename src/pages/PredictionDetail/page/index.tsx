@@ -83,7 +83,7 @@ export default function PredictionDetail() {
           <PredictionHead
             icon={prediction.icon}
             title={prediction.title}
-            tags={prediction.tags}
+            groups={prediction.groups}
             progress={scrollProgress}
             big
           />

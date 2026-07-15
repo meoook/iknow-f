@@ -122,7 +122,7 @@ export const apiBase = createApi({
     setEmail: builder.mutation<Partial<IUser>, { email: string }>({
       query: (payload) => ({
         url: 'auth/user/email',
-        method: 'PUT',
+        method: 'POST',
         body: payload,
       }),
     }),
