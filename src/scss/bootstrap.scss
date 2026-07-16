@@ -81,6 +81,7 @@
     &:hover {
       color: var(--color-blue);
     }
+
     &.active {
       color: var(--color-blue);
       background-color: var(--color-blue-bg);
@@ -237,11 +238,9 @@
     top: calc(100% - 20px);
     left: 4px;
     font-size: var(--font-size-sm);
-  }
-
-  & div.error {
     color: var(--color-red);
   }
+
 }
 
 .chip {
@@ -281,6 +280,7 @@
   &-1 {
     line-height: 1;
   }
+
   &-5 {
     line-height: 1.5;
   }

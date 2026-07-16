@@ -1,12 +1,10 @@
 import style from './header.module.scss'
-import { Link, NavLink } from 'react-router-dom'
-import { useState } from 'react'
+import { Link, NavLink, useSearchParams } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/useRedux'
 import { useModalContext } from '../../services/ModalContext'
 import { useClickOutside, useHorizontalScroll } from '../../hooks/hooks'
 import { GROUPS_MAP } from '../../utils/date'
 import IconSprite from '../../elements/icon'
-// import Logo from './logo'
 import ivanga from '../../assets/ivanga.png'
 import ivangaW from '../../assets/ivanga_w.png'
 import UserMenu from '../user'
@@ -16,13 +14,20 @@ import PredictionSearch from '../search'
 export default function Header() {
   const { user } = useAppSelector((state) => state.auth)
   const { theme } = useAppSelector((state) => state.app)
-  const [filter, setFilter] = useState('top')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const filter = searchParams.get('order') || 'top'
   const { openModal } = useModalContext()
   const [filterRef, isFilterOpen, toggleFilter] = useClickOutside()
   const scrollRef = useHorizontalScroll(true)
 
   const handleF = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setFilter(e.currentTarget.name)
+    const newFilter = e.currentTarget.name
+    if (newFilter === 'top') {
+      searchParams.delete('order')
+    } else {
+      searchParams.set('order', newFilter)
+    }
+    setSearchParams(searchParams)
     toggleFilter()
   }
 
@@ -82,11 +87,20 @@ export default function Header() {
           </div>
           <div className='hr' />
           <div className='row center justify gap-2 w-full noscroll-x transition' ref={scrollRef}>
-            {Object.entries(GROUPS_MAP).map(([path, title]) => (
-              <NavLink key={path} to={path} className={style.item}>
-                {title}
-              </NavLink>
-            ))}
+            {Object.entries(GROUPS_MAP).map(([path, title]) => {
+              const basePath = path === '' ? '/' : `/${path}`
+              return (
+                <NavLink
+                  key={path}
+                  to={{
+                    pathname: basePath,
+                    search: searchParams.toString(),
+                  }}
+                  className={style.item}>
+                  {title}
+                </NavLink>
+              )
+            })}
           </div>
         </nav>
       </div>

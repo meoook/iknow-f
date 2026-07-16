@@ -1,14 +1,16 @@
 import style from './account.module.scss'
 import { useEffect, useRef, useState } from 'react'
-import { useSetAvatarMutation, useSetUserParamsMutation } from '../../../services/api'
+import { useSetAvatarMutation, useSetUserParamsMutation, useSetEmailMutation } from '../../../services/api'
 import type { IUser } from '../../../types/auth.types'
 import IconSprite from '../../../elements/icon'
 import Avatar from '../../../elements/avatar'
+import { REGEX_EMAIL } from '../../../utils/date'
 
 export default function ProfileAccount({ user, loading }: { user: IUser | null; loading: boolean }) {
-  const [formData, setFormData] = useState({ username: user?.username || '', bio: '' })
-  const [errors, setErrors] = useState({ username: '' })
+  const [formData, setFormData] = useState({ username: user?.username || '', bio: '', email: user?.email || '' })
+  const [errors, setErrors] = useState({ username: '', email: '' })
   const [setUserParams, { error: setUserParamsError }] = useSetUserParamsMutation()
+  const [setEmail, { error: setEmailError, isLoading: isEmailLoading }] = useSetEmailMutation()
   const [setAvatar] = useSetAvatarMutation()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -20,6 +22,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
       setFormData({
         username: user.username || '',
         bio: '', // Assuming bio might be added later to IUser
+        email: user.email || '',
       })
     }
   }, [user])
@@ -43,8 +46,25 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
     if (formData.username && formData.username.length < 4) {
       newErrors.username = 'Никнейм должен быть не менее 4 символов'
     }
-    setErrors(newErrors)
+    setErrors((prev) => ({ ...prev, username: newErrors.username }))
     if (!newErrors.username) setUserParams({ username: formData.username })
+  }
+
+  const handleSaveEmail = async () => {
+    const newErrors = { email: '' }
+    if (!formData.email) {
+      newErrors.email = 'Введите Email'
+    } else if (!REGEX_EMAIL.test(formData.email)) {
+      newErrors.email = 'Некорректный формат Email'
+    }
+    setErrors((prev) => ({ ...prev, email: newErrors.email }))
+    if (!newErrors.email) {
+      try {
+        await setEmail({ email: formData.email }).unwrap()
+      } catch (err: any) {
+        // Error will be caught and shown by setEmailError hook
+      }
+    }
   }
 
   const handleFileChange = (event: Event) => {
@@ -152,8 +172,35 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
             className={errors.username ? 'outline error' : 'outline'}
             placeholder='Никнейм'
           />
-          {errors.username && <span className='error'>{errors.username}</span>}
-          {setUserParamsError && <span className='error'>Такой никнейм уже существует</span>}
+          {errors.username && <div className='error'>{errors.username}</div>}
+          {setUserParamsError && <div className='error'>Такой никнейм уже существует</div>}
+        </div>
+
+        <div className='form-row'>
+          <label htmlFor='email'>Почта (Email)</label>
+          <div className='row gap-2 w-full'>
+            <input
+              type='email'
+              name='email'
+              value={formData.email}
+              onChange={handleInputChange}
+              className={errors.email ? 'outline error grow' : 'outline grow'}
+              placeholder='example@mail.com'
+              disabled={!!user?.email}
+            />
+            {!user?.email && (
+              <button className='btn blue' onClick={handleSaveEmail} disabled={isEmailLoading || !formData.email}>
+                {isEmailLoading ? '...' : 'Привязать'}
+              </button>
+            )}
+          </div>
+          {errors.email && <div className='error'>{errors.email}</div>}
+          {setEmailError && (
+            <div className='error'>
+              {(setEmailError as any)?.data?.detail || 'Ошибка при сохранении почты'}
+            </div>
+          )}
+          {user?.email && <span className='hint text-xs secondary'>Почта успешно привязана к аккаунту</span>}
         </div>
 
         <div className='form-row'>

@@ -1,28 +1,41 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import { predictionSelectors } from '../store/prediction.adapter'
 import { useGetPredictionsQuery } from '../services/api'
 
 import PredictionCard from '../components/card'
 import Empty from '../elements/empty'
 
+const SORT_MAP: Record<string, string | undefined> = {
+  top: undefined,
+  volume: 'volume',
+  diff: 'multiplier',
+  star: 'new',
+  finish: 'date',
+}
+
 export default function Home() {
   const limit = 20
 
   const observerTarget = useRef<HTMLDivElement>(null)
   const { pathname } = useLocation()
+  const [searchParams] = useSearchParams()
 
-  const tag = pathname === '/' ? undefined : pathname.slice(1)
+  const group = pathname === '/' ? undefined : pathname.slice(1)
+  const order = searchParams.get('order') || 'top'
+  const sort = SORT_MAP[order]
+
   const [offset, setOffset] = useState(0)
 
   useEffect(() => {
     setOffset(0)
-  }, [tag])
+  }, [group, order])
 
   const { data, isLoading, isFetching, isError } = useGetPredictionsQuery({
     limit,
     offset,
-    ...(tag && { tag }),
+    ...(group && { group }),
+    sort,
   })
 
   const predictions = data ? predictionSelectors.selectAll(data) : []

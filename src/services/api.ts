@@ -280,7 +280,7 @@ export const apiBase = createApi({
           total: response.total ?? 0,
         }
       },
-      serializeQueryArgs: ({ queryArgs }) => ({ tag: queryArgs?.tag }),
+      serializeQueryArgs: ({ queryArgs }) => ({ group: queryArgs?.group, sort: queryArgs?.sort }),
       merge: (currentCache, newItems, { arg }) => {
         if (arg?.offset === 0) {
           currentCache.entities = newItems.entities
@@ -291,7 +291,7 @@ export const apiBase = createApi({
         if (currentCache.total !== newItems.total) currentCache.total = newItems.total
       },
       forceRefetch({ currentArg, previousArg }) {
-        return currentArg?.offset !== previousArg?.offset || currentArg?.tag !== previousArg?.tag
+        return currentArg?.offset !== previousArg?.offset || currentArg?.group !== previousArg?.group || currentArg?.sort !== previousArg?.sort
       },
     }),
     getPrediction: builder.query<IPredictionDetail, number>({

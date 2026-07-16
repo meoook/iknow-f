@@ -124,10 +124,7 @@ export const useHorizontalScroll = (useMask: boolean = false) => {
       if (e.deltaY > 0 && isAtRight) return
 
       e.preventDefault()
-      el.scrollBy({
-        left: e.deltaY * 3,
-        behavior: 'smooth',
-      })
+      el.scrollLeft += e.deltaY
     }
     el.addEventListener('wheel', onWheel, { passive: false })
 

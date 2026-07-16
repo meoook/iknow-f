@@ -6,7 +6,8 @@ export type PaginatedArg = {
   id?: number | string
   limit?: number
   offset?: number
-  tag?: string
+  group?: string
+  sort?: string
   period?: string
 }
 
