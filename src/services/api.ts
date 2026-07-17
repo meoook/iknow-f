@@ -119,13 +119,6 @@ export const apiBase = createApi({
         return 'Неверный код'
       },
     }),
-    setEmail: builder.mutation<Partial<IUser>, { email: string }>({
-      query: (payload) => ({
-        url: 'auth/user/email',
-        method: 'POST',
-        body: payload,
-      }),
-    }),
     setUserParams: builder.mutation<Partial<IUser>, Partial<IUser>>({
       query: (payload) => ({
         url: 'auth/user',
@@ -150,6 +143,12 @@ export const apiBase = createApi({
     }),
     getTelegramNonce: builder.mutation<{ nonce: string }, void>({
       query: () => 'auth/user/telegram',
+    }),
+    checkUsername: builder.query<{ available: boolean }, string>({
+      query: (username) => ({
+        url: 'auth/user/check/username',
+        params: { username },
+      }),
     }),
     getUserById: builder.query<IUserPublic, string>({
       query: (id) => `user/${id}`,
@@ -411,7 +410,7 @@ export const apiBase = createApi({
           total: response.total ?? 0,
         }
       },
-      serializeQueryArgs: ({ queryArgs }) => ({ tag: queryArgs.tag, period: queryArgs.period }),
+      serializeQueryArgs: ({ queryArgs }) => ({ group: queryArgs.group, period: queryArgs.period }),
       merge: (currentCache, newItems) => {
         if (currentCache.total !== newItems.total) currentCache.total = newItems.total
         leaderboardAdapter.addMany(currentCache, leaderboardSelectors.selectAll(newItems))
@@ -441,11 +440,11 @@ export const {
   useGetUserQuery,
   useEmailApproveMutation,
   useSingOutMutation,
-  useSetEmailMutation,
   useSetUserParamsMutation,
   useSetAvatarMutation,
   useGetTelegramNonceMutation,
   useGetUserByIdQuery,
+  useLazyCheckUsernameQuery,
   // Notifications
   useReadNotificationMutation,
   useReadAllNotificationsMutation,

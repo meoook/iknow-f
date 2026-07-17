@@ -1,16 +1,29 @@
 import style from './account.module.scss'
 import { useEffect, useRef, useState } from 'react'
-import { useSetAvatarMutation, useSetUserParamsMutation, useSetEmailMutation } from '../../../services/api'
+import {
+  useSetAvatarMutation,
+  useSetUserParamsMutation,
+  useEmailNonceMutation,
+  useEmailApproveMutation,
+  useLazyCheckUsernameQuery,
+} from '../../../services/api'
 import type { IUser } from '../../../types/auth.types'
 import IconSprite from '../../../elements/icon'
 import Avatar from '../../../elements/avatar'
 import { REGEX_EMAIL } from '../../../utils/date'
 
 export default function ProfileAccount({ user, loading }: { user: IUser | null; loading: boolean }) {
-  const [formData, setFormData] = useState({ username: user?.username || '', bio: '', email: user?.email || '' })
-  const [errors, setErrors] = useState({ username: '', email: '' })
+  const [formData, setFormData] = useState({ username: user?.username || '', bio: '', email: user?.email || '', nonce: '' })
+  const [errors, setErrors] = useState({ username: '', email: '', nonce: '' })
+  const [isVerificationSent, setIsVerificationSent] = useState(false)
+
+  const [usernameStatus, setUsernameStatus] = useState<'available' | 'taken' | 'invalid' | 'none'>('none')
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false)
+
   const [setUserParams, { error: setUserParamsError }] = useSetUserParamsMutation()
-  const [setEmail, { error: setEmailError, isLoading: isEmailLoading }] = useSetEmailMutation()
+  const [emailNonce, { error: emailNonceError, isLoading: isNonceLoading }] = useEmailNonceMutation()
+  const [emailApprove, { error: emailApproveError, isLoading: isApproveLoading }] = useEmailApproveMutation()
+  const [checkUsername] = useLazyCheckUsernameQuery()
   const [setAvatar] = useSetAvatarMutation()
 
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -23,9 +36,48 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
         username: user.username || '',
         bio: '', // Assuming bio might be added later to IUser
         email: user.email || '',
+        nonce: '',
       })
+      setIsVerificationSent(false)
+      setUsernameStatus('none')
     }
   }, [user])
+
+  useEffect(() => {
+    const username = formData.username.trim()
+
+    if (!username || username === user?.username) {
+      setUsernameStatus('none')
+      setIsCheckingUsername(false)
+      return
+    }
+
+    if (username.length < 4) {
+      setUsernameStatus('invalid')
+      setIsCheckingUsername(false)
+      return
+    }
+
+    setIsCheckingUsername(true)
+    setUsernameStatus('none')
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await checkUsername(username).unwrap()
+        if (res.available) {
+          setUsernameStatus('available')
+        } else {
+          setUsernameStatus('taken')
+        }
+      } catch (err) {
+        setUsernameStatus('taken')
+      } finally {
+        setIsCheckingUsername(false)
+      }
+    }, 1000)
+
+    return () => clearTimeout(timer)
+  }, [formData.username, user?.username, checkUsername])
 
   useEffect(() => {
     fileInputRef.current = document.createElement('input')
@@ -47,10 +99,12 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
       newErrors.username = 'Никнейм должен быть не менее 4 символов'
     }
     setErrors((prev) => ({ ...prev, username: newErrors.username }))
-    if (!newErrors.username) setUserParams({ username: formData.username })
+    if (!newErrors.username && usernameStatus !== 'taken') {
+      setUserParams({ username: formData.username })
+    }
   }
 
-  const handleSaveEmail = async () => {
+  const handleSendCode = async () => {
     const newErrors = { email: '' }
     if (!formData.email) {
       newErrors.email = 'Введите Email'
@@ -60,9 +114,28 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
     setErrors((prev) => ({ ...prev, email: newErrors.email }))
     if (!newErrors.email) {
       try {
-        await setEmail({ email: formData.email }).unwrap()
+        await emailNonce({ email: formData.email }).unwrap()
+        setIsVerificationSent(true)
       } catch (err: any) {
-        // Error will be caught and shown by setEmailError hook
+        // Error will be shown by emailNonceError
+      }
+    }
+  }
+
+  const handleConfirmCode = async () => {
+    const newErrors = { nonce: '' }
+    if (!formData.nonce.trim()) {
+      newErrors.nonce = 'Введите код'
+    } else if (formData.nonce.length < 4) {
+      newErrors.nonce = 'Код должен быть 4-значным'
+    }
+    setErrors((prev) => ({ ...prev, nonce: newErrors.nonce }))
+    if (!newErrors.nonce) {
+      try {
+        await emailApprove({ email: formData.email, nonce: formData.nonce }).unwrap()
+        // Upon success, user.email will update, useEffect will reset form and lock email
+      } catch (err: any) {
+        // Error will be shown by emailApproveError
       }
     }
   }
@@ -169,11 +242,26 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
             name='username'
             value={formData.username}
             onChange={handleInputChange}
-            className={errors.username ? 'outline error' : 'outline'}
+            className={
+              errors.username || usernameStatus === 'taken' || usernameStatus === 'invalid'
+                ? 'outline error'
+                : usernameStatus === 'available'
+                  ? 'outline success'
+                  : 'outline'
+            }
             placeholder='Никнейм'
           />
-          {errors.username && <div className='error'>{errors.username}</div>}
-          {setUserParamsError && <div className='error'>Такой никнейм уже существует</div>}
+          {isCheckingUsername && <span className='text-xs secondary'>Проверка доступности...</span>}
+          {usernameStatus === 'available' && (
+            <span className='text-xs color-green'>✨ Никнейм свободен</span>
+          )}
+          {usernameStatus === 'taken' && (
+            <span className='text-xs color-red'>Этот никнейм уже занят</span>
+          )}
+          {usernameStatus === 'invalid' && (
+            <span className='text-xs color-red'>Никнейм должен быть не менее 4 символов</span>
+          )}
+          {setUserParamsError && <span className='text-xs color-red'>Такой никнейм уже существует</span>}
         </div>
 
         <div className='form-row'>
@@ -186,20 +274,53 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
               onChange={handleInputChange}
               className={errors.email ? 'outline error grow' : 'outline grow'}
               placeholder='example@mail.com'
-              disabled={!!user?.email}
+              disabled={!!user?.email || isVerificationSent}
             />
-            {!user?.email && (
-              <button className='btn blue' onClick={handleSaveEmail} disabled={isEmailLoading || !formData.email}>
-                {isEmailLoading ? '...' : 'Привязать'}
+            {!user?.email && !isVerificationSent && (
+              <button
+                className='btn blue'
+                onClick={handleSendCode}
+                disabled={isNonceLoading || !formData.email}>
+                {isNonceLoading ? '...' : 'Отправить код'}
               </button>
             )}
           </div>
-          {errors.email && <div className='error'>{errors.email}</div>}
-          {setEmailError && (
-            <div className='error'>
-              {(setEmailError as any)?.data?.detail || 'Ошибка при сохранении почты'}
+          {errors.email && <span className='error'>{errors.email}</span>}
+          {emailNonceError && (
+            <span className='error'>
+              {(emailNonceError as any)?.data?.detail || 'Ошибка отправки кода'}
+            </span>
+          )}
+
+          {/* Verification code step */}
+          {!user?.email && isVerificationSent && (
+            <div className='column gap-1 mt-2 w-full'>
+              <label htmlFor='nonce'>Код подтверждения из письма</label>
+              <div className='row gap-2 w-full'>
+                <input
+                  type='text'
+                  name='nonce'
+                  maxLength={6}
+                  value={formData.nonce}
+                  onChange={handleInputChange}
+                  className={errors.nonce ? 'outline error grow' : 'outline grow'}
+                />
+                <button
+                  className='btn blue'
+                  onClick={handleConfirmCode}
+                  disabled={isApproveLoading || !formData.nonce}>
+                  {isApproveLoading ? '...' : 'Подтвердить'}
+                </button>
+              </div>
+              {errors.nonce && <span className='error'>{errors.nonce}</span>}
+              {emailApproveError && (
+                <span className='error'>
+                  {typeof emailApproveError === 'string' ? emailApproveError : 'Неверный код'}
+                </span>
+              )}
             </div>
           )}
+
           {user?.email && <span className='hint text-xs secondary'>Почта успешно привязана к аккаунту</span>}
         </div>
 
@@ -215,7 +336,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
           />
         </div>
 
-        <button className='btn blue' onClick={handleSaveChanges}>
+        <button className='btn blue' onClick={handleSaveChanges} disabled={usernameStatus === 'taken' || isCheckingUsername}>
           Сохранить
         </button>
       </div>

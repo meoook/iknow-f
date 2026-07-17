@@ -54,8 +54,10 @@ const authSlice = createSlice({
         state.loading = false
         state.user = null
       })
-      .addMatcher(apiBase.endpoints.setEmail.matchFulfilled, (state, action) => {
-        if (state.user && action.payload.email) state.user.email = action.payload.email
+      .addMatcher(apiBase.endpoints.emailApprove.matchFulfilled, (state, action) => {
+        if (state.user) {
+          state.user.email = action.meta.arg.originalArgs.email
+        }
       })
       .addMatcher(apiBase.endpoints.setUserParams.matchFulfilled, (state, action) => {
         if (state.user) Object.assign(state.user, action.payload)
