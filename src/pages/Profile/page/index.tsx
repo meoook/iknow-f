@@ -4,7 +4,6 @@ import { useAppSelector } from '../../../hooks/useRedux'
 import ProfileAccount from '../account'
 import ProfileNotifications from '../notifications'
 import ProfileTxs from '../transactions'
-import ProfileWithdraw from '../withdraw'
 import { useHorizontalScroll } from '../../../hooks/hooks'
 
 type TabType = 'account' | 'notifications' | 'transactions' | 'withdraw'
@@ -43,18 +42,12 @@ export default function Profile() {
             onClick={() => setActiveTab('transactions')}>
             Транзакции
           </button>
-          <button
-            className={`${style.item} ${activeTab === 'withdraw' ? 'active' : ''}`}
-            onClick={() => setActiveTab('withdraw')}>
-            Вывод средств
-          </button>
         </div>
 
         <div className={style.main}>
           {activeTab === 'account' && <ProfileAccount user={user} loading={loading} />}
           {activeTab === 'notifications' && <ProfileNotifications user={user} loading={loading} />}
           {activeTab === 'transactions' && <ProfileTxs />}
-          {activeTab === 'withdraw' && <ProfileWithdraw user={user} loading={loading} />}
         </div>
       </div>
     </div>

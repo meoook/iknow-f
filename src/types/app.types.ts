@@ -223,3 +223,10 @@ export interface ITopWin {
   amount: number
   payout: number
 }
+
+export interface IDepositParam {
+  currency: string
+  minimum: number
+  address: string
+  chain_name: string
+}

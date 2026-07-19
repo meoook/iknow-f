@@ -20,6 +20,7 @@ import type {
   IUserBet,
   ILeaderboardUser,
   ITopWin,
+  IDepositParam,
 } from '../types/app.types'
 import { setLoading } from '../store/auth.slice'
 
@@ -260,6 +261,10 @@ export const apiBase = createApi({
         return { ...txAdapter.setAll(txAdapter.getInitialState(), response.data ?? []), total: response.total ?? 0 }
       },
     }),
+    getDepositParams: builder.query<IDepositParam[], void>({
+      query: () => 'deposit/params',
+      keepUnusedDataFor: 86400, // 24 hours
+    }),
 
     // Public endpoints
     searchPredictions: builder.mutation<IPredictionSearch[], string>({
@@ -431,6 +436,7 @@ export const apiBase = createApi({
 export const {
   useGetConfigQuery,
   useDepositMutation,
+  useGetDepositParamsQuery,
   // Auth
   useW3nonceMutation,
   useW3authMutation,
