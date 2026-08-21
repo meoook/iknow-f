@@ -1,0 +1,163 @@
+.chartContainer {
+  position: relative;
+  width: 100%;
+  user-select: none;
+  touch-action: pan-y;
+  font-family: inherit;
+  box-sizing: border-box;
+  background-color: var(--color-chart-bg, #121418);
+  border-radius: var(--radius, 8px);
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+}
+
+.overlayRect {
+  cursor: crosshair;
+  fill: transparent;
+  pointer-events: all;
+}
+
+.gridLine {
+  stroke: light-dark(rgba(0, 0, 0, 0.08), rgba(255, 255, 255, 0.08));
+  stroke-dasharray: 4 4;
+  stroke-width: 1;
+}
+
+.axisText {
+  fill: var(--color-secondary, light-dark(#777, rgba(255, 255, 255, 0.4)));
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.yAxisText {
+  text-anchor: start;
+}
+
+.xAxisText {
+  text-anchor: middle;
+}
+
+.crosshairLine {
+  stroke: light-dark(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.25));
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.crosshairTime {
+  fill: var(--color-secondary, light-dark(#666, rgba(255, 255, 255, 0.6)));
+  font-size: 11px;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.htmlTooltipOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.tooltipTimeHeader {
+  position: absolute;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-secondary, light-dark(#666, rgba(255, 255, 255, 0.6)));
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translate(6px, -20px);
+}
+
+.tooltipBadge {
+  position: absolute;
+  background-color: var(--color-chart-bg, #121418);
+  border: 1px solid var(--color-border, light-dark(rgba(0, 0, 0, 0.12), rgba(255, 255, 255, 0.12)));
+  border-radius: 6px;
+  pointer-events: none;
+  width: max-content;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px light-dark(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.45));
+}
+
+/* Режим колонки (акцентные проценты под названием) */
+.tooltipBadgeColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 8px;
+
+  .tooltipName {
+    font-size: 9.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1;
+  }
+
+  .tooltipValue {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+}
+
+/* Режим строки (как на скриншоте кандидатов) */
+.tooltipBadgeRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 9px 4px 7px;
+
+  .colorPill {
+    width: 3.5px;
+    height: 13px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .tooltipName {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--color-primary, #ffffff);
+    line-height: 1;
+  }
+
+  .tooltipValue {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+  }
+}
+
+/* Пульсирующая live-точка на конце линии */
+.lastPointGroup {
+  pointer-events: none;
+}
+
+.pulseRing {
+  transform-origin: center;
+  animation: pulseAnimation 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+@keyframes pulseAnimation {
+  0% {
+    r: 4px;
+    opacity: 0.8;
+  }
+  70% {
+    r: 11px;
+    opacity: 0;
+  }
+  100% {
+    r: 11px;
+    opacity: 0;
+  }
+}

@@ -254,7 +254,7 @@ export const apiBase = createApi({
     }),
     getTx: builder.query<EntityStateWithTotal<ITx>, PaginatedArg | void>({
       query: (params) => ({
-        url: 'tx',
+        url: 'balance/tx',
         params: params ?? {},
       }),
       transformResponse: (response: PaginatedResponse<ITx>) => {
@@ -262,7 +262,7 @@ export const apiBase = createApi({
       },
     }),
     getDepositParams: builder.query<IDepositParam[], void>({
-      query: () => 'deposit/params',
+      query: () => 'balance/deposit',
       keepUnusedDataFor: 86400, // 24 hours
     }),
 

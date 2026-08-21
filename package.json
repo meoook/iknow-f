@@ -11,6 +11,8 @@
     "deploy": "tsc -b && vite build && firebase deploy"
   },
   "dependencies": {
+    "d3-scale": "^4.0.2",
+    "d3-shape": "^3.2.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-redux": "^9.2.0",
@@ -18,8 +20,10 @@
     "viem": "^2.40.4"
   },
   "devDependencies": {
-    "@reduxjs/toolkit": "^2.11.0",
     "@eslint/js": "^9.39.1",
+    "@reduxjs/toolkit": "^2.11.0",
+    "@types/d3-scale": "^4.0.9",
+    "@types/d3-shape": "^3.1.8",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
@@ -28,9 +32,9 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "sass": "^1.94.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4",
-    "sass": "^1.94.2"
+    "vite": "^7.2.4"
   }
 }
