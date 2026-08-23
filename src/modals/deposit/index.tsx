@@ -81,7 +81,7 @@ export default function ModalDeposit() {
     <div className={`${style.wrapper} noscroll`}>
       <h1>Депозит</h1>
       <hr />
-      <div className='column center gap12'>
+      <div className='column center gap-3'>
         <div>Отправьте {activeToken.currency} на указанный адрес в выбранном блокчейне</div>
         <select
           className='outline'

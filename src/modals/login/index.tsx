@@ -106,13 +106,13 @@ export default function ModalLogin({ close }: ModalLoginProps) {
 
       <div className={style.steps} style={{ gridTemplateRows: step === 'email' ? '1fr 0fr' : '0fr 1fr' }}>
         <div className={style.step}>
-          <div className='column gap20'>
+          <div className='column gap-5'>
             <button disabled={isOauthLoading} className='btn blue big'>
               <IconSprite name='vk' size={28} />
               <span>Войти с VK ID</span>
             </button>
 
-            <div className='row center gap20'>
+            <div className='row center gap-5'>
               <hr className='grow' />
               <span>ИЛИ</span>
               <hr className='grow' />
@@ -135,7 +135,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
               </button>
             </div>
 
-            <div className='row center gap20'>
+            <div className='row center gap-5'>
               <button
                 onClick={() => handleWeb3Login('metamask')}
                 disabled={isWeb3Loading}
@@ -152,8 +152,8 @@ export default function ModalLogin({ close }: ModalLoginProps) {
         </div>
 
         <div className={style.step}>
-          <div className='column center gap12'>
-            <div className='column center gap8'>
+          <div className='column center gap-3'>
+            <div className='column center gap-2'>
               {/* <h2>Подтвердите вход</h2> */}
               <div className='color-gray'>Код подтверждения отправлен на почту</div>
               <div>{email}</div>

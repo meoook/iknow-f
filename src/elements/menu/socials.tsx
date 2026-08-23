@@ -2,7 +2,7 @@ import IconSprite from '../icon'
 
 export default function Socials() {
   return (
-    <div className='secondary row center gap16'>
+    <div className='secondary row center gap-4'>
       <a href='mailto:hello@ivanga.me' target='_blank' className='up' rel='noreferrer'>
         <IconSprite name='mail' size={20} />
       </a>

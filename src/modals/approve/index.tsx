@@ -34,7 +34,7 @@ export default function ModalApprove({ email, close }: ModalApproveProps) {
     <div className={style.wrapper}>
       <h1>Введите код</h1>
 
-      <div className='column center gap4'>
+      <div className='column center gap-1'>
         <p className='color-gray'>{`Мы отправили ${NONCE_LENGTH}-значный код на ${email}`}</p>
         <div>&nbsp;</div>
         <Nonce length={NONCE_LENGTH} value={nonce} onChange={setNonce} />

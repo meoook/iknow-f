@@ -36,10 +36,10 @@ export default function ProfileTxs() {
   if (!txIds.length) return <Empty title='Нет транзакций' size={24} />
 
   return (
-    <div className='column gap12'>
+    <div className='column gap-3'>
       <h1>Транзакции</h1>
       <hr />
-      <div className='column gap12'>
+      <div className='column gap-3'>
         {txIds.map((txId) => (
           <Tx key={txId} txId={txId} />
         ))}
@@ -55,15 +55,15 @@ const TxBase = ({ txId }: { txId: number }) => {
 
   const positive = tx.direction === 'IN'
   return (
-    <div className='row center justify gap4 lh-1'>
-      <div className='column gap4 grow'>
+    <div className='row center justify gap-1 lh-1'>
+      <div className='column gap-1 grow'>
         <b>{positive ? 'Пополнение' : 'Вывод'}</b>
-        <div className='row gap8 label'>
+        <div className='row gap-2 label'>
           <b>{new Date(tx.created).toLocaleDateString()}</b>
           <b>{new Date(tx.created).toLocaleTimeString()}</b>
         </div>
       </div>
-      <h2 className='row gap8'>
+      <h2 className='row gap-2'>
         <b className={positive ? 'color-green' : 'color-red'}>
           {positive ? '+' : '-'}${tx.amount.toFixed(2)}
         </b>

@@ -12,12 +12,11 @@ export type PaginatedArg = {
 }
 
 export interface ISettings {
-  multiplier: number
-  fee: number
+  // fee: number
   min_bet: number
   min_create: number
-  delete: number
-  limit: number
+  delete: number  // comment delete hours limit
+  limit: number  // years limit to end prediction
 }
 
 export interface INotification {
@@ -106,7 +105,6 @@ export interface IPredictionDetail {
   groups: string[]
   icon: string | null
   volume: number
-  multiplier: number
   end_date: string
   bet_date: string
   rules: string

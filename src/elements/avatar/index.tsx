@@ -1,6 +1,6 @@
 import s from './avatar.module.scss'
 interface AvatarProps {
-  src?: string
+  src?: string | null
   size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }
 

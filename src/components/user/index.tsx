@@ -36,7 +36,7 @@ export default function UserMenu() {
 
   if (loading) {
     return (
-      <div className='row center gap8'>
+      <div className='row center gap-2'>
         <div className='btn btn-icon hidden'>
           <div className='shimmer' />
         </div>
@@ -48,7 +48,7 @@ export default function UserMenu() {
   }
 
   return (
-    <div className='row center gap8'>
+    <div className='row center gap-2'>
       {user ? <UserButtons user={user} /> : <LoginButton />}
       <div className='relative'>
         <div className={style.container} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={open}>

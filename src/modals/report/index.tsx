@@ -47,8 +47,8 @@ export default function ModalReport({ predictionId, commentId, close }: ModalRep
         <h1>Жалоба</h1>
       </div>
       {/* <hr /> */}
-      <div className='column gap16'>
-        <div className='column gap4'>
+      <div className='column gap-4'>
+        <div className='column gap-1'>
           <div className='label'>Выберите причину</div>
           <select className='outline' name='chain' value={reason} onChange={handleReasonChange}>
             {REASONS.map((m) => (

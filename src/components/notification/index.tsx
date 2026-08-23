@@ -81,7 +81,7 @@ const NotificationItem = ({ notificationId }: { notificationId: number }) => {
       <div className={`${s.icon} ${alertType}`}>
         <IconSprite name={alertType} size={28} />
       </div>
-      <div className='column gap4'>
+      <div className='column gap-1'>
         <div>{notification.title}</div>
         <div className={s.message}>{notification.text}</div>
         <div className={s.time}>{formatRelativeTime(notification.created)}</div>

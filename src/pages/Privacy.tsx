@@ -1,7 +1,7 @@
 export default function PagePrivacy() {
   return (
     <div className='container'>
-      <div className='column center middle gap12 text-sm'>
+      <div className='column center middle gap-3 text-sm'>
         <hr className='hide' />
         <div>
           <p>

@@ -61,7 +61,7 @@ const TopUserBase = ({ predictionId, topId }: BetProps) => {
 
   return (
     <div className='row justify center'>
-      <div className='row center gap8 lh-1'>
+      <div className='row center gap-2 lh-1'>
         <Link to={`/user/${topUser.id}`}>
           <Avatar src={topUser.avatar} size='sm' />
         </Link>
@@ -69,7 +69,7 @@ const TopUserBase = ({ predictionId, topId }: BetProps) => {
           {topUser.username.length > 20 ? `${topUser.username.slice(0, 17)}...` : topUser.username}
         </Link>
       </div>
-      <div className='row gap4'>
+      <div className='row gap-1'>
         <b className='color-green'>${topUser.total.toFixed(2)}</b>
       </div>
     </div>

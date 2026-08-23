@@ -67,7 +67,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
     )
   }
   return (
-    <div className='column gap12'>
+    <div className='column gap-3'>
       <h1>Уведомления</h1>
       <hr />
       <h2>Telegram</h2>
@@ -86,7 +86,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
             </div>
           </div>
         ) : (
-          <div className='row center gap8 lh-1'>
+          <div className='row center gap-2 lh-1'>
             {!user?.telegram_id ? (
               <button className='btn green' onClick={getCode}>
                 Подключить
@@ -100,7 +100,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
         )}
       </div>
       {user?.telegram_id && (
-        <div className='row center gap8'>
+        <div className='row center gap-2'>
           <Toggle checked={user?.telegram_notify} onChange={toggleTelegram} />
           <div>Получать уведомления в Telegram</div>
         </div>
@@ -116,7 +116,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
         )}
       </div>
       {user?.email && (
-        <div className='row center gap8'>
+        <div className='row center gap-2'>
           <Toggle checked={user?.email_notify} onChange={toggleMail} />
           <div>Получать уведомления на почту</div>
         </div>

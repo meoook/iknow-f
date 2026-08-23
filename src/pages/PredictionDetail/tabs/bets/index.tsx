@@ -62,11 +62,11 @@ const BetBase = ({ predictionId, betId }: BetProps) => {
   if (!bet) return null
 
   return (
-    <div className='row gap-1 center text-sm'>
+    <div className='row gap-2 center text-sm'>
       <Link to={`/user/${bet.user.id}`}>
         <Avatar src={bet.user.avatar} size='sm' />
       </Link>
-      <div className='row grow gap4 lh-1 wrap'>
+      <div className='row grow gap-1 lh-1 wrap'>
         <Link to={`/user/${bet.user.id}`} className='w-500 h-underline'>
           {bet.user.username.length > 20 ? `${bet.user.username.slice(0, 17)}...` : bet.user.username}
         </Link>

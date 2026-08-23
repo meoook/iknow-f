@@ -40,7 +40,7 @@ export default function Header() {
             {/* <h2>iVanga</h2> */}
             <img src={theme === 'dark' ? ivanga : ivangaW} alt='iVanga' />
           </Link>
-          <div className='row center gap20 grow'>
+          <div className='row center gap-5 grow'>
             <PredictionSearch />
             {!user && (
               <button className={style.tultip} onClick={() => openModal(ModalHow)}>

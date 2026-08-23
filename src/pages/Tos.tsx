@@ -1,7 +1,7 @@
 export default function PageTos() {
   return (
     <div className='container'>
-      <div className='column gap16'>
+      <div className='column gap-4'>
         <hr className='hide' />
         <h1 className='row middle'>Условия использования ivanga.me</h1>
         <h3>1. Введение</h3>

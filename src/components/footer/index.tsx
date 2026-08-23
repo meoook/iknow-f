@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <footer className={style.footer}>
       <div className={style.container}>
-        <div className='column start gap8'>
+        <div className='column start gap-2'>
           <Link to='/' className={style.logo}>
             <Logo />
             <h1>iVanga</h1>
@@ -19,7 +19,7 @@ export default function Footer() {
 
         <hr />
 
-        <div className='column gap20'>
+        <div className='column gap-5'>
           <div className={style.bottom}>
             <Socials />
 

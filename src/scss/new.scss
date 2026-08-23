@@ -86,15 +86,6 @@ $text-sizes: (
       gap: $padding * $i;
     }
   }
-
-  &.gap {
-    // TODO: RM !!
-    @each $g in $gaps {
-      &#{$g} {
-        gap: #{$g}px;
-      }
-    }
-  }
 }
 
 // Screen, borders and paddings
@@ -176,6 +167,7 @@ $text-sizes: (
   &-fit {
     max-height: fit-content;
   }
+
   &-0 {
     max-height: 0;
   }
@@ -183,20 +175,25 @@ $text-sizes: (
 
 .bd {
   border: 1px solid var(--color-border);
+
   &-b {
     border-bottom: 1px solid var(--color-border);
   }
 }
+
 .bdr {
   & {
     border-radius: var(--radius);
   }
+
   &-4 {
     border-radius: 4px;
   }
+
   &-6 {
     border-radius: 6px;
   }
+
   // &-12 {
   //   border-radius: 12px;
   // }
@@ -208,6 +205,7 @@ $text-sizes: (
   &-0 {
     opacity: 0;
   }
+
   &-1 {
     opacity: 1;
   }
@@ -249,12 +247,15 @@ $text-sizes: (
 .scroll-hide {
   overflow-y: auto;
   scrollbar-gutter: stable;
+
   &::-webkit-scrollbar {
     width: 3px;
   }
+
   &::-webkit-scrollbar-track {
     background-color: #0000;
   }
+
   &::-webkit-scrollbar-thumb {
     border-radius: 3px;
     background-color: #0000;
@@ -263,6 +264,7 @@ $text-sizes: (
   &:hover::-webkit-scrollbar {
     background-color: var(--scrollbar-track);
   }
+
   &:hover::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
   }
@@ -274,6 +276,7 @@ $text-sizes: (
 
 .transition {
   transition: all 0.3s;
+
   &.easy {
     transition-timing-function: ease;
   }
@@ -294,6 +297,7 @@ $text-sizes: (
 .text-bet {
   font-size: var(--font-size-xl);
   font-weight: 600;
+
   @media (max-width: 940px) {
     font-size: var(--font-size-h2);
   }
@@ -365,6 +369,7 @@ $text-sizes: (
   &:hover {
     background-color: var(--color-hover);
   }
+
   &-o:hover {
     opacity: 0.8;
   }
@@ -374,6 +379,7 @@ $text-sizes: (
   &-dialog {
     background-color: var(--color-dialog);
   }
+
   &-card {
     background-color: var(--color-card);
   }
