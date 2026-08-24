@@ -68,11 +68,7 @@ export default function Header() {
                 <IconSprite name='volume' size={16} />
                 <span>Объем</span>
               </button>
-              <button className={`${style.item} ${filter === 'diff' ? 'active' : ''}`} name='diff' onClick={handleF}>
-                <IconSprite name='diff' size={16} />
-                <span>Разница</span>
-              </button>
-              <button className={`${style.item} ${filter === 'star' ? 'active' : ''}`} name='star' onClick={handleF}>
+              <button className={`${style.item} ${filter === 'new' ? 'active' : ''}`} name='new' onClick={handleF}>
                 <IconSprite name='star' size={16} />
                 <span>Новые</span>
               </button>

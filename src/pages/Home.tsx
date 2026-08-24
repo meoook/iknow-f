@@ -9,8 +9,7 @@ import Empty from '../elements/empty'
 const SORT_MAP: Record<string, string | undefined> = {
   top: undefined,
   volume: 'volume',
-  diff: 'multiplier',
-  star: 'new',
+  new: 'new',
   finish: 'date',
 }
 

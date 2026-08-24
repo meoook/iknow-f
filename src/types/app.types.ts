@@ -68,7 +68,7 @@ export interface IRequest {
   created: number
 }
 
-const TPredictionState = {
+export const TPredictionState = {
   ACTIVE: 'ACTIVE',
   END_BET: 'END_BET',
   DISPUTE: 'DISPUTE',
@@ -78,17 +78,6 @@ const TPredictionState = {
 
 export type TPredictionState = (typeof TPredictionState)[keyof typeof TPredictionState]
 
-export interface IPrediction {
-  id: number
-  state: TPredictionState
-  title: string
-  groups: string[]
-  icon: string | null
-  volume: number
-  multiplier: number
-  end_date: string
-  created: number
-}
 
 export interface IChoice {
   id: number
@@ -98,20 +87,25 @@ export interface IChoice {
   win: boolean | null
 }
 
-export interface IPredictionDetail {
+export interface IPrediction {
   id: number
+  choices: IChoice[]
   state: TPredictionState
-  title: string
-  groups: string[]
   icon: string | null
+  title: string
+  // groups: string[] // TODO: Needed?
   volume: number
   end_date: string
   bet_date: string
+  created: number
+  hot: boolean
+}
+
+export interface IPredictionDetail extends IPrediction {
+  groups: string[]
   rules: string
   link: string
   closed: string | null
-  created: number
-  choices: IChoice[]
 }
 
 export interface IPredictionSearch {

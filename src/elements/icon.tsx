@@ -12,7 +12,7 @@ export type IconName =
   | 'copy'
   | 'crown'
   | 'delete'
-  | 'diff'
+  | 'diff'  // TODO: Not used
   | 'discord'
   | 'draft'
   | 'error'
@@ -20,6 +20,7 @@ export type IconName =
   | 'favorite'
   | 'filter'
   | 'finish'
+  | 'fire'
   | 'flag'
   | 'home'
   | 'info'

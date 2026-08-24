@@ -2,8 +2,9 @@
   display: inline-flex;
   font-size: var(--font-size-sm);
   gap: 4px;
-  padding: 4px 8px;
+  padding: 6px 8px;
   border-radius: 4px;
+  font-weight: 500;
 
   max-width: 240px;
   line-height: 1;
@@ -15,18 +16,22 @@
     color: var(--color-gray-text);
     background-color: var(--color-gray-bg);
   }
+
   &:global(.blue) {
     color: var(--color-blue-text);
     background-color: var(--color-blue-bg);
   }
+
   &:global(.green) {
     color: var(--color-green-text);
     background-color: var(--color-green-bg);
   }
+
   &:global(.orange) {
     color: var(--color-orange-text);
     background-color: var(--color-orange-bg);
   }
+
   &:global(.red) {
     color: var(--color-red-text);
     background-color: var(--color-red-bg);
@@ -34,19 +39,24 @@
 
   &:global(.outline) {
     background-color: transparent;
+
     &:global(.gray) {
       color: var(--color-secondary);
       box-shadow: 0 0 0 1px var(--color-secondary);
     }
+
     &:global(.blue) {
       box-shadow: 0 0 0 1px var(--color-blue-text);
     }
+
     &:global(.green) {
       box-shadow: 0 0 0 1px var(--color-green-text);
     }
+
     &:global(.orange) {
       box-shadow: 0 0 0 1px var(--color-orange-text);
     }
+
     &:global(.red) {
       box-shadow: 0 0 0 1px var(--color-red-text);
     }
