@@ -90,7 +90,7 @@ export default function PredictionDetail() {
           />
         </div>
         <div className='column gap-3'>
-          <PredictionStatus
+          {/* <PredictionStatus
             state={prediction.state}
             date={prediction.end_date}
             volume={prediction.volume}
@@ -98,12 +98,7 @@ export default function PredictionDetail() {
             created={prediction.created}
             bet_end={prediction.bet_date}
             link={prediction.link}
-          />
-          <PredictionTimeLine prediction={prediction} />
-          <div className='pv-3'>
-            <div className='label'>Правила</div>
-            <div>{prediction.rules}</div>
-          </div>
+          /> */}
           <div>
             {prediction.choices?.map((choice) => (
               <ChoiceItem
@@ -116,6 +111,16 @@ export default function PredictionDetail() {
               />
             ))}
           </div>
+          <div className='text-sm'>
+            <div className='label'>Правила и условия</div>
+            <div>{prediction.rules}</div>
+            <div className='label pt-1'>Источник валидации</div>
+            <a className='h-underline brand' href={prediction.link} target='_blank' rel='noopener noreferrer'>
+              {prediction.link}
+            </a>
+          </div>
+          <PredictionTimeLine prediction={prediction} />
+
           <PredictionTabs prediction={prediction} />
         </div>
       </div>
