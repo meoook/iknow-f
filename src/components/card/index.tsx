@@ -48,12 +48,10 @@ const PredictionCard = ({ prediction }: PredictionCardProps) => {
       </div>
       <div className='row center justify'>
         <div className='row center gap-1'>
-          {!prediction.hot && (
-            <IconSprite name='fire' size={28} color='var(--color-red)' />
-          )}
+          {!prediction.hot && <IconSprite name='fire' size={28} color='var(--color-red)' />}
           <div className='column'>
             <span className='label'>Объем</span>
-            <span>${volume}</span>
+            <span className='w-600'>${volume}</span>
           </div>
         </div>
         <StatusBlock prediction={prediction} />

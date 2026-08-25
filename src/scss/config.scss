@@ -4,9 +4,9 @@
   --scrollbar-track: #1111;
   --scrollbar-thumb: #5555;
 
-  --color-primary: light-dark(#222, #fff);
+  --color-primary: light-dark(#111, #fff);
   // --color-fg-default: #fff;
-  --color-secondary: light-dark(#777, #94a3b8);
+  --color-secondary: light-dark(#6B6B6B, #94a3b8);
   // --color-body: #1d1d23; // 1c1f24
   --color-body: light-dark(#fff, #131619); // 1c1f24
   --color-head: light-dark(#fff, #1a1a22);
@@ -21,11 +21,11 @@
 
   --color-shadow: #2222;
   --color-shimmer: #4443;
-  --color-border: light-dark(#d9d9d9, #2c333a); // #464e5a
+  --color-border: light-dark(#DDDDD9, #2c333a); // #464e5a
   --color-disabled: #505059;
 
-  // --color-brand: #f08d0b; // light-dark(#e5a623, #f0b90b); // #7545d2
-  --color-brand: #f59e0b; // #ec7506; // light-dark(#e5a623, #f0b90b); // #7545d2  #f59e0b
+  --color-brand: light-dark(#EF8700, #f59e0b);
+  // --color-brand: #f59e0b; // #ec7506; // light-dark(#e5a623, #f0b90b); // #7545d2  #f59e0b
 
   // COLORS
   --color-green: #4a8b3e;
@@ -66,13 +66,13 @@
   --size-nav: 44px;
   --size-input: 38px; // input select btn height
   --radius: 8px;
-  --font-size-xl: 24px;
-  --font-size-h1: 20px;
-  --font-size-h2: 18px;
-  --font-size-lg: 16px;
-  --font-size: 14px;
-  --font-size-sm: 12px;
-  --font-size-xs: 10px;
+  --font-size-xl: 32px;
+  --font-size-h1: 24px;
+  --font-size-h2: 20px;
+  --font-size-lg: 18px;
+  --font-size-md: 16px;
+  --font-size-sm: 14px;
+  --font-size-xs: 12px;
 
   // Shadows
   --shadow: 0px 0px 10px 2px var(--color-shadow);
