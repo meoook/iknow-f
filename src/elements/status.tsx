@@ -4,7 +4,7 @@ interface PredictionStatusProps {
   state: string
   date: string
   volume?: number
-  closed?: string
+  closed: string | null
   created?: number
   bet_end?: string
   link?: string

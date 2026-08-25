@@ -12,6 +12,7 @@ import PredictionHead from '../../../components/head'
 import Empty from '../../../elements/empty'
 import PredictionStatus from '../../../elements/status'
 import TradeModal from '../panel/TradeModal'
+import { PredictionTimeLine } from '../timeline'
 
 export default function PredictionDetail() {
   const { id } = useParams<{ id: string }>()
@@ -98,6 +99,7 @@ export default function PredictionDetail() {
             bet_end={prediction.bet_date}
             link={prediction.link}
           />
+          <PredictionTimeLine prediction={prediction} />
           <div className='pv-3'>
             <div className='label'>Правила</div>
             <div>{prediction.rules}</div>
