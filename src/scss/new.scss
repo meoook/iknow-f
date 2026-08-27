@@ -319,22 +319,22 @@ $text-sizes: (
   text-transform: capitalize;
 }
 
-.ellipsis {
+.truncate {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
 .clamp {
-  &-1 {
-    // TODO !
-    display: -webkit-box;
-    overflow: hidden;
-    line-clamp: 1;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-  }
+  // &-1 {
+  //   // TODO !
+  //   display: -webkit-box;
+  //   overflow: hidden;
+  //   line-clamp: 1;
+  //   -webkit-line-clamp: 1;
+  //   -webkit-box-orient: vertical;
+  //   text-overflow: ellipsis;
+  // }
 
   &-2 {
     display: -webkit-box;

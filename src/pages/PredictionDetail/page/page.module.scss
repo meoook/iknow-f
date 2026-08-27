@@ -83,13 +83,23 @@
       gap: 8px;
       padding: 8px;
     }
+
     & .metrics {
       gap: 4px;
       font-size: var(--font-size-h2);
     }
+
     & .change {
       min-width: 80px;
       max-width: 80px;
     }
   }
+}
+
+.link {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 4px 16px;
+  margin-top: 4px;
 }

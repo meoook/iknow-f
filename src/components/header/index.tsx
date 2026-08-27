@@ -5,15 +5,13 @@ import { useModalContext } from '../../services/ModalContext'
 import { useClickOutside, useHorizontalScroll } from '../../hooks/hooks'
 import { GROUPS_MAP } from '../../utils/date'
 import IconSprite from '../../elements/icon'
-import ivanga from '../../assets/ivanga.png'
-import ivangaW from '../../assets/ivanga_w.png'
+import logo from '../../assets/logo.png'
 import UserMenu from '../user'
 import ModalHow from '../../modals/how'
 import PredictionSearch from '../search'
 
 export default function Header() {
   const { user } = useAppSelector((state) => state.auth)
-  const { theme } = useAppSelector((state) => state.app)
   const [searchParams, setSearchParams] = useSearchParams()
   const filter = searchParams.get('order') || 'top'
   const { openModal } = useModalContext()
@@ -38,7 +36,7 @@ export default function Header() {
           <Link className={style.logo} to='/'>
             {/* <Logo /> */}
             {/* <h2>iVanga</h2> */}
-            <img src={theme === 'dark' ? ivanga : ivangaW} alt='iVanga' />
+            <img src={logo} alt='iVanga' />
           </Link>
           <div className='row center gap-5 grow'>
             <PredictionSearch />

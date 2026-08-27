@@ -72,7 +72,7 @@ const UserBetItem = React.memo(({ bet }: { bet: IUserBet }) => {
         </div>
       </div>
 
-      <div className='column right gap-1'>
+      <div className='column gap-1 right'>
         <div className='w-600'>${bet.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
         <div className='label'>{formatRelativeTime(bet.created)}</div>
       </div>

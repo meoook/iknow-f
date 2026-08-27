@@ -43,10 +43,10 @@ const WinList = ({ tag, period }: SidebarProps) => {
             </Link>
             <div className='grow w-0'>
               <div className={s.top}>
-                <Link to={`/user/${win.user.id}`} className='ellipsis w-500 h-brand'>
+                <Link to={`/user/${win.user.id}`} className='truncate w-500 h-brand'>
                   {win.user.username}
                 </Link>
-                <Link to={`/prediction/${win.prediction.id}`} className='ellipsis secondary h-brand w-full'>
+                <Link to={`/prediction/${win.prediction.id}`} className='truncate secondary h-brand w-full'>
                   {win.prediction.title}
                 </Link>
               </div>

@@ -73,7 +73,7 @@ const BetBase = ({ predictionId, betId }: BetProps) => {
         <span className='color-gray'>ставка</span>
         <span className='w-500 color-green'>${bet.amount.toFixed(2)}</span>
         <span className='color-gray'>на</span>
-        <span className='w500 clamp-1'>{bet.choice}</span>
+        <span className='w-500 truncate'>{bet.choice}</span>
       </div>
       <div className='color-gray nowrap'>{formatRelativeTime(bet.created)}</div>
     </div>

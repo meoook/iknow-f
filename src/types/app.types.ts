@@ -108,6 +108,11 @@ export interface IPredictionDetail extends IPrediction {
   closed: string | null
 }
 
+export interface IPredictionHistoryPoint {
+  t: number
+  v: Record<string, number>
+}
+
 export interface IPredictionSearch {
   id: number
   title: string

@@ -5,8 +5,8 @@
   touch-action: pan-y;
   font-family: inherit;
   box-sizing: border-box;
-  background-color: var(--color-chart-bg, #121418);
-  border-radius: var(--radius, 8px);
+  // background-color: var(--color-chart-bg, #121418);
+  // border-radius: var(--radius, 8px);
 
   svg {
     display: block;
@@ -39,7 +39,11 @@
 }
 
 .xAxisText {
-  text-anchor: middle;
+  @media (max-width: 480px) {
+    &:nth-child(even) {
+      display: none;
+    }
+  }
 }
 
 .crosshairLine {
@@ -152,10 +156,12 @@
     r: 4px;
     opacity: 0.8;
   }
+
   70% {
     r: 11px;
     opacity: 0;
   }
+
   100% {
     r: 11px;
     opacity: 0;

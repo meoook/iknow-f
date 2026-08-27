@@ -125,10 +125,10 @@ export const TimeChart: React.FC<TimeChartProps> = ({
   // Отступы графика
   const margins = useMemo(() => {
     return {
-      top: customMargins?.top ?? 30,
-      right: customMargins?.right ?? (showYAxis ? 48 : 16),
+      top: customMargins?.top ?? 20,
+      right: customMargins?.right ?? (showYAxis ? 48 : 0),
       bottom: customMargins?.bottom ?? 28,
-      left: customMargins?.left ?? 16,
+      left: customMargins?.left ?? 0,
     };
   }, [customMargins, showYAxis]);
 
@@ -178,26 +178,40 @@ export const TimeChart: React.FC<TimeChartProps> = ({
       maxV = 100;
     }
 
-    const calculatedMin = explicitYMin ?? minV;
-    const calculatedMax = explicitYMax ?? maxV;
-
-    if (calculatedMin === calculatedMax) {
-      return [calculatedMin - 1, calculatedMax + 1] as [number, number];
+    // Если все точки имеют одинаковое значение
+    if (minV === maxV) {
+      const pad = minV === 0 ? 5 : Math.abs(minV * 0.1) || 5;
+      let singleMin = minV - pad;
+      let singleMax = maxV + pad;
+      if (explicitYMin !== undefined) singleMin = Math.max(explicitYMin, singleMin);
+      if (explicitYMax !== undefined) singleMax = Math.min(explicitYMax, singleMax);
+      if (singleMin === singleMax) {
+        if (explicitYMin !== undefined && singleMin === explicitYMin) singleMax = singleMin + 1;
+        else singleMin = singleMax - 1;
+      }
+      return [singleMin, singleMax] as [number, number];
     }
 
-    // Если границы не заданы жестко, добавляем padding
-    let finalMin = calculatedMin;
-    let finalMax = calculatedMax;
+    // Авто-масштабирование с отступом (padding)
+    const delta = maxV - minV;
+    const pad = delta * yPaddingRatio;
+    let autoMin = minV - pad;
+    let autoMax = maxV + pad;
 
-    if (explicitYMin === undefined || explicitYMax === undefined) {
-      const delta = calculatedMax - calculatedMin;
-      const pad = delta * yPaddingRatio;
-      if (explicitYMin === undefined) finalMin = calculatedMin - pad;
-      if (explicitYMax === undefined) finalMax = calculatedMax + pad;
+    // Применяем nice-округление к динамическому диапазону
+    const tempScale = scaleLinear().domain([autoMin, autoMax]).nice(yTicksCount);
+    let [niceMin, niceMax] = tempScale.domain();
+
+    // Ограничиваем шкалу лимитами yMin / yMax (чтобы не уходить в -20% или 120%)
+    if (explicitYMin !== undefined) {
+      niceMin = Math.max(explicitYMin, niceMin);
+    }
+    if (explicitYMax !== undefined) {
+      niceMax = Math.min(explicitYMax, niceMax);
     }
 
-    return [finalMin, finalMax] as [number, number];
-  }, [series, explicitYMin, explicitYMax, yPaddingRatio]);
+    return [niceMin, niceMax] as [number, number];
+  }, [series, explicitYMin, explicitYMax, yPaddingRatio, yTicksCount]);
 
   // Шкалы X и Y
   const xScale = useMemo(() => {
@@ -207,13 +221,8 @@ export const TimeChart: React.FC<TimeChartProps> = ({
   }, [timeDomain, innerWidth]);
 
   const yScale = useMemo(() => {
-    const scale = scaleLinear().domain(yDomain).range([innerHeight, 0]);
-    // Применяем nice, если границы рассчитывались автоматически
-    if (explicitYMin === undefined && explicitYMax === undefined) {
-      return scale.nice(yTicksCount);
-    }
-    return scale;
-  }, [yDomain, innerHeight, explicitYMin, explicitYMax, yTicksCount]);
+    return scaleLinear().domain(yDomain).range([innerHeight, 0]);
+  }, [yDomain, innerHeight]);
 
   // Деления сетки по оси Y
   const yTicks = useMemo(() => {
@@ -222,8 +231,10 @@ export const TimeChart: React.FC<TimeChartProps> = ({
 
   // Деления сетки по оси X
   const xTicks = useMemo(() => {
-    return generateTimeTicks(timeDomain[0], timeDomain[1], timeStep, 5);
-  }, [timeDomain, timeStep]);
+    // На узких экранах (< 450px) берем 3 засечки вместо 5 для предотвращения наложения
+    const targetCount = innerWidth > 0 && innerWidth < 450 ? 4 : 5;
+    return generateTimeTicks(timeDomain[0], timeDomain[1], timeStep, targetCount);
+  }, [timeDomain, timeStep, innerWidth]);
 
   // Генераторы SVG путей
   const seriesPaths = useMemo(() => {
@@ -250,10 +261,10 @@ export const TimeChart: React.FC<TimeChartProps> = ({
       const lastItem = s.data && s.data.length > 0 ? s.data[s.data.length - 1] : null;
       const lastPointCoords = lastItem
         ? {
-            x: xScale(new Date(normalizeTime(lastItem.time))),
-            y: yScale(lastItem.value),
-            value: lastItem.value,
-          }
+          x: xScale(new Date(normalizeTime(lastItem.time))),
+          y: yScale(lastItem.value),
+          value: lastItem.value,
+        }
         : null;
 
       return {
@@ -380,6 +391,16 @@ export const TimeChart: React.FC<TimeChartProps> = ({
               );
             })}
 
+            {/* Базовая маска рабочей области графика для предотвращения вылета обводки за x=0 */}
+            <clipPath id={`clip-plot-${chartUid}`}>
+              <rect
+                x={0}
+                y={-10}
+                width={innerWidth}
+                height={innerHeight + 20}
+              />
+            </clipPath>
+
             {/* Маски для разделения линии до и после курсора */}
             {activeHoverData && dimAfterCursor && (
               <>
@@ -443,18 +464,23 @@ export const TimeChart: React.FC<TimeChartProps> = ({
 
             {/* Метки оси X */}
             <g className="x-axis-layer">
-              {xTicks.map((t) => {
+              {xTicks.map((t, idx) => {
                 const x = xScale(new Date(t));
                 if (x < -10 || x > innerWidth + 10) return null;
                 const label = formatTime
                   ? formatTime(t)
                   : defaultFormatTime(t, totalDuration);
 
+                // Выравнивание: первая метка прижимается влево, последняя вправо, промежуточные по центру
+                const anchor =
+                  idx === 0 ? 'start' : idx === xTicks.length - 1 ? 'end' : 'middle';
+
                 return (
                   <text
                     key={t}
                     x={x}
                     y={innerHeight + 20}
+                    textAnchor={anchor}
                     className={`${styles.axisText} ${styles.xAxisText}`}
                   >
                     {label}
@@ -464,69 +490,78 @@ export const TimeChart: React.FC<TimeChartProps> = ({
             </g>
 
             {/* Слои линий и градиентов */}
-            {seriesPaths.map((s, idx) => {
-              const gradId = `chart-grad-${chartUid}-${idx}`;
-              const baseOpacity = s.dimmed ? 0.35 : 1;
+            <g
+              className="series-layer"
+              clipPath={
+                !activeHoverData || !dimAfterCursor
+                  ? `url(#clip-plot-${chartUid})`
+                  : undefined
+              }
+            >
+              {seriesPaths.map((s, idx) => {
+                const gradId = `chart-grad-${chartUid}-${idx}`;
+                const baseOpacity = s.dimmed ? 0.35 : 1;
 
-              // Если включено приглушение правой части при hover
-              if (activeHoverData && dimAfterCursor) {
+                // Если включено приглушение правой части при hover
+                if (activeHoverData && dimAfterCursor) {
+                  return (
+                    <g key={s.id || idx}>
+                      {/* Левая активная часть до курсора */}
+                      <g clipPath={`url(#clip-left-${chartUid})`} opacity={baseOpacity}>
+                        {s.gradient && s.areaPath && (
+                          <path d={s.areaPath} fill={`url(#${gradId})`} />
+                        )}
+                        {s.linePath && (
+                          <path
+                            d={s.linePath}
+                            fill="none"
+                            stroke={s.color}
+                            strokeWidth={s.strokeWidth ?? 2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        )}
+                      </g>
+
+                      {/* Правая приглушенная часть после курсора */}
+                      <g clipPath={`url(#clip-right-${chartUid})`} opacity={baseOpacity * 0.18}>
+                        {s.gradient && s.areaPath && (
+                          <path d={s.areaPath} fill={`url(#${gradId})`} />
+                        )}
+                        {s.linePath && (
+                          <path
+                            d={s.linePath}
+                            fill="none"
+                            stroke={s.color}
+                            strokeWidth={s.strokeWidth ?? 2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        )}
+                      </g>
+                    </g>
+                  );
+                }
+
                 return (
-                  <g key={s.id || idx}>
-                    {/* Левая активная часть до курсора */}
-                    <g clipPath={`url(#clip-left-${chartUid})`} opacity={baseOpacity}>
-                      {s.gradient && s.areaPath && (
-                        <path d={s.areaPath} fill={`url(#${gradId})`} />
-                      )}
-                      {s.linePath && (
-                        <path
-                          d={s.linePath}
-                          fill="none"
-                          stroke={s.color}
-                          strokeWidth={s.strokeWidth ?? 2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      )}
-                    </g>
-
-                    {/* Правая приглушенная часть после курсора */}
-                    <g clipPath={`url(#clip-right-${chartUid})`} opacity={baseOpacity * 0.18}>
-                      {s.gradient && s.areaPath && (
-                        <path d={s.areaPath} fill={`url(#${gradId})`} />
-                      )}
-                      {s.linePath && (
-                        <path
-                          d={s.linePath}
-                          fill="none"
-                          stroke={s.color}
-                          strokeWidth={s.strokeWidth ?? 2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      )}
-                    </g>
+                  <g key={s.id || idx} opacity={baseOpacity}>
+                    {s.gradient && s.areaPath && (
+                      <path d={s.areaPath} fill={`url(#${gradId})`} />
+                    )}
+                    {s.linePath && (
+                      <path
+                        d={s.linePath}
+                        fill="none"
+                        stroke={s.color}
+                        strokeWidth={s.strokeWidth ?? 2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    )}
                   </g>
                 );
-              }
-
-              return (
-                <g key={s.id || idx} opacity={baseOpacity}>
-                  {s.gradient && s.areaPath && (
-                    <path d={s.areaPath} fill={`url(#${gradId})`} />
-                  )}
-                  {s.linePath && (
-                    <path
-                      d={s.linePath}
-                      fill="none"
-                      stroke={s.color}
-                      strokeWidth={s.strokeWidth ?? 2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  )}
-                </g>
-              );
-            })}
+              })}
+            </g>
 
             {/* Пульсирующая точка на конце линии (когда нет активного курсора) */}
             {hoveredTime === null &&
@@ -563,7 +598,7 @@ export const TimeChart: React.FC<TimeChartProps> = ({
                 {showCrosshair && (
                   <line
                     x1={activeHoverData.xPx}
-                    y1={-12}
+                    y1={-6}
                     x2={activeHoverData.xPx}
                     y2={innerHeight}
                     className={styles.crosshairLine}
@@ -602,8 +637,8 @@ export const TimeChart: React.FC<TimeChartProps> = ({
                 left: `${anchorX}px`,
                 top: `${margins.top}px`,
                 transform: isFlipped
-                  ? 'translate(calc(-100% - 6px), -20px)'
-                  : 'translate(6px, -20px)',
+                  ? 'translate(calc(-100% - 6px), -21px)'
+                  : 'translate(6px, -21px)',
               }}
             >
               {activeHoverData.formattedTime}

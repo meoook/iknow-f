@@ -93,35 +93,33 @@ export function generateTimeTicks(
 }
 
 /**
- * Стандартное форматирование метки времени на оси X
+ * Стандартное форматирование метки времени на оси X:
+ * строго либо только время (HH:mm), либо только дата (DD мес.)
  */
 export function defaultFormatTime(timestamp: number, totalDurationMs?: number): string {
   const date = new Date(timestamp);
-  const now = new Date();
-  const isSameDay =
-    date.getDate() === now.getDate() &&
-    date.getMonth() === now.getMonth() &&
-    date.getFullYear() === now.getFullYear();
+  const monthNames = [
+    'янв.', 'февр.', 'марта', 'апр.', 'мая', 'июня',
+    'июля', 'авг.', 'сент.', 'окт.', 'нояб.', 'дек.'
+  ];
 
-  // Если диапазон меньше суток — показываем часы:минуты
-  if (!totalDurationMs || totalDurationMs <= 24 * 60 * 60 * 1000) {
+  // Если диапазон до 24-36 часов — показываем строго время (без даты)
+  if (!totalDurationMs || totalDurationMs <= 36 * 60 * 60 * 1000) {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   }
 
-  // Если больше суток — показываем дату и месяц
+  // Если диапазон больше — показываем строго дату (без времени)
   const day = date.getDate();
-  const monthNames = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
   const month = monthNames[date.getMonth()];
+  const currentYear = new Date().getFullYear();
 
-  if (!isSameDay && totalDurationMs > 30 * 24 * 60 * 60 * 1000) {
-    return `${day} ${month}`;
+  if (date.getFullYear() !== currentYear) {
+    return `${day} ${month} ${date.getFullYear()}`;
   }
 
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${day} ${month}, ${hours}:${minutes}`;
+  return `${day} ${month}`;
 }
 
 /**

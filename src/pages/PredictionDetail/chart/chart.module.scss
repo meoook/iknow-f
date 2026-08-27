@@ -1,0 +1,130 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.periodBtn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-secondary);
+  padding: 4px 10px;
+  border-radius: 6px;
+  // font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+
+  &:hover {
+    color: var(--color-primary);
+    background: var(--color-hover);
+  }
+
+  &.active {
+    color: var(--color-primary);
+    background: var(--color-active);
+    border-color: var(--color-border);
+  }
+}
+
+.chartWrapper {
+  width: 100%;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0px 16px;
+  padding-right: 12px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-color: currentColor;
+  border: 2px solid currentColor;
+}
+
+.legendTitle {
+  font-weight: 500;
+  color: var(--color-secondary);
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.15s ease;
+}
+
+.percent {
+  font-weight: 600;
+  color: inherit;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-block: 6px;
+  user-select: none;
+  font-size: 13px;
+
+  &:hover .legendTitle {
+    color: var(--color-primary);
+  }
+
+  &.dimmed {
+    opacity: 0.6;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    & .dot {
+      background-color: transparent;
+    }
+
+    & .percent {
+      color: var(--color-secondary);
+    }
+  }
+}
+
+.logo {
+  height: 32px;
+  width: auto;
+}
+
+.stateWrapper {
+  width: 100%;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.stateText {
+  font-size: 13px;
+  color: var(--color-secondary);
+  text-align: center;
+}
+
+.retry {
+  background: var(--color-active);
+  border: 1px solid var(--color-border);
+  color: var(--color-primary);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+
+  &:hover {
+    background: var(--color-hover);
+  }
+}

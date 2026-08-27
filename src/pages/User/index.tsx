@@ -82,7 +82,7 @@ export default function PageUser() {
             <Avatar src={userO.avatar} size='lg' />
             <div className='column grow gap-1 w-0'>
               <div className='row center gap-1'>
-                <h1 className='grow ellipsis'>{userO.username}</h1>
+                <h1 className='grow truncate'>{userO.username}</h1>
                 <div className='row gap-1'>
                   <button className='btn btn-icon'>
                     <IconSprite name='more' size={16} />
@@ -135,10 +135,10 @@ export default function PageUser() {
               <h1>
                 {userO.max_win > 0
                   ? `$${userO.max_win.toLocaleString(undefined, {
-                      notation: 'compact',
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}`
+                    notation: 'compact',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}`
                   : '—'}
               </h1>
               {/* <div className='label'>Наибольший выигрыш</div> */}

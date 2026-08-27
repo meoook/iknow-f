@@ -1,4 +1,4 @@
-import style from './page.module.scss'
+import s from './page.module.scss'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetPredictionQuery } from '../../../services/api'
@@ -10,9 +10,9 @@ import TradePanel from '../panel'
 import PredictionTabs from '../tabs/main'
 import PredictionHead from '../../../components/head'
 import Empty from '../../../elements/empty'
-import PredictionStatus from '../../../elements/status'
 import TradeModal from '../panel/TradeModal'
 import { PredictionTimeLine } from '../timeline'
+import PredictionChart from '../chart'
 
 export default function PredictionDetail() {
   const { id } = useParams<{ id: string }>()
@@ -57,21 +57,21 @@ export default function PredictionDetail() {
 
   if (isLoading) {
     return (
-      <div className={style.main}>
+      <div className={s.main}>
         <Empty title='Загрузка...' loading />
       </div>
     )
   }
   if (error && !('status' in error && error.status === 404)) {
     return (
-      <div className={style.main}>
+      <div className={s.main}>
         <Empty title='Ошибка загрузки' icon='error' />
       </div>
     )
   }
   if (!prediction) {
     return (
-      <div className={style.main}>
+      <div className={s.main}>
         <Empty title='Предсказание не найдено' icon='draft' />
       </div>
     )
@@ -80,7 +80,7 @@ export default function PredictionDetail() {
   return (
     <div className='main'>
       <div className='column grow w-0'>
-        <div className={style.sticky}>
+        <div className={s.sticky}>
           <PredictionHead
             icon={prediction.icon}
             title={prediction.title}
@@ -90,15 +90,7 @@ export default function PredictionDetail() {
           />
         </div>
         <div className='column gap-3'>
-          {/* <PredictionStatus
-            state={prediction.state}
-            date={prediction.end_date}
-            volume={prediction.volume}
-            closed={prediction.closed}
-            created={prediction.created}
-            bet_end={prediction.bet_date}
-            link={prediction.link}
-          /> */}
+          <PredictionChart prediction={prediction} />
           <div>
             {prediction.choices?.map((choice) => (
               <ChoiceItem
@@ -111,15 +103,21 @@ export default function PredictionDetail() {
               />
             ))}
           </div>
-          <div className='text-sm'>
-            <div className='label'>Правила и условия</div>
-            <div>{prediction.rules}</div>
-            <div className='label pt-1'>Источник валидации</div>
-            <a className='h-underline brand' href={prediction.link} target='_blank' rel='noopener noreferrer'>
-              {prediction.link}
-            </a>
-          </div>
+
           <PredictionTimeLine prediction={prediction} />
+
+          <div className='column gap-1 pv-2'>
+            <div>Правила и условия</div>
+            <div className='secondary text-sm'>{prediction.rules}</div>
+            {prediction.link && (
+              <div className={s.link}>
+                <div className='label pt-1'>Источник валидации</div>
+                <a className='h-underline brand text-sm truncate w-500' href={prediction.link} target='_blank' rel='noopener noreferrer'>
+                  {prediction.link}
+                </a>
+              </div>
+            )}
+          </div>
 
           <PredictionTabs prediction={prediction} />
         </div>
@@ -139,23 +137,23 @@ interface ChoiceItemProps {
 
 const ChoiceItem = ({ choice, volume, selected, select, disabled }: ChoiceItemProps) => {
   const onClick = () => select(choice)
-  const className = `${style.item}${selected === choice.id ? ' active' : ''}`
+  const className = `${s.item}${selected === choice.id ? ' active' : ''}`
   return (
     <button className={className} onClick={onClick} disabled={disabled}>
       <div className='grow column'>
         {choice.win ? (
           <div className='row center gap-1'>
-            <div className={style.win}>WIN</div>
-            <span className='clamp-1'>{choice.title}</span>
+            <div className={s.win}>WIN</div>
+            <span className='truncate'>{choice.title}</span>
           </div>
         ) : (
-          <span className='clamp-1'>{choice.title}</span>
+          <span className='truncate'>{choice.title}</span>
         )}
         <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
       </div>
-      <div className={style.metrics}>
+      <div className={s.metrics}>
         <span>{((choice.volume / volume) * 100).toFixed(2)}%</span>
-        <span className={style.change}>{choice.multiplier.toFixed(2)}X</span>
+        <span className={s.change}>{choice.multiplier.toFixed(2)}X</span>
       </div>
     </button>
   )

@@ -91,7 +91,7 @@ const SearchItem = ({ prediction, clear }: { prediction: IPredictionSearch; clea
   return (
     <Link to={`/prediction/${prediction.id}`} className={style.item} onClick={clear}>
       <img src={src} alt={prediction.title} />
-      <span className='grow ellipsis'>{prediction.title}</span>
+      <span className='grow truncate'>{prediction.title}</span>
       <span className='color-green'>${volume}</span>
     </Link>
   )

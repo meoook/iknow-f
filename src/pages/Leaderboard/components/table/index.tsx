@@ -79,7 +79,7 @@ const UserItem = React.memo(({ user, idx }: { user: ILeaderboardUser; idx: numbe
             </div>
           )}
         </Link>
-        <Link to={`/user/${user.id}`} className='h-brand ellipsis' title={user.username}>
+        <Link to={`/user/${user.id}`} className='h-brand truncate' title={user.username}>
           {user.username}
         </Link>
       </div>

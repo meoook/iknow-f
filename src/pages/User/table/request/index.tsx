@@ -30,7 +30,7 @@ const RequestItem = ({ requestId }: { requestId: number }) => {
 
             <div className='grow row gap-2 start wrap'>
               {request.choices.map((c) => (
-                <span key={c} className={`${s.choice} ellipsis ${c === request.vote ? 'alert-green' : 'alert-gray'}`}>
+                <span key={c} className={`${s.choice} truncate ${c === request.vote ? 'alert-green' : 'alert-gray'}`}>
                   {c}
                 </span>
               ))}

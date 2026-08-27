@@ -33,7 +33,7 @@ const PredictionCard = ({ prediction }: PredictionCardProps) => {
           return (
             <div key={choice.id} className='column gap-1 w-full'>
               <div className='row center justify gap-2'>
-                <div className='ellipsis'>{choice.title}</div>
+                <div className='truncate'>{choice.title}</div>
                 <div className='row center gap-1'>
                   <div className='row center color-green w-600'><span>{multiplier}</span><span>x</span></div>
                   <div className={style.percent}>{percent.toFixed()}%</div>

@@ -114,11 +114,11 @@ function MenuUser({ user, mobile, onClick }: MenuUserProps) {
         <Avatar src={user.avatar} size={mobile ? 'md' : 'sm'} />
         {mobile ? (
           <div className='column'>
-            <h3 className='ellipsis'>{username}</h3>
+            <h3 className='truncate'>{username}</h3>
             <div className='text-xs color-green w-500'>${user.balance.toFixed(2)}</div>
           </div>
         ) : (
-          <h3 className='ellipsis'>{username}</h3>
+          <h3 className='truncate'>{username}</h3>
         )}
       </Link>
       <hr />

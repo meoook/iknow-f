@@ -63,7 +63,7 @@ export const Step3 = () => {
                   className={`${s.item}${formData.vote === choice ? ' active' : ''}`}
                   onClick={() => setFormData((prev) => ({ ...prev, vote: choice }))}>
                   <div className={s.bullet} />
-                  <span className='ellipsis grow'>{choice}</span>
+                  <span className='truncate grow'>{choice}</span>
                   <button
                     className={s.remove}
                     onClick={(e) => {
@@ -96,7 +96,7 @@ export const Step3 = () => {
         {errors.choices && (
           <div className='row center alert-orange gap-1 ph-3 pv-2 bdr text-sm'>
             <IconSprite name='warning' size={20} />
-            <span className='ellipsis'>{errors.choices}</span>
+            <span className='truncate'>{errors.choices}</span>
           </div>
         )}
       </div>
@@ -119,7 +119,7 @@ export const Step3 = () => {
         {errors.amount && (
           <div className='row center alert-orange gap-1 ph-3 pv-2 bdr text-sm'>
             <IconSprite name='warning' size={20} />
-            <span className='ellipsis'>{errors.amount}</span>
+            <span className='truncate'>{errors.amount}</span>
           </div>
         )}
       </div>

@@ -21,6 +21,7 @@ import type {
   ILeaderboardUser,
   ITopWin,
   IDepositParam,
+  IPredictionHistoryPoint,
 } from '../types/app.types'
 import { setLoading } from '../store/auth.slice'
 
@@ -301,6 +302,12 @@ export const apiBase = createApi({
     getPrediction: builder.query<IPredictionDetail, number>({
       query: (id) => `prediction/${id}`,
     }),
+    getPredictionHistory: builder.query<IPredictionHistoryPoint[], { id: number; period?: string }>({
+      query: ({ id, period = 'all' }) => ({
+        url: `prediction/${id}/history`,
+        params: { period },
+      }),
+    }),
     getBets: builder.query<EntityStateWithTotal<IPredictionBet>, PaginatedArg>({
       query: ({ id, ...rest }) => ({
         url: `prediction/${id}/bets`,
@@ -467,6 +474,7 @@ export const {
   useGetPredictionsQuery,
   useSearchPredictionsMutation,
   useGetPredictionQuery,
+  useGetPredictionHistoryQuery,
   useGetUserPredictionsQuery,
   useGetUserBetsQuery,
   useGetLeaderboardQuery,

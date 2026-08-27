@@ -62,7 +62,7 @@ export default function PredictionStatus({
       {link && (
         <div className='flex-i center gap-1'>
           <div className='label'>Источник валидации</div>
-          <span className='ellipsis text-xs'>{link}</span>
+          <span className='truncate text-xs'>{link}</span>
         </div>
       )}
     </>
