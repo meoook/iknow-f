@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { useAppDispatch } from '../../../../hooks/useRedux'
 import { useTop, useTopIds } from '../../../../store/top.adapter'
 import { apiBase } from '../../../../services/api'
 import Avatar from '../../../../elements/avatar'
 import Empty from '../../../../elements/empty'
-import { Link } from 'react-router-dom'
 
 export interface PredictionTabTopProps {
   predictionId: number
@@ -61,7 +61,7 @@ const TopUserBase = ({ predictionId, topId }: BetProps) => {
 
   return (
     <div className='row justify center'>
-      <div className='row center gap-2 lh-1'>
+      <div className='row center gap-2 lh-1 text-sm'>
         <Link to={`/user/${topUser.id}`}>
           <Avatar src={topUser.avatar} size='sm' />
         </Link>
@@ -69,9 +69,7 @@ const TopUserBase = ({ predictionId, topId }: BetProps) => {
           {topUser.username.length > 20 ? `${topUser.username.slice(0, 17)}...` : topUser.username}
         </Link>
       </div>
-      <div className='row gap-1'>
-        <b className='color-green'>${topUser.total.toFixed(2)}</b>
-      </div>
+      <div className='row gap-1 color-green w-600'>${topUser.total.toFixed(2)}</div>
     </div>
   )
 }

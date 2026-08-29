@@ -5,12 +5,12 @@ import { useAppSelector } from '../../../../hooks/useRedux'
 import { useCreateCommentMutation } from '../../../../services/comments/api'
 import { useCommentIds } from '../../../../services/comments/adapter'
 import { useModalContext } from '../../../../services/ModalContext'
+import { useHorizontalScroll } from '../../../../hooks/hooks'
 import ModalLogin from '../../../../modals/login'
 import IconSprite from '../../../../elements/icon'
 import PredictionTabComments from '../comments'
 import PredictionTabBets from '../bets'
 import PredictionTabTop from '../top'
-import { useHorizontalScroll } from '../../../../hooks/hooks'
 
 interface PredictionTabsProps {
   prediction: IPredictionDetail

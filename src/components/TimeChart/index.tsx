@@ -292,7 +292,7 @@ export const TimeChart: React.FC<TimeChartProps> = ({
         const points: HoverPointInfo[] = [];
 
         for (const s of series) {
-          const res = interpolateValueAtTime(s.data, timeAtCursor);
+          const res = interpolateValueAtTime(s.data, timeAtCursor, smooth);
           if (res !== null) {
             points.push({
               seriesId: s.id,
@@ -314,7 +314,7 @@ export const TimeChart: React.FC<TimeChartProps> = ({
         onHover(info);
       }
     },
-    [innerWidth, margins.left, xScale, yScale, series, onHover, formatTooltipTime]
+    [innerWidth, margins.left, xScale, yScale, series, smooth, onHover, formatTooltipTime]
   );
 
   const handlePointerLeave = useCallback(() => {
@@ -338,7 +338,7 @@ export const TimeChart: React.FC<TimeChartProps> = ({
     }> = [];
 
     for (const s of series) {
-      const res = interpolateValueAtTime(s.data, hoveredTime);
+      const res = interpolateValueAtTime(s.data, hoveredTime, smooth);
       if (res !== null) {
         points.push({
           seriesId: s.id,

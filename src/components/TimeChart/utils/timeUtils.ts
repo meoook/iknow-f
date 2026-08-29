@@ -137,9 +137,14 @@ export function defaultFormatTooltipTime(timestamp: number): string {
 }
 
 /**
- * Бинарный поиск ближайшей точки или интерполяция значения для заданного времени
+/**
+ * Бинарный поиск и интерполяция значения для заданного времени с поддержкой монотонного кубического сплайна (D3 curveMonotoneX)
  */
-export function interpolateValueAtTime(data: ChartPoint[], targetTime: number): { value: number; exact: boolean } | null {
+export function interpolateValueAtTime(
+  data: ChartPoint[],
+  targetTime: number,
+  smooth = false
+): { value: number; exact: boolean } | null {
   if (!data || data.length === 0) return null;
 
   if (data.length === 1) {
@@ -183,6 +188,50 @@ export function interpolateValueAtTime(data: ChartPoint[], targetTime: number): 
   const v1 = data[right].value;
 
   if (t1 === t0) return { value: v0, exact: true };
+
+  // Если сглаживание включено и точек больше 2, используем монотонный кубический сплайн (аналог curveMonotoneX)
+  if (smooth && data.length > 2) {
+    const n = data.length;
+    const x = (idx: number) => normalizeTime(data[idx].time);
+    const y = (idx: number) => data[idx].value;
+
+    const deltas: number[] = new Array(n - 1);
+    for (let k = 0; k < n - 1; k++) {
+      const dx = x(k + 1) - x(k);
+      deltas[k] = dx === 0 ? 0 : (y(k + 1) - y(k)) / dx;
+    }
+
+    const tangents: number[] = new Array(n);
+    tangents[0] = deltas[0];
+    tangents[n - 1] = deltas[n - 2];
+
+    for (let k = 1; k < n - 1; k++) {
+      if (deltas[k - 1] * deltas[k] <= 0) {
+        tangents[k] = 0;
+      } else {
+        const dxPrev = x(k) - x(k - 1);
+        const dxNext = x(k + 1) - x(k);
+        const dxTotal = dxPrev + dxNext;
+        tangents[k] = (3 * dxTotal) / ((dxTotal + dxNext) / deltas[k - 1] + (dxTotal + dxPrev) / deltas[k]);
+      }
+    }
+
+    const h = t1 - t0;
+    const m0 = tangents[left];
+    const m1 = tangents[right];
+
+    const t = (normTarget - t0) / h;
+    const t2 = t * t;
+    const t3 = t2 * t;
+
+    const h00 = 2 * t3 - 3 * t2 + 1;
+    const h10 = t3 - 2 * t2 + t;
+    const h01 = -2 * t3 + 3 * t2;
+    const h11 = t3 - t2;
+
+    const interpolated = h00 * v0 + h10 * h * m0 + h01 * v1 + h11 * h * m1;
+    return { value: interpolated, exact: false };
+  }
 
   // Линейная интерполяция между двумя соседними точками
   const factor = (normTarget - t0) / (t1 - t0);

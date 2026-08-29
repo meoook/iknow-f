@@ -62,7 +62,7 @@ const BetBase = ({ predictionId, betId }: BetProps) => {
   if (!bet) return null
 
   return (
-    <div className='row gap-2 center text-sm'>
+    <div className='row gap-2 center text-sm lh-1'>
       <Link to={`/user/${bet.user.id}`}>
         <Avatar src={bet.user.avatar} size='sm' />
       </Link>

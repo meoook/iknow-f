@@ -1,5 +1,6 @@
 import s from './chart.module.scss';
 import React, { useMemo, useState } from 'react';
+import { TPredictionState } from '../../../types/app.types';
 import type { IPredictionDetail } from '../../../types/app.types';
 import type { ChartSeries } from '../../../components/TimeChart';
 import { useGetPredictionHistoryQuery } from '../../../services/api';
@@ -89,9 +90,12 @@ export const PredictionChart: React.FC<PredictionChartProps> = ({
       return [];
     }
 
-    const nowSec = Math.floor(Date.now() / 1000);
-    // Добавляем актуальный live-хвост на текущий момент времени
-    const points = [...historyResponse, { t: nowSec, v: currentValues }];
+    // Добавляем хвост (текущий или bet_date)
+    const toAdd =
+      prediction.state === TPredictionState.ACTIVE ?
+        { t: Math.floor(Date.now() / 1000), v: currentValues } :
+        { t: Math.floor(Date.parse(prediction.bet_date) / 1000), v: currentValues };
+    const points = [...historyResponse, toAdd];
     const activeChoices = topChoices.filter((choice) => !hiddenIds.has(choice.id));
 
     return activeChoices.map((choice) => {

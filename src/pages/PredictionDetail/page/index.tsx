@@ -5,7 +5,7 @@ import { useGetPredictionQuery } from '../../../services/api'
 import { useModalContext } from '../../../services/ModalContext'
 import { intlNumber } from '../../../hooks/hooks'
 import { wsManager } from '../../../services/websocket'
-import type { IChoice } from '../../../types/app.types'
+import { TPredictionState, type IChoice } from '../../../types/app.types'
 import TradePanel from '../panel'
 import PredictionTabs from '../tabs/main'
 import PredictionHead from '../../../components/head'
@@ -99,7 +99,7 @@ export default function PredictionDetail() {
                 volume={prediction.volume}
                 selected={selectedChoice?.id}
                 select={select}
-                disabled={prediction.state === 'ENDED'}
+                disabled={prediction.state !== TPredictionState.ACTIVE}
               />
             ))}
           </div>
@@ -110,7 +110,7 @@ export default function PredictionDetail() {
             <div>Правила и условия</div>
             <div className='secondary text-sm'>{prediction.rules}</div>
             {prediction.link && (
-              <div className={s.link}>
+              <div className='bg-card bd bdr-6 ph-4 pv-1'>
                 <div className='label pt-1'>Источник валидации</div>
                 <a className='h-underline brand text-sm truncate w-500' href={prediction.link} target='_blank' rel='noopener noreferrer'>
                   {prediction.link}
@@ -139,22 +139,25 @@ const ChoiceItem = ({ choice, volume, selected, select, disabled }: ChoiceItemPr
   const onClick = () => select(choice)
   const className = `${s.item}${selected === choice.id ? ' active' : ''}`
   return (
-    <button className={className} onClick={onClick} disabled={disabled}>
-      <div className='grow column'>
-        {choice.win ? (
-          <div className='row center gap-1'>
-            <div className={s.win}>WIN</div>
-            <span className='truncate'>{choice.title}</span>
-          </div>
-        ) : (
-          <span className='truncate'>{choice.title}</span>
-        )}
-        <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
-      </div>
-      <div className={s.metrics}>
-        <span>{((choice.volume / volume) * 100).toFixed(2)}%</span>
-        <span className={s.change}>{choice.multiplier.toFixed(2)}X</span>
-      </div>
-    </button>
+    <>
+      <div className={s.hr} />
+      <button className={className} onClick={onClick} disabled={disabled}>
+        <div className='grow column w-0'>
+          {choice.win ? (
+            <div className='row center gap-1'>
+              <div className={s.win}>WIN</div>
+              <div className='truncate'>{choice.title}</div>
+            </div>
+          ) : (
+            <div className='truncate'>{choice.title}</div>
+          )}
+          <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
+        </div>
+        <div className={s.metrics}>
+          <span>{((choice.volume / volume) * 100).toFixed()}%</span>
+          <span className={s.change}>{choice.multiplier.toFixed(2)}X</span>
+        </div>
+      </button>
+    </>
   )
 }
