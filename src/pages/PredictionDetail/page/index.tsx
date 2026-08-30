@@ -6,12 +6,12 @@ import { useModalContext } from '../../../services/ModalContext'
 import { intlNumber } from '../../../hooks/hooks'
 import { wsManager } from '../../../services/websocket'
 import { TPredictionState, type IChoice } from '../../../types/app.types'
+import PredictionTimeLine from '../timeline'
 import TradePanel from '../panel'
 import PredictionTabs from '../tabs/main'
 import PredictionHead from '../../../components/head'
 import Empty from '../../../elements/empty'
 import TradeModal from '../panel/TradeModal'
-import { PredictionTimeLine } from '../timeline'
 import PredictionChart from '../chart'
 
 export default function PredictionDetail() {
@@ -40,9 +40,8 @@ export default function PredictionDetail() {
   useEffect(() => {
     const handleScroll = () => {
       if (document.body.style.position === 'fixed') return
-      const scrollY = window.scrollY
-      const maxScroll = 100 // Дистанция, за которую произойдет полное изменение
-      const progress = Math.min(scrollY / maxScroll, 1)
+      // Дистанция, за которую произойдет полное изменение - 100px
+      const progress = Math.min(window.scrollY / 100, 1)
       setScrollProgress(progress)
     }
 
@@ -89,7 +88,7 @@ export default function PredictionDetail() {
             big
           />
         </div>
-        <div className='column gap-3'>
+        <div className='column gap-4'>
           <PredictionChart prediction={prediction} />
           <div>
             {prediction.choices?.map((choice) => (

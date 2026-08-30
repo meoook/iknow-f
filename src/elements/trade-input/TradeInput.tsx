@@ -40,12 +40,12 @@ export default function TradeInput({ maximum, minimum, value, isTilt, setValue, 
 
   const displayValue = formatWithCommas(value)
 
-  const className = `row center gap-1 text-bet${isTilt ? ` ${s.tilt}` : ''}`
+  const className = `row center gap-1 justify-end grow text-bet${isTilt ? ` ${s.tilt}` : ''}`
   return (
     <>
-      <div className='row justify center'>
+      <div className='row justify center' onClick={handlClick}>
         <div>Количество</div>
-        <div className={className} onClick={handlClick}>
+        <div className={className}>
           <span>$</span>
           <div className={s.input}>
             <input
@@ -56,7 +56,6 @@ export default function TradeInput({ maximum, minimum, value, isTilt, setValue, 
               onChange={handleInputChange}
               inputMode='decimal'
               autoComplete='off'
-              autoFocus={true}
               placeholder='$0'
             />
             <span className={s.mirror}>{displayValue || '0'}</span>

@@ -35,6 +35,10 @@ nav {
   @media (max-width: 768px) {
     padding-inline: 16px;
   }
+
+  @media (max-width: 400px) {
+    padding-inline: 8px;
+  }
 }
 
 .head {
@@ -152,7 +156,7 @@ nav {
   align-items: center;
   gap: 6px;
   color: var(--color-brand);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
 
   &:hover {
     opacity: 0.75;

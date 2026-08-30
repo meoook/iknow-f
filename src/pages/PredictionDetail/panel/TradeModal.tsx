@@ -10,5 +10,5 @@ interface TradeModalProps {
 export default function TradeModal({ prediction, choice }: TradeModalProps) {
   const { closeModal } = useModalContext()
 
-  return <TradeContent prediction={prediction} selectedChoice={choice} onSuccess={closeModal} />
+  return <div className='ph-4 pb-3'><TradeContent prediction={prediction} selectedChoice={choice} onSuccess={closeModal} /></div>
 }

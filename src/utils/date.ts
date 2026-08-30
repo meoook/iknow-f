@@ -40,7 +40,7 @@ export const GROUPS_MAP: Record<string, string> = {
   finance: 'Финансы',
   crypto: 'Крипта',
   geopolitics: 'Геополитика',
-  technology: 'Технологии',
+  tech: 'Технологии',
   culture: 'Культура',
   world: 'Мир',
   economy: 'Экономика',

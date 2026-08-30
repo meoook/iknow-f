@@ -20,7 +20,7 @@ export default function Empty({ title, loading, size, icon = 'draft' }: EmptyPro
   return (
     <div className={classSize}>
       {loading ? <Loader /> : <IconSprite name={icon} size={iconSize} />}
-      <div>{title}</div>
+      <div className='text-center'>{title}</div>
     </div>
   )
 }

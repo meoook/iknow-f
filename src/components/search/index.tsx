@@ -47,7 +47,7 @@ export default function PredictionSearch({ mobile = false }: { mobile?: boolean 
 
   const opened = isSearchOpen && (isLoading || isSuccess || searchValue)
 
-  const className = mobile ? style.wrapper : `${style.wrapper} md-hide`
+  const className = mobile ? `${style.wrapper} pt-2` : `${style.wrapper} md-hide`
   return (
     <div className={className} ref={searchRef}>
       <form className={`${style.input}${opened ? ' open' : ''}`} onSubmit={(e) => e.preventDefault()}>

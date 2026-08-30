@@ -53,7 +53,7 @@ export default function NavRouter() {
               <Route path='/finance' element={<Home />} />
               <Route path='/crypto' element={<Home />} />
               <Route path='/geopolitics' element={<Home />} />
-              <Route path='/technology' element={<Home />} />
+              <Route path='/tech' element={<Home />} />
               <Route path='/culture' element={<Home />} />
               <Route path='/world' element={<Home />} />
               <Route path='/economy' element={<Home />} />

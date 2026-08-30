@@ -1,23 +1,16 @@
 import s from './timeline.module.scss'
 import { useEffect, useState } from 'react'
-import type { IPredictionDetail } from '../../../types/app.types'
-import { TPredictionState } from '../../../types/app.types'
+import { TPredictionState, type IPredictionDetail } from '../../../types/app.types'
 
 const formatDate = (val: string | number | null | undefined): string => {
     if (!val) return ''
     const timestamp = typeof val === 'number' && val < 1e11 ? val * 1000 : val
     const d = new Date(timestamp)
     if (isNaN(d.getTime())) return ''
-
-    // return d.toLocaleDateString(undefined, {
-    //     day: '2-digit',
-    //     month: 'short',
-    //     year: 'numeric',
-    // })
     return d.toLocaleDateString()
 }
 
-export const PredictionTimeLine = ({ prediction }: { prediction: IPredictionDetail }) => {
+export default function PredictionTimeLine({ prediction }: { prediction: IPredictionDetail }) {
     const [now, setNow] = useState<number>(() => Date.now())
 
     useEffect(() => {

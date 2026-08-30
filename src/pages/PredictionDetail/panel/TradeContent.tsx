@@ -56,7 +56,7 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
 
   return (
     <div className={s.bet}>
-      <div className='row center gap-3 pv-2 bd-b'>
+      <div className='row center gap-3 pb-2 bd-b'>
         <img className={s.icon} src={src} alt='' />
         <h3 className='clamp-2'>{selectedChoice?.title || 'Выберите вариант'}</h3>
       </div>
@@ -85,7 +85,7 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
                 </span>
               </div>
             </div>
-            <div className='row center gap-1 text-bet color-green'>
+            <div className='row center text-bet color-green'>
               <span>$</span>
               <div>{formatWithCommas((Number(amount) * (selectedChoice?.multiplier || 1)).toFixed(0))}</div>
             </div>

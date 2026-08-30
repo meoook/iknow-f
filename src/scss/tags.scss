@@ -60,6 +60,10 @@ main {
   @media (max-width: 768px) {
     padding-inline: 16px;
   }
+
+  @media (max-width: 400px) {
+    padding-inline: 8px;
+  }
 }
 
 aside {
