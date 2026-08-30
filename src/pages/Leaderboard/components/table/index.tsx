@@ -10,20 +10,20 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 interface TableProps {
-  tag: string
+  group: string
   period: string
 }
 
-export default function LeaderboardTable({ tag, period }: TableProps) {
+export default function LeaderboardTable({ group, period }: TableProps) {
   const limit = 20
   const dispatch = useAppDispatch()
   const observerTarget = useRef<HTMLDivElement>(null)
-  const { users, total, isLoading, isError, isFetching } = useLeaderboard(tag, period, limit, 0)
+  const { users, total, isLoading, isError, isFetching } = useLeaderboard(group, period, limit, 0)
 
   const loadMore = () => {
     if (users.length >= total || isFetching) return
     const nextOffset = users.length
-    dispatch(apiBase.endpoints.getLeaderboard.initiate({ tag, period, limit, offset: nextOffset }))
+    dispatch(apiBase.endpoints.getLeaderboard.initiate({ group, period, limit, offset: nextOffset }))
   }
 
   useEffect(() => {

@@ -1,9 +1,9 @@
 import s from './leaderboard.module.scss'
 import { useState } from 'react'
+import { useClickOutside } from '../../hooks/hooks'
 import { GROUPS_MAP } from '../../utils/date'
 import LeaderboardTable from './components/table'
 import SidebarWins from './components/Sidebar'
-import { useClickOutside } from '../../hooks/hooks'
 import IconSprite from '../../elements/icon'
 
 type TPeriod = 'day' | 'week' | 'month' | 'all'
@@ -17,9 +17,9 @@ const PERIODS: { id: TPeriod; label: string }[] = [
 
 export default function PageLeaderboard() {
   const [period, setPeriod] = useState<TPeriod>('month')
-  const [tag, setTag] = useState('')
+  const [group, setGroup] = useState('')
   const [periodRef, isPeriodOpen, togglePeriod] = useClickOutside()
-  const tags = Object.entries(GROUPS_MAP).map(([key, value]) => ({ id: key, label: value }))
+  const groups = Object.entries(GROUPS_MAP).map(([key, value]) => ({ id: key, label: value }))
 
   const handleSetPeriod = (periodId: TPeriod) => {
     setPeriod(periodId)
@@ -51,8 +51,8 @@ export default function PageLeaderboard() {
           </div>
 
           <div className='flex-i bd bdr'>
-            <select name='tag' value={tag} onChange={(e) => setTag(e.target.value)}>
-              {tags.map((t) => (
+            <select name='group' value={group} onChange={(e) => setGroup(e.target.value)}>
+              {groups.map((t) => (
                 <option key={t.id} value={t.id}>
                   {t.label} {t.id === '' ? 'категории' : ''}
                 </option>
@@ -61,10 +61,10 @@ export default function PageLeaderboard() {
           </div>
         </div>
 
-        <LeaderboardTable period={period} tag={tag} />
+        <LeaderboardTable period={period} group={group} />
       </div>
 
-      <SidebarWins period={period} tag={tag} />
+      <SidebarWins period={period} group={group} />
     </div>
   )
 }

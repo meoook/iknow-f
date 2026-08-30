@@ -5,11 +5,11 @@ import { useGetTopWinsQuery } from '../../../../services/api'
 import { Link } from 'react-router-dom'
 
 interface SidebarProps {
-  tag: string
+  group: string
   period: string
 }
 
-export default function SidebarWins({ tag, period }: SidebarProps) {
+export default function SidebarWins({ group, period }: SidebarProps) {
   const periodTitle = {
     day: 'последний день',
     week: 'последнюю неделю',
@@ -20,13 +20,13 @@ export default function SidebarWins({ tag, period }: SidebarProps) {
   return (
     <aside className={s.sidebar}>
       <h2 className='pv-1'>Крупнейшие выигрыши за {periodTitle}</h2>
-      <WinList tag={tag} period={period} />
+      <WinList group={group} period={period} />
     </aside>
   )
 }
 
-const WinList = ({ tag, period }: SidebarProps) => {
-  const { data, isLoading, isError } = useGetTopWinsQuery({ tag, period })
+const WinList = ({ group, period }: SidebarProps) => {
+  const { data, isLoading, isError } = useGetTopWinsQuery({ group, period })
 
   if (isLoading) return <Empty title='Загрузка...' loading size={16} />
   if (isError) return <Empty title='Ошибка загрузки' size={16} />

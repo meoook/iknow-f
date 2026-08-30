@@ -2,7 +2,7 @@ import style from './how.module.scss'
 import { useEffect, useState } from 'react'
 import { useModalContext } from '../../services/ModalContext'
 import ModalLogin from '../login'
-import how1 from '../../assets/how11.webp'
+import how1 from '../../assets/how1.webp'
 import how2 from '../../assets/how2.webp'
 import how3 from '../../assets/how3.webp'
 

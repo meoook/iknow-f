@@ -5,9 +5,9 @@ import type { ILeaderboardUser } from '../types/app.types'
 export const leaderboardAdapter = createEntityAdapter<ILeaderboardUser>()
 export const leaderboardSelectors = leaderboardAdapter.getSelectors()
 
-export const useLeaderboard = (tag?: string, period?: string, limit?: number, offset?: number) => {
+export const useLeaderboard = (group?: string, period?: string, limit?: number, offset?: number) => {
   return useGetLeaderboardQuery(
-    { tag, period, limit, offset },
+    { group, period, limit, offset },
     {
       selectFromResult: ({ data, isLoading, isFetching, isError }) => ({
         userIds: data ? leaderboardSelectors.selectIds(data) : [],
