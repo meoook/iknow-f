@@ -21,7 +21,7 @@ import type {
   ILeaderboardUser,
   ITopWin,
   IDepositParam,
-  IPredictionHistoryPoint,
+  IHistoryPoint,
 } from '../types/app.types'
 import { setLoading } from '../store/auth.slice'
 
@@ -154,6 +154,12 @@ export const apiBase = createApi({
     }),
     getUserById: builder.query<IUserPublic, string>({
       query: (id) => `user/${id}`,
+    }),
+    getUserProfitHistory: builder.query<IHistoryPoint<number>[], { id: string | number; period?: string }>({
+      query: ({ id, period = 'all' }) => ({
+        url: `user/${id}/profit/history`,
+        params: { period },
+      }),
     }),
     // Notifications endpoints
     getNotifications: builder.query<INotification[], void>({
@@ -302,7 +308,7 @@ export const apiBase = createApi({
     getPrediction: builder.query<IPredictionDetail, number>({
       query: (id) => `prediction/${id}`,
     }),
-    getPredictionHistory: builder.query<IPredictionHistoryPoint[], { id: number; period?: string }>({
+    getPredictionHistory: builder.query<IHistoryPoint<Record<string, number>>[], { id: number; period?: string }>({
       query: ({ id, period = 'all' }) => ({
         url: `prediction/${id}/history`,
         params: { period },
@@ -457,6 +463,7 @@ export const {
   useSetAvatarMutation,
   useGetTelegramNonceMutation,
   useGetUserByIdQuery,
+  useGetUserProfitHistoryQuery,
   useLazyCheckUsernameQuery,
   // Notifications
   useReadNotificationMutation,

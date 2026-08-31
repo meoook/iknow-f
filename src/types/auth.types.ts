@@ -19,10 +19,6 @@ export interface IUserPublic {
   count: number
   predictions: number
   max_win: number
-  profit_all: number
-  profit_d: number
-  profit_w: number
-  profit_m: number
   created: number
 }
 

@@ -108,9 +108,9 @@ export interface IPredictionDetail extends IPrediction {
   closed: string | null
 }
 
-export interface IPredictionHistoryPoint {
+export interface IHistoryPoint<V = number | Record<string, number>> {
   t: number
-  v: Record<string, number>
+  v: V
 }
 
 export interface IPredictionSearch {

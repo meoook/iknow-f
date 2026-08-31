@@ -47,6 +47,7 @@ export interface TimeChartProps {
   lastPoint?: boolean; // Показывать ли точку на конце линий в состоянии покоя (по умолчанию берется из серии)
 
   // Ось X (Время)
+  showXAxis?: boolean; // Отображать ли шкалу времени снизу (по умолчанию true)
   timeStep?: TimeStep;
   formatTime?: (timestamp: number) => string;
   formatTooltipTime?: (timestamp: number) => string;
@@ -60,6 +61,7 @@ export interface TimeChartProps {
   formatValue?: (value: number) => string; // Форматирование чисел (например, v => `${v}%`)
 
   // Интерактивность и hover
+  snapToPoint?: boolean; // Примагничивать курсор к реальным точкам данных (по умолчанию false)
   showInternalTooltip?: boolean; // Отображать ли значения и время прямо на графике (по умолчанию true)
   showCrosshair?: boolean; // Отображать ли вертикальную линию курсора (по умолчанию true)
   dimAfterCursor?: boolean; // Приглушать ли правую часть графика после курсора при hover (по умолчанию false)

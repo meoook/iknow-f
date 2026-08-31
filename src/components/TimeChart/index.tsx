@@ -8,6 +8,7 @@ import {
   defaultFormatTime,
   defaultFormatTooltipTime,
   interpolateValueAtTime,
+  findClosestPoint,
 } from './utils/timeUtils';
 import styles from './TimeChart.module.scss';
 
@@ -77,10 +78,12 @@ export const TimeChart: React.FC<TimeChartProps> = ({
   height = 300,
   className = '',
   smooth = true,
+  snapToPoint = false,
   lastPoint = false,
   timeStep = 'auto',
   formatTime,
   formatTooltipTime = defaultFormatTooltipTime,
+  showXAxis = true,
   showYAxis = true,
   yMin: explicitYMin,
   yMax: explicitYMax,
@@ -125,12 +128,12 @@ export const TimeChart: React.FC<TimeChartProps> = ({
   // Отступы графика
   const margins = useMemo(() => {
     return {
-      top: customMargins?.top ?? 20,
+      top: customMargins?.top ?? (showInternalTooltip ? 20 : 10),
       right: customMargins?.right ?? (showYAxis ? 48 : 0),
-      bottom: customMargins?.bottom ?? 28,
+      bottom: customMargins?.bottom ?? (showXAxis ? 28 : 10),
       left: customMargins?.left ?? 0,
     };
-  }, [customMargins, showYAxis]);
+  }, [customMargins, showYAxis, showXAxis, showInternalTooltip]);
 
   const innerWidth = Math.max(0, containerWidth - margins.left - margins.right);
   const innerHeight = Math.max(0, height - margins.top - margins.bottom);
@@ -285,7 +288,18 @@ export const TimeChart: React.FC<TimeChartProps> = ({
       const clientX = e.clientX - rect.left - margins.left;
       const clampedX = Math.max(0, Math.min(innerWidth, clientX));
 
-      const timeAtCursor = xScale.invert(clampedX).getTime();
+      let timeAtCursor = xScale.invert(clampedX).getTime();
+      let targetX = clampedX;
+
+      // Если включен режим примагничивания к реальным точкам
+      if (snapToPoint && series.length > 0 && series[0].data.length > 0) {
+        const closest = findClosestPoint(series[0].data, timeAtCursor);
+        if (closest) {
+          timeAtCursor = normalizeTime(closest.time);
+          targetX = xScale(new Date(timeAtCursor));
+        }
+      }
+
       setHoveredTime(timeAtCursor);
 
       if (onHover) {
@@ -307,14 +321,14 @@ export const TimeChart: React.FC<TimeChartProps> = ({
         const info: HoverInfo = {
           timestamp: timeAtCursor,
           formattedTime: formatTooltipTime(timeAtCursor),
-          xPx: clampedX,
+          xPx: targetX,
           points,
         };
 
         onHover(info);
       }
     },
-    [innerWidth, margins.left, xScale, yScale, series, smooth, onHover, formatTooltipTime]
+    [innerWidth, margins.left, xScale, yScale, series, smooth, snapToPoint, onHover, formatTooltipTime]
   );
 
   const handlePointerLeave = useCallback(() => {
@@ -355,7 +369,7 @@ export const TimeChart: React.FC<TimeChartProps> = ({
       formattedTime: formatTooltipTime(hoveredTime),
       points,
     };
-  }, [hoveredTime, innerWidth, xScale, yScale, series, formatTooltipTime]);
+  }, [hoveredTime, innerWidth, xScale, yScale, series, smooth, formatTooltipTime]);
 
   const totalDuration = timeDomain[1] - timeDomain[0];
 
@@ -463,31 +477,33 @@ export const TimeChart: React.FC<TimeChartProps> = ({
             )}
 
             {/* Метки оси X */}
-            <g className="x-axis-layer">
-              {xTicks.map((t, idx) => {
-                const x = xScale(new Date(t));
-                if (x < -10 || x > innerWidth + 10) return null;
-                const label = formatTime
-                  ? formatTime(t)
-                  : defaultFormatTime(t, totalDuration);
+            {showXAxis && (
+              <g className="x-axis-layer">
+                {xTicks.map((t, idx) => {
+                  const x = xScale(new Date(t));
+                  if (x < -10 || x > innerWidth + 10) return null;
+                  const label = formatTime
+                    ? formatTime(t)
+                    : defaultFormatTime(t, totalDuration);
 
-                // Выравнивание: первая метка прижимается влево, последняя вправо, промежуточные по центру
-                const anchor =
-                  idx === 0 ? 'start' : idx === xTicks.length - 1 ? 'end' : 'middle';
+                  // Выравнивание: первая метка прижимается влево, последняя вправо, промежуточные по центру
+                  const anchor =
+                    idx === 0 ? 'start' : idx === xTicks.length - 1 ? 'end' : 'middle';
 
-                return (
-                  <text
-                    key={t}
-                    x={x}
-                    y={innerHeight + 20}
-                    textAnchor={anchor}
-                    className={`${styles.axisText} ${styles.xAxisText}`}
-                  >
-                    {label}
-                  </text>
-                );
-              })}
-            </g>
+                  return (
+                    <text
+                      key={t}
+                      x={x}
+                      y={innerHeight + 20}
+                      textAnchor={anchor}
+                      className={`${styles.axisText} ${styles.xAxisText}`}
+                    >
+                      {label}
+                    </text>
+                  );
+                })}
+              </g>
+            )}
 
             {/* Слои линий и градиентов */}
             <g

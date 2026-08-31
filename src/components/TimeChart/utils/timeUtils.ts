@@ -138,7 +138,9 @@ export function defaultFormatTooltipTime(timestamp: number): string {
 
 /**
 /**
- * Бинарный поиск и интерполяция значения для заданного времени с поддержкой монотонного кубического сплайна (D3 curveMonotoneX)
+ * Бинарный поиск и интерполяция значения для заданного времени:
+ * - smooth: монотонный кубический сплайн (D3 curveMonotoneX)
+ * - linear: линейная интерполяция между точками
  */
 export function interpolateValueAtTime(
   data: ChartPoint[],
@@ -238,4 +240,32 @@ export function interpolateValueAtTime(
   const interpolated = v0 + (v1 - v0) * factor;
 
   return { value: interpolated, exact: false };
+}
+
+/**
+ * Находит ближайшую реальную точку из массива данных
+ */
+export function findClosestPoint(data: ChartPoint[], targetTime: number): ChartPoint | null {
+  if (!data || data.length === 0) return null;
+  if (data.length === 1) return data[0];
+
+  const normTarget = normalizeTime(targetTime);
+  let low = 0;
+  let high = data.length - 1;
+
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    const midTime = normalizeTime(data[mid].time);
+    if (midTime === normTarget) return data[mid];
+    if (midTime < normTarget) low = mid + 1;
+    else high = mid - 1;
+  }
+
+  const left = Math.max(0, high);
+  const right = Math.min(data.length - 1, low);
+
+  const distLeft = Math.abs(normalizeTime(data[left].time) - normTarget);
+  const distRight = Math.abs(normalizeTime(data[right].time) - normTarget);
+
+  return distLeft <= distRight ? data[left] : data[right];
 }
