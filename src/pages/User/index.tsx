@@ -1,12 +1,10 @@
 import style from './page.module.scss'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useAppSelector } from '../../hooks/useRedux'
-import { useGetUserByIdQuery, useGetUserProfitHistoryQuery } from '../../services/api'
+import { useGetUserByIdQuery } from '../../services/api'
 import { useModalContext } from '../../services/ModalContext'
 import { wsManager } from '../../services/websocket'
-import { TimeChart, type ChartSeries, type HoverInfo } from '../../components/TimeChart'
-import { normalizeTime } from '../../components/TimeChart/utils/timeUtils'
 import ModalDeposit from '../../modals/deposit'
 import IconSprite from '../../elements/icon'
 import Empty from '../../elements/empty'
@@ -14,23 +12,10 @@ import Avatar from '../../elements/avatar'
 import PredictionsTable from './table/predictions'
 import BetsTable from './table/bets'
 import RequestsTable from './table/requests'
+import PnlCard from './pnlCard'
 
 type TabType = 'predictions' | 'activity' | 'created'
 const VALID_TABS: TabType[] = ['predictions', 'activity', 'created']
-
-interface PnlRangeConfig {
-  key: string
-  label: string
-  apiPeriod: string
-  title: string
-}
-
-const PNL_RANGES: PnlRangeConfig[] = [
-  { key: '1d', label: '1Д', apiPeriod: '1d', title: 'За последний день' },
-  { key: '1w', label: '1Н', apiPeriod: '1w', title: 'За последнюю неделю' },
-  { key: '1m', label: '1М', apiPeriod: '1m', title: 'За последний месяц' },
-  { key: 'all', label: 'ВСЕ', apiPeriod: 'all', title: 'За все время' },
-]
 
 
 export default function PageUser() {
@@ -38,19 +23,7 @@ export default function PageUser() {
   const { openModal } = useModalContext()
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const [selectedRangeKey, setSelectedRangeKey] = useState<string>('all')
-  const [hoveredInfo, setHoveredInfo] = useState<HoverInfo | null>(null)
-
-  const currentRange = useMemo(
-    () => PNL_RANGES.find((r) => r.key === selectedRangeKey) ?? PNL_RANGES[3],
-    [selectedRangeKey]
-  )
-
   const { data: userO, isLoading, isError } = useGetUserByIdQuery(id as string, { skip: !id })
-  const { data: profitHistory } = useGetUserProfitHistoryQuery(
-    { id: id as string, period: currentRange.apiPeriod },
-    { skip: !id }
-  )
   const { user } = useAppSelector((state) => state.auth)
 
   useEffect(() => {
@@ -61,49 +34,6 @@ export default function PageUser() {
       wsManager.userLeave(userO.id)
     }
   }, [userO?.id])
-
-  const startProfit: number = profitHistory && profitHistory.length > 0 ? profitHistory[0].v : 0
-  const endProfit: number = profitHistory && profitHistory.length > 0 ? profitHistory[profitHistory.length - 1].v : 0
-  const currentPeriodProfit = endProfit - startProfit
-
-  const isHovered = hoveredInfo !== null && hoveredInfo.points.length > 0
-  const displayProfit = isHovered ? hoveredInfo.points[0].value - startProfit : currentPeriodProfit
-  const displayPeriodTitle = isHovered ? hoveredInfo.formattedTime : currentRange.title
-
-  const chartSeries: ChartSeries[] = useMemo(() => {
-    const color = 'var(--color-brand)'
-
-    if (!profitHistory || profitHistory.length === 0) {
-      const now = Date.now()
-      const created = userO?.created ? new Date(userO.created).getTime() : now - 3600 * 1000
-      return [
-        {
-          id: 'pnl',
-          name: 'Прибыль',
-          color,
-          data: [
-            { time: Math.min(now - 60000, created), value: 0 },
-            { time: now, value: 0 },
-          ],
-          gradient: true,
-          strokeWidth: 2,
-        },
-      ]
-    }
-
-    const data = profitHistory.map((pt) => ({ time: normalizeTime(pt.t), value: pt.v }))
-
-    return [
-      {
-        id: 'pnl',
-        name: 'Прибыль',
-        color,
-        data,
-        gradient: true,
-        strokeWidth: 2,
-      },
-    ]
-  }, [profitHistory, userO?.created])
 
   if (isLoading) return <Empty title='Загрузка...' loading />
   if (isError) return <Empty title='Ошибка...' />
@@ -135,27 +65,27 @@ export default function PageUser() {
           <div className='row gap-4'>
             <Avatar src={userO.avatar} size='lg' />
             <div className='column grow gap-1 w-0'>
-              <div className='row center gap-1'>
+              <div className='grow row center gap-1'>
                 <h1 className='grow truncate'>{userO.username}</h1>
                 <div className='row gap-1'>
-                  <button className='btn btn-icon'>
+                  {/* <button className='btn btn-icon'>
                     <IconSprite name='more' size={16} />
-                  </button>
+                  </button> */}
                   {isOwner && (
                     <Link to='/profile' className='btn btn-icon'>
                       <IconSprite name='pencil' size={16} />
                     </Link>
                   )}
-                  <button className='btn btn-icon'>
+                  {/* <button className='btn btn-icon'>
                     <IconSprite name='upload' size={16} />
-                  </button>
+                  </button> */}
                 </div>
               </div>
-              <div className='text-sm secondary'>Дата присоединения {formatDate(userO.created)}</div>
+              <div className='grow text-sm secondary'>Дата присоединения {formatDate(userO.created)}</div>
             </div>
           </div>
 
-          {!isOwner && <div className='flex-i grow w-0'>Супер предсказатель</div>}
+          {!isOwner && <div className='grow clamp-3'>{userO.bio}</div>}
 
           <div className='row center'>
             <div className='grow column center gap-1'>
@@ -170,21 +100,11 @@ export default function PageUser() {
               <div className='label'>Ставок</div>
             </div>
             <div className={style.divider} />
-            <div className='grow column center gap-1'>
-              <h1>
-                $
-                {Intl.NumberFormat('en-US', {
-                  notation: 'compact',
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })
-                  .format(userO.amount)
-                  .replace('.', ',')}
-              </h1>
-              {/* <div className='label'>Стоимость позиций</div> */}
+            {/* <div className='grow column center gap-1'>
+              <h1>${Intl.NumberFormat('en-US', { notation: 'compact' }).format(userO.amount)}</h1>
               <div className='label'>Позиций</div>
             </div>
-            <div className={style.divider} />
+            <div className={style.divider} /> */}
             <div className='grow column center gap-1'>
               <h1>
                 {userO.max_win > 0
@@ -215,55 +135,7 @@ export default function PageUser() {
         </div>
 
         {/* PnL Card */}
-        <div className={style.card}>
-          <div className='row center justify text-sm secondary'>
-            <div className='row center gap-1 w-500'>
-              <IconSprite name='trend' size={16} />
-              <span>Прибыль/убыток</span>
-            </div>
-            <div className='row ph-1 gap-1'>
-              {PNL_RANGES.map((range) => (
-                <button
-                  key={range.key}
-                  className={`btn blue-l${selectedRangeKey === range.key ? ' active' : ''}`}
-                  onClick={() => {
-                    setSelectedRangeKey(range.key)
-                    setHoveredInfo(null)
-                  }}>
-                  {range.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className='row center gap-3 pv-1'>
-            <h1 className='w-600 text-xl'>
-              {displayProfit < 0 ? '-' : ''}${Math.abs(displayProfit).toFixed(2).replace('.', ',')} {displayProfit}
-            </h1>
-
-            <button className='btn btn-icon'>
-              <IconSprite name='upload' size={20} color='var(--color-secondary)' />
-            </button>
-          </div>
-          <div className='text-xs secondary pv-1'>{displayPeriodTitle}</div>
-
-          <div className={style.chart}>
-            <TimeChart
-              series={chartSeries}
-              height={74}
-              smooth={true}
-              snapToPoint={true}
-              showYAxis={false}
-              showXAxis={false}
-              showInternalTooltip={false}
-              showCrosshair={true}
-              dimAfterCursor={true}
-              lastPoint={true}
-              margins={{ top: 8, bottom: 6, left: 0, right: 0 }}
-              onHover={setHoveredInfo}
-            />
-          </div>
-        </div>
+        <PnlCard userId={userO.id} />
       </div>
 
       {/* Tabs section */}

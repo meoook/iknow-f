@@ -7,6 +7,7 @@ export interface IUser {
   telegram_id: string
   telegram_notify: boolean
   avatar?: string
+  bio: string
   balance: number
 }
 
@@ -14,8 +15,9 @@ export interface IUserPublic {
   id: number
   username: string
   avatar?: string
-  amount: number
-  payout: number
+  bio: string
+  // amount: number
+  // payout: number
   count: number
   predictions: number
   max_win: number

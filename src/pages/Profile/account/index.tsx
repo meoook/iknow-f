@@ -13,7 +13,7 @@ import Avatar from '../../../elements/avatar'
 import { REGEX_EMAIL } from '../../../utils/date'
 
 export default function ProfileAccount({ user, loading }: { user: IUser | null; loading: boolean }) {
-  const [formData, setFormData] = useState({ username: user?.username || '', bio: '', email: user?.email || '', nonce: '' })
+  const [formData, setFormData] = useState({ username: user?.username || '', bio: user?.bio, email: user?.email || '', nonce: '' })
   const [errors, setErrors] = useState({ username: '', email: '', nonce: '' })
   const [isVerificationSent, setIsVerificationSent] = useState(false)
 
@@ -34,7 +34,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
     if (user) {
       setFormData({
         username: user.username || '',
-        bio: '', // Assuming bio might be added later to IUser
+        bio: user.bio || '',
         email: user.email || '',
         nonce: '',
       })
@@ -100,7 +100,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
     }
     setErrors((prev) => ({ ...prev, username: newErrors.username }))
     if (!newErrors.username && usernameStatus !== 'taken') {
-      setUserParams({ username: formData.username })
+      setUserParams({ username: formData.username, bio: formData.bio })
     }
   }
 

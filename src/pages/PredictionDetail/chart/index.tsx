@@ -2,7 +2,7 @@ import s from './chart.module.scss';
 import React, { useMemo, useState } from 'react';
 import { TPredictionState } from '../../../types/app.types';
 import type { IPredictionDetail } from '../../../types/app.types';
-import type { ChartSeries } from '../../../components/TimeChart';
+import type { ChartSeries, ChartPoint } from '../../../components/TimeChart';
 import { useGetPredictionHistoryQuery } from '../../../services/api';
 import TimeChart from '../../../components/TimeChart';
 import Empty from '../../../elements/empty';
@@ -93,8 +93,8 @@ export const PredictionChart: React.FC<PredictionChartProps> = ({
     // Добавляем хвост (текущий или bet_date)
     const toAdd =
       prediction.state === TPredictionState.ACTIVE ?
-        { t: Math.floor(Date.now() / 1000), v: currentValues } :
-        { t: Math.floor(Date.parse(prediction.bet_date) / 1000), v: currentValues };
+        { t: Date.now(), v: currentValues } :
+        { t: new Date(prediction.bet_date).getTime(), v: currentValues };
     const points = [...historyResponse, toAdd];
     const activeChoices = topChoices.filter((choice) => !hiddenIds.has(choice.id));
 
@@ -102,9 +102,9 @@ export const PredictionChart: React.FC<PredictionChartProps> = ({
       const originalIdx = topChoices.findIndex((c) => c.id === choice.id);
       const color = COLOR_PALETTE[originalIdx % COLOR_PALETTE.length];
 
-      const data = points.map((pt) => ({
-        time: pt.t < 1e11 ? pt.t * 1000 : pt.t,
-        value: pt.v[String(choice.id)] ?? 0,
+      const data: ChartPoint[] = points.map((pt) => ({
+        t: pt.t,
+        v: pt.v[String(choice.id)] ?? 0,
       }));
 
       return {

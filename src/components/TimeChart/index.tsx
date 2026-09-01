@@ -145,8 +145,8 @@ export const TimeChart: React.FC<TimeChartProps> = ({
 
     for (const s of series) {
       if (!s.data || s.data.length === 0) continue;
-      const firstT = normalizeTime(s.data[0].time);
-      const lastT = normalizeTime(s.data[s.data.length - 1].time);
+      const firstT = normalizeTime(s.data[0].t);
+      const lastT = normalizeTime(s.data[s.data.length - 1].t);
       if (firstT < minT) minT = firstT;
       if (lastT > maxT) maxT = lastT;
     }
@@ -171,8 +171,8 @@ export const TimeChart: React.FC<TimeChartProps> = ({
     for (const s of series) {
       if (!s.data) continue;
       for (const p of s.data) {
-        if (p.value < minV) minV = p.value;
-        if (p.value > maxV) maxV = p.value;
+        if (p.v < minV) minV = p.v;
+        if (p.v > maxV) maxV = p.v;
       }
     }
 
@@ -247,14 +247,14 @@ export const TimeChart: React.FC<TimeChartProps> = ({
 
     return series.map((s) => {
       const lineGenerator = line<ChartPoint>()
-        .x((d) => xScale(new Date(normalizeTime(d.time))))
-        .y((d) => yScale(d.value))
+        .x((d) => xScale(new Date(normalizeTime(d.t))))
+        .y((d) => yScale(d.v))
         .curve(curve);
 
       const areaGenerator = area<ChartPoint>()
-        .x((d) => xScale(new Date(normalizeTime(d.time))))
+        .x((d) => xScale(new Date(normalizeTime(d.t))))
         .y0(innerHeight)
-        .y1((d) => yScale(d.value))
+        .y1((d) => yScale(d.v))
         .curve(curve);
 
       const linePath = lineGenerator(s.data) || '';
@@ -264,9 +264,9 @@ export const TimeChart: React.FC<TimeChartProps> = ({
       const lastItem = s.data && s.data.length > 0 ? s.data[s.data.length - 1] : null;
       const lastPointCoords = lastItem
         ? {
-          x: xScale(new Date(normalizeTime(lastItem.time))),
-          y: yScale(lastItem.value),
-          value: lastItem.value,
+          x: xScale(new Date(normalizeTime(lastItem.t))),
+          y: yScale(lastItem.v),
+          value: lastItem.v,
         }
         : null;
 
@@ -295,7 +295,7 @@ export const TimeChart: React.FC<TimeChartProps> = ({
       if (snapToPoint && series.length > 0 && series[0].data.length > 0) {
         const closest = findClosestPoint(series[0].data, timeAtCursor);
         if (closest) {
-          timeAtCursor = normalizeTime(closest.time);
+          timeAtCursor = normalizeTime(closest.t);
           targetX = xScale(new Date(timeAtCursor));
         }
       }
@@ -306,14 +306,14 @@ export const TimeChart: React.FC<TimeChartProps> = ({
         const points: HoverPointInfo[] = [];
 
         for (const s of series) {
-          const res = interpolateValueAtTime(s.data, timeAtCursor, smooth);
+          const res = interpolateValueAtTime(s.data, timeAtCursor, smooth, xScale, yScale);
           if (res !== null) {
             points.push({
               seriesId: s.id,
               name: s.name,
               color: s.color,
               value: res.value,
-              yPx: yScale(res.value),
+              yPx: res.yPx ?? yScale(res.value),
             });
           }
         }
@@ -352,14 +352,14 @@ export const TimeChart: React.FC<TimeChartProps> = ({
     }> = [];
 
     for (const s of series) {
-      const res = interpolateValueAtTime(s.data, hoveredTime, smooth);
+      const res = interpolateValueAtTime(s.data, hoveredTime, smooth, xScale, yScale);
       if (res !== null) {
         points.push({
           seriesId: s.id,
           name: s.name,
           color: s.color,
           value: res.value,
-          yPx: yScale(res.value),
+          yPx: res.yPx ?? yScale(res.value),
         });
       }
     }

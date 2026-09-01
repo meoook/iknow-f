@@ -1,6 +1,6 @@
 export interface ChartPoint {
-  time: number; // Unix timestamp (в секундах или миллисекундах)
-  value: number;
+  t: number; // Unix timestamp в миллисекундах
+  v: number;
 }
 
 export interface ChartSeries {
