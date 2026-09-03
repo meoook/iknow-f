@@ -2,13 +2,6 @@
   width: 420px;
 }
 
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
-}
-
 .input {
   position: relative;
   display: flex;
@@ -57,16 +50,6 @@
   background-color: var(--color-shimmer);
   border-radius: 6px;
   color: var(--color-primary);
-}
-
-.alertBox {
-  padding: 10px 14px;
-  border-radius: var(--radius);
-  background-color: #ff4d4f1a;
-  border: 1px solid #ff4d4f4d;
-  color: var(--color-red);
-  font-size: var(--font-size-sm);
-  text-align: center;
 }
 
 .icon {

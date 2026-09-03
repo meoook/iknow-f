@@ -1,4 +1,4 @@
-import style from './withdraw.module.scss'
+import s from './withdraw.module.scss'
 import { useEffect, useMemo, useState } from 'react'
 import { useGetDepositParamsQuery, useWithdrawMutation } from '../../services/api'
 import { useModalContext } from '../../services/ModalContext'
@@ -109,8 +109,8 @@ export default function ModalWithdraw() {
 
   if (isLoading) {
     return (
-      <div className={style.wrapper}>
-        <div className={style.header}>
+      <div className={s.wrapper}>
+        <div className={s.header}>
           <h1>Вывод средств</h1>
         </div>
         <hr />
@@ -124,8 +124,8 @@ export default function ModalWithdraw() {
 
   if (isError || chains.length === 0) {
     return (
-      <div className={style.wrapper}>
-        <div className={style.header}>
+      <div className={s.wrapper}>
+        <div className={s.header}>
           <h1>Вывод средств</h1>
         </div>
         <hr />
@@ -137,7 +137,7 @@ export default function ModalWithdraw() {
   const currentLogo = selectedChain ? getLogo(selectedChain.chain_name) : undefined
 
   return (
-    <div className={`${style.wrapper} noscroll`}>
+    <div className={`${s.wrapper} noscroll`}>
       {/* Шаг 1: Форма ввода */}
       {step === 'form' && (
         <>
@@ -146,7 +146,7 @@ export default function ModalWithdraw() {
 
           <div className='column gap-3'>
             {/* Выбор блокчейна */}
-            <div className={style.field}>
+            <div className='column gap-1'>
               <div className='text-sm secondary'>Блокчейн</div>
               <select
                 className='outline'
@@ -165,13 +165,13 @@ export default function ModalWithdraw() {
             </div>
 
             {/* Поле ввода суммы */}
-            <div className={style.field}>
+            <div className='column gap-1'>
               <div className='row center justify text-sm secondary gap-3'>
                 <span>Сумма вывода</span>
                 <span className='color-brand'>Доступно: ${userBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               </div>
-              <div className={style.input}>
-                <span className={style.prefix}>$</span>
+              <div className={s.input}>
+                <span className={s.prefix}>$</span>
                 <input
                   type='text'
                   inputMode='decimal'
@@ -179,7 +179,7 @@ export default function ModalWithdraw() {
                   value={amount}
                   onChange={handleAmountChange}
                 />
-                {amount && <button className={style.reset} onClick={() => setAmount('')}><IconSprite name='close' size={20} /></button>}
+                {amount && <button className={s.reset} onClick={() => setAmount('')}><IconSprite name='close' size={20} /></button>}
               </div>
 
               <div className='row center gap-2'>
@@ -200,7 +200,7 @@ export default function ModalWithdraw() {
             </div>
 
             {/* Поле ввода адреса */}
-            <div className={style.field}>
+            <div className='column gap-1'>
               <div className='text-sm secondary'>Адрес получателя</div>
               <input
                 type='text'
@@ -240,7 +240,7 @@ export default function ModalWithdraw() {
               <div className='row center justify'>
                 <div className='secondary'>Блокчейн</div>
                 <div className='row end gap-2 w-500 primary'>
-                  {currentLogo && <img src={currentLogo} alt='' className={style.logo} />}
+                  {currentLogo && <img src={currentLogo} alt='' className={s.logo} />}
 
                   <span>{selectedChain.chain_name}</span>
                 </div>
@@ -258,7 +258,7 @@ export default function ModalWithdraw() {
 
               <div className='column gap-1'>
                 <span className='secondary'>Адрес получателя</span>
-                <div className={style.address}>{address.trim()}</div>
+                <div className={s.address}>{address.trim()}</div>
                 <div className='alert-orange p-2 bdr-6 text-xs'>Пожалуйста проверьте внимательно адрес получателя</div>
               </div>
             </div>
@@ -286,7 +286,7 @@ export default function ModalWithdraw() {
       {/* Шаг 3: Успех */}
       {step === 'success' && (
         <div className='column center text-center gap-5 pv-3'>
-          <div className={style.icon}>
+          <div className={s.icon}>
             <IconSprite name='check' size={32} />
           </div>
           <h2>Заявка создана!</h2>
