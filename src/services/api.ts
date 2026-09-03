@@ -21,6 +21,7 @@ import type {
   ILeaderboardUser,
   ITopWin,
   IDepositParam,
+  IWithdrawPayload,
   IHistoryPoint,
 } from '../types/app.types'
 import { setLoading } from '../store/auth.slice'
@@ -272,6 +273,13 @@ export const apiBase = createApi({
       query: () => 'balance/deposit',
       keepUnusedDataFor: 86400, // 24 hours
     }),
+    withdraw: builder.mutation<void, IWithdrawPayload>({
+      query: (payload) => ({
+        url: 'balance/withdraw',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
 
     // Public endpoints
     searchPredictions: builder.mutation<IPredictionSearch[], string>({
@@ -450,6 +458,7 @@ export const {
   useGetConfigQuery,
   useDepositMutation,
   useGetDepositParamsQuery,
+  useWithdrawMutation,
   // Auth
   useW3nonceMutation,
   useW3authMutation,

@@ -92,6 +92,10 @@ $text-sizes: (
   }
 }
 
+.grow {
+  flex-grow: 1;
+}
+
 // Screen, borders and paddings
 
 .relative {
@@ -278,10 +282,6 @@ $text-sizes: (
   }
 }
 
-.grow {
-  flex-grow: 1;
-}
-
 .transition {
   transition: all 0.3s;
 
@@ -301,6 +301,10 @@ $text-sizes: (
 .text-center {
   text-align: center;
 }
+
+// .text-mono {
+//   font-family: monospace;
+// }
 
 .text-bet {
   font-size: var(--font-size-xl);

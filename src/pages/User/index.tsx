@@ -6,6 +6,7 @@ import { useGetUserByIdQuery } from '../../services/api'
 import { useModalContext } from '../../services/ModalContext'
 import { wsManager } from '../../services/websocket'
 import ModalDeposit from '../../modals/deposit'
+import ModalWithdraw from '../../modals/withdraw'
 import IconSprite from '../../elements/icon'
 import Empty from '../../elements/empty'
 import Avatar from '../../elements/avatar'
@@ -126,7 +127,10 @@ export default function PageUser() {
                 <IconSprite name='arrow_down' size={18} />
                 Депозит
               </button>
-              <button className='btn gray mid w-full'>
+              <button
+                className='btn gray mid w-full'
+                disabled={!user?.balance || user.balance <= 0}
+                onClick={() => openModal(ModalWithdraw)}>
                 <IconSprite name='upload' size={18} />
                 Вывод
               </button>

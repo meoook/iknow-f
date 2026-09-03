@@ -1,12 +1,6 @@
 .wrapper {
-  box-sizing: border-box;
   width: 400px;
-  max-height: calc(100vh - 140px);
   text-align: center;
-
-  @media (max-width: 800px) {
-    width: 100%;
-  }
 }
 
 .address {

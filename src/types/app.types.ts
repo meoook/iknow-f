@@ -227,3 +227,9 @@ export interface IDepositParam {
   address: string
   chain_name: string
 }
+
+export interface IWithdrawPayload {
+  chain_name: string
+  amount: number
+  address: string
+}

@@ -1,19 +1,9 @@
 .wrapper {
   position: relative;
-  box-sizing: border-box;
   width: 440px;
   min-height: 330px;
-  min-width: 340px;
-  overflow: hidden;
-  text-wrap: nowrap;
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
   gap: 22px;
-
-  @media (max-width: 800px) {
-    width: 100%;
-  }
 }
 
 .steps {
@@ -24,7 +14,6 @@
 }
 
 .step {
-  // min-height: 0;
   overflow: hidden;
   transition: opacity 0.3s ease;
   text-wrap: wrap;
@@ -32,16 +21,19 @@
 
 .email {
   position: relative;
+
   & input {
     height: 54px;
     // padding-right: 120px;
   }
+
   & button {
     position: absolute;
     top: 50%;
     right: 8px;
     height: 40px;
     transform: translateY(-50%);
+
     &:active {
       transform: translateY(calc(-50% + 2px));
     }

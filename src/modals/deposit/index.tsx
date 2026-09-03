@@ -14,11 +14,11 @@ import tronLogo from '../../assets/tron.svg'
 
 const getLogo = (chainName: string) => {
   const name = chainName.toUpperCase()
-  if (name.includes('ETH') || name.includes('ETHER')) return etheriumLogo
-  if (name.includes('BSC') || name.includes('BNB') || name.includes('BINANCE')) return bscLogo
+  if (name.includes('ETH')) return etheriumLogo
+  if (name.includes('BSC')) return bscLogo
   if (name.includes('SOL')) return solanaLogo
-  if (name.includes('POL') || name.includes('POLYGON')) return polygonLogo
-  if (name.includes('TRX') || name.includes('TRON')) return tronLogo
+  if (name.includes('POL')) return polygonLogo
+  if (name.includes('TRON')) return tronLogo
   return undefined
 }
 

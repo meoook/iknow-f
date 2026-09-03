@@ -4,6 +4,7 @@ export type IconName =
   | 'activity'
   | 'add'
   | 'arrow_down'
+  | 'arrow_back'
   | 'bank'
   | 'bell'
   | 'bell-z'

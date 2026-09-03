@@ -1,4 +1,4 @@
-import style from './login.module.scss'
+import s from './login.module.scss'
 import { useState, useEffect } from 'react'
 import { useEmailNonceMutation, useEmailAuthMutation, useW3authMutation, useW3nonceMutation } from '../../services/api'
 import { web3AuthService } from '../../services/web3Auth'
@@ -101,11 +101,11 @@ export default function ModalLogin({ close }: ModalLoginProps) {
   }
 
   return (
-    <div className={style.wrapper}>
+    <div className={s.wrapper}>
       <h2 className='column center'>Добро пожаловать в iVanga</h2>
 
-      <div className={style.steps} style={{ gridTemplateRows: step === 'email' ? '1fr 0fr' : '0fr 1fr' }}>
-        <div className={style.step}>
+      <div className={s.steps} style={{ gridTemplateRows: step === 'email' ? '1fr 0fr' : '0fr 1fr' }}>
+        <div className={s.step}>
           <div className='column gap-5'>
             <button disabled={isOauthLoading} className='btn blue big'>
               <IconSprite name='vk' size={28} />
@@ -118,7 +118,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
               <hr className='grow' />
             </div>
 
-            <div className={style.email}>
+            <div className={s.email}>
               <input
                 name='email'
                 type='email'
@@ -151,7 +151,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
           </div>
         </div>
 
-        <div className={style.step}>
+        <div className={s.step}>
           <div className='column center gap-3'>
             <div className='column center gap-2'>
               {/* <h2>Подтвердите вход</h2> */}
@@ -160,9 +160,9 @@ export default function ModalLogin({ close }: ModalLoginProps) {
             </div>
 
             {step === 'email' ? (
-              <div className={style.expired} />
+              <div className={s.expired} />
             ) : expired ? (
-              <h3 className={style.expired}>Срок действия кода истёк</h3>
+              <h3 className={s.expired}>Срок действия кода истёк</h3>
             ) : (
               <Nonce length={NONCE_LENGTH} value={nonce} onChange={setNonce} />
             )}
@@ -187,7 +187,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
         </div>
       </div>
 
-      <small className={style.error}>{error ? error : '\u00A0'}</small>
+      <small className={s.error}>{error ? error : '\u00A0'}</small>
 
       <Link to='/tos' onClick={() => close()}>
         <small className='column center color-gray'>Условия использования</small>
