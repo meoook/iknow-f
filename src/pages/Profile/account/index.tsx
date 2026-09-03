@@ -13,7 +13,7 @@ import Avatar from '../../../elements/avatar'
 import { REGEX_EMAIL } from '../../../utils/date'
 
 export default function ProfileAccount({ user, loading }: { user: IUser | null; loading: boolean }) {
-  const [formData, setFormData] = useState({ username: user?.username || '', bio: user?.bio, email: user?.email || '', nonce: '' })
+  const [formData, setFormData] = useState({ username: user?.username || '', bio: user?.bio || '', email: user?.email || '', nonce: '' })
   const [errors, setErrors] = useState({ username: '', email: '', nonce: '' })
   const [isVerificationSent, setIsVerificationSent] = useState(false)
 
@@ -69,7 +69,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
         } else {
           setUsernameStatus('taken')
         }
-      } catch (err) {
+      } catch {
         setUsernameStatus('taken')
       } finally {
         setIsCheckingUsername(false)
@@ -116,7 +116,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
       try {
         await emailNonce({ email: formData.email }).unwrap()
         setIsVerificationSent(true)
-      } catch (err: any) {
+      } catch {
         // Error will be shown by emailNonceError
       }
     }
@@ -134,7 +134,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
       try {
         await emailApprove({ email: formData.email, nonce: formData.nonce }).unwrap()
         // Upon success, user.email will update, useEffect will reset form and lock email
-      } catch (err: any) {
+      } catch {
         // Error will be shown by emailApproveError
       }
     }
@@ -327,13 +327,28 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
         <div className='form-row'>
           <label htmlFor='bio'>О себе</label>
           <textarea
+            id='bio'
             name='bio'
             value={formData.bio}
             onChange={handleInputChange}
             className='outline'
-            placeholder='О себе'
+            placeholder='Расскажите немного о себе'
             rows={4}
+            maxLength={255}
           />
+          <div className={style.fieldFooter}>
+            <span className='text-xs secondary'>Отображается в вашем публичном профиле</span>
+            <span
+              className={`${style.counter} ${
+                (formData.bio?.length || 0) >= 255
+                  ? style.counterDanger
+                  : (formData.bio?.length || 0) >= 230
+                    ? style.counterWarn
+                    : ''
+              }`}>
+              {formData.bio?.length || 0} / 255
+            </span>
+          </div>
         </div>
 
         <button className='btn blue' onClick={handleSaveChanges} disabled={usernameStatus === 'taken' || isCheckingUsername}>

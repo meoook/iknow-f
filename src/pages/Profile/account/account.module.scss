@@ -81,3 +81,29 @@
   height: 106px;
   border-radius: var(--radius);
 }
+
+.fieldFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.counter {
+  font-size: var(--font-size-xs);
+  color: var(--color-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  transition: color 0.15s ease, font-weight 0.15s ease;
+}
+
+.counterWarn {
+  color: var(--color-orange);
+  font-weight: 500;
+}
+
+.counterDanger {
+  color: var(--color-red);
+  font-weight: 600;
+}

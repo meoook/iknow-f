@@ -102,7 +102,7 @@ export default function ModalWithdraw() {
         address: address.trim(),
       }).unwrap()
       setStep('success')
-    } catch (err: any) {
+    } catch {
       setServerError('Произошла ошибка при отправке заявки на вывод')
     }
   }
