@@ -19,13 +19,13 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 12px;
+  padding: 16px 8px;
   transition: background-color 0.3s;
   border-radius: 8px;
   text-align: left;
 
-  margin-inline: -12px;
-  width: calc(100% + 24px);
+  margin-inline: -8px;
+  width: calc(100% + 16px);
 
   &:global(.active) {
     background-color: var(--color-active);
@@ -77,7 +77,7 @@
   @media (max-width: 768px) {
     & {
       gap: 8px;
-      padding: 8px 12px;
+      padding: 8px 8px;
     }
 
     & .metrics {

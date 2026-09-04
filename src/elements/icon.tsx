@@ -1,7 +1,7 @@
 // import React from 'react'
 
 export type IconName =
-  | 'activity'
+  | 'activity'  // TODO: Not used
   | 'add'
   | 'arrow_down'
   | 'arrow_back'

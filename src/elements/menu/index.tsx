@@ -45,14 +45,10 @@ export default function Menu({ mobile, close }: MenuProps) {
   return (
     <>
       {user && <MenuUser mobile={mobile} onClick={onClose} user={user} />}
-      <Link to='/leaderboard' className={classItem}>
+      <Link to='/leaderboard' className={classItem} onClick={onClose}>
         <IconSprite name='crown' size={20} color='var(--color-brand)' />
         <span>Таблица лидеров</span>
       </Link>
-      <button className={classItem}>
-        <IconSprite name='activity' size={20} color='var(--color-red)' />
-        <span>Активность</span>
-      </button>
       <button className={classItem} onClick={handleToggleTheme}>
         <IconSprite name='moon' size={20} color='var(--color-blue)' />
         <span>Темная тема</span>
@@ -60,16 +56,10 @@ export default function Menu({ mobile, close }: MenuProps) {
         <Toggle checked={theme === 'dark'} />
       </button>
       {user && (
-        <>
-          {/* <Link to='/predictions' className={classItem} onClick={onClose}>
-            <IconSprite name='bank' size={20} color='var(--color-green)' />
-            <span>Мое участие</span>
-          </Link> */}
-          <Link to='/create' className={classItem} onClick={onClose}>
-            <IconSprite name='add' size={20} color='var(--color-blue-dark)' />
-            <span>Создать прогноз</span>
-          </Link>
-        </>
+        <Link to='/create' className={classItem} onClick={onClose}>
+          <IconSprite name='add' size={20} color='var(--color-blue-dark)' />
+          <span>Создать прогноз</span>
+        </Link>
       )}
       <hr />
       <Link className={classLink} to='/tos' onClick={onClose}>

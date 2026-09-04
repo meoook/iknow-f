@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   max-width: 500px;
+
   @media (max-width: 768px) {
     & {
       max-width: 100%;
@@ -16,16 +17,14 @@
   align-items: center;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-border);
   overflow: hidden;
-  transition: box-shadow 0.3s ease-in;
+  transition: box-shadow 0.2s ease-in;
   min-width: 200px;
   width: 100%;
   color: var(--color-secondary);
-  background: var(--color-bg-secondary);
 
   &:focus-within {
-    box-shadow: var(--shadow-active);
+    box-shadow: var(--shadow);
   }
 
   &:hover:not(:focus-within) {
@@ -99,8 +98,7 @@
   border: 1px solid var(--color-border);
   border-bottom-left-radius: var(--radius);
   border-bottom-right-radius: var(--radius);
-  // border-radius: var(--radius);
-  box-shadow: var(--shadow-large);
+  box-shadow: var(--shadow);
   z-index: 6;
   max-height: 300px;
   overflow-y: auto;
@@ -121,6 +119,7 @@
   &:hover {
     background: var(--color-hover);
   }
+
   & img {
     width: 28px;
     height: 28px;
@@ -133,6 +132,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

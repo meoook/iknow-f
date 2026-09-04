@@ -12,7 +12,7 @@ export type PaginatedArg = {
 }
 
 export interface ISettings {
-  // fee: number
+  tg_nonce_ttl: number
   min_bet: number
   min_create: number
   delete: number  // comment delete hours limit
@@ -193,10 +193,20 @@ export interface ICommentReport {
   text: string
 }
 
+export type TxStatus = 'PENDING' | 'APPROVED' | 'PROCESSING' | 'SUBMITTED' | 'COMPLETED' | 'REJECTED' | 'FAILED'
+
 export interface ITx {
   id: number
+  url?: string
+  token?: {
+    chain: string
+    currency: string
+  }
   direction: 'IN' | 'OUT'
   amount: number
+  status?: TxStatus
+  tx_id?: string
+  address?: string
   created: number
 }
 

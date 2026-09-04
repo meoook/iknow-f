@@ -162,6 +162,13 @@ export const apiBase = createApi({
         params: { period },
       }),
     }),
+    getUserBalanceHistory: builder.query<IHistoryPoint<number>[], { id: string | number; period?: string }>({
+      query: ({ id, period = 'all' }) => ({
+        url: `balance/${id}/history`,
+        params: { period },
+      }),
+      keepUnusedDataFor: 3600,
+    }),
     // Notifications endpoints
     getNotifications: builder.query<INotification[], void>({
       query: () => 'auth/user/notification',
@@ -473,6 +480,7 @@ export const {
   useGetTelegramNonceMutation,
   useGetUserByIdQuery,
   useGetUserProfitHistoryQuery,
+  useGetUserBalanceHistoryQuery,
   useLazyCheckUsernameQuery,
   // Notifications
   useReadNotificationMutation,

@@ -16,6 +16,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
   const [formData, setFormData] = useState({ username: user?.username || '', bio: user?.bio || '', email: user?.email || '', nonce: '' })
   const [errors, setErrors] = useState({ username: '', email: '', nonce: '' })
   const [isVerificationSent, setIsVerificationSent] = useState(false)
+  const [saveSuccess, setSaveSuccess] = useState(false)
 
   const [usernameStatus, setUsernameStatus] = useState<'available' | 'taken' | 'invalid' | 'none'>('none')
   const [isCheckingUsername, setIsCheckingUsername] = useState(false)
@@ -100,7 +101,13 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
     }
     setErrors((prev) => ({ ...prev, username: newErrors.username }))
     if (!newErrors.username && usernameStatus !== 'taken') {
-      setUserParams({ username: formData.username, bio: formData.bio })
+      try {
+        await setUserParams({ username: formData.username, bio: formData.bio }).unwrap()
+        setSaveSuccess(true)
+        setTimeout(() => setSaveSuccess(false), 3000)
+      } catch {
+        // error will be shown by setUserParamsError
+      }
     }
   }
 
@@ -171,10 +178,17 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
       setTimeout(() => {
         setUploadProgress(null)
       }, 1000)
-    } catch (err: any) {
+    } catch (err: unknown) {
       clearInterval(interval)
       setUploadProgress(null)
-      setUploadError(err?.data?.detail || 'Ошибка при загрузке аватара')
+      const detail =
+        err &&
+        typeof err === 'object' &&
+        'data' in err &&
+        typeof (err as { data?: { detail?: string } }).data?.detail === 'string'
+          ? (err as { data: { detail: string } }).data.detail
+          : 'Ошибка при загрузке аватара'
+      setUploadError(detail)
     }
   }
 
@@ -288,7 +302,12 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
           {errors.email && <span className='error'>{errors.email}</span>}
           {emailNonceError && (
             <span className='error'>
-              {(emailNonceError as any)?.data?.detail || 'Ошибка отправки кода'}
+              {typeof emailNonceError === 'object' &&
+              emailNonceError !== null &&
+              'data' in emailNonceError &&
+              typeof (emailNonceError as { data?: { detail?: string } }).data?.detail === 'string'
+                ? (emailNonceError as { data: { detail: string } }).data.detail
+                : 'Ошибка отправки кода'}
             </span>
           )}
 
@@ -351,9 +370,17 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
           </div>
         </div>
 
-        <button className='btn blue' onClick={handleSaveChanges} disabled={usernameStatus === 'taken' || isCheckingUsername}>
-          Сохранить
-        </button>
+        <div className='row center gap-3'>
+          <button className='btn blue' onClick={handleSaveChanges} disabled={usernameStatus === 'taken' || isCheckingUsername}>
+            Сохранить
+          </button>
+          {saveSuccess && (
+            <span className='row center gap-1 text-sm color-green'>
+              <IconSprite name='check' size={18} />
+              <span>Изменения сохранены</span>
+            </span>
+          )}
+        </div>
       </div>
     </div>
   )

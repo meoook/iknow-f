@@ -2,7 +2,7 @@ $width: 600px;
 
 .container {
   max-width: $width;
-  margin: 18px auto;
+  margin: 16px auto;
 }
 
 .steps {
@@ -70,6 +70,7 @@ $width: 600px;
       color: #fff;
       box-shadow: 0 0 0 4px #ec750626;
     }
+
     .label {
       color: var(--color-brand);
     }
@@ -81,6 +82,7 @@ $width: 600px;
       border-color: var(--color-green);
       color: #fff;
     }
+
     .label {
       color: var(--color-green);
     }
@@ -134,6 +136,7 @@ $width: 600px;
   .steps {
     padding-bottom: 8px;
   }
+
   .content {
     padding: 0;
     margin-bottom: 0;
@@ -141,11 +144,13 @@ $width: 600px;
     border: none;
     box-shadow: none;
   }
+
   .card {
     padding: 0;
     background-color: transparent;
     border: none;
   }
+
   .footer {
     gap: 12px;
     margin-top: 0;
@@ -203,6 +208,7 @@ $width: 600px;
     transform: translateY(-10px);
     max-height: 0;
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

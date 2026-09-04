@@ -1,43 +1,97 @@
-.tg_block {
-  min-height: 50px;
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-}
-
-.nonce {
-  padding: 11px 16px;
-  margin-right: 16px;
-  // font-size: var(--font-size-lg);
-  font-weight: 600;
-  letter-spacing: 3px;
-  line-height: 1;
-  color: #f9ecc4;
-  background: var(--color-orange-dark);
-  border-radius: 8px;
-}
-
-.email {
-  position: relative;
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  overflow: hidden;
-  & input {
-    padding-right: 50px;
+  padding: 20px;
+  box-shadow: 0 2px 10px var(--color-shadow);
+
+  @media (max-width: 375px) {
+    padding: 8px;
   }
 }
 
-.btn {
-  box-sizing: border-box;
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: inline-flex;
+.icon {
+  display: flex;
   align-items: center;
-  height: 100%;
-  padding-inline: 12px;
-  background-color: var(--color-blue);
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  margin-right: 12px;
 
-  &:global(.green) {
-    background-color: var(--color-green);
+  @media (max-width: 375px) {
+    margin-right: 8px;
+  }
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-wrap: nowrap;
+}
+
+.timer {
+  font-family: monospace;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-secondary);
+  background: var(--color-card);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+
+  &.danger {
+    color: var(--color-red);
+    border-color: var(--color-red);
+    animation: pulse 1s infinite alternate;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.nonce {
+  padding: 7px 14px;
+  border: 1px dashed var(--color-brand);
+  border-radius: 6px;
+  background: var(--color-card);
+  color: var(--color-brand);
+  font-family: monospace;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  letter-spacing: 3px;
+}
+
+/* Skeleton Loading */
+
+.skeleton {
+  height: 16px;
+  border-radius: 4px;
+
+  &.title {
+    width: 140px;
+  }
+
+  &.text {
+    width: 80%;
+  }
+
+  &.btn {
+    width: 120px;
+    height: 38px;
+    border-radius: 6px;
+    margin-top: 6px;
   }
 }

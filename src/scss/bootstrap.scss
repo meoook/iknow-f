@@ -170,48 +170,10 @@
 .container {
   width: var(--size-container);
   margin-inline: auto;
-  padding-top: 18px;
+  // padding-top: 18px;
 
   @media (max-width: 1040px) {
     width: 100%;
-    // text-wrap: ;
-  }
-}
-
-.shimmer {
-  display: block;
-  animation: shimmer 3.5s infinite;
-  background: var(--color-shimmer);
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  // background-repeat: no-repeat;
-  // background-size: 800px 100px;
-}
-
-@keyframes shimmer {
-  0% {
-    opacity: 0.4;
-  }
-
-  10% {
-    opacity: 0.4;
-  }
-
-  35% {
-    opacity: 1;
-  }
-
-  60% {
-    opacity: 1;
-  }
-
-  80% {
-    opacity: 0.4;
-  }
-
-  100% {
-    opacity: 0.4;
   }
 }
 
@@ -292,7 +254,7 @@
 .main {
   display: flex;
   justify-content: center;
-  padding-top: 18px;
+  padding-top: 16px;
   gap: 24px;
   min-height: 70vh;
 }

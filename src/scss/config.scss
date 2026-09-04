@@ -20,7 +20,9 @@
   // rgb(36, 43, 50)  434a56
 
   --color-shadow: #2222;
-  --color-shimmer: #4443;
+  --color-shimmer-base: light-dark(#ebecee, #23272e);
+  --color-shimmer-highlight: light-dark(#f8f9fa, #2f3540);
+  --color-shimmer: var(--color-shimmer-base);
   --color-border: light-dark(#DDDDD9, #2c333a); // #464e5a
   --color-disabled: #505059;
 
