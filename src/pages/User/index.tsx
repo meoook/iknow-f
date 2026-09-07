@@ -86,7 +86,7 @@ export default function PageUser() {
             </div>
           </div>
 
-          {!isOwner && <div className='grow clamp-3'>{userO.bio}</div>}
+          {!isOwner && <div className='grow clamp-3 text-sm'>{userO.bio}</div>}
 
           <div className='row center'>
             <div className='grow column center gap-1'>

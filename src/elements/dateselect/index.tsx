@@ -112,7 +112,7 @@ export default function DateSelect({ title, value, onChange, error }: DateSelect
     <div className='form-row'>
       {title && <div>{title}</div>}
       <div className={`${style.container} ${error ? style.error : ''}`}>
-        <select className={`${style.day} outline`} name='day' value={day} onChange={handleDayChange}>
+        <select className={`select ${style.day} outline`} name='day' value={day} onChange={handleDayChange}>
           <option value='' disabled hidden>
             День
           </option>
@@ -122,7 +122,7 @@ export default function DateSelect({ title, value, onChange, error }: DateSelect
             </option>
           ))}
         </select>
-        <select className={`${style.month} outline`} name='month' value={month} onChange={handleMonthChange}>
+        <select className={`select ${style.month} outline`} name='month' value={month} onChange={handleMonthChange}>
           <option value='' disabled hidden>
             Месяц
           </option>
@@ -132,7 +132,7 @@ export default function DateSelect({ title, value, onChange, error }: DateSelect
             </option>
           ))}
         </select>
-        <select className={`${style.year} outline`} name='year' value={year} onChange={handleYearChange}>
+        <select className={`select ${style.year} outline`} name='year' value={year} onChange={handleYearChange}>
           <option value='' disabled hidden>
             Год
           </option>

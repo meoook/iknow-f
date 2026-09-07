@@ -30,6 +30,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [uploadProgress, setUploadProgress] = useState<number | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
+  const BIO_LIMIT = 200
 
   useEffect(() => {
     if (user) {
@@ -183,9 +184,9 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
       setUploadProgress(null)
       const detail =
         err &&
-        typeof err === 'object' &&
-        'data' in err &&
-        typeof (err as { data?: { detail?: string } }).data?.detail === 'string'
+          typeof err === 'object' &&
+          'data' in err &&
+          typeof (err as { data?: { detail?: string } }).data?.detail === 'string'
           ? (err as { data: { detail: string } }).data.detail
           : 'Ошибка при загрузке аватара'
       setUploadError(detail)
@@ -194,22 +195,29 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
 
   if (loading) {
     return (
-      <>
+      <div className={style.skeleton}>
         <h1>Настройки профиля</h1>
+        <hr />
         <div className={style.head}>
           <div className={`${style.avatar} shimmer`} />
           <div className={`${style.btn} shimmer`} />
         </div>
-        <div className='form-row'>
-          <label>Никнейм</label>
-          <div className={`${style.input} shimmer`} />
-        </div>
-        <div className='form-row'>
-          <label>О себе</label>
-          <div className={`${style.textarea} shimmer`} />
+        <div>
+          <div className='form-row'>
+            <label>Никнейм</label>
+            <div className={`${style.input} shimmer`} />
+          </div>
+          <div className='form-row'>
+            <label>Почта</label>
+            <div className={`${style.input} shimmer`} />
+          </div>
+          <div className='form-row'>
+            <label>О себе</label>
+            <div className={`${style.bio} shimmer`} />
+          </div>
         </div>
         <div className={`${style.btn} shimmer`} />
-      </>
+      </div>
     )
   }
 
@@ -303,9 +311,9 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
           {emailNonceError && (
             <span className='error'>
               {typeof emailNonceError === 'object' &&
-              emailNonceError !== null &&
-              'data' in emailNonceError &&
-              typeof (emailNonceError as { data?: { detail?: string } }).data?.detail === 'string'
+                emailNonceError !== null &&
+                'data' in emailNonceError &&
+                typeof (emailNonceError as { data?: { detail?: string } }).data?.detail === 'string'
                 ? (emailNonceError as { data: { detail: string } }).data.detail
                 : 'Ошибка отправки кода'}
             </span>
@@ -352,20 +360,18 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
             onChange={handleInputChange}
             className='outline'
             placeholder='Расскажите немного о себе'
-            rows={4}
-            maxLength={255}
+            maxLength={BIO_LIMIT}
           />
           <div className={style.fieldFooter}>
             <span className='text-xs secondary'>Отображается в вашем публичном профиле</span>
             <span
-              className={`${style.counter} ${
-                (formData.bio?.length || 0) >= 255
-                  ? style.counterDanger
-                  : (formData.bio?.length || 0) >= 230
-                    ? style.counterWarn
-                    : ''
-              }`}>
-              {formData.bio?.length || 0} / 255
+              className={`${style.counter} ${(formData.bio?.length || 0) > BIO_LIMIT
+                ? style.counterDanger
+                : (formData.bio?.length || 0) >= BIO_LIMIT - 20
+                  ? style.counterWarn
+                  : ''
+                }`}>
+              {formData.bio?.length || 0} / {BIO_LIMIT}
             </span>
           </div>
         </div>

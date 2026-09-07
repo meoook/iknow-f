@@ -50,15 +50,13 @@ export default function PageLeaderboard() {
             </div>
           </div>
 
-          <div className='flex-i bd bdr'>
-            <select name='group' value={group} onChange={(e) => setGroup(e.target.value)}>
-              {groups.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.label} {t.id === '' ? 'категории' : ''}
-                </option>
-              ))}
-            </select>
-          </div>
+          <select className={`select ${s.select}`} name='group' value={group} onChange={(e) => setGroup(e.target.value)}>
+            {groups.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.label} {t.id === '' ? 'категории' : ''}
+              </option>
+            ))}
+          </select>
         </div>
 
         <LeaderboardTable period={period} group={group} />

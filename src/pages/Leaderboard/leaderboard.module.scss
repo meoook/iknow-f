@@ -65,9 +65,11 @@ $width: 800px;
     color: var(--color-primary);
     background: var(--color-hover);
   }
+
   & svg {
     transition: rotate 0.2s ease;
   }
+
   &:global(.open svg) {
     rotate: 180deg;
   }
@@ -109,8 +111,13 @@ $width: 800px;
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.select {
+  max-width: 160px;
 }

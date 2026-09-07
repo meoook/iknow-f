@@ -149,7 +149,7 @@ export default function ModalWithdraw() {
             <div className='column gap-1'>
               <div className='text-sm secondary'>Блокчейн</div>
               <select
-                className='outline'
+                className='select outline'
                 name='chain'
                 value={selectedChainName || ''}
                 onChange={(e) => {
@@ -174,6 +174,7 @@ export default function ModalWithdraw() {
                 <span className={s.prefix}>$</span>
                 <input
                   type='text'
+                  className='outline'
                   inputMode='decimal'
                   placeholder={`Минимум ${minWithdraw.toFixed(2)}`}
                   value={amount}
@@ -204,6 +205,7 @@ export default function ModalWithdraw() {
               <div className='text-sm secondary'>Адрес получателя</div>
               <input
                 type='text'
+                className='outline'
                 placeholder={`Введите ваш ${selectedChain.chain_name} адрес`}
                 value={address}
                 onChange={(e) => {

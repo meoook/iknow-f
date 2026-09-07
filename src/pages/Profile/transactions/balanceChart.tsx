@@ -68,18 +68,18 @@ export default function BalanceChart() {
   }, [balanceHistory])
 
   return (
-    <div className={s.chartCard}>
-      <div className={s.chartHead}>
-        <div className={s.chartTitle}>
+    <div className='column gap-3 bg-card p-card bd bdr shadow'>
+      <div className='row sm-column center justify gap-3'>
+        <div className='row center gap-2 w-600'>
           <IconSprite name='trend' size={18} color='var(--color-brand)' />
           <span>Динамика баланса</span>
         </div>
-        <div className={s.rangeButtons}>
+        <div className='row center justify gap-1 bg-input bd bdr sm-full'>
           {BALANCE_RANGES.map((range) => (
             <button
               key={range.key}
               type='button'
-              className={`${s.rangeBtn} ${selectedRangeKey === range.key ? s.active : ''}`}
+              className={`${s.rangeBtn}${selectedRangeKey === range.key ? ' active' : ''}`}
               onClick={() => {
                 setSelectedRangeKey(range.key)
                 setHoveredInfo(null)
@@ -90,25 +90,23 @@ export default function BalanceChart() {
         </div>
       </div>
 
-      <div className={s.chartValueRow}>
-        <div>
-          <div className={s.balanceNumber}>
-            ${displayBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </div>
-          <div className={s.chartMeta}>
-            <span className={s.periodTitle}>{displayPeriodTitle}</span>
-            {!isHovered && balanceHistory && balanceHistory.length > 1 && (
-              <span className={periodDiff >= 0 ? s.diffPositive : s.diffNegative}>
-                {periodDiff >= 0 ? '+' : ''}${periodDiff.toFixed(2)}
-              </span>
-            )}
-          </div>
+      <div className='column gap-1'>
+        <div className='text-xl w-600'>
+          ${displayBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </div>
+        <div className='row center gap-2 text-xs'>
+          <span className='secondary'>{displayPeriodTitle}</span>
+          {!isHovered && balanceHistory && balanceHistory.length > 1 && (
+            <span className={`w-600 ${periodDiff >= 0 ? 'color-green' : 'color-red'}`}>
+              {periodDiff >= 0 ? '+' : ''}${periodDiff.toFixed(2)}
+            </span>
+          )}
         </div>
       </div>
 
-      <div className={s.chartWrapper}>
+      <div className={s.wrapper}>
         {isError ? (
-          <div className={s.chartError}>
+          <div className='column center middle gap-2 text-sm secondary'>
             <span>Не удалось загрузить историю баланса</span>
             <button type='button' className='btn gray' onClick={() => refetch()}>
               Повторить
@@ -132,6 +130,6 @@ export default function BalanceChart() {
           />
         )}
       </div>
-    </div>
+    </div >
   )
 }

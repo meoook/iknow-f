@@ -2,6 +2,8 @@
   display: flex;
   gap: 12px;
   justify-content: center;
+  align-items: center;
+  height: 56px;
 }
 
 .cell {
@@ -22,5 +24,11 @@
     border-color: var(--color-blue);
     background: var(--color-bg);
     box-shadow: 0 0 0 2px rgba(var(--color-blue-rgb), 0.1);
+  }
+
+  @media (max-width: 400px) {
+    width: 36px;
+    height: 40px;
+    font-size: var(--font-size-h2);
   }
 }

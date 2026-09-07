@@ -10,7 +10,7 @@ export const WizardFooter = () => {
     <>
       <div className={s.footer}>
         {step > 1 && (
-          <button className='btn gray mid w-full' onClick={prevStep} disabled={isLoading}>
+          <button className='btn gray mid w-full bd' onClick={prevStep} disabled={isLoading}>
             Назад
           </button>
         )}

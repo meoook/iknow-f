@@ -90,21 +90,35 @@ export default function PnlCard({ userId }: PnlCardProps) {
         </div>
       </div>
 
-      <div className='row justify center gap-3 pt-2'>
+      <div className='row justify end gap-3 pt-1'>
+        <div className='column gap-2'>
+          <h1 className='w-600 text-xl'>
+            {isProfitError || isProfitBusy || !profitHistory
+              ? '—'
+              : `${displayProfit < 0 ? '-' : ''}$${Math.abs(displayProfit).toFixed(2)}`}
+          </h1>
+          <div className='text-xs secondary'>
+            {isProfitError || isProfitBusy ? 'Данные графика' : displayPeriodTitle}
+          </div>
+        </div>
+        <img className={s.logo} src={logo} alt="logo" />
+      </div>
+
+      {/* <div className='row justify center gap-3 pt-2'>
         <h1 className='w-600 text-xl'>
           {isProfitError || isProfitBusy || !profitHistory
             ? '—'
             : `${displayProfit < 0 ? '-' : ''}$${Math.abs(displayProfit).toFixed(2)}`}
         </h1>
 
-        {/* <button className='btn btn-icon'>
+        <button className='btn btn-icon'>
           <IconSprite name='upload' size={20} color='var(--color-secondary)' />
-        </button> */}
+        </button>
         <img className={s.logo} src={logo} alt="logo" />
       </div>
       <div className='text-xs secondary pt-2'>
         {isProfitError || isProfitBusy ? 'Данные графика' : displayPeriodTitle}
-      </div>
+      </div> */}
 
       <div className={s.chart}>
         {isProfitError ? (
@@ -119,7 +133,7 @@ export default function PnlCard({ userId }: PnlCardProps) {
         ) : (
           <TimeChart
             series={chartSeries}
-            height={100}
+            height={94}
             snapToPoint={true}
             showYAxis={false}
             showXAxis={false}

@@ -146,8 +146,7 @@ select,
 textarea {
   box-sizing: border-box;
   width: 100%;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-inline: 12px;
   border-radius: var(--radius);
   background-color: var(--color-input);
 
@@ -167,11 +166,11 @@ textarea {
   }
 
   &:hover {
-    background-color: var(--color-hover);
+    background-color: var(--color-active);
   }
 
   &:focus-within {
-    background-color: var(--color-hover);
+    background-color: var(--color-active);
     // box-shadow: var(--color-shadow);
   }
 
@@ -182,9 +181,9 @@ textarea {
 }
 
 textarea {
-  min-height: 100px;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  field-sizing: content;
+  min-height: calc(3lh + 26px);
+  padding-block: 12px;
   resize: none;
 }
 

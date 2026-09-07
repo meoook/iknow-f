@@ -3,7 +3,7 @@
   gap: 12px;
   // width: 100%;
 
-  &.error > select {
+  &.error>select {
     // box-shadow: 0 0 0 2px var(--color-red);
     // border-color: transparent;
     border-color: var(--color-red);
@@ -13,15 +13,11 @@
 .day {
   width: 80px;
 }
+
 .month {
   width: 120px;
 }
+
 .year {
   width: 80px;
-}
-
-.day,
-.month,
-.year {
-  padding-inline: 6px;
 }

@@ -193,7 +193,18 @@ export interface ICommentReport {
   text: string
 }
 
-export type TxStatus = 'PENDING' | 'APPROVED' | 'PROCESSING' | 'SUBMITTED' | 'COMPLETED' | 'REJECTED' | 'FAILED'
+export const TxStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  PROCESSING: 'PROCESSING',
+  SUBMITTED: 'SUBMITTED',
+  COMPLETED: 'COMPLETED',
+  REJECTED: 'REJECTED',
+  FAILED: 'FAILED',
+} as const
+
+export type TxStatus = (typeof TxStatus)[keyof typeof TxStatus]
+
 
 export interface ITx {
   id: number

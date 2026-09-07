@@ -82,13 +82,13 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`
   }
 
-  if (!loading) {
+  if (loading) {
     return (
       <div className='column gap-3'>
         <h1>Уведомления</h1>
         <hr />
         <div className='column gap-4'>
-          <div className={s.card}>
+          <div className='p-card bg-card bd bdr shadow'>
             <div className='row center pb-2'>
               <div className={`${s.icon} shimmer`} />
               <div className='column gap-1'>
@@ -98,7 +98,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
             </div>
             <div className={`${s.skeleton} ${s.btn} shimmer`} />
           </div>
-          <div className={s.card}>
+          <div className='p-card bg-card bd bdr shadow'>
             <div className='row center pb-2'>
               <div className={`${s.icon} shimmer`} />
               <div className='column gap-1'>
@@ -123,7 +123,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
 
       <div className='column gap-4'>
         {/* Telegram Card */}
-        <div className={s.card}>
+        <div className='p-card bg-card bd bdr shadow'>
           <div className='row center pb-3 bd-b'>
             <div className={`${s.icon} alert-blue`}>
               <IconSprite name='bell' size={22} />
@@ -240,7 +240,7 @@ export default function ProfileNotifications({ user, loading }: { user: IUser | 
         </div>
 
         {/* Email Card */}
-        <div className={s.card}>
+        <div className='p-card bg-card bd bdr shadow'>
           <div className='row center pb-3 bd-b'>
             <div className={`${s.icon} alert-orange`}>
               <IconSprite name='mail' size={22} />

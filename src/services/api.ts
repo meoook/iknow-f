@@ -463,7 +463,6 @@ export const apiBase = createApi({
 
 export const {
   useGetConfigQuery,
-  useDepositMutation,
   useGetDepositParamsQuery,
   useWithdrawMutation,
   // Auth

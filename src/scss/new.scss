@@ -128,6 +128,10 @@ $text-sizes: (
 @mixin generate-responsive($name, $size) {
   .#{$name} {
     @media (max-width: $size) {
+      & {
+        display: block;
+      }
+
       &-flex {
         display: flex;
       }
@@ -136,8 +140,12 @@ $text-sizes: (
         display: none;
       }
 
-      & {
-        display: block;
+      &-column {
+        flex-direction: column;
+      }
+
+      &-full {
+        width: 100%;
       }
     }
   }
@@ -167,6 +175,14 @@ $text-sizes: (
 
     &v-#{$i} {
       padding-block: $padding * $i;
+    }
+  }
+
+  &-card {
+    padding: 20px;
+
+    @media (max-width: 375px) {
+      padding: 12px 8px;
     }
   }
 }

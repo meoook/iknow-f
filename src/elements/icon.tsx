@@ -31,6 +31,7 @@ export type IconName =
   | 'metamask'
   | 'moon'
   | 'more'
+  | 'open_in_new'
   | 'pencil'
   | 'phantom'
   | 'plus'

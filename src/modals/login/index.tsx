@@ -1,11 +1,11 @@
 import s from './login.module.scss'
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useEmailNonceMutation, useEmailAuthMutation, useW3authMutation, useW3nonceMutation } from '../../services/api'
 import { web3AuthService } from '../../services/web3Auth'
 import { REGEX_EMAIL } from '../../utils/date'
 import IconSprite from '../../elements/icon'
 import Nonce from '../../elements/nonce'
-import { Link } from 'react-router-dom'
 import Loader from '../../elements/loader'
 
 interface ModalLoginProps {
@@ -125,6 +125,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
                 value={email}
                 onChange={handleEmailChange}
                 placeholder='Почтовый адрес'
+                autoComplete='off'
               />
               <button
                 type='submit'
@@ -143,7 +144,10 @@ export default function ModalLogin({ close }: ModalLoginProps) {
                 <IconSprite name='metamask' size={28} />
                 Metamask
               </button>
-              <button onClick={() => handleWeb3Login('phantom')} disabled={isWeb3Loading} className='btn gray grow big'>
+              <button
+                onClick={() => handleWeb3Login('phantom')}
+                disabled={isWeb3Loading}
+                className='btn gray grow big'>
                 <IconSprite name='phantom' size={28} />
                 Phantom
               </button>
@@ -155,7 +159,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
           <div className='column center gap-3'>
             <div className='column center gap-2'>
               {/* <h2>Подтвердите вход</h2> */}
-              <div className='color-gray'>Код подтверждения отправлен на почту</div>
+              <div className='color-gray text-center'>Код подтверждения отправлен на почту</div>
               <div>{email}</div>
             </div>
 
@@ -180,7 +184,7 @@ export default function ModalLogin({ close }: ModalLoginProps) {
               </button>
             )}
 
-            <button className='btn text' onClick={stepBack}>
+            <button className='btn' onClick={stepBack}>
               Изменить почту
             </button>
           </div>

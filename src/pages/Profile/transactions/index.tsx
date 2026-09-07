@@ -6,6 +6,7 @@ import { useTx, useTxIds } from '../../../store/tx.adapter'
 import Empty from '../../../elements/empty'
 import IconSprite from '../../../elements/icon'
 import BalanceChart from './balanceChart'
+import { TxStatus } from '../../../types/app.types'
 
 type FilterType = 'ALL' | 'IN' | 'OUT'
 
@@ -52,24 +53,24 @@ export default function ProfileTxs() {
       <BalanceChart />
 
       {/* Transactions Section */}
-      <div className={s.sectionHeader}>
+      <div className='row center justify wrap gap-5 pt-4 pb-2'>
         <h2>История операций</h2>
-        <div className={s.filterChips}>
+        <div className='row center gap-2'>
           <button
             type='button'
-            className={`${s.chip} ${filter === 'ALL' ? s.active : ''}`}
+            className={`${s.chip}${filter === 'ALL' ? ' active' : ''}`}
             onClick={() => setFilter('ALL')}>
             Все
           </button>
           <button
             type='button'
-            className={`${s.chip} ${filter === 'IN' ? s.active : ''}`}
+            className={`${s.chip}${filter === 'IN' ? ' active' : ''}`}
             onClick={() => setFilter('IN')}>
             Пополнения
           </button>
           <button
             type='button'
-            className={`${s.chip} ${filter === 'OUT' ? s.active : ''}`}
+            className={`${s.chip}${filter === 'OUT' ? ' active' : ''}`}
             onClick={() => setFilter('OUT')}>
             Выводы
           </button>
@@ -81,7 +82,7 @@ export default function ProfileTxs() {
       ) : !txIds.length ? (
         <Empty title='Нет транзакций' size={24} />
       ) : (
-        <div className={s.txList}>
+        <div className='column gap-2'>
           {txIds.map((txId) => (
             <Tx key={txId} txId={txId} filter={filter} />
           ))}
@@ -109,17 +110,17 @@ const TxBase = ({ txId, filter }: TxProps) => {
 
   const getStatusInfo = (status?: string) => {
     switch (status) {
-      case 'PENDING':
-      case 'APPROVED':
-      case 'PROCESSING':
-      case 'SUBMITTED':
-        return { label: 'В обработке', className: s.pending }
-      case 'REJECTED':
-      case 'FAILED':
-        return { label: 'Отклонен', className: s.rejected }
-      case 'COMPLETED':
+      case TxStatus.PENDING:
+      case TxStatus.APPROVED:
+      case TxStatus.PROCESSING:
+      case TxStatus.SUBMITTED:
+        return { label: 'В обработке', className: 'alert-orange' }
+      case TxStatus.REJECTED:
+      case TxStatus.FAILED:
+        return { label: 'Отклонен', className: 'alert-red' }
+      case TxStatus.COMPLETED:
       default:
-        return { label: 'Выполнен', className: s.completed }
+        return { label: 'Выполнен', className: 'alert-green' }
     }
   }
 
@@ -135,24 +136,18 @@ const TxBase = ({ txId, filter }: TxProps) => {
 
   return (
     <div className={s.txItem}>
-      <div className={s.txLeft}>
-        <div className={`${s.txIcon} ${positive ? s.in : s.out}`}>
-          <IconSprite name={positive ? 'arrow_down' : 'upload'} size={18} />
+      <div className={`${s.txIcon} ${positive ? 'alert-green' : 'alert-orange'}`}>
+        <IconSprite name={positive ? 'arrow_down' : 'upload'} size={18} />
+      </div>
+      <div className='column gap-1 w-0 grow'>
+        <div className='row center gap-2 nowrap'>
+          <span className='w-600'>{positive ? 'Пополнение' : 'Вывод'}</span>
+          <span className={`${s.statusBadge} ${statusInfo.className}`}>{statusInfo.label}</span>
         </div>
-        <div className={s.txInfo}>
-          <div className={s.txTitleRow}>
-            <span className={s.txTitle}>{positive ? 'Пополнение' : 'Вывод'}</span>
-            {tx.token && (
-              <span className={s.tokenTag}>
-                {tx.token.currency} • {tx.token.chain}
-              </span>
-            )}
-            <span className={`${s.statusBadge} ${statusInfo.className}`}>{statusInfo.label}</span>
-          </div>
-          <div className={s.txMetaRow}>
-            <span>
-              {formattedDate} {formattedTime}
-            </span>
+        <div className='row center gap-1 text-xs secondary wrap'>
+          <span className={s.dt}>{formattedDate} {formattedTime}</span>
+          <div className='row center gap-1 nowrap'>
+            {tx.token && <span className={s.chain}>{tx.token.chain}</span>}
             {shortHash && (
               <>
                 <span>•</span>
@@ -161,13 +156,13 @@ const TxBase = ({ txId, filter }: TxProps) => {
                     href={tx.url}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className={s.scanLink}
+                    className={s.link}
                     title='Посмотреть в блокчейн-сканере'>
                     <span>{shortHash}</span>
-                    <span className={s.externalIcon}>↗</span>
+                    <IconSprite name='open_in_new' size={12} />
                   </a>
                 ) : (
-                  <span className={s.scanLink}>{shortHash}</span>
+                  <span className={s.link}>{shortHash}</span>
                 )}
               </>
             )}
@@ -175,10 +170,10 @@ const TxBase = ({ txId, filter }: TxProps) => {
         </div>
       </div>
 
-      <div className={s.txRight}>
-        <div className={`${s.amount} ${positive ? s.positive : s.negative}`}>
-          {positive ? '+' : '-'}${tx.amount.toFixed(2)}
-        </div>
+      {tx.token && <div className='ph-4 w-600 secondary sm-hide'>{tx.token.currency}</div>}
+
+      <div className={`${s.amount}${positive ? ' color-green' : ''}`}>
+        {positive ? '+' : '-'}${tx.amount.toFixed(2)}
       </div>
     </div>
   )

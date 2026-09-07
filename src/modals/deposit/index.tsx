@@ -84,7 +84,7 @@ export default function ModalDeposit() {
       <div className='column center gap-3'>
         <div>Отправьте {activeToken.currency} на указанный адрес в выбранном блокчейне</div>
         <select
-          className='outline'
+          className='select outline'
           name='chain'
           value={selectedKey || ''}
           onChange={(e) => setSelectedKey(e.target.value)}>
