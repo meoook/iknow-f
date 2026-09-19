@@ -14,14 +14,14 @@ import { REGEX_EMAIL } from '../../../utils/date'
 
 export default function ProfileAccount({ user, loading }: { user: IUser | null; loading: boolean }) {
   const [formData, setFormData] = useState({ username: user?.username || '', bio: user?.bio || '', email: user?.email || '', nonce: '' })
-  const [errors, setErrors] = useState({ username: '', email: '', nonce: '' })
+  const [errors, setErrors] = useState({ username: '', email: '', nonce: '', bio: '', general: '' })
   const [isVerificationSent, setIsVerificationSent] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
 
   const [usernameStatus, setUsernameStatus] = useState<'available' | 'taken' | 'invalid' | 'none'>('none')
   const [isCheckingUsername, setIsCheckingUsername] = useState(false)
 
-  const [setUserParams, { error: setUserParamsError }] = useSetUserParamsMutation()
+  const [setUserParams] = useSetUserParamsMutation()
   const [emailNonce, { error: emailNonceError, isLoading: isNonceLoading }] = useEmailNonceMutation()
   const [emailApprove, { error: emailApproveError, isLoading: isApproveLoading }] = useEmailApproveMutation()
   const [checkUsername] = useLazyCheckUsernameQuery()
@@ -93,21 +93,78 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
     if (errors[name as keyof typeof errors]) setErrors((prev) => ({ ...prev, [name]: '' }))
+    if (errors.general) setErrors((prev) => ({ ...prev, general: '' }))
   }
 
   const handleSaveChanges = async () => {
-    const newErrors = { username: '' }
+    const newErrors: { username?: string; bio?: string } = {}
     if (formData.username && formData.username.length < 4) {
       newErrors.username = 'Никнейм должен быть не менее 4 символов'
     }
-    setErrors((prev) => ({ ...prev, username: newErrors.username }))
-    if (!newErrors.username && usernameStatus !== 'taken') {
+    if ((formData.bio?.length || 0) > BIO_LIMIT) {
+      newErrors.bio = `Не более ${BIO_LIMIT} символов`
+    }
+    setErrors((prev) => ({
+      ...prev,
+      username: newErrors.username || '',
+      bio: newErrors.bio || '',
+      general: '',
+    }))
+
+    if (!newErrors.username && !newErrors.bio && usernameStatus !== 'taken') {
       try {
         await setUserParams({ username: formData.username, bio: formData.bio }).unwrap()
         setSaveSuccess(true)
         setTimeout(() => setSaveSuccess(false), 3000)
-      } catch {
-        // error will be shown by setUserParamsError
+      } catch (err: any) {
+        const data = err?.data
+        let usernameErr = ''
+        let bioErr = ''
+        let generalErr = ''
+
+        if (data) {
+          if (data.username) {
+            const raw = Array.isArray(data.username) ? data.username[0] : String(data.username)
+            if (raw.includes('already exists') || raw.includes('уже существует')) {
+              usernameErr = 'Этот никнейм уже занят'
+            } else if (raw.includes('blank') || raw.includes('пустым')) {
+              usernameErr = 'Никнейм не может быть пустым'
+            } else if (raw.includes('at least 4') || raw.includes('менее 4')) {
+              usernameErr = 'Никнейм должен быть не менее 4 символов'
+            } else {
+              usernameErr = raw
+            }
+          }
+          if (data.bio) {
+            const raw = Array.isArray(data.bio) ? data.bio[0] : String(data.bio)
+            if (raw.includes('blank') || raw.includes('пустым')) {
+              bioErr = 'Поле не может быть пустым'
+            } else if (raw.includes('200')) {
+              bioErr = 'Не более 200 символов'
+            } else {
+              bioErr = raw
+            }
+          }
+          if (data.detail) {
+            const detailStr = String(data.detail)
+            if (detailStr.toLowerCase().includes('username already exists')) {
+              usernameErr = 'Этот никнейм уже занят'
+            } else if (detailStr.toLowerCase().includes('username must be at least 4')) {
+              usernameErr = 'Никнейм должен быть не менее 4 символов'
+            } else {
+              generalErr = detailStr
+            }
+          }
+        } else {
+          generalErr = 'Не удалось сохранить изменения'
+        }
+
+        setErrors((prev) => ({
+          ...prev,
+          username: usernameErr,
+          bio: bioErr,
+          general: generalErr,
+        }))
       }
     }
   }
@@ -283,7 +340,9 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
           {usernameStatus === 'invalid' && (
             <span className='text-xs color-red'>Никнейм должен быть не менее 4 символов</span>
           )}
-          {setUserParamsError && <span className='text-xs color-red'>Такой никнейм уже существует</span>}
+          {!['taken', 'invalid'].includes(usernameStatus) && errors.username && (
+            <span className='text-xs color-red'>{errors.username}</span>
+          )}
         </div>
 
         <div className='form-row'>
@@ -358,10 +417,11 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
             name='bio'
             value={formData.bio}
             onChange={handleInputChange}
-            className='outline'
+            className={errors.bio ? 'outline error' : 'outline'}
             placeholder='Расскажите немного о себе'
             maxLength={BIO_LIMIT}
           />
+          {errors.bio && <span className='text-xs color-red'>{errors.bio}</span>}
           <div className={style.fieldFooter}>
             <span className='text-xs secondary'>Отображается в вашем публичном профиле</span>
             <span
@@ -380,6 +440,7 @@ export default function ProfileAccount({ user, loading }: { user: IUser | null; 
           <button className='btn blue' onClick={handleSaveChanges} disabled={usernameStatus === 'taken' || isCheckingUsername}>
             Сохранить
           </button>
+          {errors.general && <span className='text-xs color-red'>{errors.general}</span>}
           {saveSuccess && (
             <span className='row center gap-1 text-sm color-green'>
               <IconSprite name='check' size={18} />
