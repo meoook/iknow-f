@@ -9,6 +9,7 @@ import {
   defaultFormatTooltipTime,
   interpolateValueAtTime,
   findClosestPoint,
+  cleanNumber,
 } from './utils/timeUtils';
 import styles from './TimeChart.module.scss';
 
@@ -89,7 +90,7 @@ export const TimeChart: React.FC<TimeChartProps> = ({
   yMax: explicitYMax,
   yPaddingRatio = 0.08,
   yTicksCount = 5,
-  formatValue = (v) => `${Math.round(v)}%`,
+  formatValue: rawFormatValue = (v) => `${Math.round(v)}%`,
   showInternalTooltip = true,
   showCrosshair = true,
   dimAfterCursor = false,
@@ -100,6 +101,14 @@ export const TimeChart: React.FC<TimeChartProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const [hoveredTime, setHoveredTime] = useState<number | null>(null);
+
+  const formatValue = useCallback(
+    (v: number) => {
+      const clean = cleanNumber(v);
+      return rawFormatValue(clean);
+    },
+    [rawFormatValue]
+  );
 
   const chartUid = useId();
 

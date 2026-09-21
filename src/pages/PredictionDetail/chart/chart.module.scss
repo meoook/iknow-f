@@ -54,6 +54,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   transition: color 0.15s ease;
+
+  @media (max-width: 480px) {
+    max-width: 145px;
+  }
 }
 
 .percent {
@@ -87,10 +91,6 @@
     & .percent {
       color: var(--color-secondary);
     }
-  }
-
-  @media (max-width: 480px) {
-    max-width: 200px;
   }
 }
 

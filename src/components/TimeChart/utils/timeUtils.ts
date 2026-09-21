@@ -160,6 +160,11 @@ function slope2(x0: number, y0: number, x1: number, y1: number, t: number): numb
   return h !== 0 ? (3 * (y1 - y0) / h - t) / 2 : t;
 }
 
+export function cleanNumber(val: number): number {
+  if (Object.is(val, -0) || Math.abs(val) < 1e-10) return 0;
+  return val;
+}
+
 /**
  * Бинарный поиск и точная интерполяция значения и Y-координаты для заданного времени:
  * - smooth: точная кубическая кривая Безье (Fritsch-Carlson d3.curveMonotoneX)
@@ -175,7 +180,7 @@ export function interpolateValueAtTime(
   if (!data || data.length === 0) return null;
 
   if (data.length === 1) {
-    const val = data[0].v;
+    const val = cleanNumber(data[0].v);
     return { value: val, yPx: yScale ? yScale(val) : undefined, exact: true };
   }
 
@@ -184,11 +189,11 @@ export function interpolateValueAtTime(
   const lastTime = normalizeTime(data[data.length - 1].t);
 
   if (normTarget <= firstTime) {
-    const val = data[0].v;
+    const val = cleanNumber(data[0].v);
     return { value: val, yPx: yScale ? yScale(val) : undefined, exact: normTarget === firstTime };
   }
   if (normTarget >= lastTime) {
-    const val = data[data.length - 1].v;
+    const val = cleanNumber(data[data.length - 1].v);
     return { value: val, yPx: yScale ? yScale(val) : undefined, exact: normTarget === lastTime };
   }
 
@@ -201,7 +206,7 @@ export function interpolateValueAtTime(
     const midTime = normalizeTime(data[mid].t);
 
     if (midTime === normTarget) {
-      const val = data[mid].v;
+      const val = cleanNumber(data[mid].v);
       return { value: val, yPx: yScale ? yScale(val) : undefined, exact: true };
     } else if (midTime < normTarget) {
       low = mid + 1;
@@ -239,7 +244,7 @@ export function interpolateValueAtTime(
     const dx = x1 - x0;
 
     if (dx === 0) {
-      const val = data[left].v;
+      const val = cleanNumber(data[left].v);
       return { value: val, yPx: pts[left].y, exact: true };
     }
 
@@ -259,7 +264,7 @@ export function interpolateValueAtTime(
       3 * u1 * u * u * yb +
       u * u * u * y1;
 
-    const interpolatedVal = yScale.invert(interpolatedY);
+    const interpolatedVal = cleanNumber(yScale.invert(interpolatedY));
     return { value: interpolatedVal, yPx: interpolatedY, exact: false };
   }
 
@@ -270,11 +275,12 @@ export function interpolateValueAtTime(
   const v1 = data[right].v;
 
   if (t1 === t0) {
-    return { value: v0, yPx: yScale ? yScale(v0) : undefined, exact: true };
+    const val = cleanNumber(v0);
+    return { value: val, yPx: yScale ? yScale(v0) : undefined, exact: true };
   }
 
   const factor = (normTarget - t0) / (t1 - t0);
-  const interpolated = v0 + (v1 - v0) * factor;
+  const interpolated = cleanNumber(v0 + (v1 - v0) * factor);
 
   return { value: interpolated, yPx: yScale ? yScale(interpolated) : undefined, exact: false };
 }

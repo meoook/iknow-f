@@ -1,9 +1,11 @@
 .panel {
   max-width: 360px;
+  min-width: 360px;
 
   @media (max-width: 1024px) {
     & {
       max-width: 270px;
+      min-width: 270px;
     }
 
     :global(.big) {

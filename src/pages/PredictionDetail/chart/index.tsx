@@ -140,7 +140,7 @@ export const PredictionChart: React.FC<PredictionChartProps> = ({
                 <button
                   key={choice.id}
                   type="button"
-                  className={`${s.item} truncate${isHidden ? ' dimmed' : ''}`}
+                  className={`${s.item} ${isHidden ? ' dimmed' : ''}`}
                   style={{ color }}
                   onClick={() => toggleChoice(choice.id)}
                   title={isHidden ? 'Показать линию на графике' : 'Скрыть линию на графике'}
