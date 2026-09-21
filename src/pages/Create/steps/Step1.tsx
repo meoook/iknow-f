@@ -25,7 +25,7 @@ export const Step1 = () => {
       </div>
 
       <div className='form-row'>
-        <label htmlFor='rules'>Условия и правила расчета</label>
+        <label htmlFor='rules'>Условия и правила подведения итогов</label>
         <textarea
           id='rules'
           name='rules'

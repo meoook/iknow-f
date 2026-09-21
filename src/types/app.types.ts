@@ -42,12 +42,12 @@ export interface PaginatedResponse<T> {
 export interface IRequestCreate {
   title: string
   rules: string
-  link: string | null
+  link: string
   choices: string[]
   vote: string
   amount: number
   end_date: string
-  bet_date: string | null
+  bet_date: string
 }
 
 export interface IRequest {

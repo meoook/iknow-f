@@ -58,7 +58,8 @@ export const PredictionChart: React.FC<PredictionChartProps> = ({
 
     return [...rawChoices]
       .sort((a, b) => (b.volume || 0) - (a.volume || 0))
-      .slice(0, 5);
+      .slice(0, 5)
+      .sort((a, b) => a.id - b.id);
   }, [prediction?.choices]);
 
   // Расчет актуальных текущих процентов из prediction в реальном времени
@@ -139,13 +140,13 @@ export const PredictionChart: React.FC<PredictionChartProps> = ({
                 <button
                   key={choice.id}
                   type="button"
-                  className={`${s.legendItem} ${isHidden ? s.dimmed : ''}`}
+                  className={`${s.item} truncate${isHidden ? ' dimmed' : ''}`}
                   style={{ color }}
                   onClick={() => toggleChoice(choice.id)}
-                  title={isHidden ? 'Показать линию на графике' : 'Скрыть линию с графика'}
+                  title={isHidden ? 'Показать линию на графике' : 'Скрыть линию на графике'}
                 >
                   <span className={s.dot} />
-                  <span className={s.legendTitle}>{choice.title}</span>
+                  <span className={s.title}>{choice.title}</span>
                   <span className={s.percent}>{percent.toFixed(1)}%</span>
                 </button>
               );
@@ -156,13 +157,13 @@ export const PredictionChart: React.FC<PredictionChartProps> = ({
       </div>
 
       {/* График / Загрузка / Заглушка ошибки */}
-      <div className={s.chartWrapper}>
+      <div className='w-full'>
         {isLoading ? (
-          <div className={s.stateWrapper}>
+          <div className={s.wrapper}>
             <Empty loading title="Загрузка графика..." />
           </div>
         ) : isError || !hasHistory ? (
-          <div className={s.stateWrapper}>
+          <div className={s.wrapper}>
             <Empty title="История графика временно недоступна" icon="draft" />
             <button type="button" className={s.retry} onClick={() => refetch()}>
               Обновить
@@ -193,7 +194,7 @@ export const PredictionChart: React.FC<PredictionChartProps> = ({
             <button
               key={p.key}
               type="button"
-              className={`${s.periodBtn} ${period === p.key ? s.active : ''}`}
+              className={`${s.btn}${period === p.key ? ' active' : ''}`}
               onClick={() => setPeriod(p.key)}
             >
               {p.label}
