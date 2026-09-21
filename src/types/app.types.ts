@@ -40,15 +40,14 @@ export interface PaginatedResponse<T> {
 }
 
 export interface IRequestCreate {
-  icon?: File
   title: string
   rules: string
-  link: string
+  link: string | null
   choices: string[]
   vote: string
   amount: number
   end_date: string
-  bet_date: string
+  bet_date: string | null
 }
 
 export interface IRequest {

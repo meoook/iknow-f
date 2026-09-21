@@ -58,7 +58,8 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const new_value = value.trim() ? value.trim() : null
+    setFormData((prev) => ({ ...prev, [name]: new_value }))
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev }
@@ -105,7 +106,7 @@ export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (step === 1) {
       if (!formData.title.trim()) newErrors.title = 'Введите название'
       if (!formData.rules.trim()) newErrors.rules = 'Введите правила'
-      if (formData.link.trim() && !isUrl(formData.link)) newErrors.link = 'Неверная ссылка'
+      if (formData.link && formData.link.trim() && !isUrl(formData.link)) newErrors.link = 'Неверная ссылка'
     } else if (step === 2) {
       if (!formData.end_date) newErrors.end_date = 'Выберите дату события'
       else if (formData.end_date < minDate) newErrors.end_date = 'Не может быть раньше завтрашнего дня'

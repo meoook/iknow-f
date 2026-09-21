@@ -294,7 +294,7 @@ export default function ModalWithdraw() {
           <h2>Заявка создана!</h2>
           <p className='secondary text-sm lh-5'>
             Заявка на вывод <strong>${numAmount.toFixed(2)}</strong> в сети <strong>{selectedChain.chain_name}</strong> успешно отправлена.
-            Средства поступят на ваш кошелек после обработки транзакции сетью.
+            Средства поступят на указанный вами кошелек после обработки транзакции сетью.
           </p>
           <button className='btn blue mid w-full' onClick={closeModal}>
             Понятно
