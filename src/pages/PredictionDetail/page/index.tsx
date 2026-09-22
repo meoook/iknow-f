@@ -154,7 +154,7 @@ const ChoiceItem = ({ choice, volume, selected, select, disabled }: ChoiceItemPr
         </div>
         <div className={s.metrics}>
           <span>{((choice.volume / volume) * 100).toFixed()}%</span>
-          <span className={s.change}>{choice.multiplier.toFixed(2)}X</span>
+          <span className={s.change}>{choice.multiplier.toFixed(2)}x</span>
         </div>
       </button>
     </>

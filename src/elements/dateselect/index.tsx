@@ -101,7 +101,7 @@ export default function DateSelect({ title, value, onChange, error }: DateSelect
       list.push(i.toString())
     }
     return list
-  }, [])
+  }, [limit])
 
   const daysList = useMemo(() => {
     const maxDays = getDaysInMonth(month, year)

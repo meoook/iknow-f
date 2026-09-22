@@ -1,5 +1,5 @@
 import s from './chart.module.scss';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { TPredictionState } from '../../../types/app.types';
 import type { IPredictionDetail } from '../../../types/app.types';
 import type { ChartSeries, ChartPoint } from '../../../components/TimeChart';
@@ -33,10 +33,7 @@ interface PredictionChartProps {
   soloLineGradient?: boolean;
 }
 
-export const PredictionChart: React.FC<PredictionChartProps> = ({
-  prediction,
-  soloLineGradient = false,
-}) => {
+export default function PredictionChart({ prediction, soloLineGradient = false }: PredictionChartProps) {
   const [period, setPeriod] = useState<TimePeriod>('all');
   const [hiddenIds, setHiddenIds] = useState<Set<number>>(new Set());
 
@@ -124,6 +121,8 @@ export const PredictionChart: React.FC<PredictionChartProps> = ({
   const totalVolume = prediction.volume || 0;
   const hasHistory = historyResponse && historyResponse.length > 0;
 
+  if (!isLoading && !isError && !hasHistory) return null
+
   return (
     <div className='column pv-2'>
 
@@ -206,5 +205,3 @@ export const PredictionChart: React.FC<PredictionChartProps> = ({
     </div>
   );
 };
-
-export default PredictionChart;
