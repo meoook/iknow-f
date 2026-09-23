@@ -4,7 +4,6 @@ import { useRequest } from '../../../../store/requests.adapter'
 import IconSprite from '../../../../elements/icon'
 import Loader from '../../../../elements/loader'
 import PredictionHead from '../../../../components/head'
-import PredictionStatus from '../../../../elements/status'
 
 const RequestItem = ({ requestId }: { requestId: number }) => {
   const request = useRequest(requestId)
@@ -19,15 +18,26 @@ const RequestItem = ({ requestId }: { requestId: number }) => {
         <div className='grow row gap-5 w-0'>
           <div className='grow column gap-3 w-full'>
             <PredictionHead title={request.title} icon={request.icon} groups={request.groups} />
-            <PredictionStatus
-              state={request.state}
-              date={request.end_date}
-              volume={request.amount}
-              bet_end={request.bet_date}
-              link={request.link}
-            />
-            <p className='text-sm secondary lh-5'>{request.rules}</p>
 
+            <div className='flex-i center gap-1 text-sm color-brand nowrap'>
+              <IconSprite name='finish' size={16} />
+              <span className='truncate'>Завершение: {new Date(request.end_date).toLocaleDateString()}</span>
+            </div>
+            <div className='flex-i center gap-1 text-sm'>
+              <div className='secondary'>Закрытие ставок</div>
+              <span className='truncate'>{new Date(request.bet_date).toLocaleDateString()}</span>
+            </div>
+
+            <p className='text-sm secondary pre-line lh-5'>{request.rules}</p>
+            <div className='flex-i center gap-1 text-sm'>
+              <div className='secondary'>Источник валидации</div>
+              <span className='truncate'>{request.link}</span>
+            </div>
+
+            <div className='flex-i center gap-1 text-sm'>
+              <div className='secondary'>Ставка</div>
+              <span>${new Intl.NumberFormat('en-US').format(request.amount)}</span>
+            </div>
             <div className='grow row gap-2 start wrap'>
               {request.choices.map((c) => (
                 <span key={c} className={`${s.choice} truncate ${c === request.vote ? 'alert-green' : 'alert-gray'}`}>
