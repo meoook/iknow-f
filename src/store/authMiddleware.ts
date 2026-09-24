@@ -56,8 +56,12 @@ export const authMiddleware: Middleware = (store) => {
   return (next) => (action) => {
     const result = next(action)
 
-    // Успешный логин (через Web3 или Email)
-    if (apiBase.endpoints.w3auth.matchFulfilled(action) || apiBase.endpoints.emailAuth.matchFulfilled(action)) {
+    // Успешный логин (через Web3, Email или OAuth)
+    if (
+      apiBase.endpoints.w3auth.matchFulfilled(action) ||
+      apiBase.endpoints.emailAuth.matchFulfilled(action) ||
+      apiBase.endpoints.oauthLogin.matchFulfilled(action)
+    ) {
       // @ts-ignore
       store.dispatch(apiBase.endpoints.getUser.initiate(undefined, { forceRefetch: true }))
     }

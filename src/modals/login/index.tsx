@@ -92,6 +92,38 @@ export default function ModalLogin({ close }: ModalLoginProps) {
     }
   }
 
+  const handleGoogleLogin = () => {
+    const clientId = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID
+    if (!clientId) {
+      setError('Google OAuth Client ID не настроен')
+      return
+    }
+
+    const currentPath = window.location.pathname + window.location.search
+    sessionStorage.setItem('oauth_return_to', currentPath)
+
+    const statePayload = {
+      csrf: crypto.randomUUID(),
+      returnTo: currentPath,
+    }
+    const state = btoa(unescape(encodeURIComponent(JSON.stringify(statePayload))))
+    sessionStorage.setItem('oauth_state', state)
+
+    const redirectUri = `${window.location.origin}/oauth/google`
+
+    const params = new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: 'code',
+      scope: 'openid email',
+      state: state,
+      access_type: 'online',
+      prompt: 'select_account',
+    })
+
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`
+  }
+
   const stepBack = () => {
     setStep('email')
     setError('')
@@ -107,9 +139,9 @@ export default function ModalLogin({ close }: ModalLoginProps) {
       <div className={s.steps} style={{ gridTemplateRows: step === 'email' ? '1fr 0fr' : '0fr 1fr' }}>
         <div className={s.step}>
           <div className='column gap-5'>
-            <button disabled={isOauthLoading} className='btn blue big'>
-              <IconSprite name='vk' size={28} />
-              <span>Войти с VK ID</span>
+            <button type='button' onClick={handleGoogleLogin} className='btn gray big'>
+              <IconSprite name='google' size={24} />
+              <span>Войти через Google</span>
             </button>
 
             <div className='row center gap-5'>

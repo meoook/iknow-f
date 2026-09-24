@@ -23,6 +23,7 @@ export type IconName =
   | 'finish'
   | 'fire'
   | 'flag'
+  | 'google'
   | 'home'
   | 'info'
   | 'instagram'

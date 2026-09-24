@@ -20,6 +20,7 @@ const PageLeaderboard = lazy(() => import('./pages/Leaderboard'))
 const Page404 = lazy(() => import('./pages/404'))
 const PageTos = lazy(() => import('./pages/Tos'))
 const PagePrivacy = lazy(() => import('./pages/Privacy'))
+const OAuthCallback = lazy(() => import('./pages/OAuthCallback'))
 
 const CONSTRUCTION_KEY = 'construction'
 const CONSTRUCTION_TTL = 4 * 60 * 60 * 1000 // 4 hours in ms
@@ -65,6 +66,7 @@ export default function NavRouter() {
               <Route path='/prediction/:id' element={<PredictionDetail />} />
               <Route path='/tos' element={<PageTos />} />
               <Route path='/privacy' element={<PagePrivacy />} />
+              <Route path='/oauth/:provider' element={<OAuthCallback />} />
               <Route path='/' element={<Home />} />
 
               {/* 404 fallback */}

@@ -100,6 +100,17 @@ export const apiBase = createApi({
         await queryFulfilled
       },
     }),
+    oauthLogin: builder.mutation<IAuthResponse, { provider: string; code: string; redirect_uri: string }>({
+      query: (payload) => ({
+        url: 'auth/oauth',
+        method: 'POST',
+        body: payload,
+      }),
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        dispatch(setLoading(true))
+        await queryFulfilled
+      },
+    }),
     singOut: builder.mutation<void, void>({
       query: () => ({
         url: 'auth/user',
@@ -470,6 +481,7 @@ export const {
   useW3authMutation,
   useEmailNonceMutation,
   useEmailAuthMutation,
+  useOauthLoginMutation,
   // User
   useGetUserQuery,
   useEmailApproveMutation,
