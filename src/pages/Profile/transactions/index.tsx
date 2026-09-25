@@ -3,10 +3,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useAppDispatch } from '../../../hooks/useRedux'
 import { apiBase } from '../../../services/api'
 import { useTx, useTxIds } from '../../../store/tx.adapter'
+import { TxStatus } from '../../../types/app.types'
 import Empty from '../../../elements/empty'
 import IconSprite from '../../../elements/icon'
 import BalanceChart from './balanceChart'
-import { TxStatus } from '../../../types/app.types'
 
 type FilterType = 'ALL' | 'IN' | 'OUT'
 

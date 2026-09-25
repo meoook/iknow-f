@@ -65,12 +65,12 @@ export default function Menu({ mobile, close }: MenuProps) {
       <Link className={classLink} to='/tos' onClick={onClose}>
         Условия использования
       </Link>
-      <Link className={classLink} to='/about' onClick={onClose}>
+      {/* <Link className={classLink} to='/about' onClick={onClose}>
         О приложении
       </Link>
       <Link className={classLink} to='/docs' onClick={onClose}>
         Документация
-      </Link>
+      </Link> */}
 
       {mobile && <SocialsBlock />}
 
