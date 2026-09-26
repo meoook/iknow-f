@@ -4,6 +4,7 @@ import { useRequest } from '../../../../store/requests.adapter'
 import IconSprite from '../../../../elements/icon'
 import Loader from '../../../../elements/loader'
 import PredictionHead from '../../../../components/head'
+import ExpandableText from '../../../../elements/expandable-text'
 
 const RequestItem = ({ requestId }: { requestId: number }) => {
   const request = useRequest(requestId)
@@ -28,7 +29,7 @@ const RequestItem = ({ requestId }: { requestId: number }) => {
               <span className='truncate'>{new Date(request.bet_date).toLocaleDateString()}</span>
             </div>
 
-            <p className='text-sm secondary pre-line lh-5'>{request.rules}</p>
+            <ExpandableText text={request.rules} className='text-sm secondary pre-line lh-5' />
             <div className='flex-i center gap-1 text-sm'>
               <div className='secondary'>Источник валидации</div>
               <span className='truncate'>{request.link}</span>

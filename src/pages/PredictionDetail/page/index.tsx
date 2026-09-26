@@ -13,6 +13,7 @@ import PredictionHead from '../../../components/head'
 import Empty from '../../../elements/empty'
 import TradeModal from '../panel/TradeModal'
 import PredictionChart from '../chart'
+import ExpandableText from '../../../elements/expandable-text'
 
 export default function PredictionDetail() {
   const { id } = useParams<{ id: string }>()
@@ -107,7 +108,7 @@ export default function PredictionDetail() {
 
           <div className='column gap-1 pv-2'>
             <div>Правила и условия</div>
-            <div className='secondary text-sm pre-line'>{prediction.rules}</div>
+            <ExpandableText text={prediction.rules} className='secondary text-sm pre-line' />
             {prediction.link && (
               <div className='bg-card bd bdr-6 ph-4 pv-1'>
                 <div className='label pt-1'>Источник валидации</div>

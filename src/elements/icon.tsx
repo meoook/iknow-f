@@ -4,6 +4,7 @@ export type IconName =
   | 'activity'  // TODO: Not used
   | 'add'
   | 'arrow_down'
+  | 'arrow_up'
   | 'arrow_back'
   | 'bank'
   | 'bell'
