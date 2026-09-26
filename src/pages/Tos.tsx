@@ -2,7 +2,7 @@ export default function PageTos() {
   return (
     <div className='container column pt-4 gap-4'>
       <h1 className='row middle pt-4'>Условия использования ivanga.me</h1>
-      <p className='text-sm secondary'>Дата вступления в силу: 11 августа 2026 г.</p>
+      <p className='text-sm secondary'>Дата вступления в силу: 25 сентября 2026 г.</p>
 
       {/* 1. Введение */}
       <div className='column gap-4'>
