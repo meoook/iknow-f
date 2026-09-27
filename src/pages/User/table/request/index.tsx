@@ -29,7 +29,7 @@ const RequestItem = ({ requestId }: { requestId: number }) => {
               <span className='truncate'>{new Date(request.bet_date).toLocaleDateString()}</span>
             </div>
 
-            <ExpandableText text={request.rules} className='text-sm secondary pre-line lh-5' />
+            <ExpandableText text={request.rules} />
             <div className='flex-i center gap-1 text-sm'>
               <div className='secondary'>Источник валидации</div>
               <span className='truncate'>{request.link}</span>

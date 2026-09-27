@@ -108,7 +108,7 @@ export default function PredictionDetail() {
 
           <div className='column gap-1 pv-2'>
             <div>Правила и условия</div>
-            <ExpandableText text={prediction.rules} className='secondary text-sm pre-line' />
+            <ExpandableText text={prediction.rules} />
             {prediction.link && (
               <div className='bg-card bd bdr-6 ph-4 pv-1'>
                 <div className='label pt-1'>Источник валидации</div>
