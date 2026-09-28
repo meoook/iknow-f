@@ -5,7 +5,7 @@ export default function BackToTop() {
   const [isVisible, setIsVisible] = useState(false)
 
   const toggleVisibility = () => {
-    if (window.scrollY > window.innerHeight * 1.8) setIsVisible(true)
+    if (window.scrollY > window.innerHeight * 0.8) setIsVisible(true)
     else setIsVisible(false)
   }
 

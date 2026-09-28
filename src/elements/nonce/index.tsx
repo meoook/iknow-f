@@ -9,13 +9,13 @@ interface NonceProps {
 
 export default function Nonce({ length, value, onChange }: NonceProps) {
   const [nonce, setNonce] = useState<string[]>(Array.from({ length }, () => ''))
-  const firstInput = useRef<HTMLInputElement>(null)
+  const inputsRef = useRef<(HTMLInputElement | null)[]>([])
 
   // Sync internal state with value prop (primarily for resets)
   useEffect(() => {
     if (value === '') {
       setNonce(Array.from({ length }, () => ''))
-      firstInput.current?.focus()
+      inputsRef.current[0]?.focus()
     } else if (value.length <= length) {
       const newNonce = Array.from({ length }, (_, i) => value[i] || '')
       setNonce(newNonce)
@@ -32,27 +32,34 @@ export default function Nonce({ length, value, onChange }: NonceProps) {
     onChange(nextValue)
 
     if (char && index < length - 1) {
-      const nextInput = document.getElementById(`nonce-${index + 1}`)
-      nextInput?.focus()
+      inputsRef.current[index + 1]?.focus()
     }
   }
 
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && !nonce[index] && index > 0) {
-      const prevInput = document.getElementById(`nonce-${index - 1}`)
-      prevInput?.focus()
+      inputsRef.current[index - 1]?.focus()
     }
   }
 
-  const handlePaste = (e: React.ClipboardEvent) => {
+  const handlePaste = (e: React.ClipboardEvent, index: number) => {
+    e.preventDefault()
     const data = e.clipboardData.getData('text').trim()
-    const digits = data.replace(/\D/g, '').slice(0, length)
+    const digits = data.replace(/\D/g, '')
     if (!digits) return
 
-    onChange(digits)
+    const startFrom = digits.length >= length ? 0 : index
+    const newNonce = [...nonce]
+    for (let i = 0; i < digits.length && startFrom + i < length; i++) {
+      newNonce[startFrom + i] = digits[i]
+    }
+    setNonce(newNonce)
 
-    const nextIndex = Math.min(digits.length, length - 1)
-    document.getElementById(`nonce-${nextIndex}`)?.focus()
+    const nextValue = newNonce.join('')
+    onChange(nextValue)
+
+    const nextIndex = Math.min(startFrom + digits.length, length - 1)
+    inputsRef.current[nextIndex]?.focus()
   }
 
   return (
@@ -63,13 +70,16 @@ export default function Nonce({ length, value, onChange }: NonceProps) {
           id={`nonce-${i}`}
           type='text'
           inputMode='numeric'
+          // autoComplete='one-time-code'
           value={digit}
           onChange={(e) => handleNonceChange(i, e.target.value)}
           onKeyDown={(e) => handleKeyDown(i, e)}
-          onPaste={handlePaste}
+          onPaste={(e) => handlePaste(e, i)}
           maxLength={1}
           className={style.cell}
-          ref={i === 0 ? firstInput : undefined}
+          ref={(el) => {
+            inputsRef.current[i] = el
+          }}
         />
       ))}
     </div>
