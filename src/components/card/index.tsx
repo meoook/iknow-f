@@ -46,7 +46,7 @@ const PredictionCard = ({ prediction }: PredictionCardProps) => {
           )
         })}
       </div>
-      <div className='row center justify'>
+      <div className='row end justify'>
         <div className='row center gap-1'>
           {prediction.hot && <IconSprite name='fire' size={28} color='var(--color-red)' />}
           <div className='column'>
