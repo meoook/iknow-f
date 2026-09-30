@@ -379,7 +379,7 @@ export default function ModalWithdraw() {
           <div className='column gap-4'>
             <div className='column bg-card bd bdr p-4 gap-2 text-center'>
               <span className='secondary text-sm'>
-                Код подтверждения отправлен на почту:
+                Код подтверждения отправлен на почту
               </span>
               <span className='w-600 primary text-sm'>{targetEmail}</span>
             </div>
