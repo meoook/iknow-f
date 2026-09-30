@@ -56,13 +56,14 @@ export class Web3AuthService {
     }
   }
 
-  async signMessage(address: string, message: string): Promise<string> {
-    if (!this.walletClient) throw new Error('Wallet not connected')
+  async signMessage(address: string, message: string, walletType: WalletType = 'metamask'): Promise<string> {
+    if (!this.walletClient) await this.connectWallet(walletType)
+    if (!this.walletClient) throw new Error('Кошелек не подключен')
     try {
       const signature = await this.walletClient.signMessage({ account: address as `0x${string}`, message })
       return signature
     } catch (error: any) {
-      if (error.code === 4001) throw new Error('User rejected the signature request')
+      if (error.code === 4001) throw new Error('Запрос подписи отклонен в кошельке')
       throw error
     }
   }

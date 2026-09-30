@@ -1,12 +1,14 @@
 import s from './withdraw.module.scss'
 import { useEffect, useMemo, useState } from 'react'
-import { useGetDepositParamsQuery, useWithdrawMutation } from '../../services/api'
+import { useGetDepositParamsQuery, useWithdrawNonceMutation, useWithdrawMutation } from '../../services/api'
 import { useModalContext } from '../../services/ModalContext'
 import { useAppSelector } from '../../hooks/useRedux'
 import type { IDepositParam } from '../../types/app.types'
+import { web3AuthService } from '../../services/web3Auth'
 import IconSprite from '../../elements/icon'
 import Loader from '../../elements/loader'
 import Empty from '../../elements/empty'
+import Nonce from '../../elements/nonce'
 import solanaLogo from '../../assets/solana.svg'
 import etheriumLogo from '../../assets/etherium.svg'
 import bscLogo from '../../assets/bsc.svg'
@@ -29,18 +31,40 @@ export default function ModalWithdraw() {
   const userBalance = user?.balance ?? 0
 
   const { data: depositParams = [], isLoading, isError } = useGetDepositParamsQuery()
+  const [withdrawNonce, { isLoading: isRequestingNonce }] = useWithdrawNonceMutation()
   const [withdraw, { isLoading: isWithdrawing }] = useWithdrawMutation()
 
-  const [step, setStep] = useState<'form' | 'confirm' | 'success'>('form')
+  const [step, setStep] = useState<'form' | 'confirm' | 'nonce' | 'success'>('form')
   const [selectedChainName, setSelectedChainName] = useState<string | null>(null)
   const [amount, setAmount] = useState<string>('')
   const [address, setAddress] = useState<string>('')
   const [serverError, setServerError] = useState<string | null>(null)
 
+  // Nonce confirmation state
+  const [nonce, setNonce] = useState<string>('')
+  const [targetEmail, setTargetEmail] = useState<string>('')
+  const [expireTime, setExpireTime] = useState<number | null>(null)
+  const [expired, setExpired] = useState<boolean>(false)
+  const [remainingSec, setRemainingSec] = useState<number>(0)
+
   // Закрывать модалку ТОЛЬКО по крестику
   useEffect(() => {
     setCloseOutside(false)
   }, [setCloseOutside])
+
+  // Countdown timer for nonce step
+  useEffect(() => {
+    if (step === 'nonce' && expireTime) {
+      const update = () => {
+        const sec = Math.max(0, expireTime - Math.floor(Date.now() / 1000))
+        setRemainingSec(sec)
+        if (sec <= 0) setExpired(true)
+      }
+      update()
+      const interval = setInterval(update, 1000)
+      return () => clearInterval(interval)
+    }
+  }, [step, expireTime])
 
   // Список уникальных блокчейнов без дубликатов
   const chains = useMemo(() => {
@@ -51,14 +75,10 @@ export default function ModalWithdraw() {
     return Array.from(map.values())
   }, [depositParams])
 
-  // По умолчанию выбираем первый доступный блокчейн
-  useEffect(() => {
-    if (chains.length > 0 && selectedChainName === null) {
-      setSelectedChainName(chains[0].chain_name)
-    }
+  const selectedChain = useMemo(() => {
+    if (selectedChainName) return chains.find((c) => c.chain_name === selectedChainName) || chains[0]
+    return chains[0]
   }, [chains, selectedChainName])
-
-  const selectedChain = chains.find((c) => c.chain_name === selectedChainName) || chains[0]
 
   // Обработка ввода суммы
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,20 +111,79 @@ export default function ModalWithdraw() {
 
   const isFormValid = isAmountPositive && hasEnoughBalance && meetsMinimum && isAddressFilled
 
-  // Отправка заявки на вывод
-  const handleConfirmWithdraw = async () => {
+  // Запрос подтверждения вывода (Шаг confirm -> nonce или Web3 подпись)
+  const handleRequestWithdraw = async () => {
     if (!isFormValid || !selectedChain) return
     setServerError(null)
     try {
-      await withdraw({
+      const res = await withdrawNonce({
         chain_name: selectedChain.chain_name,
         amount: numAmount,
         address: address.trim(),
       }).unwrap()
+
+      if (res.method === 'email') {
+        setTargetEmail(res.email || '')
+        setExpireTime(res.expire)
+        setExpired(false)
+        setNonce('')
+        setStep('nonce')
+      } else if (res.method === 'web3') {
+        if (!user?.address) {
+          setServerError('Кошелек пользователя не найден')
+          return
+        }
+        if (!res.message) {
+          setServerError('Сообщение для подписи не получено')
+          return
+        }
+        try {
+          const signature = await web3AuthService.signMessage(user.address, res.message)
+          await withdraw({ signature }).unwrap()
+          setStep('success')
+        } catch {
+          setServerError('Ошибка подтверждения вывода')
+        }
+      }
+    } catch {
+      setServerError('Ошибка при создании запроса на вывод')
+    }
+  }
+
+  // Подтверждение по Email OTP (Шаг nonce)
+  const handleConfirmEmailWithdraw = async () => {
+    if (nonce.length !== 6) return
+    setServerError(null)
+    try {
+      await withdraw({ nonce }).unwrap()
       setStep('success')
     } catch {
-      setServerError('Произошла ошибка при отправке заявки на вывод')
+      setServerError('Неверный код подтверждения')
     }
+  }
+
+  // Повторная отправка кода
+  const handleResendNonce = async () => {
+    if (!selectedChain) return
+    setServerError(null)
+    setExpired(false)
+    try {
+      const res = await withdrawNonce({
+        chain_name: selectedChain.chain_name,
+        amount: numAmount,
+        address: address.trim(),
+      }).unwrap()
+      setExpireTime(res.expire)
+      setNonce('')
+    } catch {
+      setServerError('Не удалось повторно отправить код')
+    }
+  }
+
+  const formatRemainingTime = (sec: number) => {
+    const m = Math.floor(sec / 60)
+    const s = sec % 60
+    return `${m}:${s < 10 ? '0' : ''}${s}`
   }
 
   if (isLoading) {
@@ -220,14 +299,17 @@ export default function ModalWithdraw() {
             <button
               className='btn blue mid w-full'
               disabled={!isFormValid}
-              onClick={() => setStep('confirm')}>
+              onClick={() => {
+                setServerError(null)
+                setStep('confirm')
+              }}>
               Продолжить
             </button>
           </div>
         </>
       )}
 
-      {/* Шаг 2: Подтверждение */}
+      {/* Шаг 2: Предпросмотр */}
       {step === 'confirm' && (
         <>
           <div className='row center gap-4 pb-1'>
@@ -243,7 +325,6 @@ export default function ModalWithdraw() {
                 <div className='secondary'>Блокчейн</div>
                 <div className='row end gap-2 w-500 primary'>
                   {currentLogo && <img src={currentLogo} alt='' className={s.logo} />}
-
                   <span>{selectedChain.chain_name}</span>
                 </div>
               </div>
@@ -267,18 +348,85 @@ export default function ModalWithdraw() {
 
             {serverError && <div className='alert-red bdr text-sm ph-3 pv-2'>{serverError}</div>}
 
-            <div className='row gap-5'>
+            <div className='row gap-4'>
               <button
                 className='btn gray mid w-full'
                 onClick={() => setStep('form')}
+                disabled={isRequestingNonce || isWithdrawing}>
+                Назад
+              </button>
+              <button
+                className='btn blue mid w-full'
+                onClick={handleRequestWithdraw}
+                disabled={isRequestingNonce || isWithdrawing}>
+                {isRequestingNonce || isWithdrawing ? 'Подготовка...' : 'Подтвердить'}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Шаг 2.5: Подтверждение по почте (OTP Nonce) */}
+      {step === 'nonce' && (
+        <>
+          <div className='row center gap-4 pb-1'>
+            <button className='btn btn-icon' onClick={() => setStep('confirm')} title='Назад'>
+              <IconSprite name='arrow_back' size={20} />
+            </button>
+            <h1>Подтверждение кода</h1>
+          </div>
+
+          <div className='column gap-4'>
+            <div className='column bg-card bd bdr p-4 gap-2 text-center'>
+              <span className='secondary text-sm'>
+                Код подтверждения отправлен на почту:
+              </span>
+              <span className='w-600 primary text-sm'>{targetEmail}</span>
+            </div>
+
+            <div className='column center gap-3'>
+              <Nonce
+                length={6}
+                value={nonce}
+                onChange={(val) => {
+                  setNonce(val)
+                  setServerError(null)
+                }}
+              />
+
+              <div className='row center justify w-full text-sm secondary'>
+                {!expired && expireTime ? (
+                  <span>
+                    Код действителен: <strong className='primary'>{formatRemainingTime(remainingSec)}</strong>
+                  </span>
+                ) : (
+                  <span className='color-red'>Срок действия кода истек</span>
+                )}
+
+                <button
+                  type='button'
+                  className='btn btn-text text-sm'
+                  disabled={!expired && remainingSec > 60 || isRequestingNonce}
+                  onClick={handleResendNonce}>
+                  Отправить повторно
+                </button>
+              </div>
+            </div>
+
+            {serverError && <div className='alert-red bdr text-sm ph-3 pv-2'>{serverError}</div>}
+
+            <div className='row gap-4'>
+              <button
+                className='btn gray mid w-full'
+                onClick={() => setStep('confirm')}
                 disabled={isWithdrawing}>
                 Назад
               </button>
               <button
                 className='btn blue mid w-full'
-                onClick={handleConfirmWithdraw}
-                disabled={isWithdrawing}>
-                {isWithdrawing ? 'Отправка...' : 'Подтвердить'}
+                onClick={handleConfirmEmailWithdraw}
+                disabled={nonce.length !== 6 || isWithdrawing}>
+                {isWithdrawing ? 'Проверка...' : 'Завершить вывод'}
               </button>
             </div>
           </div>

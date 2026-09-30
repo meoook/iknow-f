@@ -22,6 +22,8 @@ import type {
   ITopWin,
   IDepositParam,
   IWithdrawPayload,
+  IWithdrawNonceRequest,
+  IWithdrawNonceResponse,
   IHistoryPoint,
 } from '../types/app.types'
 import { setLoading } from '../store/auth.slice'
@@ -291,6 +293,13 @@ export const apiBase = createApi({
       query: () => 'balance/deposit',
       keepUnusedDataFor: 86400, // 24 hours
     }),
+    withdrawNonce: builder.mutation<IWithdrawNonceResponse, IWithdrawNonceRequest>({
+      query: (payload) => ({
+        url: 'balance/withdraw/nonce',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
     withdraw: builder.mutation<void, IWithdrawPayload>({
       query: (payload) => ({
         url: 'balance/withdraw',
@@ -475,6 +484,7 @@ export const apiBase = createApi({
 export const {
   useGetConfigQuery,
   useGetDepositParamsQuery,
+  useWithdrawNonceMutation,
   useWithdrawMutation,
   // Auth
   useW3nonceMutation,

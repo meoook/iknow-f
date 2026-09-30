@@ -248,8 +248,21 @@ export interface IDepositParam {
   chain_name: string
 }
 
-export interface IWithdrawPayload {
+export interface IWithdrawNonceRequest {
   chain_name: string
   amount: number
   address: string
 }
+
+export interface IWithdrawNonceResponse {
+  method: 'email' | 'web3'
+  expire: number
+  email?: string
+  message?: string
+}
+
+export interface IWithdrawPayload {
+  nonce?: string
+  signature?: string
+}
+
