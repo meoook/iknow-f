@@ -45,7 +45,7 @@ export default function PredictionHead({ icon, title, groups, big, progress }: P
 }
 
 const Groups = ({ groups, hide }: { groups: string[]; hide?: boolean }) => {
-  const classNames = hide ? 'mh-0 opacity-0' : 'mh-fit opacity-1 pb-1'
+  const classNames = hide ? 'mh-0 opacity-0' : 'mh-fit opacity-1'
   return (
     <div className={`row center gap-2 transition ${classNames}`}>
       {groups.map((group, index) => (
