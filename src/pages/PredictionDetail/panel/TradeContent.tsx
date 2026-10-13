@@ -34,7 +34,7 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
       openModal(ModalLogin)
       return
     }
-    if (!selectedChoice) return
+    if (!selectedChoice || !selectedChoice.active) return
     if (amount > (user.balance || 0)) {
       tilt()
       return
@@ -93,9 +93,14 @@ export default function TradeContent({ prediction, selectedChoice, onSuccess }: 
         </div>
       </div>
 
-      <button className='btn blue big w-full' disabled={loading || isLoading} onClick={handleCreateBet}>
-        Сделать ставку
+      <button
+        className='btn blue big w-full'
+        disabled={loading || isLoading || !selectedChoice?.active}
+        onClick={handleCreateBet}
+      >
+        {!selectedChoice?.active ? 'Исход выбыл' : 'Сделать ставку'}
       </button>
+
     </div>
   )
 }

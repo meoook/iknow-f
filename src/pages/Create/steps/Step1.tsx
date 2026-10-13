@@ -16,6 +16,7 @@ export const Step1 = () => {
           onChange={handleInputChange}
           className={errors.title ? 'outline error' : 'outline'}
           placeholder='Курс BTC будет выше $100k к концу года'
+          spellCheck={true}
         />
         {errors.title && <div className='error'>{errors.title}</div>}
       </div>
@@ -33,6 +34,7 @@ export const Step1 = () => {
           onChange={handleInputChange}
           className={errors.rules ? 'outline error' : 'outline'}
           placeholder='Опишите, как именно будет определяться результат...'
+          spellCheck={true}
         />
         {errors.rules && <div className='error'>{errors.rules}</div>}
       </div>

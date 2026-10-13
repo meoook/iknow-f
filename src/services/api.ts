@@ -30,7 +30,7 @@ import { setLoading } from '../store/auth.slice'
 
 import { wsManager } from './websocket'
 import { requestsAdapter } from '../store/requests.adapter'
-import { betAdapter } from '../store/bet.adapter'
+import { betAdapter, betSelectors } from '../store/bet.adapter'
 import { predictionAdapter, predictionSelectors } from '../store/prediction.adapter'
 import { topAdapter, topSelectors } from '../store/top.adapter'
 import { txAdapter } from '../store/tx.adapter'
@@ -359,9 +359,8 @@ export const apiBase = createApi({
       },
       serializeQueryArgs: ({ queryArgs }) => ({ id: queryArgs.id }),
       merge: (currentCache, newItems) => {
-        currentCache.entities = { ...currentCache.entities, ...newItems.entities }
-        currentCache.ids = [...currentCache.ids, ...newItems.ids]
-        currentCache.total = newItems.total
+        if (currentCache.total !== newItems.total) currentCache.total = newItems.total
+        betAdapter.addMany(currentCache, betSelectors.selectAll(newItems))
       },
       async onCacheEntryAdded(_arg, { cacheDataLoaded, cacheEntryRemoved, updateCachedData }) {
         try {
@@ -371,8 +370,13 @@ export const apiBase = createApi({
         }
 
         const handleCreated = (bet: IPredictionBet) => {
+          if (bet.prediction_id && bet.prediction_id !== _arg.id) return
           updateCachedData((draft) => {
-            betAdapter.addOne(draft, bet)
+            const exists = draft.ids.includes(bet.id)
+            if (!exists) {
+              betAdapter.addOne(draft, bet)
+              if (draft.total !== undefined) draft.total += 1
+            }
           })
         }
 

@@ -62,7 +62,7 @@ export default function PredictionTabs({ prediction }: PredictionTabsProps) {
         {activeTab === 'comments' && (
           <>
             <form className={style.input} onSubmit={handleSubmit}>
-              <input className='outline' name='comment' placeholder='Добавить комментарий' required />
+              <input className='outline' name='comment' placeholder='Добавить комментарий' required spellCheck={true} />
               <button type='submit' disabled={isPosting}>
                 {isPosting ? 'Публикация...' : 'Опубликовать'}
               </button>

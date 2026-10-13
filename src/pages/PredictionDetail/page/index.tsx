@@ -25,7 +25,8 @@ export default function PredictionDetail() {
 
   useEffect(() => {
     if (prediction && prediction.choices && prediction.choices.length > 0 && !selectedChoice) {
-      setSelectedChoice(prediction.choices[0])
+      const firstActive = prediction.choices.find((c) => c.active) || prediction.choices[0]
+      setSelectedChoice(firstActive)
     }
   }, [prediction, selectedChoice])
 
@@ -99,7 +100,7 @@ export default function PredictionDetail() {
                 volume={prediction.volume}
                 selected={selectedChoice?.id}
                 select={select}
-                disabled={prediction.state !== TPredictionState.ACTIVE}
+                disabled={prediction.state !== TPredictionState.ACTIVE || !choice.active}
               />
             ))}
           </div>
@@ -136,8 +137,11 @@ interface ChoiceItemProps {
 }
 
 const ChoiceItem = ({ choice, volume, selected, select, disabled }: ChoiceItemProps) => {
-  const onClick = () => select(choice)
-  const className = `${s.item}${selected === choice.id ? ' active' : ''}`
+  const onClick = () => {
+    if (!choice.active) return
+    select(choice)
+  }
+  const className = `${s.item}${selected === choice.id ? ' active' : ''}${!choice.active ? ` ${s.inactive}` : ''}`
   return (
     <>
       <div className={s.hr} />
@@ -148,13 +152,18 @@ const ChoiceItem = ({ choice, volume, selected, select, disabled }: ChoiceItemPr
               <div className={s.win}>WIN</div>
               <div className='truncate'>{choice.title}</div>
             </div>
+          ) : !choice.active ? (
+            <div className='row center gap-1'>
+              <div className={s.disqualified}>Выбыл</div>
+              <div className='truncate'>{choice.title}</div>
+            </div>
           ) : (
             <div className='truncate'>{choice.title}</div>
           )}
           <span className='label'>Объем ${intlNumber('ru-RU', choice.volume)}</span>
         </div>
         <div className={s.metrics}>
-          <span>{((choice.volume / volume) * 100).toFixed()}%</span>
+          <span>{volume > 0 ? ((choice.volume / volume) * 100).toFixed() : '0'}%</span>
           <span className={s.change}>{choice.multiplier.toFixed(2)}x</span>
         </div>
       </button>

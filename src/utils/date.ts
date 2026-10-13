@@ -45,6 +45,6 @@ export const GROUPS_MAP: Record<string, string> = {
   world: 'Мир',
   economy: 'Экономика',
   elections: 'Выборы',
-  mentions: 'Упоминания',
+  weather: 'Погода',
   other: 'Другое',
 }

@@ -84,6 +84,7 @@ export interface IChoice {
   volume: number
   multiplier: number
   win: boolean | null
+  active: boolean
 }
 
 export interface IPrediction {
@@ -157,6 +158,7 @@ interface IObjectUser {
 
 export interface IPredictionBet {
   id: number
+  prediction_id?: number
   amount: number
   created: number
   choice: string

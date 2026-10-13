@@ -59,7 +59,7 @@ export default function NavRouter() {
               <Route path='/world' element={<Home />} />
               <Route path='/economy' element={<Home />} />
               <Route path='/elections' element={<Home />} />
-              <Route path='/mentions' element={<Home />} />
+              <Route path='/weather' element={<Home />} />
               <Route path='/other' element={<Home />} />
               <Route path='/user/:id' element={<PageUser />} />
               <Route path='/leaderboard' element={<PageLeaderboard />} />

@@ -51,6 +51,25 @@
     cursor: default;
   }
 
+  &.inactive {
+    opacity: 0.45;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: unset;
+    }
+  }
+
+  & .disqualified {
+    font-size: var(--font-size-xs);
+    color: var(--color-red);
+    background-color: rgba(239, 68, 68, 0.1);
+    padding: 1px 6px;
+    border: 1px solid var(--color-red);
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
   & .win {
     font-size: var(--font-size-xs);
     color: var(--color-green-text);
