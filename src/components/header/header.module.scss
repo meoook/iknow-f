@@ -13,6 +13,31 @@ header {
     margin-inline: auto;
   }
 
+  & .testCorner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 44px;
+    height: 44px;
+    background: var(--color-yellow);
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    pointer-events: none;
+    user-select: none;
+
+    span {
+      position: absolute;
+      top: 13px;
+      left: 13px;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      color: #000;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 0.85;
+      text-align: center;
+      white-space: nowrap;
+    }
+  }
+
   & .logo {
     display: inline-flex;
     align-items: center;

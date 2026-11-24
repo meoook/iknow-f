@@ -1,5 +1,5 @@
 import s from './chart.module.scss';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { TPredictionState } from '../../../types/app.types';
 import type { IPredictionDetail } from '../../../types/app.types';
 import type { ChartSeries, ChartPoint } from '../../../components/TimeChart';
@@ -28,6 +28,18 @@ const PERIOD_LABELS: { key: TimePeriod; label: string }[] = [
   { key: 'all', label: 'ВСЕ' },
 ];
 
+const getInitialHiddenIds = (choices?: IPredictionDetail['choices']): Set<number> => {
+  const hidden = new Set<number>();
+  if (!choices || choices.length === 0) return hidden;
+
+  const inactive = choices.filter((c) => !c.active);
+  // Если есть хотя бы один активный исход, по умолчанию скрываем неактивные исходы
+  if (inactive.length < choices.length) {
+    inactive.forEach((c) => hidden.add(c.id));
+  }
+  return hidden;
+};
+
 interface PredictionChartProps {
   prediction: IPredictionDetail;
   soloLineGradient?: boolean;
@@ -35,7 +47,13 @@ interface PredictionChartProps {
 
 export default function PredictionChart({ prediction, soloLineGradient = false }: PredictionChartProps) {
   const [period, setPeriod] = useState<TimePeriod>('all');
-  const [hiddenIds, setHiddenIds] = useState<Set<number>>(new Set());
+  const [hiddenIds, setHiddenIds] = useState<Set<number>>(() =>
+    getInitialHiddenIds(prediction?.choices)
+  );
+
+  useEffect(() => {
+    setHiddenIds(getInitialHiddenIds(prediction?.choices));
+  }, [prediction?.id]);
 
   // Запрос истории с бэкенда
   const {
@@ -134,6 +152,13 @@ export default function PredictionChart({ prediction, soloLineGradient = false }
               const color = COLOR_PALETTE[idx % COLOR_PALETTE.length];
               const isHidden = hiddenIds.has(choice.id);
               const percent = totalVolume > 0 ? ((choice.volume || 0) / totalVolume) * 100 : 100 / topChoices.length;
+              const titleText = !choice.active
+                ? isHidden
+                  ? 'Исход неактивен (нажмите, чтобы показать на графике)'
+                  : 'Исход неактивен (нажмите, чтобы скрыть)'
+                : isHidden
+                  ? 'Показать линию на графике'
+                  : 'Скрыть линию на графике';
 
               return (
                 <button
@@ -142,7 +167,7 @@ export default function PredictionChart({ prediction, soloLineGradient = false }
                   className={`${s.item} ${isHidden ? ' dimmed' : ''}`}
                   style={{ color }}
                   onClick={() => toggleChoice(choice.id)}
-                  title={isHidden ? 'Показать линию на графике' : 'Скрыть линию на графике'}
+                  title={titleText}
                 >
                   <span className={s.dot} />
                   <span className={s.title}>{choice.title}</span>

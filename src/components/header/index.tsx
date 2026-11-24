@@ -31,6 +31,13 @@ export default function Header() {
 
   return (
     <header>
+      <div className={style.testCorner} aria-hidden='true'>
+        <span>
+          in
+          <br />
+          test
+        </span>
+      </div>
       <div className={style.wrapper}>
         <div className={style.head}>
           <Link className={style.logo} to='/'>

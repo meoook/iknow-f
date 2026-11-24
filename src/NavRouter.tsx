@@ -2,8 +2,7 @@ import { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Outlet, useLocation, Navigate } from 'react-router-dom'
 import { useAppSelector } from './hooks/useRedux'
 import { useGetConfigQuery } from './services/api'
-import { ModalProvider, useModalContext } from './services/ModalContext'
-import UnderConstruction from './modals/construction'
+import { ModalProvider } from './services/ModalContext'
 import Header from './components/header'
 import Footer from './components/footer'
 import TapBar from './components/tapbar'
@@ -22,16 +21,12 @@ const PageTos = lazy(() => import('./pages/Tos'))
 const PagePrivacy = lazy(() => import('./pages/Privacy'))
 const OAuthCallback = lazy(() => import('./pages/OAuthCallback'))
 
-const CONSTRUCTION_KEY = 'construction'
-const CONSTRUCTION_TTL = 4 * 60 * 60 * 1000 // 4 hours in ms
-
 export default function NavRouter() {
   useGetConfigQuery()
 
   return (
     <ModalProvider>
       <BrowserRouter>
-        <ConstructionGuard />
         <ModalRenderer />
         <Header />
         <main>
@@ -82,25 +77,6 @@ export default function NavRouter() {
       </BrowserRouter>
     </ModalProvider>
   )
-}
-
-// Opens UnderConstruction modal on first visit or after 4 hours
-function ConstructionGuard() {
-  const { openModal } = useModalContext()
-
-  useEffect(() => {
-    const stored = localStorage.getItem(CONSTRUCTION_KEY)
-    const now = Date.now()
-    const shouldShow = !stored || now - Number(stored) > CONSTRUCTION_TTL
-
-    if (shouldShow) {
-      localStorage.setItem(CONSTRUCTION_KEY, String(now))
-      openModal(UnderConstruction)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  return null
 }
 
 // Layout for protected routes
